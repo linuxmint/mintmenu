@@ -1,0 +1,26 @@
+<oaf_info>
+<oaf_server iid="OAFIID:GNOME_mintMenu_Factory"
+            type="exe" location="/usr/lib/linuxmint/mintMenu/mintMenu.py">
+
+        <oaf_attribute name="repo_ids" type="stringv">
+                <item value="IDL:Bonobo/GenericFactory:1.0"/>
+                <item value="IDL:Bonobo/Unknown:1.0"/>
+        </oaf_attribute>
+        <oaf_attribute name="name" type="string" value="mintMenu"/>
+        <oaf_attribute name="description" type="string" value="Linux Mint Menu for Gnome"/>
+</oaf_server>
+
+<oaf_server iid="OAFIID:GNOME_mintMenu"
+            type="factory" location="OAFIID:GNOME_mintMenu_Factory">
+
+        <oaf_attribute name="repo_ids" type="stringv">
+                <item value="IDL:GNOME/Vertigo/PanelAppletShell:1.0"/>
+                <item value="IDL:Bonobo/Control:1.0"/>
+                <item value="IDL:Bonobo/Unknown:1.0"/>
+        </oaf_attribute>
+        <oaf_attribute name="name" type="string" value="mintMenu"/>
+        <oaf_attribute name="description" type="string" value="Linux Mint Menu for Gnome"/>
+        <oaf_attribute name="panel:category" type="string" value="Utilities"/>
+        <oaf_attribute name="panel:icon" type="string" value="/usr/lib/linuxmint/mintSystem/icon.png"/>
+</oaf_server>
+</oaf_info>

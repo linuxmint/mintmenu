@@ -1,0 +1,265 @@
+msgid "Computer"
+msgstr "Equipoa"
+
+msgid "Browse all local and remote disks and folders accessible from this computer"
+msgstr "Ordenagailu honetatik bertoko eta kampoko disko eta karpetak guztiak ikusi"
+
+msgid "Home Folder"
+msgstr "karpeta perstonala"
+
+msgid "Open your personal folder"
+msgstr "Ireki zure carpeta pertsonala"
+
+msgid "Network"
+msgstr "Zarea"
+
+msgid "Browse bookmarked and local network locations"
+msgstr "Autatutakoak eta bertoko zarea ikusi"
+
+msgid "Browse items placed on the desktop"
+msgstr "Idazmahiko elementuaetan bilatu"
+
+msgid "Browse deleted files"
+msgstr "Ezabatu elementuetan bilatu"
+
+msgid "Software manager"
+msgstr "Aplikazio gestorea"
+
+msgid "Browse and install available software"
+msgstr "Dauden aplikazioak ikusi eta instalatu"
+
+msgid "Package manager"
+msgstr "Pakete gestorea"
+
+msgid "Install, remove and upgrade software packages"
+msgstr "banan banan paketeak instalar, ezabatu edo berriztu"
+
+msgid "Control center"
+msgstr "Kontrol zentrua"
+
+msgid "Configure your system"
+msgstr "Zure sistema konfiguratu"
+
+msgid "Use the command line"
+msgstr "Komando area erabil"
+
+msgid "Couldn't load plugin:"
+msgstr "Ezin izan da kargatu plugin-a:"
+
+msgid "Couldn't initialize plugin"
+msgstr "Ezin izan da hasierazi plugin-a"
+
+msgid "Preferences"
+msgstr "Preferentziak"
+
+msgid "About"
+msgstr "Gutaz"
+
+msgid "Reload plugins"
+msgstr "Muenua rekargatu"
+
+msgid "Edit menu"
+msgstr "Menua editatu"
+
+msgid "GNOME Menu for Linux Mint"
+msgstr "Linux Mint-rajo Gnome menua"
+
+msgid "Based on USP from S.Chanderbally"
+msgstr "S. Chanderbally-ko USP-en oinarriztuta"
+
+msgid "Trash"
+msgstr "Paperontzia"
+
+msgid "Places"
+msgstr "Tokiak"
+
+msgid "Desktop"
+msgstr "Idazmahaia"
+
+msgid "System"
+msgstr "Sistema"
+
+msgid "Terminal"
+msgstr "Terminala"
+
+msgid "Quit"
+msgstr "Itxi"
+
+msgid "File not found"
+msgstr "Artzibia ez aurkituta"
+
+msgid "Not a .menu file"
+msgstr "Ez da .menu artziboa"
+
+msgid "Not a valid .menu file"
+msgstr "Ez da .menu artzibo baliagarria"
+
+msgid "Applications"
+msgstr "Aplikazioak"
+
+msgid "Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu"
+msgstr "Ezin izan da faboritoak gorde. Zeahaztu ~/.linuxmint/mintMenu idazteko permisuak daukazula"
+
+msgid "All"
+msgstr "Dena"
+
+msgid "Show all applications"
+msgstr "Erakutzi aplikazio guztiak"
+
+msgid "Filter:"
+msgstr "Filtroa:"
+
+msgid "Favorites"
+msgstr "Faboritoak"
+
+msgid "All applications"
+msgstr "Aplikazio guztiak"
+
+msgid "Launch"
+msgstr "Lanzatu"
+
+msgid "Show in my favorites"
+msgstr "Nire faboritoak erakutzi"
+
+msgid "Launch when I log in"
+msgstr "Haiseran ejekutatu"
+
+msgid "Remove from favorites"
+msgstr "Faboritotik kendu"
+
+msgid "Insert space"
+msgstr "Espacio jarri"
+
+msgid "Insert separator"
+msgstr "Separadorea jarri"
+
+msgid "Remove"
+msgstr "Ezabatu"
+
+msgid "mintMenu Preferences"
+msgstr "mintMenu preferentziak"
+
+msgid "Show sidepane"
+msgstr "Aldeko panela erakutsi"
+
+msgid "Border width:"
+msgstr "Bazter zabala"
+
+msgid "pixels"
+msgstr "pixelak"
+
+msgid "Icon size:"
+msgstr "Ikonoaren tamaina:"
+
+msgid "Options"
+msgstr "Opzioaks"
+
+msgid "Show button icon"
+msgstr "Menuko ikonoak erakutsi"
+
+msgid "Button text:"
+msgstr "Botoiko Textoa:"
+
+msgid "Button icon:"
+msgstr "Botoiko Iconoa:"
+
+msgid "Use custom colors"
+msgstr "kolore pertsonalizatuak"
+
+msgid "Headings:"
+msgstr "Tituloak:"
+
+msgid "Background:"
+msgstr "Fondoa:"
+
+msgid "Borders:"
+msgstr "Bazterrak:"
+
+msgid "Show application comments"
+msgstr "Aplikazioko deskripzioa erakutsi"
+
+msgid "Show category icons"
+msgstr "Iconoen kategoriak mostratu"
+
+msgid "Hover"
+msgstr "Kursoreen edukiera erajutzi"
+
+msgid "Number of columns:"
+msgstr "Kolumnen kopurua:"
+
+msgid "Swap name and generic name"
+msgstr "Izen eta izen generikoa trukatu"
+
+msgid "Hover delay (ms):"
+msgstr "Edukiera mostratzeko atzerakuntza (ms):"
+
+msgid "Colors"
+msgstr "koloreak"
+
+msgid "Main button"
+msgstr "Botoi principala"
+
+msgid "Show recent documents"
+msgstr "Dokumento berri erakutsi"
+
+msgid "Recent documents"
+msgstr "Dokumento berriak"
+
+msgid "Please wait, this can take some time"
+msgstr "Itzaron mesedez, zembait dembora har litsake..."
+
+msgid "Application removed successfully"
+msgstr "Aplikazioa honez ezabatuta"
+
+msgid "Remove application"
+msgstr "Aplikazioa ezabatu"
+
+msgid "No matching package found"
+msgstr "Ezin izan da paketea aurkitu"
+
+msgid "Do you want to remove this menu entry?"
+msgstr "Menu sarrera ezabatu nahi duzu?"
+
+msgid "Remove package %s and all its dependencies?"
+msgstr "Pakete %s ezabatu eta beredependentziak guztiak?"
+
+msgid "Packages to be removed"
+msgstr "Paketeak ezabatu izango dira"
+
+msgid "Uninstall"
+msgstr "Ezabatu"
+
+msgid "Search command:"
+msgstr "Bilatu comandoa:"
+
+msgid "Logout"
+msgstr "Sesio itxi"
+
+msgid "Log out or switch user"
+msgstr "Sesio itxi edo usuarioa aldatu"
+
+msgid "Shutdown, restart, suspend or hibernate"
+msgstr "Itzali, berrasi, eten edo hibernatu"
+
+# Added in v.4.3
+
+msgid "Empty trash"
+msgstr "Paperontzia uztu"
+
+msgid "Search portal for '%s'"
+msgstr "Portala bilatu '%s'-ko "
+
+msgid "Search repositories for '%s'"
+msgstr "Repositorioa bilatu'%s'-ko"
+
+msgid "Show package '%s'"
+msgstr "'%s' paketea erakutsi"
+
+msgid "Install package '%s'"
+msgstr "'%s' paketea instalatu"
+
+msgid "Keyboard shortcut:"
+msgstr "Tekatu laburbide:"
+
+msgid "No results"
+msgstr "emaitz gabekoa"

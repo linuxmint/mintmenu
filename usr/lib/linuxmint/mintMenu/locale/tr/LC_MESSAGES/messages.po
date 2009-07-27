@@ -1,0 +1,265 @@
+msgid "Computer"
+msgstr "Bilgisayar"
+
+msgid "Browse all local and remote disks and folders accessible from this computer"
+msgstr "Bu bilgisayardan erişilebilen tüm yerel ve uzak disk ve klasörlere göz atın"
+
+msgid "Home Folder"
+msgstr "Ev Klasörü"
+
+msgid "Open your personal folder"
+msgstr "Kişisel klasörünüzü açın"
+
+msgid "Network"
+msgstr "Ağ"
+
+msgid "Browse bookmarked and local network locations"
+msgstr "İşaretlenmiş ve yerel ağ konumlarına göz atın"
+
+msgid "Browse items placed on the desktop"
+msgstr "Masaüstüne yerleştirilen nesnelere göz atın"
+
+msgid "Browse deleted files"
+msgstr "Silinmiş dosyalara göz atın"
+
+msgid "Software manager"
+msgstr "Yazılım Yönetici"
+
+msgid "Browse and install available software"
+msgstr "Mevcut yazılımları arayın ve yükleyin"
+
+msgid "Package manager"
+msgstr "Paket Yönetici"
+
+msgid "Install, remove and upgrade software packages"
+msgstr "Paket yükleyin, kaldırın veya güncelleyin"
+
+msgid "Control center"
+msgstr "Kontrol Merkezi"
+
+msgid "Configure your system"
+msgstr "Sisteminizi yapılandırın"
+
+msgid "Use the command line"
+msgstr "Komut satırını kullan"
+
+msgid "Couldn't load plugin:"
+msgstr "Plugin yüklenemedi :"
+
+msgid "Couldn't initialize plugin"
+msgstr "Plugin başlatılamadı"
+
+msgid "Preferences"
+msgstr "Tercihler"
+
+msgid "About"
+msgstr "Hakkında"
+
+msgid "Reload plugins"
+msgstr "Pluginleri tekrar yükle"
+
+msgid "Edit menu"
+msgstr "Menüyü düzenle"
+
+msgid "GNOME Menu for Linux Mint"
+msgstr "Linux Mint için GNOME Menü"
+
+msgid "Based on USP from S.Chanderbally"
+msgstr "S. Chanderbally'den USP temel alınmıştır"
+
+msgid "Trash"
+msgstr "Çöp"
+
+msgid "Places"
+msgstr "Konumlar"
+
+msgid "Desktop"
+msgstr "Masaüstü"
+
+msgid "System"
+msgstr "Sistem"
+
+msgid "Terminal"
+msgstr "Terminal"
+
+msgid "Quit"
+msgstr "Çık"
+
+msgid "File not found"
+msgstr "Dosya bulunamadı"
+
+msgid "Not a .menu file"
+msgstr ".menu dosyası değil"
+
+msgid "Not a valid .menu file"
+msgstr "Uygun bir .menu dosyası değil"
+
+msgid "Applications"
+msgstr "Uygulamalar"
+
+msgid "Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu"
+msgstr "Favorileriniz kaydedilemedi. ~/.linuxmint/mintMenu dizinine yazma izniniz olup olmadığını kontrol edin."
+
+msgid "All"
+msgstr "Tümü"
+
+msgid "Show all applications"
+msgstr "Bütün uygulamaları göster"
+
+msgid "Filter:"
+msgstr "Filtre :"
+
+msgid "Favorites"
+msgstr "Favoriler"
+
+msgid "All applications"
+msgstr "Tüm Uygulamalar"
+
+msgid "Launch"
+msgstr "Çalıştır"
+
+msgid "Show in my favorites"
+msgstr "Favorilerimde göster"
+
+msgid "Launch when I log in"
+msgstr "Giriş yaptığımda çalıştır"
+
+msgid "Remove from favorites"
+msgstr "Favorilerimden sil"
+
+msgid "Insert space"
+msgstr "Boşluk koy"
+
+msgid "Insert separator"
+msgstr "Ayraç koy"
+
+msgid "Remove"
+msgstr "Kaldır"
+
+msgid "mintMenu Preferences"
+msgstr "mintMenu Tercihleri"
+
+msgid "Show sidepane"
+msgstr "Yan paneli göster"
+
+msgid "Border width:"
+msgstr "Çerçeve kalınlığı :"
+
+msgid "pixels"
+msgstr "pixel"
+
+msgid "Icon size:"
+msgstr "İkon boyutu:"
+
+msgid "Options"
+msgstr "Seçenekler"
+
+msgid "Show button icon"
+msgstr "Buton ikonlarını göster"
+
+msgid "Button text:"
+msgstr "Buton Metni:"
+
+msgid "Button icon:"
+msgstr "Buton ikonu:"
+
+msgid "Use custom colors"
+msgstr "Kişisel renkleri kullan"
+
+msgid "Headings:"
+msgstr "Başlıklar:"
+
+msgid "Background:"
+msgstr "Arkaplan:"
+
+msgid "Borders:"
+msgstr "Çerçeveler:"
+
+msgid "Show application comments"
+msgstr "Uygulama yorumlarını göster"
+
+msgid "Show category icons"
+msgstr "Kategori ikonlarını göster"
+
+msgid "Hover"
+msgstr "Duraksa"
+
+msgid "Number of columns:"
+msgstr "Sutun sayısı:"
+
+msgid "Swap name and generic name"
+msgstr "Swap ismi ve jenerik isim"
+
+msgid "Hover delay (ms):"
+msgstr "Duraklama gecikmesi (ms):"
+
+msgid "Colors"
+msgstr "Renkler"
+
+msgid "Main button"
+msgstr "Ana buton"
+
+msgid "Show recent documents"
+msgstr "Son açtığım belgeleri göster"
+
+msgid "Recent documents"
+msgstr "Son kullanılan belgeler"
+
+msgid "Please wait, this can take some time"
+msgstr "Lütfen bekleyin, bu işlem biraz zaman alabilir..."
+
+msgid "Application removed successfully"
+msgstr "Uygulama başarıyla kaldırıldı"
+
+msgid "Remove application"
+msgstr "Uygulamayı kaldır"
+
+msgid "No matching package found"
+msgstr "Uyuşan paket bulunamadı"
+
+msgid "Do you want to remove this menu entry?"
+msgstr "Bu menü girişini silmek istiyor musunuz?"
+
+msgid "Remove package %s and all its dependencies?"
+msgstr "%s paketini ve tüm bağımlılıklarını silmek istiyor musunuz?"
+
+msgid "Packages to be removed"
+msgstr "Silinecek paketler"
+
+msgid "Uninstall"
+msgstr "Kaldır"
+
+msgid "Search command:"
+msgstr "Komut ara:"
+
+msgid "Logout"
+msgstr "Çıkış"
+
+msgid "Log out or switch user"
+msgstr "Hesabı kapat veya kullanıcı değiştir"
+
+msgid "Shutdown, restart, suspend or hibernate"
+msgstr "Bilgisayarı kapat, baştan başlat, askıya al veya uyku moduna geçir"
+
+# Added in v.4.3
+
+msgid "Empty trash"
+msgstr "Çöpü boşalt"
+
+msgid "Search portal for '%s'"
+msgstr "%s için portalı ara"
+
+msgid "Search repositories for '%s'"
+msgstr "%s için havuzları(repo) ara"
+
+msgid "Show package '%s'"
+msgstr "%s paketini göster"
+
+msgid "Install package '%s'"
+msgstr "'%s paketini göster'"
+
+msgid "Keyboard shortcut:"
+msgstr "Klavye kısayolu:"
+
+msgid "No results"
+msgstr "Sonuç bulunamadı"

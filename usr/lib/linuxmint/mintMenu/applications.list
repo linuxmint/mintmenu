@@ -1,0 +1,14 @@
+location:/usr/share/applications/firefox.desktop
+location:/usr/share/applications/thunderbird.desktop
+location:/usr/share/applications/xchat-gnome.desktop
+location:/usr/share/applications/rhythmbox.desktop
+location:/usr/share/applications/ooo-writer.desktop
+location:/usr/share/applications/ooo-calc.desktop
+separator
+location:/usr/share/applications/gcalctool.desktop
+location:/usr/share/applications/gedit.desktop
+location:/usr/share/applications/gnome-terminal.desktop
+location:/usr/share/applications/pavucontrol.desktop
+separator
+location:/usr/share/applications/display-properties.desktop
+location:/usr/share/applications/gnome-system-monitor.desktop

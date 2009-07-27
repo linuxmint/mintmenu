@@ -1,0 +1,265 @@
+msgid "Computer"
+msgstr "Datamaskin"
+
+msgid "Browse all local and remote disks and folders accessible from this computer"
+msgstr "Bla gjennom alle lokale og eksterne disker og mapper som er tilgjengelig fra denne datamaskinen"
+
+msgid "Home Folder"
+msgstr "Hjemmemappe"
+
+msgid "Open your personal folder"
+msgstr "Åpne din personlige mappe"
+
+msgid "Network"
+msgstr "Nettverk"
+
+msgid "Browse bookmarked and local network locations"
+msgstr "Bla gjennom bokmerkede og lokale nettverkssteder"
+
+msgid "Browse items placed on the desktop"
+msgstr "Bla gjennom elementer på skrivebordet"
+
+msgid "Browse deleted files"
+msgstr "Bla gjennom slettede filer"
+
+msgid "Software manager"
+msgstr "Programvarebehandler"
+
+msgid "Browse and install available software"
+msgstr "Bla gjennom og installèr tilgjengelig programvare"
+
+msgid "Package manager"
+msgstr "Pakkebehandler"
+
+msgid "Install, remove and upgrade software packages"
+msgstr "Installer, fjern og oppdater programvare"
+
+msgid "Control center"
+msgstr "Kontrollsenter"
+
+msgid "Configure your system"
+msgstr "Konfigurer systemet"
+
+msgid "Use the command line"
+msgstr "Bruk kommandolinjen"
+
+msgid "Couldn't load plugin:"
+msgstr "Kunne ikke åpne programtillegg :"
+
+msgid "Couldn't initialize plugin"
+msgstr "Kunne ikke starte opp programtillegg"
+
+msgid "Preferences"
+msgstr "Innstillinger"
+
+msgid "About"
+msgstr "Om"
+
+msgid "Reload plugins"
+msgstr "Åpne programtillegg på nytt"
+
+msgid "Edit menu"
+msgstr "Rediger meny"
+
+msgid "GNOME Menu for Linux Mint"
+msgstr "GNOME-meny for Linux Mint"
+
+msgid "Based on USP from S.Chanderbally"
+msgstr "Basert på USP fra S. Chanderbally"
+
+msgid "Trash"
+msgstr "Søppel"
+
+msgid "Places"
+msgstr "Steder"
+
+msgid "Desktop"
+msgstr "Skrivebord"
+
+msgid "System"
+msgstr "System"
+
+msgid "Terminal"
+msgstr "Terminal"
+
+msgid "Quit"
+msgstr "Avslutt"
+
+msgid "File not found"
+msgstr "Fil ikke funnet"
+
+msgid "Not a .menu file"
+msgstr "Ikke en .menu-fil"
+
+msgid "Not a valid .menu file"
+msgstr "Ikke en gyldig .menu-fil"
+
+msgid "Applications"
+msgstr "Programmer"
+
+msgid "Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu"
+msgstr "Kunne ikke lagre favoritter. Sjekk at du har skrivetilgang til ~/.linuxmint/mintMenu"
+
+msgid "All"
+msgstr "Alt"
+
+msgid "Show all applications"
+msgstr "Vis alle programmer"
+
+msgid "Filter:"
+msgstr "Filtrer:"
+
+msgid "Favorites"
+msgstr "Favoritter"
+
+msgid "All applications"
+msgstr "Alle programmer"
+
+msgid "Launch"
+msgstr "Start"
+
+msgid "Show in my favorites"
+msgstr "Vis i Mine favoritter"
+
+msgid "Launch when I log in"
+msgstr "Start når jeg logger inn"
+
+msgid "Remove from favorites"
+msgstr "Fjern fra Mine favoritter"
+
+msgid "Insert space"
+msgstr "Sett inn mellomrom"
+
+msgid "Insert separator"
+msgstr "Sett inn skille"
+
+msgid "Remove"
+msgstr "Fjern"
+
+msgid "mintMenu Preferences"
+msgstr "Innstillinger for mintMenu"
+
+msgid "Show sidepane"
+msgstr "Vis panel på siden"
+
+msgid "Border width:"
+msgstr "Kanttykkelse :"
+
+msgid "pixels"
+msgstr "piksler"
+
+msgid "Icon size:"
+msgstr "Størrelse på ikon:"
+
+msgid "Options"
+msgstr "Innstillinger"
+
+msgid "Show button icon"
+msgstr "Vis ikon for knapp"
+
+msgid "Button text:"
+msgstr "Tekst for knapp:"
+
+msgid "Button icon:"
+msgstr "Ikon for knapp:"
+
+msgid "Use custom colors"
+msgstr "Bruk tilpassede farger"
+
+msgid "Headings:"
+msgstr "Overskrifter:"
+
+msgid "Background:"
+msgstr "Bakgrunn:"
+
+msgid "Borders:"
+msgstr "Kantlinjer:"
+
+msgid "Show application comments"
+msgstr "Vis kort beskrivelse av programmer"
+
+msgid "Show category icons"
+msgstr "Vis ikoner for kategorier"
+
+msgid "Hover"
+msgstr "Legg øverst"
+
+msgid "Number of columns:"
+msgstr "Antall kolonner:"
+
+msgid "Swap name and generic name"
+msgstr "Foretrekk navn foran generisk navn"
+
+msgid "Hover delay (ms):"
+msgstr "Legg øverst i (ms):"
+
+msgid "Colors"
+msgstr "Farger"
+
+msgid "Main button"
+msgstr "Hovedknapp"
+
+msgid "Show recent documents"
+msgstr "Vis siste dokumenter"
+
+msgid "Recent documents"
+msgstr "Siste dokumenter"
+
+msgid "Please wait, this can take some time"
+msgstr "Vennligst vent, dette kan ta litt tid"
+
+msgid "Application removed successfully"
+msgstr "Program avinstallert uten problemer"
+
+msgid "Remove application"
+msgstr "Avinstaller program"
+
+msgid "No matching package found"
+msgstr "Ingen samsvarende programpakker funnet"
+
+msgid "Do you want to remove this menu entry?"
+msgstr "Vil du fjerne denne menyoppføringen?"
+
+msgid "Remove package %s and all its dependencies?"
+msgstr "Avinstaller programpakke %s og alle avhengigheter?"
+
+msgid "Packages to be removed"
+msgstr "Programpakker som vil bli avinstallert"
+
+msgid "Uninstall"
+msgstr "Avinstaller"
+
+msgid "Search command:"
+msgstr "Søkekommando:"
+
+msgid "Logout"
+msgstr "Logg ut"
+
+msgid "Log out or switch user"
+msgstr "Logg ut eller bytt bruker"
+
+msgid "Shutdown, restart, suspend or hibernate"
+msgstr "Slå av, start på nytt eller sett datamaskinen i hvile- eller dvalemodus"
+
+# Added in v.4.3
+
+msgid "Empty trash"
+msgstr "Tøm søppel"
+
+msgid "Search portal for '%s'"
+msgstr "Søk etter '%s' i portalen"
+
+msgid "Search repositories for '%s'"
+msgstr "Søk etter '%s' i pakkebrønnene"
+
+msgid "Show package '%s'"
+msgstr "Vis programpakke '%s'"
+
+msgid "Install package '%s'"
+msgstr "Installer programpakke '%s'"
+
+msgid "Keyboard shortcut:"
+msgstr "Hurtigtast:"
+
+msgid "No results"
+msgstr "Ingen treff"

@@ -1,0 +1,12 @@
+#!/usr/bin/python
+
+import sys, os
+
+if len(sys.argv) > 1:
+	if (sys.argv[1] == "clean"):
+		print "All mintMenu settings are now restored to default"
+		os.system("gconftool-2 --recursive-unset /apps/mintMenu")
+		os.system("rm -rf ~/.linuxmint/mintMenu")
+else:
+	os.system("/usr/lib/linuxmint/mintMenu/mintMenu.py run-in-window")
+

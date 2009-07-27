@@ -1,0 +1,265 @@
+msgid "Computer"
+msgstr "Computer"
+
+msgid "Browse all local and remote disks and folders accessible from this computer"
+msgstr "Esplora i dischi locali e remoti accessibili da questo computer"
+
+msgid "Home Folder"
+msgstr "Cartella Home"
+
+msgid "Open your personal folder"
+msgstr "Apri la tua cartella personale"
+
+msgid "Network"
+msgstr "Rete"
+
+msgid "Browse bookmarked and local network locations"
+msgstr "Esplora le reti locali e preferite"
+
+msgid "Browse items placed on the desktop"
+msgstr "Esplora gli oggetti della scrivania"
+
+msgid "Browse deleted files"
+msgstr "Esplora i file eliminati"
+
+msgid "Software manager"
+msgstr "Gestore delle applicazioni"
+
+msgid "Browse and install available software"
+msgstr "Esplora e installa il software disponibile"
+
+msgid "Package manager"
+msgstr "Gestore dei pacchetti"
+
+msgid "Install, remove and upgrade software packages"
+msgstr "Installa, disinstalla e aggiorna i pacchetti software"
+
+msgid "Control center"
+msgstr "Centro di controllo"
+
+msgid "Configure your system"
+msgstr "Configura il sistema"
+
+msgid "Use the command line"
+msgstr "Usa la linea di comando"
+
+msgid "Couldn't load plugin:"
+msgstr "Impossibile caricare il plugin:"
+
+msgid "Couldn't initialize plugin"
+msgstr "Impossibile inizializzare il plugin"
+
+msgid "Preferences"
+msgstr "Preferenze"
+
+msgid "About"
+msgstr "A proposito"
+
+msgid "Reload plugins"
+msgstr "Ricarica i plugin"
+
+msgid "Edit menu"
+msgstr "Modifica menu"
+
+msgid "GNOME Menu for Linux Mint"
+msgstr "Menu di GNOME per Linux Mint"
+
+msgid "Based on USP from S.Chanderbally"
+msgstr "Basato su USP (S. Chanderbally)"
+
+msgid "Trash"
+msgstr "Cestino"
+
+msgid "Places"
+msgstr "Scorciatoie"
+
+msgid "Desktop"
+msgstr "Scrivania"
+
+msgid "System"
+msgstr "Sistema"
+
+msgid "Terminal"
+msgstr "Terminale"
+
+msgid "Quit"
+msgstr "Esci"
+
+msgid "File not found"
+msgstr "File non trovato"
+
+msgid "Not a .menu file"
+msgstr "Non è un file .menu"
+
+msgid "Not a valid .menu file"
+msgstr "Non è un file .menu valido"
+
+msgid "Applications"
+msgstr "Applicazioni"
+
+msgid "Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu"
+msgstr "Impossibile salvare i preferiti. Verificare di avere i permessi di scrittura su ~/.linuxmint/mintMenu"
+
+msgid "All"
+msgstr "Tutto"
+
+msgid "Show all applications"
+msgstr "Mostra tutte le applicazioni"
+
+msgid "Filter:"
+msgstr "Filtra :"
+
+msgid "Favorites"
+msgstr "Preferiti"
+
+msgid "All applications"
+msgstr "Tutte le applicazioni"
+
+msgid "Launch"
+msgstr "Esegui"
+
+msgid "Show in my favorites"
+msgstr "Aggiungi ai preferiti"
+
+msgid "Launch when I log in"
+msgstr "Esegui all'accesso"
+
+msgid "Remove from favorites"
+msgstr "Rimuovi dai preferiti"
+
+msgid "Insert space"
+msgstr "Inserisci spazio"
+
+msgid "Insert separator"
+msgstr "Inserisci separatore"
+
+msgid "Remove"
+msgstr "Rimuovi"
+
+msgid "mintMenu Preferences"
+msgstr "Preferenze per mintMenu"
+
+msgid "Show sidepane"
+msgstr "Mostra pannello laterale"
+
+msgid "Border width:"
+msgstr "Larghezza bordi:"
+
+msgid "pixels"
+msgstr "pixel"
+
+msgid "Icon size:"
+msgstr "Grandezza icone :"
+
+msgid "Options"
+msgstr "Opzioni"
+
+msgid "Show button icon"
+msgstr "Mostra l'icona del pulsante principale"
+
+msgid "Button text:"
+msgstr "Testo del pulsante principale:"
+
+msgid "Button icon:"
+msgstr "Icona del pulsante principale:"
+
+msgid "Use custom colors"
+msgstr "Usa colori personalizzati"
+
+msgid "Headings:"
+msgstr "Titoli:"
+
+msgid "Background:"
+msgstr "Sfondo:"
+
+msgid "Borders:"
+msgstr "Bordi:"
+
+msgid "Show application comments"
+msgstr "Mostra commenti sulle applicazioni"
+
+msgid "Show category icons"
+msgstr "Mostra icone di categoria"
+
+msgid "Hover"
+msgstr "Sorvolo"
+
+msgid "Number of columns:"
+msgstr "Numero di colonne:"
+
+msgid "Swap name and generic name"
+msgstr "Preferisci il nome al nome generico"
+
+msgid "Hover delay (ms):"
+msgstr "Ritardo di sorvolo (ms) :"
+
+msgid "Colors"
+msgstr "Colori"
+
+msgid "Main button"
+msgstr "Pulsante principale"
+
+msgid "Show recent documents"
+msgstr "Mostra documenti recenti"
+
+msgid "Recent documents"
+msgstr "Documenti recenti"
+
+msgid "Please wait, this can take some time"
+msgstr "Aspetta, ci vorrà un po'..."
+
+msgid "Application removed successfully"
+msgstr "Applicazione rimossa con successo"
+
+msgid "Remove application"
+msgstr "Disinstalla applicazione"
+
+msgid "No matching package found"
+msgstr "Non sono stati trovati pacchetti corrispondenti"
+
+msgid "Do you want to remove this menu entry?"
+msgstr "Vuoi eliminare questa voce dal menu?"
+
+msgid "Remove package %s and all its dependencies?"
+msgstr "Disinstalla il pacchetto %s e tutte le dipendenze?"
+
+msgid "Packages to be removed"
+msgstr "Pacchetti che saranno eliminati"
+
+msgid "Uninstall"
+msgstr "Disinstalla"
+
+msgid "Search command:"
+msgstr "Comando di ricerca:"
+
+msgid "Logout"
+msgstr "Disconnessione"
+
+msgid "Log out or switch user"
+msgstr "Disconnetti o cambia utente"
+
+msgid "Shutdown, restart, suspend or hibernate"
+msgstr "Chiudi, riavvia, sospendi o iberna"
+
+# Added in v.4.3
+
+msgid "Empty trash"
+msgstr "Svuota cestino"
+
+msgid "Search portal for '%s'"
+msgstr "Cerca '%s' nel portale"
+
+msgid "Search repositories for '%s'"
+msgstr "Cerca '%s' nel deposito"
+
+msgid "Show package '%s'"
+msgstr "Mostra il pacchetto '%s'"
+
+msgid "Install package '%s'"
+msgstr "Installa pacchetto '%s'"
+
+msgid "Keyboard shortcut:"
+msgstr "Scorciatoie tastiera:"
+
+msgid "No results"
+msgstr "Nessun risultato"

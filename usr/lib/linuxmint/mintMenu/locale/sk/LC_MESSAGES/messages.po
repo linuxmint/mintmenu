@@ -1,0 +1,265 @@
+msgid "Computer"
+msgstr "Počítač"
+
+msgid "Browse all local and remote disks and folders accessible from this computer"
+msgstr "Prezrieť miestne,vzdialené disky a priečinky dostupné z tohto počítača"
+
+msgid "Home Folder"
+msgstr "Domovský priečinok"
+
+msgid "Open your personal folder"
+msgstr "Otvoriť osobný priečinok"
+
+msgid "Network"
+msgstr "Sieť"
+
+msgid "Browse bookmarked and local network locations"
+msgstr "Prezrieť sieťové miesta"
+
+msgid "Browse items placed on the desktop"
+msgstr "Prezrieť položky umiestnené na ploche"
+
+msgid "Browse deleted files"
+msgstr "Prezrieť odstránené súbory"
+
+msgid "Software manager"
+msgstr "Správca softvéru"
+
+msgid "Browse and install available software"
+msgstr "Prezrieť a inštalovať dostupný softvér"
+
+msgid "Package manager"
+msgstr "Správca balíčkov"
+
+msgid "Install, remove and upgrade software packages"
+msgstr "Nainštalovať,odstrániť a aktualizovať softvérové balíčky"
+
+msgid "Control center"
+msgstr "Ovládací panel"
+
+msgid "Configure your system"
+msgstr "Nastaviť systém"
+
+msgid "Use the command line"
+msgstr "Použiť príkazový riadok"
+
+msgid "Couldn't load plugin:"
+msgstr "Nemožno nahrať doplnky :"
+
+msgid "Couldn't initialize plugin"
+msgstr "Nemožno spustiť doplnky"
+
+msgid "Preferences"
+msgstr "Voľby"
+
+msgid "About"
+msgstr "O aplikácii"
+
+msgid "Reload plugins"
+msgstr "Znovu nahrať doplnky"
+
+msgid "Edit menu"
+msgstr "Upraviť ponuku"
+
+msgid "GNOME Menu for Linux Mint"
+msgstr "GNOME Menu pre Linux Mint"
+
+msgid "Based on USP from S.Chanderbally"
+msgstr "Založené na USP od S.Chanderbally"
+
+msgid "Trash"
+msgstr "Kôš"
+
+msgid "Places"
+msgstr "Miesta"
+
+msgid "Desktop"
+msgstr "Plocha"
+
+msgid "System"
+msgstr "Systém"
+
+msgid "Terminal"
+msgstr "Terminál"
+
+msgid "Quit"
+msgstr "Ukončiť"
+
+msgid "File not found"
+msgstr "Súbor nenájdený"
+
+msgid "Not a .menu file"
+msgstr "Nedostupný .menu súbor"
+
+msgid "Not a valid .menu file"
+msgstr "Nedostupný korektný .menu súbor"
+
+msgid "Applications"
+msgstr "Aplikácie"
+
+msgid "Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu"
+msgstr "Nemožno uložiť obľúbené položky.Skontrolujte,či máte právo zápisu do ~/.linuxmint/mintMenu "
+
+msgid "All"
+msgstr "Všetko"
+
+msgid "Show all applications"
+msgstr "Zobraziť všetky aplikácie"
+
+msgid "Filter:"
+msgstr "Filter :"
+
+msgid "Favorites"
+msgstr "Obľúbené položky"
+
+msgid "All applications"
+msgstr "Všetky aplikácie"
+
+msgid "Launch"
+msgstr "Spustiť"
+
+msgid "Show in my favorites"
+msgstr "Pridať do obľúbených položiek"
+
+msgid "Launch when I log in"
+msgstr "Spustiť po prihlásení"
+
+msgid "Remove from favorites"
+msgstr "Odstrániť z obľúbených položiek"
+
+msgid "Insert space"
+msgstr "Vložiť medzeru"
+
+msgid "Insert separator"
+msgstr "Vložiť oddeľovač"
+
+msgid "Remove"
+msgstr "Odstrániť"
+
+msgid "mintMenu Preferences"
+msgstr "Nastavenia mintMenu"
+
+msgid "Show sidepane"
+msgstr "Zobraziť bočný panel"
+
+msgid "Border width:"
+msgstr "Hrúbka rámika:"
+
+msgid "pixels"
+msgstr "pixlov"
+
+msgid "Icon size:"
+msgstr "Veľkosť ikon:"
+
+msgid "Options"
+msgstr "Voľby"
+
+msgid "Show button icon"
+msgstr "Zobraziť ikonu tlačidla"
+
+msgid "Button text:"
+msgstr "Text tlačidla :"
+
+msgid "Button icon:"
+msgstr "Ikona tlačidla :"
+
+msgid "Use custom colors"
+msgstr "Použiť vlastné farby"
+
+msgid "Headings:"
+msgstr "Nadpisy :"
+
+msgid "Background:"
+msgstr "Pozadie :"
+
+msgid "Borders:"
+msgstr "Rámiky :"
+
+msgid "Show application comments"
+msgstr "Zobraziť popisy aplikácii"
+
+msgid "Show category icons"
+msgstr "Zobraziť ikony kategórií"
+
+msgid "Hover"
+msgstr "Efekt umiestnenia myši nad položku"
+
+msgid "Number of columns:"
+msgstr "Počet stĺpcov:"
+
+msgid "Swap name and generic name"
+msgstr "Preklad aplikácie v menu"
+
+msgid "Hover delay (ms):"
+msgstr "Oneskorenie efektu umiestnenia myši nad položku (ms) :"
+
+msgid "Colors"
+msgstr "Farby"
+
+msgid "Main button"
+msgstr "Hlavné tlačidlo"
+
+msgid "Show recent documents"
+msgstr "Zobraziť nedávne dokumenty"
+
+msgid "Recent documents"
+msgstr "Nedávne dokumenty"
+
+msgid "Please wait, this can take some time"
+msgstr "Prosím počkajte, táto operácia môže chvíľu trvať..."
+
+msgid "Application removed successfully"
+msgstr "Aplikácia úspešne odstránená"
+
+msgid "Remove application"
+msgstr "Odstrániť aplikáciu"
+
+msgid "No matching package found"
+msgstr "Nenájdený zhodujúc sa balíček"
+
+msgid "Do you want to remove this menu entry?"
+msgstr "Chcete odstrániť túto položku menu ?"
+
+msgid "Remove package %s and all its dependencies?"
+msgstr "Odstrániť balíček %s a všetky jeho závislosti?"
+
+msgid "Packages to be removed"
+msgstr "Balíčky na odstránenie"
+
+msgid "Uninstall"
+msgstr "Odinštalovať"
+
+msgid "Search command:"
+msgstr "Príkaz hľadania:"
+
+msgid "Logout"
+msgstr "Odhlásiť"
+
+msgid "Log out or switch user"
+msgstr "Odhlásiť alebo prepnúť užívateľa"
+
+msgid "Shutdown, restart, suspend or hibernate"
+msgstr "Vypnúť,reštartovať,uspať"
+
+# Added in v.4.3
+
+msgid "Empty trash"
+msgstr "Prázdny kôš"
+
+msgid "Search portal for '%s'"
+msgstr "Vyhľadať balíček '%s' na portáli"
+
+msgid "Search repositories for '%s'"
+msgstr "Vyhľadávať balíček '%s' v repozitároch "
+
+msgid "Show package '%s'"
+msgstr "Zobraziť balíček '%s'"
+
+msgid "Install package '%s'"
+msgstr "Nainštalovať balík '%s'"
+
+msgid "Keyboard shortcut:"
+msgstr "Klávesová skratka:"
+
+msgid "No results"
+msgstr "Žiaden výsledok"

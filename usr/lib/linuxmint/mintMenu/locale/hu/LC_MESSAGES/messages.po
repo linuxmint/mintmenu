@@ -1,0 +1,265 @@
+msgid "Computer"
+msgstr "Számítógép"
+
+msgid "Browse all local and remote disks and folders accessible from this computer"
+msgstr "A számítógépről elérhető összes helyi és távoli lemez és mappa tallózása"
+
+msgid "Home Folder"
+msgstr "Saját mappa"
+
+msgid "Open your personal folder"
+msgstr "A személyes mappájának megnyitása"
+
+msgid "Network"
+msgstr "Hálózat"
+
+msgid "Browse bookmarked and local network locations"
+msgstr "Könyvjelzős vagy helyi hálózati kapcsolatok tallózása"
+
+msgid "Browse items placed on the desktop"
+msgstr "Az asztal tartalmának megnyitása egy mappában"
+
+msgid "Browse deleted files"
+msgstr "Törölt fájlok tallózása"
+
+msgid "Software manager"
+msgstr "Szoftverkezelő"
+
+msgid "Browse and install available software"
+msgstr "Elérhető alkalmazások tallózása és telepítése"
+
+msgid "Package manager"
+msgstr "Csomagkezelő"
+
+msgid "Install, remove and upgrade software packages"
+msgstr "Csomagok telepítése, törlése és frissítése"
+
+msgid "Control center"
+msgstr "Vezérlőközpont"
+
+msgid "Configure your system"
+msgstr "A rendszer beállítása"
+
+msgid "Use the command line"
+msgstr "Parancssor használata"
+
+msgid "Couldn't load plugin:"
+msgstr "Nem sikerült betölteni a következő plugint:"
+
+msgid "Couldn't initialize plugin"
+msgstr "Nem sikerült beállítani a plugint"
+
+msgid "Preferences"
+msgstr "Beállítások"
+
+msgid "About"
+msgstr "Névjegy"
+
+msgid "Reload plugins"
+msgstr "Pluginok újratöltése"
+
+msgid "Edit menu"
+msgstr "Menük szerkesztése"
+
+msgid "GNOME Menu for Linux Mint"
+msgstr "GNOME menü a Linux Mint-hez"
+
+msgid "Based on USP from S.Chanderbally"
+msgstr "USP alapokon S.Chanderbally-tól"
+
+msgid "Trash"
+msgstr "Kuka"
+
+msgid "Places"
+msgstr "Helyek"
+
+msgid "Desktop"
+msgstr "Asztal"
+
+msgid "System"
+msgstr "Rendszer"
+
+msgid "Terminal"
+msgstr "Terminál"
+
+msgid "Quit"
+msgstr "Leállítás..."
+
+msgid "File not found"
+msgstr "A fájl nem található"
+
+msgid "Not a .menu file"
+msgstr "Nem .menu fájl"
+
+msgid "Not a valid .menu file"
+msgstr "Hibás .menu fájl"
+
+msgid "Applications"
+msgstr "Alkalmazások"
+
+msgid "Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu"
+msgstr "Nem sikerült menteni a kedvenceket. Ellenőrizze a ~/.linuxmint/mintMenu mappa írási jogosultságait."
+
+msgid "All"
+msgstr "Mind"
+
+msgid "Show all applications"
+msgstr "Minden alkalmazás megjelenítése"
+
+msgid "Filter:"
+msgstr "Szűrő:"
+
+msgid "Favorites"
+msgstr "Kedvencek"
+
+msgid "All applications"
+msgstr "Minden alkalmazás"
+
+msgid "Launch"
+msgstr "Futtatás"
+
+msgid "Show in my favorites"
+msgstr "Megjelenítés a kedvencek között"
+
+msgid "Launch when I log in"
+msgstr "Futtatás bejelentkezéskor"
+
+msgid "Remove from favorites"
+msgstr "Eltávolítás a kedvencek közül"
+
+msgid "Insert space"
+msgstr "Térköz beillesztése"
+
+msgid "Insert separator"
+msgstr "Elválasztó beillesztése"
+
+msgid "Remove"
+msgstr "Eltávolítás"
+
+msgid "mintMenu Preferences"
+msgstr "mintMenu beállításai"
+
+msgid "Show sidepane"
+msgstr "Oldalpanel megjelenítése"
+
+msgid "Border width:"
+msgstr "Szegély szélessége:"
+
+msgid "pixels"
+msgstr "pixel"
+
+msgid "Icon size:"
+msgstr "Ikonméret:"
+
+msgid "Options"
+msgstr "Általános"
+
+msgid "Show button icon"
+msgstr "Ikon megjelenítése a menügombon"
+
+msgid "Button text:"
+msgstr "Felirat:"
+
+msgid "Button icon:"
+msgstr "Ikon:"
+
+msgid "Use custom colors"
+msgstr "Egyéni színek használata"
+
+msgid "Headings:"
+msgstr "Címsor:"
+
+msgid "Background:"
+msgstr "Háttér:"
+
+msgid "Borders:"
+msgstr "Szegély:"
+
+msgid "Show application comments"
+msgstr "Alkalmazás leírás megjelenítése"
+
+msgid "Show category icons"
+msgstr "Kategória ikonok megjelenítése"
+
+msgid "Hover"
+msgstr "Kategória tartalom automatikus megjelenítése"
+
+msgid "Number of columns:"
+msgstr "Oszlopok száma:"
+
+msgid "Swap name and generic name"
+msgstr "Név és általános név felcserélése"
+
+msgid "Hover delay (ms):"
+msgstr "Automatikus megjelenítés késleltetése (ms):"
+
+msgid "Colors"
+msgstr "Színek"
+
+msgid "Main button"
+msgstr "Menügomb"
+
+msgid "Show recent documents"
+msgstr "Legutóbbi dokumentumok megjelenítése"
+
+msgid "Recent documents"
+msgstr "Legutóbbi dokumentumok"
+
+msgid "Please wait, this can take some time"
+msgstr "Kis türelmet, ez eltarthat egy ideig"
+
+msgid "Application removed successfully"
+msgstr "Az alkalmazás sikeresen eltávolítva"
+
+msgid "Remove application"
+msgstr "Alkalmazás eltávolítása"
+
+msgid "No matching package found"
+msgstr "Nem található megfelelő csomag"
+
+msgid "Do you want to remove this menu entry?"
+msgstr "Szeretné eltávolítani ezt a menübejegyzést?"
+
+msgid "Remove package %s and all its dependencies?"
+msgstr "Eltávolítja a(z) %s csomagot és valamennyi függőségét?"
+
+msgid "Packages to be removed"
+msgstr "Eltávolítandó csomagok"
+
+msgid "Uninstall"
+msgstr "Eltávolítás"
+
+msgid "Search command:"
+msgstr "Kereső parancs:"
+
+msgid "Logout"
+msgstr "Kijelentkezés..."
+
+msgid "Log out or switch user"
+msgstr "Kijelentkezés vagy felhasználóváltás"
+
+msgid "Shutdown, restart, suspend or hibernate"
+msgstr "Leállítás, újraindítás, felfüggesztés vagy hibernálás"
+
+# Added in v.4.3
+
+msgid "Empty trash"
+msgstr "Kuka ürítése"
+
+msgid "Search portal for '%s'"
+msgstr "'%s' keresése a Szoftverportálon"
+
+msgid "Search repositories for '%s'"
+msgstr "'%s' keresése a csomagtárolókban"
+
+msgid "Show package '%s'"
+msgstr "A(z) '%s' csomag megjelenítése"
+
+msgid "Install package '%s'"
+msgstr "A(z) '%s' csomag telepítése"
+
+msgid "Keyboard shortcut:"
+msgstr "Gyorsbillentyű:"
+
+msgid "No results"
+msgstr "Nincs találat"
