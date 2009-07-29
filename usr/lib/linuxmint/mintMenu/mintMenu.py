@@ -33,14 +33,16 @@ except Exception, cause:
 try:
 	import dl
 	libc = dl.open( "/lib/libc.so.6" )
-	libc.call( "prctl", 15, "mintMenu", 0, 0, 0 )
+	libc.call( "prctl", 15, "mintmenu", 0, 0, 0 )
 	libc.close()
 except ImportError:
 	pass
 
+# i18n
+gettext.install("messages", "/usr/lib/linuxmint/mintMenu/locale")
 
-NAME = u"mintMenu"
-ICON = "/usr/lib/linuxmint/mintSystem/icon.png"
+NAME = _("Menu")
+ICON = "/usr/lib/linuxmint/mintMenu/icon.svg"
 PATH = os.path.abspath( os.path.dirname( sys.argv[0] ) )
 
 sys.path.append( os.path.join( PATH , "plugins") )
@@ -52,8 +54,7 @@ from easybuttons import iconManager
 from easygconf import EasyGConf
 from execute import *
 
-# i18n
-gettext.install("messages", "/usr/lib/linuxmint/mintMenu/locale")
+
 
 class MainWindow( object ):
 	"""This is the main class for the application"""
@@ -639,7 +640,7 @@ class MenuWin( object ):
 		self.hideIcon	=  self.gconf.get( "bool", "hide_applet_icon", False )
 		self.buttonText =  self.gconf.get( "string", "applet_text", "Menu" )
 		self.hotkeyText =  self.gconf.get( "string", "hot_key", "<Control>Super_L" )
-		self.buttonIcon =  self.gconf.get( "string", "applet_icon", "/usr/lib/linuxmint/mintMenu/mintMenu.png" )
+		self.buttonIcon =  self.gconf.get( "string", "applet_icon", "/usr/lib/linuxmint/mintMenu/icon.png" )
 		self.setIconSize( self.gconf.get( "int", "applet_icon_size", 2 ) )
 
 	def setIconSize( self, icon_size):
@@ -744,12 +745,12 @@ class MenuWin( object ):
 		gtk.about_dialog_set_email_hook( lambda dialog, mail: gnomevfs.url_show( "mailto:" + mail ) )
 		gtk.about_dialog_set_url_hook( lambda dialog, url: gnomevfs.url_show( url ) )
 		about = gtk.AboutDialog()
-		about.set_name( NAME )
+		about.set_name("mintMenu")
 		import commands
-		version = commands.getoutput("mint-apt-version mintmenu")
+		version = commands.getoutput("/usr/lib/linuxmint/mintMenu/version.py")
 		about.set_version(version)
 		try:
-           		h = open('/usr/lib/linuxmint/mintSystem/GPL.txt','r')
+           		h = open('/usr/share/common-licenses/GPL','r')
 			s = h.readlines()
 			gpl = ""
 		        for line in s:
@@ -758,12 +759,11 @@ class MenuWin( object ):
 		        about.set_license(gpl)
         	except Exception, detail:
             		print detail            	        
-		about.set_comments( _("GNOME Menu for Linux Mint") )
+		about.set_comments( _("Advanced Gnome Menu") )
 		about.set_authors( ["Clement Lefebvre <clem@linuxmint.com>", "Lars-Peter Clausen <lars@laprican.de>"] )
 		about.set_translator_credits(("translator-credits") )
-		about.set_website( "http://www.linuxmint.com" )
 		about.set_copyright( _("Based on USP from S.Chanderbally") )
-		about.set_logo( gtk.gdk.pixbuf_new_from_file("/usr/lib/linuxmint/mintSystem/icon.png") )
+		about.set_logo( gtk.gdk.pixbuf_new_from_file("/usr/lib/linuxmint/mintMenu/icon.svg") )
 		about.connect( "response", lambda dialog, r: dialog.destroy() )
 		about.show()
 

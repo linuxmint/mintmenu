@@ -7,7 +7,7 @@
                 <item value="IDL:Bonobo/Unknown:1.0"/>
         </oaf_attribute>
         <oaf_attribute name="name" type="string" value="mintMenu"/>
-        <oaf_attribute name="description" type="string" value="Linux Mint Menu for Gnome"/>
+        <oaf_attribute name="description" type="string" value="Advanced Gnome Menu"/>
 </oaf_server>
 
 <oaf_server iid="OAFIID:GNOME_mintMenu"
@@ -19,8 +19,8 @@
                 <item value="IDL:Bonobo/Unknown:1.0"/>
         </oaf_attribute>
         <oaf_attribute name="name" type="string" value="mintMenu"/>
-        <oaf_attribute name="description" type="string" value="Linux Mint Menu for Gnome"/>
+        <oaf_attribute name="description" type="string" value="Advanced Gnome Menu"/>
         <oaf_attribute name="panel:category" type="string" value="Utilities"/>
-        <oaf_attribute name="panel:icon" type="string" value="/usr/lib/linuxmint/mintSystem/icon.png"/>
+        <oaf_attribute name="panel:icon" type="string" value="/usr/lib/linuxmint/mintMenu/icon.png"/>
 </oaf_server>
 </oaf_info>

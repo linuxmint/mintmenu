@@ -1,3 +1,9 @@
+mintmenu (4.8.1) helena; urgency=low
+
+  * Blueprint implemented: https://blueprints.launchpad.net/linuxmint/+spec/generic-branding
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed,  29 Jul 2009 22:48:00 +0000
+
 mintmenu (4.7.9) gloria; urgency=low
 
   * Fix: Hitting enter on search does nothing (https://bugs.launchpad.net/bugs/399990)

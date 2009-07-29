@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-27 12:44+0200\n"
+"POT-Creation-Date: 2009-07-29 22:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,32 +16,36 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:264
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:44
+msgid "Menu"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:265
 msgid "Couldn't load plugin:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:338
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:339
 msgid "Couldn't initialize plugin"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:583
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:584
 msgid "Preferences"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:583
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:584
 msgid "Edit menu"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:583
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:584
 msgid "Reload plugins"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:583
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:584
 msgid "About"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:761
-msgid "GNOME Menu for Linux Mint"
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:762
+msgid "Advanced Gnome Menu"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenu.py:765
@@ -78,111 +82,111 @@ msgid "Packages to be removed"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:42
-msgid "mintMenu Preferences"
-msgstr ""
-
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:44
-msgid "Show sidepane"
+msgid "Menu preferences"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:45
-msgid "Show button icon"
+msgid "Show sidepane"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:46
-msgid "Use custom colors"
+msgid "Show button icon"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:47
+msgid "Use custom colors"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:48
 msgid "Show recent documents"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:49
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:50
 msgid "Show application comments"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:50
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:51
 msgid "Show category icons"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:51
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:52
 msgid "Hover"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:52
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:53
 msgid "Swap name and generic name"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:54
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:55
 msgid "Border width:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:55
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:56
 msgid "pixels"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:56
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:57
 msgid "Button text:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:57
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:58
 msgid "Options"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:58
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:59
 #: usr/lib/linuxmint/mintMenu/plugins/applications.py:193
 msgid "Applications"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:60
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:61
 msgid "Colors"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:61
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:62
 #: usr/lib/linuxmint/mintMenu/plugins/applications.py:179
 #: usr/lib/linuxmint/mintMenu/plugins/applications.py:184
 msgid "Favorites"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:62
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:63
 msgid "Main button"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:64
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:65
 msgid "Background:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:65
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:66
 msgid "Headings:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:66
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:67
 msgid "Borders:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:70
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:71
 msgid "Number of columns:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:71
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:72
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:73
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:74
 msgid "Icon size:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:74
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:75
 msgid "Hover delay (ms):"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:75
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:76
 msgid "Button icon:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:76
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:77
 msgid "Search command:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:78
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:79
 msgid "Keyboard shortcut:"
 msgstr ""
 

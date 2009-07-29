@@ -97,7 +97,7 @@ class pluginclass( object ):
 	#Add standard items
 	def do_standard_items( self ):		
 
-		Button1 = easyButton( "/usr/lib/linuxmint/mintSystem/icon.png", self.iconsize, [_("Software manager")], -1, -1 )
+		Button1 = easyButton( "/usr/lib/linuxmint/mintInstall/icon.svg", self.iconsize, [_("Software manager")], -1, -1 )
 		Button1.connect( "clicked", self.ButtonClicked, "mintinstall" )
 		Button1.show()
 		self.systemBtnHolder.pack_start( Button1, False, False )

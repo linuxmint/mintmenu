@@ -39,7 +39,8 @@ class mintMenuConfig( object ):
 	
 
 		#i18n
-		wTree.get_widget("mainWindow").set_title(_("mintMenu Preferences"))
+		wTree.get_widget("mainWindow").set_title(_("Menu preferences"))
+		wTree.get_widget("mainWindow").set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
 
 		wTree.get_widget("showSidepane").set_label(_("Show sidepane"))
 		wTree.get_widget("showButtonIcon").set_label(_("Show button icon"))
