@@ -1,11 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="main_window">
     <property name="border_width">6</property>
     <property name="title" translatable="yes">mintMenu</property>
-    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="window_position">center</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -20,19 +24,20 @@
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
-                <property name="pixbuf">/usr/lib/linuxmint/mintSystem/icon.png</property>
+                <property name="stock">gtk-dialog-warning</property>
+                <property name="icon-size">6</property>
               </widget>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="padding">9</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
               <widget class="GtkTable" id="table1">
                 <property name="visible">True</property>
                 <property name="n_rows">2</property>
-                <property name="n_columns">1</property>
                 <property name="column_spacing">19</property>
                 <property name="row_spacing">11</property>
                 <child>
@@ -40,7 +45,7 @@
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Name</property>
-                    <property name="justify">GTK_JUSTIFY_CENTER</property>
+                    <property name="justify">center</property>
                   </widget>
                   <packing>
                     <property name="x_options">GTK_FILL</property>
@@ -72,6 +77,7 @@
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="padding">2</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -79,15 +85,17 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <property name="hscrollbar_policy">automatic</property>
+            <property name="vscrollbar_policy">automatic</property>
+            <property name="shadow_type">etched-in</property>
             <child>
               <widget class="GtkTreeView" id="tree">
                 <property name="height_request">120</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="headers_clickable">True</property>
+                <property name="headers_visible">False</property>
+                <property name="headers_clickable">False</property>
               </widget>
             </child>
           </widget>
@@ -99,29 +107,35 @@
           <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
             <property name="spacing">10</property>
-            <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
+            <property name="layout_style">spread</property>
             <child>
               <widget class="GtkButton" id="cancel_button">
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="label">gtk-cancel</property>
+                <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
                 <signal name="clicked" handler="on_cancel_button_clicked"/>
               </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkButton" id="remove_button">
+                <property name="label" translatable="yes">gtk-remove</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">gtk-remove</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
                 <signal name="clicked" handler="on_remove_button_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>

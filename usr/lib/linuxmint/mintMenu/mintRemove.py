@@ -68,7 +68,8 @@ class mintRemoveWindow:
         #Set the Glade file
         self.gladefile = "/usr/lib/linuxmint/mintMenu/mintRemove.glade"
         wTree = gtk.glade.XML(self.gladefile,"main_window")
-	wTree.get_widget("main_window").set_icon_from_file("/usr/lib/linuxmint/mintSystem/icon.png")
+	wTree.get_widget("main_window").set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+	wTree.get_widget("main_window").set_title("")
 	wTree.get_widget("main_window").connect("destroy", self.giveUp)
 
 	# Get the window socket (needed for synaptic later on)
@@ -78,8 +79,7 @@ class mintRemoveWindow:
 	socket.show()
 	window_id = repr(socket.get_id())
         
-	wTree.get_widget("txt_name").set_text("<big><b>" + _("Remove application") + "</b></big>")
-	wTree.get_widget("txt_name").set_use_markup(True)
+	
 	
 	package = commands.getoutput("dpkg -S " + self.desktopFile)
 	package = package[:package.find(":")]
@@ -109,9 +109,11 @@ class mintRemoveWindow:
 		warnDlg.destroy()
 		gtk.main_quit()
 		sys.exit(0)		
+
+	wTree.get_widget("txt_name").set_text("<big><b>" + _("Remove %s?") % package + "</b></big>")
+	wTree.get_widget("txt_name").set_use_markup(True)
 		
-	wTree.get_widget("txt_guidance").set_text("<i>" + _("Remove package %s and all its dependencies?") % package + "</i>")
-	wTree.get_widget("txt_guidance").set_use_markup(True)
+	wTree.get_widget("txt_guidance").set_text(_("The following packages will be removed:"))
 	
 	treeview = wTree.get_widget("tree")
 	column1 = gtk.TreeViewColumn(_("Packages to be removed"))
