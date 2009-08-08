@@ -36,6 +36,7 @@ class mintMenuConfig( object ):
 		# Load glade file and extract widgets
 		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
 		wTree 	  = gtk.glade.XML( gladefile, "mainWindow" )
+		editTree  = gtk.glade.XML( gladefile, "editPlaceDialog" )
 	
 
 		#i18n
@@ -102,12 +103,22 @@ class mintMenuConfig( object ):
 		self.hotkeyText = wTree.get_widget( "hotkeyText" )
 		self.buttonIcon = wTree.get_widget( "buttonIcon" )	
 		self.buttonIconImage = wTree.get_widget( "image_button_icon" )	
-		self.searchCommand = wTree.get_widget( "search_command" )		
+		self.searchCommand = wTree.get_widget( "search_command" )
+		self.computertoggle = wTree.get_widget( "computercheckbutton" )
+		self.homefoldertoggle = wTree.get_widget( "homecheckbutton" )
+		self.networktoggle = wTree.get_widget( "networkcheckbutton" )
+		self.desktoptoggle = wTree.get_widget( "desktopcheckbutton" )
+		self.trashtoggle = wTree.get_widget( "trashcheckbutton" )
+		self.customplacestree = wTree.get_widget( "customplacestree" )
+		self.editPlaceDialog = editTree.get_widget( "editPlaceDialog" )
+		self.editPlaceName = editTree.get_widget( "nameEntryBox" )
+		self.editPlacePath = editTree.get_widget( "pathEntryBox" )
 		wTree.get_widget( "closeButton" ).connect("clicked", gtk.main_quit )
 
 		
 		self.gconf = EasyGConf( "/apps/mintMenu/" )
 		self.gconfApplications = EasyGConf( "/apps/mintMenu/plugins/applications/" )
+		self.gconfPlaces = EasyGConf( "/apps/mintMenu/plugins/places/" )
 		
 		self.useCustomColors.connect( "toggled", self.toggleUseCustomColors )
 		
@@ -136,6 +147,31 @@ class mintMenuConfig( object ):
 
 		self.showRecentPlugin.connect("toggled", self.toggleRecent )
 		self.showRecentPlugin.set_active( self.getRecentToggle() )
+		
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_computer", self.computertoggle, "toggled", self.computertoggle.set_active, self.computertoggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_home_folder", self.homefoldertoggle, "toggled", self.homefoldertoggle.set_active, self.homefoldertoggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_network", self.networktoggle, "toggled", self.networktoggle.set_active, self.networktoggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_desktop", self.desktoptoggle, "toggled", self.desktoptoggle.set_active, self.desktoptoggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_trash", self.trashtoggle, "toggled", self.trashtoggle.set_active, self.trashtoggle.get_active )
+		
+		self.customplacenames = self.gconfPlaces.get( "list-string", "custom_names", [ ] )
+		self.customplacepaths = self.gconfPlaces.get( "list-string", "custom_paths", [ ] )
+		
+		self.customplacestreemodel = gtk.ListStore( str, str)
+		self.cell = gtk.CellRendererText()
+		
+		for count in range( len(self.customplacepaths) ):
+			self.customplacestreemodel.append( [ self.customplacenames[count], self.customplacepaths[count] ] )
+		self.customplacestree.set_model( self.customplacestreemodel )
+		self.namescolumn = gtk.TreeViewColumn( 'Name', self.cell, text = 0 )
+		self.placescolumn = gtk.TreeViewColumn( 'Path', self.cell, text = 1 )
+		self.customplacestree.append_column( self.namescolumn )
+		self.customplacestree.append_column( self.placescolumn )
+		wTree.get_widget("newButton").connect("clicked", self.newPlace)
+		wTree.get_widget("editButton").connect("clicked", self.editPlace)
+		wTree.get_widget("upButton").connect("clicked", self.moveUp)
+		wTree.get_widget("downButton").connect("clicked", self.moveDown)
+		wTree.get_widget("removeButton").connect("clicked", self.removePlace)
 		
 		wTree.get_widget( "mainWindow" ).present()
 		
@@ -204,6 +240,94 @@ class mintMenuConfig( object ):
 		
 	def gdkColorToString( self, gdkColor ):
 		return "#%.2X%.2X%.2X" % ( gdkColor.red / 256, gdkColor.green / 256, gdkColor.blue / 256 )
+		
+	def moveUp( self, upButton ):
+	
+		treeselection = self.customplacestree.get_selection()
+		currentiter = (treeselection.get_selected())[1]
+		
+		if ( treeselection != None ):
+		
+			lagiter = self.customplacestreemodel.get_iter_first()
+			nextiter = self.customplacestreemodel.get_iter_first()
+			
+			while ( (self.customplacestreemodel.get_path(nextiter) != self.customplacestreemodel.get_path(currentiter)) & (nextiter != None)):
+				lagiter = nextiter
+				nextiter = self.customplacestreemodel.iter_next(nextiter)
+				
+			if (nextiter != None):
+				self.customplacestreemodel.swap(currentiter, lagiter)
+				self.updatePlacesGconf()
+		
+		return
+	
+	def newPlace(self, newButton):
+		self.editPlaceName.set_text("")
+		self.editPlacePath.set_text("")
+		response = self.editPlaceDialog.run()
+		self.editPlaceDialog.hide()
+		if (response == 1 ):
+			name = self.editPlaceName.get_text()
+			path = self.editPlacePath.get_text()
+			self.customplacestreemodel.append( (name, path) )
+			self.updatePlacesGconf()
+			
+	def editPlace(self, editButton):
+		treeselection = self.customplacestree.get_selection()
+		currentiter = (treeselection.get_selected())[1]
+		
+		if (currentiter != None):
+			
+			initName = self.customplacestreemodel.get_value(currentiter, 0)
+			initPath = self.customplacestreemodel.get_value(currentiter, 1)
+			
+			self.editPlaceName.set_text(initName)
+			self.editPlacePath.set_text(initPath)
+			response = self.editPlaceDialog.run()
+			self.editPlaceDialog.hide()
+			if (response == 1 ):
+				name = self.editPlaceName.get_text()
+				path = self.editPlacePath.get_text()
+				self.customplacestreemodel.set_value(currentiter, 0, name)
+				self.customplacestreemodel.set_value(currentiter, 1, path)
+				self.updatePlacesGconf()
+	
+	def moveDown(self, downButton):
+	
+		treeselection = self.customplacestree.get_selection()
+		currentiter = (treeselection.get_selected())[1]
+		
+		nextiter = self.customplacestreemodel.iter_next(currentiter)
+		
+		if (nextiter != None):
+			self.customplacestreemodel.swap(currentiter, nextiter)
+			self.updatePlacesGconf()
+		
+		return
+		
+		
+	def removePlace(self, removeButton):
+	
+		treeselection = self.customplacestree.get_selection()
+		currentiter = (treeselection.get_selected())[1]
+		
+		if (currentiter != None):
+			self.customplacestreemodel.remove(currentiter)
+			self.updatePlacesGconf()
+		
+		return
+		
+	def updatePlacesGconf(self):
+		treeiter = self.customplacestreemodel.get_iter_first()
+		customplacenames = [ ]
+		customplacepaths = [ ]
+		while( treeiter != None ):
+			customplacenames = customplacenames + [ self.customplacestreemodel.get_value(treeiter, 0 ) ]
+			customplacepaths = customplacepaths + [ self.customplacestreemodel.get_value(treeiter, 1 ) ]
+			treeiter = self.customplacestreemodel.iter_next(treeiter)
+		self.gconfPlaces.set( "list-string", "custom_names", customplacenames)
+		self.gconfPlaces.set( "list-string", "custom_paths", customplacepaths)
+		return
 		
 
 window = mintMenuConfig()

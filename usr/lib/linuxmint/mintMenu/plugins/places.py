@@ -58,7 +58,8 @@ class pluginclass( object ):
 		self.content_holder.set_size_request( self.width, self.height )
 
 	def wake (self) :
-		self.refreshTrash()
+		if ( self.showtrash == True ):
+			self.refreshTrash()
 
 	def destroy( self ):
 		self.gconf.notifyRemoveAll()		
@@ -98,7 +99,7 @@ class pluginclass( object ):
 		
 		# Get names for custom items
 		
-		self.customnames = self.gconf.get( "list-string", "custom-names", [ ] )
+		self.customnames = self.gconf.get( "list-string", "custom_names", [ ] )
 
 		# Hide vertical dotted separator
 		self.hideseparator = self.gconf.get( "bool", "hide_separator", False )
@@ -163,8 +164,7 @@ class pluginclass( object ):
 			self.trashButton.connect( "clicked", self.ButtonClicked, "nautilus --no-desktop trash:" )
 			self.trashButton.show()
 			self.trashButton.connect( "button-release-event", self.trashPopup )				
-			#self.refreshTrash()		
-		
+			self.refreshTrash()		
 			self.placesBtnHolder.pack_start( self.trashButton, False, False )
 			self.mintMenuWin.setTooltip( self.trashButton, _("Browse deleted files") )
 			
@@ -198,10 +198,10 @@ class pluginclass( object ):
 		   self.do_standard_places()
 
 	def refreshTrash (self):
-		iconName = "user-trash"
-		if (os.path.exists(home + "/.local/share/Trash/info")):			
-			infoFiles = commands.getoutput("ls " + home + "/.local/share/Trash/info/ | wc -l")				
-			if (int(infoFiles) > 0):
-				iconName = "user-trash-full"		
-		self.trashButton.setIcon(iconName)
+			iconName = "user-trash"
+			if (os.path.exists(home + "/.local/share/Trash/info")):			
+				infoFiles = commands.getoutput("ls " + home + "/.local/share/Trash/info/ | wc -l")				
+				if (int(infoFiles) > 0):
+					iconName = "user-trash-full"		
+			self.trashButton.setIcon(iconName)
 
