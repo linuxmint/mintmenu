@@ -110,6 +110,7 @@ class mintMenuConfig( object ):
 		self.desktoptoggle = wTree.get_widget( "desktopcheckbutton" )
 		self.trashtoggle = wTree.get_widget( "trashcheckbutton" )
 		self.customplacestree = wTree.get_widget( "customplacestree" )
+		self.placesHeightBox = wTree.get_widget( "placesHeightSpinBox" ) 
 		self.editPlaceDialog = editTree.get_widget( "editPlaceDialog" )
 		self.editPlaceName = editTree.get_widget( "nameEntryBox" )
 		self.editPlacePath = editTree.get_widget( "pathEntryBox" )
@@ -153,6 +154,7 @@ class mintMenuConfig( object ):
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_network", self.networktoggle, "toggled", self.networktoggle.set_active, self.networktoggle.get_active )
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_desktop", self.desktoptoggle, "toggled", self.desktoptoggle.set_active, self.desktoptoggle.get_active )
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_trash", self.trashtoggle, "toggled", self.trashtoggle.set_active, self.trashtoggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "int", "height", self.placesHeightBox, "value-changed", self.placesHeightBox.set_value, self.placesHeightBox.get_value_as_int )
 		
 		self.customplacenames = self.gconfPlaces.get( "list-string", "custom_names", [ ] )
 		self.customplacepaths = self.gconfPlaces.get( "list-string", "custom_paths", [ ] )

@@ -838,6 +838,50 @@
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <child>
+                          <widget class="GtkAlignment" id="alignment5">
+                            <property name="visible">True</property>
+                            <property name="bottom_padding">3</property>
+                            <property name="left_padding">5</property>
+                            <child>
+                              <widget class="GtkHBox" id="hbox2">
+                                <property name="visible">True</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <widget class="GtkLabel" id="placesHeightEntryLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Height:</property>
+                                    <property name="use_markup">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkSpinButton" id="placesHeightSpinBox">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="max_length">5</property>
+                                    <property name="invisible_char">&#x25CF;</property>
+                                    <property name="caps_lock_warning">False</property>
+                                    <property name="adjustment">0 0 10000 1 10 10</property>
+                                    <property name="numeric">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="padding">4</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <widget class="GtkFrame" id="frame3">
                             <property name="visible">True</property>
                             <property name="label_xalign">0</property>
@@ -930,7 +974,7 @@
                             </child>
                           </widget>
                           <packing>
-                            <property name="position">0</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
@@ -1090,7 +1134,7 @@
                             </child>
                           </widget>
                           <packing>
-                            <property name="position">1</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </widget>
