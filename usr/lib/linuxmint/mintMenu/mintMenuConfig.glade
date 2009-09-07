@@ -963,7 +963,7 @@
                               </widget>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="label8">
+                              <widget class="GtkLabel" id="defaultPlacesFrameLabel">
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">Toggle Default Places:</property>
                                 <property name="use_markup">True</property>
@@ -1123,7 +1123,7 @@
                               </widget>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="label7">
+                              <widget class="GtkLabel" id="customPlacesFrameLabel">
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">Custom Places:</property>
                                 <property name="use_markup">True</property>
@@ -1204,6 +1204,9 @@
   </widget>
   <widget class="GtkDialog" id="editPlaceDialog">
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Edit Place</property>
+    <property name="modal">True</property>
+    <property name="icon">/usr/lib/linuxmint/mintSystem/icon.png</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">

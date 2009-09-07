@@ -42,6 +42,7 @@ class mintMenuConfig( object ):
 		#i18n
 		wTree.get_widget("mainWindow").set_title(_("Menu preferences"))
 		wTree.get_widget("mainWindow").set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+		editTree.get_widget("editPlaceDialog").set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
 
 		wTree.get_widget("showSidepane").set_label(_("Show sidepane"))
 		wTree.get_widget("showButtonIcon").set_label(_("Show button icon"))
@@ -76,6 +77,19 @@ class mintMenuConfig( object ):
 		wTree.get_widget("hoverLabel").set_text(_("Hover delay (ms):"))
 		wTree.get_widget("label4").set_text(_("Button icon:"))
 		wTree.get_widget("label5").set_text(_("Search command:"))
+
+		wTree.get_widget("placesLabel").set_text(_("Places"))
+		wTree.get_widget("placesHeightEntryLabel").set_text(_("Height:"))
+		wTree.get_widget("defaultPlacesFrameLabel").set_text(_("Toggle Default Places:"))
+		wTree.get_widget("computercheckbutton").set_label(_("Computer"))
+		wTree.get_widget("homecheckbutton").set_label(_("Home Folder"))
+		wTree.get_widget("networkcheckbutton").set_label(_("Network"))
+		wTree.get_widget("desktopcheckbutton").set_label(_("Desktop"))
+		wTree.get_widget("trashcheckbutton").set_label(_("Trash"))
+		wTree.get_widget("customPlacesFrameLabel").set_text(_("Custom Places:"))
+
+		self.editPlaceDialogTitle = (_("Edit Place"))
+		self.newPlaceDialogTitle = (_("New Place"))
 
 		wTree.get_widget("hotkey_label").set_text(_("Keyboard shortcut:"))
 
@@ -264,7 +278,7 @@ class mintMenuConfig( object ):
 		return
 	
 	def newPlace(self, newButton):
-		self.editPlaceDialog.set_title("New Place")
+		self.editPlaceDialog.set_title(self.newPlaceDialogTitle)
 		self.editPlaceName.set_text("")
 		self.editPlacePath.set_text("")
 		response = self.editPlaceDialog.run()
@@ -276,7 +290,7 @@ class mintMenuConfig( object ):
 			self.updatePlacesGconf()
 			
 	def editPlace(self, editButton):
-		self.editPlaceDialog.set_title("Edit Place")
+		self.editPlaceDialog.set_title(self.editPlaceDialogTitle)
 		treeselection = self.customplacestree.get_selection()
 		currentiter = (treeselection.get_selected())[1]
 		
