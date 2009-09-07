@@ -264,6 +264,7 @@ class mintMenuConfig( object ):
 		return
 	
 	def newPlace(self, newButton):
+		self.editPlaceDialog.set_title("New Place")
 		self.editPlaceName.set_text("")
 		self.editPlacePath.set_text("")
 		response = self.editPlaceDialog.run()
@@ -275,6 +276,7 @@ class mintMenuConfig( object ):
 			self.updatePlacesGconf()
 			
 	def editPlace(self, editButton):
+		self.editPlaceDialog.set_title("Edit Place")
 		treeselection = self.customplacestree.get_selection()
 		currentiter = (treeselection.get_selected())[1]
 		
