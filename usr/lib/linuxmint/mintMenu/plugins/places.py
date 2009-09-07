@@ -69,14 +69,15 @@ class pluginclass( object ):
 			self.width = entry.get_value().get_int()
 		elif entry.get_key() == self.gconf.gconfDir+"height":
 			self.heigth = entry.get_value().get_int()
-
 		self.content_holder.set_size_request( self.width, self.height )
+		
 
 
 	def RegenPlugin( self, *args, **kargs ):
 		self.GetGconfEntries()
 		self.ClearAll()
 		self.do_standard_places()
+		self.do_custom_places()
 
 	def GetGconfEntries( self ):
 
@@ -168,9 +169,10 @@ class pluginclass( object ):
 			self.placesBtnHolder.pack_start( self.trashButton, False, False )
 			self.mintMenuWin.setTooltip( self.trashButton, _("Browse deleted files") )
 			
+	def do_custom_places( self ):		
 		for index in range( len(self.custompaths) ):
 			command = ( "nautilus --no-desktop " + self.custompaths[index] )
-			currentbutton = easyButton( "folder", self.iconsize, [_(self.customnames[index])], -1, -1 )
+			currentbutton = easyButton( "folder", self.iconsize, [self.customnames[index]], -1, -1 )
 			currentbutton.connect( "clicked", self.ButtonClicked, command )
 			currentbutton.show()
 			self.placesBtnHolder.pack_start( currentbutton, False, False )
@@ -195,7 +197,8 @@ class pluginclass( object ):
 			Execute( Exec )
 
 	def do_plugin( self ):
-		   self.do_standard_places()
+		self.do_standard_places()
+		self.do_custom_places()
 
 	def refreshTrash (self):
 			iconName = "user-trash"
