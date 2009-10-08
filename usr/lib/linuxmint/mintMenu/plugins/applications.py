@@ -270,7 +270,7 @@ class pluginclass( object ):
 				return ( 0, 0 )
 
 		#sizeIcon = gtk.icon_size_lookup( sizeIcon )
-
+		
 		self.suggestSearchAppButton = SuggestionButton(gtk.STOCK_FIND, self.iconSize, "")		
 		self.suggestSearchButton = SuggestionButton(gtk.STOCK_FIND, self.iconSize, "")
 		self.suggestShowButton = SuggestionButton(gtk.STOCK_INFO, self.iconSize, "")
@@ -561,7 +561,7 @@ class pluginclass( object ):
 					if (shown):
 						showns = True
 
-				if (not showns):					
+				if (not showns and os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg")):					
 					self.suggestion = text
 
 					self.applicationsBox.add(self.suggestSearchAppButton)					
