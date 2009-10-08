@@ -22,7 +22,7 @@ except Exception, e:
 global mbindkey
 # Load the key binding lib (developped by deskbar-applet, copied into mintMenu so we don't end up with an unnecessary dependency)
 try:
-	sys.path.append('/usr/lib/python2.5/site-packages/deskbar/core/keybinder')
+	sys.path.append('/usr/lib/pyshared/python2.6/deskbar/core/keybinder')
         from _keybinder import tomboy_keybinder_bind as bind_key
 except Exception, cause:
         print "*********** Keybind Driver Load Failure **************"
@@ -747,7 +747,7 @@ class MenuWin( object ):
 		about = gtk.AboutDialog()
 		about.set_name("mintMenu")
 		import commands
-		version = commands.getoutput("/usr/lib/linuxmint/mintMenu/version.py")
+		version = commands.getoutput("/usr/lib/linuxmint/common/version.py mintmenu")
 		about.set_version(version)
 		try:
            		h = open('/usr/share/common-licenses/GPL','r')
