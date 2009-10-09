@@ -36,13 +36,11 @@ class mintMenuConfig( object ):
 		# Load glade file and extract widgets
 		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
 		wTree 	  = gtk.glade.XML( gladefile, "mainWindow" )
-		editTree  = gtk.glade.XML( gladefile, "editPlaceDialog" )
-	
+		self.mainWindow=wTree.get_widget("mainWindow")
 
 		#i18n
-		wTree.get_widget("mainWindow").set_title(_("Menu preferences"))
-		wTree.get_widget("mainWindow").set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
-		editTree.get_widget("editPlaceDialog").set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+		self.mainWindow.set_title(_("Menu preferences"))
+		self.mainWindow.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
 
 		wTree.get_widget("showSidepane").set_label(_("Show sidepane"))
 		wTree.get_widget("showButtonIcon").set_label(_("Show button icon"))
@@ -125,9 +123,6 @@ class mintMenuConfig( object ):
 		self.trashtoggle = wTree.get_widget( "trashcheckbutton" )
 		self.customplacestree = wTree.get_widget( "customplacestree" )
 		self.placesHeightBox = wTree.get_widget( "placesHeightSpinBox" ) 
-		self.editPlaceDialog = editTree.get_widget( "editPlaceDialog" )
-		self.editPlaceName = editTree.get_widget( "nameEntryBox" )
-		self.editPlacePath = editTree.get_widget( "pathEntryBox" )
 		wTree.get_widget( "closeButton" ).connect("clicked", gtk.main_quit )
 
 		
@@ -189,7 +184,7 @@ class mintMenuConfig( object ):
 		wTree.get_widget("downButton").connect("clicked", self.moveDown)
 		wTree.get_widget("removeButton").connect("clicked", self.removePlace)
 		
-		wTree.get_widget( "mainWindow" ).present()
+		self.mainWindow.present()
 		
 		self.getBackgroundColor()
 
@@ -278,19 +273,50 @@ class mintMenuConfig( object ):
 		return
 	
 	def newPlace(self, newButton):
-		self.editPlaceDialog.set_title(self.newPlaceDialogTitle)
-		self.editPlaceName.set_text("")
-		self.editPlacePath.set_text("")
-		response = self.editPlaceDialog.run()
-		self.editPlaceDialog.hide()
-		if (response == 1 ):
-			name = self.editPlaceName.get_text()
-			path = self.editPlacePath.get_text()
-			self.customplacestreemodel.append( (name, path) )
-			self.updatePlacesGconf()
+		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
+		wTree = gtk.glade.XML( gladefile, "editPlaceDialog" )
+		folderChooserTree = gtk.glade.XML( gladefile, "fileChooserDialog" )
+		newPlaceDialog = wTree.get_widget( "editPlaceDialog" )
+		folderChooserDialog = folderChooserTree.get_widget( "fileChooserDialog" )
+		newPlaceDialog.set_transient_for(self.mainWindow)
+		newPlaceDialog.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+		newPlaceDialog.set_title(self.newPlaceDialogTitle)
+		newPlaceDialog.set_default_response(gtk.RESPONSE_OK)
+		newPlaceName = wTree.get_widget( "nameEntryBox" )
+		newPlacePath = wTree.get_widget( "pathEntryBox" )
+		folderButton = wTree.get_widget( "folderButton" )
+		def chooseFolder(folderButton):
+			currentPath = newPlacePath.get_text()
+			if (currentPath!=""):
+				folderChooserDialog.select_filename(currentPath)
+			response = folderChooserDialog.run()
+			folderChooserDialog.hide()
+			if (response == gtk.RESPONSE_OK):
+				newPlacePath.set_text( folderChooserDialog.get_filenames()[0] )
+		folderButton.connect("clicked", chooseFolder)
+
+		response = newPlaceDialog.run()
+		newPlaceDialog.hide()
+		if (response == gtk.RESPONSE_OK ):
+			name = newPlaceName.get_text()
+			path = newPlacePath.get_text()
+			if (name != "" and path !=""):
+				self.customplacestreemodel.append( (name, path) )
+				self.updatePlacesGconf()
 			
 	def editPlace(self, editButton):
-		self.editPlaceDialog.set_title(self.editPlaceDialogTitle)
+		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
+		wTree = gtk.glade.XML( gladefile, "editPlaceDialog" )
+		folderChooserTree = gtk.glade.XML( gladefile, "fileChooserDialog" )
+		editPlaceDialog = wTree.get_widget( "editPlaceDialog" )
+		folderChooserDialog = folderChooserTree.get_widget( "fileChooserDialog" )
+		editPlaceDialog.set_transient_for(self.mainWindow)
+		editPlaceDialog.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+		editPlaceDialog.set_title(self.editPlaceDialogTitle)
+		editPlaceDialog.set_default_response(gtk.RESPONSE_OK)
+		editPlaceName = wTree.get_widget( "nameEntryBox" )
+		editPlacePath = wTree.get_widget( "pathEntryBox" )
+		folderButton = wTree.get_widget( "folderButton" )
 		treeselection = self.customplacestree.get_selection()
 		currentiter = (treeselection.get_selected())[1]
 		
@@ -299,16 +325,26 @@ class mintMenuConfig( object ):
 			initName = self.customplacestreemodel.get_value(currentiter, 0)
 			initPath = self.customplacestreemodel.get_value(currentiter, 1)
 			
-			self.editPlaceName.set_text(initName)
-			self.editPlacePath.set_text(initPath)
-			response = self.editPlaceDialog.run()
-			self.editPlaceDialog.hide()
-			if (response == 1 ):
-				name = self.editPlaceName.get_text()
-				path = self.editPlacePath.get_text()
-				self.customplacestreemodel.set_value(currentiter, 0, name)
-				self.customplacestreemodel.set_value(currentiter, 1, path)
-				self.updatePlacesGconf()
+			editPlaceName.set_text(initName)
+			editPlacePath.set_text(initPath)
+			def chooseFolder(folderButton):
+				currentPath = editPlacePath.get_text()
+				if (currentPath!=""):
+					folderChooserDialog.select_filename(currentPath)
+				response = folderChooserDialog.run()
+				folderChooserDialog.hide()
+				if (response == gtk.RESPONSE_OK):
+					editPlacePath.set_text( folderChooserDialog.get_filenames()[0] )
+			folderButton.connect("clicked", chooseFolder)
+			response = editPlaceDialog.run()
+			editPlaceDialog.hide()
+			if (response == gtk.RESPONSE_OK):
+				name = editPlaceName.get_text()
+				path = editPlacePath.get_text()
+				if (name != "" and path != ""):
+					self.customplacestreemodel.set_value(currentiter, 0, name)
+					self.customplacestreemodel.set_value(currentiter, 1, path)
+					self.updatePlacesGconf()
 	
 	def moveDown(self, downButton):
 	
