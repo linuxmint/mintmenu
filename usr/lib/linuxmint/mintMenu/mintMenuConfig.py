@@ -123,7 +123,10 @@ class mintMenuConfig( object ):
 		self.trashtoggle = wTree.get_widget( "trashcheckbutton" )
 		self.customplacestree = wTree.get_widget( "customplacestree" )
 		self.allowScrollbarToggle = wTree.get_widget( "allowscrollbarcheckbutton" )
-		self.placesHeightBox = wTree.get_widget( "placesHeightSpinBox" ) 
+		self.placesHeightButton = wTree.get_widget( "placesHeightSpinButton" ) 
+		if (self.allowScrollbarToggle.get_active() == False):
+			self.placesHeightButton.set_sensitive(False)
+		self.allowScrollbarToggle.connect("toggled", self.toggleHeightEnabled )
 		wTree.get_widget( "closeButton" ).connect("clicked", gtk.main_quit )
 
 		
@@ -164,7 +167,7 @@ class mintMenuConfig( object ):
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_network", self.networktoggle, "toggled", self.networktoggle.set_active, self.networktoggle.get_active )
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_desktop", self.desktoptoggle, "toggled", self.desktoptoggle.set_active, self.desktoptoggle.get_active )
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_trash", self.trashtoggle, "toggled", self.trashtoggle.set_active, self.trashtoggle.get_active )
-		self.bindGconfValueToWidget( self.gconfPlaces, "int", "height", self.placesHeightBox, "value-changed", self.placesHeightBox.set_value, self.placesHeightBox.get_value_as_int )
+		self.bindGconfValueToWidget( self.gconfPlaces, "int", "height", self.placesHeightButton, "value-changed", self.placesHeightButton.set_value, self.placesHeightButton.get_value_as_int )
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "allowScrollbar", self.allowScrollbarToggle, "toggled", self.allowScrollbarToggle.set_active, self.allowScrollbarToggle.get_active )
 		
 		self.customplacenames = self.gconfPlaces.get( "list-string", "custom_names", [ ] )
@@ -372,6 +375,12 @@ class mintMenuConfig( object ):
 			self.updatePlacesGconf()
 		
 		return
+	
+	def toggleHeightEnabled(self, toggle):
+		if (toggle.get_active() == True):
+			self.placesHeightButton.set_sensitive(True)
+		else:
+			self.placesHeightButton.set_sensitive(False)
 		
 	def updatePlacesGconf(self):
 		treeiter = self.customplacestreemodel.get_iter_first()
