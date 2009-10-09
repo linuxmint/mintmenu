@@ -30,7 +30,7 @@ class pluginclass( object ):
 		wTree 	= gtk.glade.XML( gladefile, "mainWindow" )
 		self.placesBtnHolder	= wTree.get_widget( "places_button_holder" )
 		self.editableBtnHolder 	= wTree.get_widget( "editable_button_holder" )
-
+		self.scrolledWindow=wTree.get_widget("scrolledwindow2")
 		# These properties are NECESSARY to maintain consistency
 
 		# Set 'window' property for the plugin (Must be the root widget)
@@ -82,7 +82,12 @@ class pluginclass( object ):
 	def GetGconfEntries( self ):
 
 		self.width = self.gconf.get( "int", "width", 200 )
-		self.height = self.gconf.get( "int", "height", 155 )
+		self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
+		if (self.allowScrollbar == False):
+			self.height = -1
+			self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
+		else:
+			self.height = self.gconf.get( "int", "height", 155 )
 		self.execapp = self.gconf.get( "string", "execute_app", "nautilus" )
 		self.iconsize = self.gconf.get( "int","icon_size", 2 )
 		

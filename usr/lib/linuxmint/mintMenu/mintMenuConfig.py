@@ -122,6 +122,7 @@ class mintMenuConfig( object ):
 		self.desktoptoggle = wTree.get_widget( "desktopcheckbutton" )
 		self.trashtoggle = wTree.get_widget( "trashcheckbutton" )
 		self.customplacestree = wTree.get_widget( "customplacestree" )
+		self.allowScrollbarToggle = wTree.get_widget( "allowscrollbarcheckbutton" )
 		self.placesHeightBox = wTree.get_widget( "placesHeightSpinBox" ) 
 		wTree.get_widget( "closeButton" ).connect("clicked", gtk.main_quit )
 
@@ -164,6 +165,7 @@ class mintMenuConfig( object ):
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_desktop", self.desktoptoggle, "toggled", self.desktoptoggle.set_active, self.desktoptoggle.get_active )
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_trash", self.trashtoggle, "toggled", self.trashtoggle.set_active, self.trashtoggle.get_active )
 		self.bindGconfValueToWidget( self.gconfPlaces, "int", "height", self.placesHeightBox, "value-changed", self.placesHeightBox.set_value, self.placesHeightBox.get_value_as_int )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "allowScrollbar", self.allowScrollbarToggle, "toggled", self.allowScrollbarToggle.set_active, self.allowScrollbarToggle.get_active )
 		
 		self.customplacenames = self.gconfPlaces.get( "list-string", "custom_names", [ ] )
 		self.customplacepaths = self.gconfPlaces.get( "list-string", "custom_paths", [ ] )
