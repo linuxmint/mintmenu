@@ -87,7 +87,7 @@ class mintRemoveWindow:
 		warnDlg = gtk.Dialog(title="MintMenu", parent=None, flags=0, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
 		warnDlg.add_button(gtk.STOCK_REMOVE, gtk.RESPONSE_OK)
 		warnDlg.vbox.set_spacing(10)
-		warnDlg.set_icon_from_file("/usr/lib/linuxmint/mintSystem/icon.png")
+		warnDlg.set_icon_from_file("/usr/share/linuxmint/logo.png")
 		labelSpc = gtk.Label(" ")
 		warnDlg.vbox.pack_start(labelSpc)	
 		labelSpc.show()

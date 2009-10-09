@@ -1,3 +1,12 @@
+mintmenu (4.8.1) helena; urgency=low
+
+  * Dependency on mint-common
+  * Updated calls to newer pyinotify API
+  * Updated path of keybinder API
+  * Removed dependency on mintinstall
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu,  8 Oct 2009 10:26:00 +0000
+
 mintmenu (4.8.0) helena; urgency=low
 
   * Blueprint implemented: https://blueprints.launchpad.net/linuxmint/+spec/generic-branding

@@ -5,7 +5,7 @@
   <widget class="GtkWindow" id="mainWindow">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="window_position">center-always</property>
-    <property name="icon">/usr/lib/linuxmint/mintSystem/icon.png</property>
+    <property name="icon">/usr/share/linuxmint/logo.png</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
