@@ -27,6 +27,7 @@ class pluginclass( object ):
 		wTree 					= gtk.glade.XML( gladefile, "mainWindow" )
 		self.systemBtnHolder	= wTree.get_widget( "system_button_holder" )
 		self.editableBtnHolder 	= wTree.get_widget( "editable_button_holder" )
+		self.scrolledWindow = wTree.get_widget( "scrolledwindow2" )
 
 		# These properties are NECESSARY to maintain consistency
 
@@ -77,8 +78,23 @@ class pluginclass( object ):
 	def GetGconfEntries( self ):
 
 		self.width = self.gconf.get( "int", "width", 200 )
-		self.height = self.gconf.get( "int", "height", 180 )
+		self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
+		if (self.allowScrollbar == False):
+			self.height = -1
+			self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
+		else:
+			self.height = self.gconf.get( "int", "height", 180 )
 		self.iconsize = self.gconf.get( "int","icon_size", 2 )
+
+		# Check toggles
+
+		self.showSoftwareManager = self.gconf.get( "bool", "show_software_manager", True )
+		self.showPackageManager = self.gconf.get( "bool", "show_package_manager", True )
+		self.showControlCenter = self.gconf.get( "bool", "show_control_center", True )
+		self.showTerminal = self.gconf.get( "bool", "show_terminal", True )
+		self.showLockScreen = self.gconf.get( "bool", "show_lock_screen", True )
+		self.showLogout = self.gconf.get( "bool", "show_logout", True )
+		self.showQuit = self.gconf.get( "bool", "show_quit", True )
 
 		# Hide vertical dotted separator
 		self.hideseparator = self.gconf.get( "bool", "hide_separator", False )
@@ -97,42 +113,55 @@ class pluginclass( object ):
 	#Add standard items
 	def do_standard_items( self ):		
 
-		if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
-			Button1 = easyButton( "/usr/lib/linuxmint/mintInstall/icon.svg", self.iconsize, [_("Software manager")], -1, -1 )
-			Button1.connect( "clicked", self.ButtonClicked, "mintinstall" )
-			Button1.show()
-			self.systemBtnHolder.pack_start( Button1, False, False )
-			self.mintMenuWin.setTooltip( Button1, _("Browse and install available software") )
+		if ( self.showSoftwareManager == True ):
+			if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
+				Button1 = easyButton( "/usr/lib/linuxmint/mintInstall/icon.svg", self.iconsize, [_("Software manager")], -1, -1 )
+				Button1.connect( "clicked", self.ButtonClicked, "mintinstall" )
+				Button1.show()
+				self.systemBtnHolder.pack_start( Button1, False, False )
+				self.mintMenuWin.setTooltip( Button1, _("Browse and install available software") )
 
-		Button2 = easyButton( "synaptic", self.iconsize, [_("Package manager")], -1, -1 )
-		Button2.connect( "clicked", self.ButtonClicked, "gksu /usr/sbin/synaptic" )
-		Button2.show()
-		self.systemBtnHolder.pack_start( Button2, False, False )
-		self.mintMenuWin.setTooltip( Button2, _("Install, remove and upgrade software packages") )
+		if ( self.showPackageManager == True ):
+			Button2 = easyButton( "synaptic", self.iconsize, [_("Package manager")], -1, -1 )
+			Button2.connect( "clicked", self.ButtonClicked, "gksu /usr/sbin/synaptic" )
+			Button2.show()
+			self.systemBtnHolder.pack_start( Button2, False, False )
+			self.mintMenuWin.setTooltip( Button2, _("Install, remove and upgrade software packages") )
 
-		Button3 = easyButton( "gtk-preferences", self.iconsize, [_("Control center")], -1, -1 )
-		Button3.connect( "clicked", self.ButtonClicked, "gnome-control-center" )
-		Button3.show()
-		self.systemBtnHolder.pack_start( Button3, False, False )
-		self.mintMenuWin.setTooltip( Button3, _("Configure your system") )
+		if ( self.showControlCenter == True ):
+			Button3 = easyButton( "gtk-preferences", self.iconsize, [_("Control center")], -1, -1 )
+			Button3.connect( "clicked", self.ButtonClicked, "gnome-control-center" )
+			Button3.show()
+			self.systemBtnHolder.pack_start( Button3, False, False )
+			self.mintMenuWin.setTooltip( Button3, _("Configure your system") )
 		
-		Button4 = easyButton( "gnome-terminal", self.iconsize, [_("Terminal")], -1, -1 )
-		Button4.connect( "clicked", self.ButtonClicked, "x-terminal-emulator" )
-		Button4.show()
-		self.systemBtnHolder.pack_start( Button4, False, False )
-		self.mintMenuWin.setTooltip( Button4, _("Use the command line") )
+		if ( self.showTerminal == True ):
+			Button4 = easyButton( "gnome-terminal", self.iconsize, [_("Terminal")], -1, -1 )
+			Button4.connect( "clicked", self.ButtonClicked, "x-terminal-emulator" )
+			Button4.show()
+			self.systemBtnHolder.pack_start( Button4, False, False )
+			self.mintMenuWin.setTooltip( Button4, _("Use the command line") )
 
-		Button5 = easyButton( "system-log-out", self.iconsize, [_("Logout")], -1, -1 )
-		Button5.connect( "clicked", self.ButtonClicked, "gnome-session-save --logout-dialog" )
-		Button5.show()
-		self.systemBtnHolder.pack_start( Button5, False, False )
-		self.mintMenuWin.setTooltip( Button5, _("Log out or switch user") )
+		if ( self.showLockScreen == True ):
+			Button5 = easyButton( "system-lock-screen", self.iconsize, [_("Lock Screen")], -1, -1 )
+			Button5.connect( "clicked", self.ButtonClicked, "gnome-screensaver-command --lock" )
+			Button5.show()
+			self.systemBtnHolder.pack_start( Button5, False, False )
+			self.mintMenuWin.setTooltip( Button5, _("Requires password to unlock") )
 
-		Button6 = easyButton( "system-shutdown", self.iconsize, [_("Quit")], -1, -1 )
-		Button6.connect( "clicked", self.ButtonClicked, "gnome-session-save --shutdown-dialog" )
-		Button6.show()
-		self.systemBtnHolder.pack_start( Button6, False, False )
-		self.mintMenuWin.setTooltip( Button6, _("Shutdown, restart, suspend or hibernate") )
+		if ( self.showLogout == True ):
+			Button6 = easyButton( "system-log-out", self.iconsize, [_("Logout")], -1, -1 )
+			Button6.connect( "clicked", self.ButtonClicked, "gnome-session-save --logout-dialog" )
+			Button6.show()
+			self.systemBtnHolder.pack_start( Button6, False, False )
+			self.mintMenuWin.setTooltip( Button6, _("Log out or switch user") )
+
+		if ( self.showQuit == True ):
+			Button7 = easyButton( "system-shutdown", self.iconsize, [_("Quit")], -1, -1 )
+			Button7.connect( "clicked", self.ButtonClicked, "gnome-session-save --shutdown-dialog" )
+			Button7.show()
+			self.systemBtnHolder.pack_start( Button7, False, False )
+			self.mintMenuWin.setTooltip( Button7, _("Shutdown, restart, suspend or hibernate") )
 
 	def ButtonClicked( self, widget, Exec ):
 		self.mintMenuWin.hide()
