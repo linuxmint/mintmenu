@@ -88,6 +88,7 @@ class mintMenuConfig( object ):
 
 		self.editPlaceDialogTitle = (_("Edit Place"))
 		self.newPlaceDialogTitle = (_("New Place"))
+		self.folderChooserDialogTitle = (_("Select a folder"))
 
 		wTree.get_widget("hotkey_label").set_text(_("Keyboard shortcut:"))
 
@@ -289,6 +290,7 @@ class mintMenuConfig( object ):
 		newPlaceDialog.set_transient_for(self.mainWindow)
 		newPlaceDialog.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
 		newPlaceDialog.set_title(self.newPlaceDialogTitle)
+		folderChooserDialog.set_title(self.folderChooserDialogTitle)
 		newPlaceDialog.set_default_response(gtk.RESPONSE_OK)
 		newPlaceName = wTree.get_widget( "nameEntryBox" )
 		newPlacePath = wTree.get_widget( "pathEntryBox" )
@@ -320,6 +322,7 @@ class mintMenuConfig( object ):
 		editPlaceDialog.set_transient_for(self.mainWindow)
 		editPlaceDialog.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
 		editPlaceDialog.set_title(self.editPlaceDialogTitle)
+		folderChooserDialog.set_title(self.folderChooserDialogTitle)
 		editPlaceDialog.set_default_response(gtk.RESPONSE_OK)
 		editPlaceName = wTree.get_widget( "nameEntryBox" )
 		editPlacePath = wTree.get_widget( "pathEntryBox" )
