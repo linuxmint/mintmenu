@@ -77,6 +77,7 @@ class mintMenuConfig( object ):
 		wTree.get_widget("label5").set_text(_("Search command:"))
 
 		wTree.get_widget("placesLabel").set_text(_("Places"))
+		wTree.get_widget("allowscrollbarcheckbutton").set_label(_("Allow Scrollbar"))
 		wTree.get_widget("placesHeightEntryLabel").set_text(_("Height:"))
 		wTree.get_widget("defaultPlacesFrameLabel").set_text(_("Toggle Default Places:"))
 		wTree.get_widget("computercheckbutton").set_label(_("Computer"))
@@ -85,6 +86,18 @@ class mintMenuConfig( object ):
 		wTree.get_widget("desktopcheckbutton").set_label(_("Desktop"))
 		wTree.get_widget("trashcheckbutton").set_label(_("Trash"))
 		wTree.get_widget("customPlacesFrameLabel").set_text(_("Custom Places:"))
+
+		wTree.get_widget("systemLabel").set_text(_("System"))
+		wTree.get_widget("allowscrollbarcheckbutton1").set_label(_("Allow Scrollbar"))
+		wTree.get_widget("systemHeightEntryLabel").set_text(_("Height:"))
+		wTree.get_widget("defaultItemsFrameLabel").set_text(_("Toggle Default Items:"))
+		wTree.get_widget("softwaremanagercheckbutton").set_label(_("Software Manager"))
+		wTree.get_widget("packagemanagercheckbutton").set_label(_("Package Manager"))
+		wTree.get_widget("controlcentercheckbutton").set_label(_("Control Center"))
+		wTree.get_widget("terminalcheckbutton").set_label(_("Terminal"))
+		wTree.get_widget("lockcheckbutton").set_label(_("Lock Screen"))
+		wTree.get_widget("logoutcheckbutton").set_label(_("Log Out"))
+		wTree.get_widget("quitcheckbutton").set_label(_("Quit"))
 
 		self.editPlaceDialogTitle = (_("Edit Place"))
 		self.newPlaceDialogTitle = (_("New Place"))
@@ -128,6 +141,7 @@ class mintMenuConfig( object ):
 		if (self.allowPlacesScrollbarToggle.get_active() == False):
 			self.placesHeightButton.set_sensitive(False)
 		self.allowPlacesScrollbarToggle.connect("toggled", self.togglePlacesHeightEnabled )
+		self.softwareManagerToggle = wTree.get_widget( "softwaremanagercheckbutton" )
 		self.packageManagerToggle = wTree.get_widget( "packagemanagercheckbutton" )
 		self.controlCenterToggle = wTree.get_widget( "controlcentercheckbutton" )
 		self.packageManagerToggle = wTree.get_widget( "packagemanagercheckbutton" )
@@ -137,9 +151,13 @@ class mintMenuConfig( object ):
 		self.quitToggle = wTree.get_widget( "quitcheckbutton" )
 		self.allowSystemScrollbarToggle = wTree.get_widget( "allowscrollbarcheckbutton1" )
 		self.systemHeightButton = wTree.get_widget( "systemHeightSpinButton" ) 
-		if (self.allowSystemScrollbarToggle.get_active() == False):
-			self.systemHeightButton.set_sensitive(False)
+		if (self.allowSystemScrollbarToggle.get_active() == False): self.systemHeightButton.set_sensitive(False)
 		self.allowSystemScrollbarToggle.connect("toggled", self.toggleSystemHeightEnabled )
+		if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
+			wTree.get_widget( "softwaremanagercheckbutton" ).visible = True
+		else:
+			wTree.get_widget( "softwaremanagercheckbutton" ).visible = False
+
 		wTree.get_widget( "closeButton" ).connect("clicked", gtk.main_quit )
 
 		
@@ -184,6 +202,7 @@ class mintMenuConfig( object ):
 		self.bindGconfValueToWidget( self.gconfPlaces, "int", "height", self.placesHeightButton, "value-changed", self.placesHeightButton.set_value, self.placesHeightButton.get_value_as_int )
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "allowScrollbar", self.allowPlacesScrollbarToggle, "toggled", self.allowPlacesScrollbarToggle.set_active, self.allowPlacesScrollbarToggle.get_active )
 		
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_show_software_manager", self.softwareManagerToggle, "toggled", self.softwareManagerToggle.set_active, self.softwareManagerToggle.get_active )
 		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_package_manager", self.packageManagerToggle, "toggled", self.packageManagerToggle.set_active, self.packageManagerToggle.get_active )
 		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_control_center", self.controlCenterToggle, "toggled", self.controlCenterToggle.set_active, self.controlCenterToggle.get_active )
 		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_terminal", self.terminalToggle, "toggled", self.terminalToggle.set_active, self.terminalToggle.get_active )

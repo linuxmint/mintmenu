@@ -1218,7 +1218,7 @@
                                 <property name="visible">True</property>
                                 <property name="spacing">4</property>
                                 <child>
-                                  <widget class="GtkLabel" id="placesHeightEntryLabel1">
+                                  <widget class="GtkLabel" id="systemHeightEntryLabel">
                                     <property name="visible">True</property>
                                     <property name="label" translatable="yes">Height:</property>
                                     <property name="use_markup">True</property>
@@ -1269,9 +1269,8 @@
                                     <property name="visible">True</property>
                                     <property name="orientation">vertical</property>
                                     <child>
-                                      <widget class="GtkCheckButton" id="packagemanagercheckbutton">
-                                        <property name="label" translatable="yes">Package Manager</property>
-                                        <property name="visible">True</property>
+                                      <widget class="GtkCheckButton" id="softwaremanagercheckbutton">
+                                        <property name="label" translatable="yes">Software Manager</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="draw_indicator">True</property>
@@ -1283,6 +1282,20 @@
                                       </packing>
                                     </child>
                                     <child>
+                                      <widget class="GtkCheckButton" id="packagemanagercheckbutton">
+                                        <property name="label" translatable="yes">Package Manager</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="draw_indicator">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <widget class="GtkCheckButton" id="controlcentercheckbutton">
                                         <property name="label" translatable="yes">Control Center</property>
                                         <property name="visible">True</property>
@@ -1291,7 +1304,7 @@
                                         <property name="draw_indicator">True</property>
                                       </widget>
                                       <packing>
-                                        <property name="position">1</property>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1304,7 +1317,7 @@
                                         <property name="draw_indicator">True</property>
                                       </widget>
                                       <packing>
-                                        <property name="position">2</property>
+                                        <property name="position">3</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1317,7 +1330,7 @@
                                         <property name="draw_indicator">True</property>
                                       </widget>
                                       <packing>
-                                        <property name="position">3</property>
+                                        <property name="position">4</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1329,7 +1342,7 @@
                                         <property name="draw_indicator">True</property>
                                       </widget>
                                       <packing>
-                                        <property name="position">4</property>
+                                        <property name="position">5</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1341,7 +1354,7 @@
                                         <property name="draw_indicator">True</property>
                                       </widget>
                                       <packing>
-                                        <property name="position">5</property>
+                                        <property name="position">6</property>
                                       </packing>
                                     </child>
                                   </widget>
@@ -1349,8 +1362,9 @@
                               </widget>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="defaultPlacesFrameLabel1">
+                              <widget class="GtkLabel" id="defaultItemsFrameLabel">
                                 <property name="visible">True</property>
+                                <property name="xalign">0.56000000238418579</property>
                                 <property name="label" translatable="yes">Toggle Default Items:</property>
                                 <property name="use_markup">True</property>
                               </widget>
