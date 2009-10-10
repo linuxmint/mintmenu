@@ -123,17 +123,30 @@ class mintMenuConfig( object ):
 		self.desktoptoggle = wTree.get_widget( "desktopcheckbutton" )
 		self.trashtoggle = wTree.get_widget( "trashcheckbutton" )
 		self.customplacestree = wTree.get_widget( "customplacestree" )
-		self.allowScrollbarToggle = wTree.get_widget( "allowscrollbarcheckbutton" )
+		self.allowPlacesScrollbarToggle = wTree.get_widget( "allowscrollbarcheckbutton" )
 		self.placesHeightButton = wTree.get_widget( "placesHeightSpinButton" ) 
-		if (self.allowScrollbarToggle.get_active() == False):
+		if (self.allowPlacesScrollbarToggle.get_active() == False):
 			self.placesHeightButton.set_sensitive(False)
-		self.allowScrollbarToggle.connect("toggled", self.toggleHeightEnabled )
+		self.allowPlacesScrollbarToggle.connect("toggled", self.togglePlacesHeightEnabled )
+		self.packageManagerToggle = wTree.get_widget( "packagemanagercheckbutton" )
+		self.controlCenterToggle = wTree.get_widget( "controlcentercheckbutton" )
+		self.packageManagerToggle = wTree.get_widget( "packagemanagercheckbutton" )
+		self.terminalToggle = wTree.get_widget( "terminalcheckbutton" )
+		self.lockToggle = wTree.get_widget( "lockcheckbutton" )
+		self.logoutToggle = wTree.get_widget( "logoutcheckbutton" )
+		self.quitToggle = wTree.get_widget( "quitcheckbutton" )
+		self.allowSystemScrollbarToggle = wTree.get_widget( "allowscrollbarcheckbutton1" )
+		self.systemHeightButton = wTree.get_widget( "systemHeightSpinButton" ) 
+		if (self.allowSystemScrollbarToggle.get_active() == False):
+			self.systemHeightButton.set_sensitive(False)
+		self.allowSystemScrollbarToggle.connect("toggled", self.toggleSystemHeightEnabled )
 		wTree.get_widget( "closeButton" ).connect("clicked", gtk.main_quit )
 
 		
 		self.gconf = EasyGConf( "/apps/mintMenu/" )
 		self.gconfApplications = EasyGConf( "/apps/mintMenu/plugins/applications/" )
 		self.gconfPlaces = EasyGConf( "/apps/mintMenu/plugins/places/" )
+		self.gconfSystem = EasyGConf( "/apps/mintMenu/plugins/system-management/" )
 		
 		self.useCustomColors.connect( "toggled", self.toggleUseCustomColors )
 		
@@ -169,8 +182,17 @@ class mintMenuConfig( object ):
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_desktop", self.desktoptoggle, "toggled", self.desktoptoggle.set_active, self.desktoptoggle.get_active )
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_trash", self.trashtoggle, "toggled", self.trashtoggle.set_active, self.trashtoggle.get_active )
 		self.bindGconfValueToWidget( self.gconfPlaces, "int", "height", self.placesHeightButton, "value-changed", self.placesHeightButton.set_value, self.placesHeightButton.get_value_as_int )
-		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "allowScrollbar", self.allowScrollbarToggle, "toggled", self.allowScrollbarToggle.set_active, self.allowScrollbarToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "allowScrollbar", self.allowPlacesScrollbarToggle, "toggled", self.allowPlacesScrollbarToggle.set_active, self.allowPlacesScrollbarToggle.get_active )
 		
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_package_manager", self.packageManagerToggle, "toggled", self.packageManagerToggle.set_active, self.packageManagerToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_control_center", self.controlCenterToggle, "toggled", self.controlCenterToggle.set_active, self.controlCenterToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_terminal", self.terminalToggle, "toggled", self.terminalToggle.set_active, self.terminalToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_lock_screen", self.lockToggle, "toggled", self.lockToggle.set_active, self.lockToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_logout", self.logoutToggle, "toggled", self.logoutToggle.set_active, self.logoutToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_quit", self.quitToggle, "toggled", self.quitToggle.set_active, self.quitToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "int", "height", self.systemHeightButton, "value-changed", self.systemHeightButton.set_value, self.systemHeightButton.get_value_as_int )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "allowScrollbar", self.allowSystemScrollbarToggle, "toggled", self.allowSystemScrollbarToggle.set_active, self.allowSystemScrollbarToggle.get_active )
+
 		self.customplacenames = self.gconfPlaces.get( "list-string", "custom_names", [ ] )
 		self.customplacepaths = self.gconfPlaces.get( "list-string", "custom_paths", [ ] )
 		
@@ -378,12 +400,18 @@ class mintMenuConfig( object ):
 		
 		return
 	
-	def toggleHeightEnabled(self, toggle):
+	def togglePlacesHeightEnabled(self, toggle):
 		if (toggle.get_active() == True):
 			self.placesHeightButton.set_sensitive(True)
 		else:
 			self.placesHeightButton.set_sensitive(False)
 		
+	def toggleSystemHeightEnabled(self, toggle):
+		if (toggle.get_active() == True):
+			self.systemHeightButton.set_sensitive(True)
+		else:
+			self.systemHeightButton.set_sensitive(False)
+
 	def updatePlacesGconf(self, treemodel, path, iter = None, new_order = None):
 # Do only if not partway though an append operation; Append = insert+change+change and each creates a signal
 		if ((iter == None) or (self.customplacestreemodel.get_value(iter, 1) != None)):
