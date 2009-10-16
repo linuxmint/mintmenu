@@ -150,7 +150,7 @@ class pluginclass( object ):
 			desktopDir = home + "/Desktop"
 			try:
 				import sys
-				sys.path.append('/usr/lib/linuxmint/mintSystem/common')
+				sys.path.append('/usr/lib/linuxmint/common')
 				from configobj import ConfigObj
 				config = ConfigObj(home + "/.config/user-dirs.dirs")
 				tmpdesktopDir = config['XDG_DESKTOP_DIR']
