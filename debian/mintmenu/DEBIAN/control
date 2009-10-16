@@ -1,0 +1,10 @@
+Package: mintmenu
+Version: 4.8.1
+Architecture: all
+Maintainer: clem <root@linuxmint.com>
+Installed-Size: 1468
+Depends: python (>= 2.4), python (<< 3), python-gtk2, python-glade2, deskbar-applet, mint-common
+Section: admin
+Priority: optional
+Description: Advanced Gnome menu
+ One of the most advanced menus under Linux. MintMenu supports filtering, favorites, easy-uninstallation, autosession, and many other features.

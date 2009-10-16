@@ -1,0 +1,265 @@
+msgid "Computer"
+msgstr "Computer"
+
+msgid "Browse all local and remote disks and folders accessible from this computer"
+msgstr "Browse all local and remote disks and folders accessible from this computer"
+
+msgid "Home Folder"
+msgstr "Home Folder"
+
+msgid "Open your personal folder"
+msgstr "Open your personal folder"
+
+msgid "Network"
+msgstr "Network"
+
+msgid "Browse bookmarked and local network locations"
+msgstr "Browse bookmarked and local network locations"
+
+msgid "Browse items placed on the desktop"
+msgstr "Browse items placed on the desktop"
+
+msgid "Browse deleted files"
+msgstr "Browse deleted files"
+
+msgid "Software manager"
+msgstr "Software manager"
+
+msgid "Browse and install available software"
+msgstr "Browse and install available software"
+
+msgid "Package manager"
+msgstr "Package manager"
+
+msgid "Install, remove and upgrade software packages"
+msgstr "Install, remove and upgrade software packages"
+
+msgid "Control center"
+msgstr "Control centre"
+
+msgid "Configure your system"
+msgstr "Configure your system"
+
+msgid "Use the command line"
+msgstr "Use the command line"
+
+msgid "Couldn't load plugin:"
+msgstr "Couldn't load plugin:"
+
+msgid "Couldn't initialize plugin"
+msgstr "Couldn't initialise plugin"
+
+msgid "Preferences"
+msgstr "Preferences"
+
+msgid "About"
+msgstr "About"
+
+msgid "Reload plugins"
+msgstr "Reload plugins"
+
+msgid "Edit menu"
+msgstr "Edit menu"
+
+msgid "GNOME Menu for Linux Mint"
+msgstr "GNOME Menu for Linux Mint"
+
+msgid "Based on USP from S.Chanderbally"
+msgstr "Based on USP from S.Chanderbally"
+
+msgid "Trash"
+msgstr "Trash"
+
+msgid "Places"
+msgstr "Places"
+
+msgid "Desktop"
+msgstr "Desktop"
+
+msgid "System"
+msgstr "System"
+
+msgid "Terminal"
+msgstr "Terminal"
+
+msgid "Quit"
+msgstr "Quit"
+
+msgid "File not found"
+msgstr "File not found"
+
+msgid "Not a .menu file"
+msgstr "Not a .menu file"
+
+msgid "Not a valid .menu file"
+msgstr "Not a valid .menu file"
+
+msgid "Applications"
+msgstr "Applications"
+
+msgid "Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu"
+msgstr "Couldn't save favourites. Check if you have write access to ~/.linuxmint/mintMenu"
+
+msgid "All"
+msgstr "All"
+
+msgid "Show all applications"
+msgstr "Show all applications"
+
+msgid "Filter:"
+msgstr "Filter:"
+
+msgid "Favorites"
+msgstr "Favourites"
+
+msgid "All applications"
+msgstr "All applications"
+
+msgid "Launch"
+msgstr "Launch"
+
+msgid "Show in my favorites"
+msgstr "Show in my favourites"
+
+msgid "Launch when I log in"
+msgstr "Launch when I log in"
+
+msgid "Remove from favorites"
+msgstr "Remove from favourites"
+
+msgid "Insert space"
+msgstr "Insert space"
+
+msgid "Insert separator"
+msgstr "Insert separator"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "mintMenu Preferences"
+msgstr "mintMenu Preferences"
+
+msgid "Show sidepane"
+msgstr "Show sidepane"
+
+msgid "Border width:"
+msgstr "Border width:"
+
+msgid "pixels"
+msgstr "pixels"
+
+msgid "Icon size:"
+msgstr "Icon size:"
+
+msgid "Options"
+msgstr "Options"
+
+msgid "Show button icon"
+msgstr "Show button icon"
+
+msgid "Button text:"
+msgstr "Button text:"
+
+msgid "Button icon:"
+msgstr "Button icon:"
+
+msgid "Use custom colors"
+msgstr "Use custom colours"
+
+msgid "Headings:"
+msgstr "Headings:"
+
+msgid "Background:"
+msgstr "Background:"
+
+msgid "Borders:"
+msgstr "Borders:"
+
+msgid "Show application comments"
+msgstr "Show application comments"
+
+msgid "Show category icons"
+msgstr "Show category icons"
+
+msgid "Hover"
+msgstr "Hover"
+
+msgid "Number of columns:"
+msgstr "Number of columns:"
+
+msgid "Swap name and generic name"
+msgstr "Swap name and generic name"
+
+msgid "Hover delay (ms):"
+msgstr "Hover delay (ms):"
+
+msgid "Colors"
+msgstr "Colours"
+
+msgid "Main button"
+msgstr "Main button"
+
+msgid "Show recent documents"
+msgstr "Show recent documents"
+
+msgid "Recent documents"
+msgstr "Recent documents"
+
+msgid "Please wait, this can take some time"
+msgstr "Please wait, this can take some time"
+
+msgid "Application removed successfully"
+msgstr "Application removed successfully"
+
+msgid "Remove application"
+msgstr "Remove application"
+
+msgid "No matching package found"
+msgstr "No matching package found"
+
+msgid "Do you want to remove this menu entry?"
+msgstr "Do you want to remove this menu entry?"
+
+msgid "Remove package %s and all its dependencies?"
+msgstr "Remove package %s and all its dependencies?"
+
+msgid "Packages to be removed"
+msgstr "Packages to be removed"
+
+msgid "Uninstall"
+msgstr "Uninstall"
+
+msgid "Search command:"
+msgstr "Search command:"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Log out or switch user"
+msgstr "Log out or switch user"
+
+msgid "Shutdown, restart, suspend or hibernate"
+msgstr "Shutdown, restart, suspend or hibernate"
+
+# Added in v.4.3
+
+msgid "Empty trash"
+msgstr "Empty trash"
+
+msgid "Search portal for '%s'"
+msgstr "Search portal for '%s'"
+
+msgid "Search repositories for '%s'"
+msgstr "Search repositories for '%s'"
+
+msgid "Show package '%s'"
+msgstr "Show package '%s'"
+
+msgid "Install package '%s'"
+msgstr "Install package '%s'"
+
+msgid "Keyboard shortcut:"
+msgstr "Keyboard shortcut:"
+
+msgid "No results"
+msgstr "No results"
