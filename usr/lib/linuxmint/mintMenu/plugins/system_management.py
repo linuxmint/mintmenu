@@ -47,6 +47,15 @@ class pluginclass( object ):
 		self.gconf = EasyGConf( "/apps/mintMenu/plugins/system-management/" )
 
 		self.gconf.notifyAdd( "icon_size", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_control_center", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_lock_screen", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_logout", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_package_manager", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_software_manager", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_terminal", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_quit", self.RegenPlugin )
+		self.gconf.notifyAdd( "allowScrollbar", self.changePluginSize )
+		self.gconf.notifyAdd( "allowScrollbar", self.RegenPlugin )
 		self.gconf.notifyAdd( "height", self.changePluginSize )
 		self.gconf.notifyAdd( "width", self.changePluginSize )		
 		self.gconf.bindGconfEntryToVar( "bool", "sticky", self, "sticky" )
@@ -62,15 +71,23 @@ class pluginclass( object ):
 		pass
 
 	def changePluginSize( self, client, connection_id, entry, args ):
+		print("One")
+		self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
 		if entry.get_key() == self.gconf.gconfDir+"width":
 			self.width = entry.get_value().get_int()
 		elif entry.get_key() == self.gconf.gconfDir+"height":
-			self.heigth = entry.get_value().get_int()
+			if (self.allowScrollbar == False):
+				self.height = -1
+				self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
+			else:
+				self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC )
+				self.height = entry.get_value().get_int()
 
 		self.content_holder.set_size_request( self.width, self.height )
 
 
 	def RegenPlugin( self, *args, **kargs ):
+		print("Two")
 		self.GetGconfEntries()
 		self.ClearAll()
 		self.do_standard_items()
@@ -79,11 +96,13 @@ class pluginclass( object ):
 
 		self.width = self.gconf.get( "int", "width", 200 )
 		self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
+		self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC )
+		self.height = self.gconf.get( "int", "height", 180 )
+		self.content_holder.set_size_request( self.width, self.height )
 		if (self.allowScrollbar == False):
 			self.height = -1
 			self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
-		else:
-			self.height = self.gconf.get( "int", "height", 180 )
+		self.content_holder.set_size_request( self.width, self.height )
 		self.iconsize = self.gconf.get( "int","icon_size", 2 )
 
 		# Check toggles
