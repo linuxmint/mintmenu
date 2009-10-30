@@ -1271,6 +1271,7 @@
                                     <child>
                                       <widget class="GtkCheckButton" id="softwaremanagercheckbutton">
                                         <property name="label" translatable="yes">Software Manager</property>
+                                        <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="draw_indicator">True</property>

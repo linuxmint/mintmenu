@@ -154,9 +154,9 @@ class mintMenuConfig( object ):
 		if (self.allowSystemScrollbarToggle.get_active() == False): self.systemHeightButton.set_sensitive(False)
 		self.allowSystemScrollbarToggle.connect("toggled", self.toggleSystemHeightEnabled )
 		if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
-			wTree.get_widget( "softwaremanagercheckbutton" ).visible = True
+			wTree.get_widget( "softwaremanagercheckbutton" ).show()
 		else:
-			wTree.get_widget( "softwaremanagercheckbutton" ).visible = False
+			wTree.get_widget( "softwaremanagercheckbutton" ).hide()
 
 		wTree.get_widget( "closeButton" ).connect("clicked", gtk.main_quit )
 
@@ -202,7 +202,7 @@ class mintMenuConfig( object ):
 		self.bindGconfValueToWidget( self.gconfPlaces, "int", "height", self.placesHeightButton, "value-changed", self.placesHeightButton.set_value, self.placesHeightButton.get_value_as_int )
 		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "allowScrollbar", self.allowPlacesScrollbarToggle, "toggled", self.allowPlacesScrollbarToggle.set_active, self.allowPlacesScrollbarToggle.get_active )
 		
-		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_show_software_manager", self.softwareManagerToggle, "toggled", self.softwareManagerToggle.set_active, self.softwareManagerToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_software_manager", self.softwareManagerToggle, "toggled", self.softwareManagerToggle.set_active, self.softwareManagerToggle.get_active )
 		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_package_manager", self.packageManagerToggle, "toggled", self.packageManagerToggle.set_active, self.packageManagerToggle.get_active )
 		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_control_center", self.controlCenterToggle, "toggled", self.controlCenterToggle.set_active, self.controlCenterToggle.get_active )
 		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_terminal", self.terminalToggle, "toggled", self.terminalToggle.set_active, self.terminalToggle.get_active )
