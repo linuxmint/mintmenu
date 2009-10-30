@@ -71,7 +71,6 @@ class pluginclass( object ):
 		pass
 
 	def changePluginSize( self, client, connection_id, entry, args ):
-		print("One")
 		self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
 		if entry.get_key() == self.gconf.gconfDir+"width":
 			self.width = entry.get_value().get_int()
@@ -87,7 +86,6 @@ class pluginclass( object ):
 
 
 	def RegenPlugin( self, *args, **kargs ):
-		print("Two")
 		self.GetGconfEntries()
 		self.ClearAll()
 		self.do_standard_items()
