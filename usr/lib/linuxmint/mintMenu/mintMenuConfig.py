@@ -212,8 +212,8 @@ class mintMenuConfig( object ):
 		self.bindGconfValueToWidget( self.gconfSystem, "int", "height", self.systemHeightButton, "value-changed", self.systemHeightButton.set_value, self.systemHeightButton.get_value_as_int )
 		self.bindGconfValueToWidget( self.gconfSystem, "bool", "allowScrollbar", self.allowSystemScrollbarToggle, "toggled", self.allowSystemScrollbarToggle.set_active, self.allowSystemScrollbarToggle.get_active )
 
-		self.customplacenames = self.gconfPlaces.get( "list-string", "custom_names", [ ] )
 		self.customplacepaths = self.gconfPlaces.get( "list-string", "custom_paths", [ ] )
+		self.customplacenames = self.gconfPlaces.get( "list-string", "custom_names", [ ] )
 		
 		self.customplacestreemodel = gtk.ListStore( str, str)
 		self.cell = gtk.CellRendererText()
@@ -441,8 +441,8 @@ class mintMenuConfig( object ):
 				customplacenames = customplacenames + [ self.customplacestreemodel.get_value(treeiter, 0 ) ]
 				customplacepaths = customplacepaths + [ self.customplacestreemodel.get_value(treeiter, 1 ) ]
 				treeiter = self.customplacestreemodel.iter_next(treeiter)
-			self.gconfPlaces.set( "list-string", "custom_names", customplacenames)
 			self.gconfPlaces.set( "list-string", "custom_paths", customplacepaths)
+			self.gconfPlaces.set( "list-string", "custom_names", customplacenames)
 		
 
 window = mintMenuConfig()

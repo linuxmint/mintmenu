@@ -49,6 +49,13 @@ class pluginclass( object ):
 		self.gconf = EasyGConf( "/apps/mintMenu/plugins/places/" )
 
 		self.gconf.notifyAdd( "icon_size", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_computer", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_desktop", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_home_folder", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_trash", self.RegenPlugin )
+		self.gconf.notifyAdd( "custom_names", self.RegenPlugin )
+		self.gconf.notifyAdd( "allowScrollbar", self.changePluginSize )
+		self.gconf.notifyAdd( "allowScrollbar", self.RegenPlugin )
 		self.gconf.notifyAdd( "height", self.changePluginSize )
 		self.gconf.notifyAdd( "width", self.changePluginSize )		
 		self.gconf.bindGconfEntryToVar( "bool", "sticky", self, "sticky" )
@@ -65,10 +72,17 @@ class pluginclass( object ):
 		self.gconf.notifyRemoveAll()		
 
 	def changePluginSize( self, client, connection_id, entry, args ):
+		self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
 		if entry.get_key() == self.gconf.gconfDir+"width":
 			self.width = entry.get_value().get_int()
 		elif entry.get_key() == self.gconf.gconfDir+"height":
-			self.heigth = entry.get_value().get_int()
+			if (self.allowScrollbar == False):
+				self.height = -1
+				self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
+			else:
+				self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC )
+				self.height = entry.get_value().get_int()
+
 		self.content_holder.set_size_request( self.width, self.height )
 		
 
@@ -83,11 +97,13 @@ class pluginclass( object ):
 
 		self.width = self.gconf.get( "int", "width", 200 )
 		self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
+		self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC )
+		self.height = self.gconf.get( "int", "height", 180 )
+		self.content_holder.set_size_request( self.width, self.height )
 		if (self.allowScrollbar == False):
 			self.height = -1
 			self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
-		else:
-			self.height = self.gconf.get( "int", "height", 155 )
+		self.content_holder.set_size_request( self.width, self.height )
 		self.execapp = self.gconf.get( "string", "execute_app", "nautilus" )
 		self.iconsize = self.gconf.get( "int","icon_size", 2 )
 		
