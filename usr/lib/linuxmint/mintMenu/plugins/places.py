@@ -54,7 +54,6 @@ class pluginclass( object ):
 		self.gconf.notifyAdd( "show_home_folder", self.RegenPlugin )
 		self.gconf.notifyAdd( "show_trash", self.RegenPlugin )
 		self.gconf.notifyAdd( "custom_names", self.RegenPlugin )
-		self.gconf.notifyAdd( "allowScrollbar", self.changePluginSize )
 		self.gconf.notifyAdd( "allowScrollbar", self.RegenPlugin )
 		self.gconf.notifyAdd( "height", self.changePluginSize )
 		self.gconf.notifyAdd( "width", self.changePluginSize )		

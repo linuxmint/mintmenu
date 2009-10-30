@@ -54,7 +54,6 @@ class pluginclass( object ):
 		self.gconf.notifyAdd( "show_software_manager", self.RegenPlugin )
 		self.gconf.notifyAdd( "show_terminal", self.RegenPlugin )
 		self.gconf.notifyAdd( "show_quit", self.RegenPlugin )
-		self.gconf.notifyAdd( "allowScrollbar", self.changePluginSize )
 		self.gconf.notifyAdd( "allowScrollbar", self.RegenPlugin )
 		self.gconf.notifyAdd( "height", self.changePluginSize )
 		self.gconf.notifyAdd( "width", self.changePluginSize )		
