@@ -52,6 +52,7 @@ class pluginclass( object ):
 		self.gconf.notifyAdd( "show_computer", self.RegenPlugin )
 		self.gconf.notifyAdd( "show_desktop", self.RegenPlugin )
 		self.gconf.notifyAdd( "show_home_folder", self.RegenPlugin )
+		self.gconf.notifyAdd( "show_network", self.RegenPlugin )
 		self.gconf.notifyAdd( "show_trash", self.RegenPlugin )
 		self.gconf.notifyAdd( "custom_names", self.RegenPlugin )
 		self.gconf.notifyAdd( "allowScrollbar", self.RegenPlugin )
