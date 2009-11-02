@@ -1,3 +1,9 @@
+mintmenu (4.8.3) helena; urgency=low
+
+  * Added latest changes from chlodapp
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon,  2 Nov 2009 18:19:00 +0000
+
 mintmenu (4.8.2) helena; urgency=low
 
   * Changed default favorites
