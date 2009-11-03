@@ -13,7 +13,7 @@ from execute import Execute
 from easygconf import EasyGConf
 
 # i18n
-gettext.install("messages", "/usr/lib/linuxmint/mintMenu/locale")
+gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 class pluginclass( object ):
 	

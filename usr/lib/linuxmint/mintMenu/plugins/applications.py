@@ -23,7 +23,7 @@ from filemonitor import monitor as filemonitor
 import xdg.Menu
 
 # i18n
-gettext.install("messages", "/usr/lib/linuxmint/mintMenu/locale")
+gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 # Evil patching
 def xdgParsePatched(filename=None):

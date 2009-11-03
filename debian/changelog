@@ -1,3 +1,9 @@
+mintmenu (4.8.4) helena; urgency=low
+
+  * Changed translation framework
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue,  3 Nov 2009 11:27:00 +0000
+
 mintmenu (4.8.3) helena; urgency=low
 
   * Added latest changes from chlodapp

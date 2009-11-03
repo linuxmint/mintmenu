@@ -25,7 +25,7 @@ from subprocess import Popen, PIPE
 gtk.gdk.threads_init()
 
 # i18n
-gettext.install("messages", "/usr/lib/linuxmint/mintMenu/locale")
+gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 class RemoveExecuter(threading.Thread):
 

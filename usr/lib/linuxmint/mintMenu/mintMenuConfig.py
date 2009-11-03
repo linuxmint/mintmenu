@@ -22,7 +22,7 @@ PATH = os.path.abspath( os.path.dirname( sys.argv[0] ) )
 sys.path.append( os.path.join( PATH , "plugins") )
 
 # i18n
-gettext.install("messages", "/usr/lib/linuxmint/mintMenu/locale")
+gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 from easybuttons import iconManager
 from easygconf import EasyGConf

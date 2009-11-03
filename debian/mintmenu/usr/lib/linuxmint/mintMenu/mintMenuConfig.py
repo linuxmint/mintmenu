@@ -36,11 +36,11 @@ class mintMenuConfig( object ):
 		# Load glade file and extract widgets
 		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
 		wTree 	  = gtk.glade.XML( gladefile, "mainWindow" )
-	
+		self.mainWindow=wTree.get_widget("mainWindow")
 
 		#i18n
-		wTree.get_widget("mainWindow").set_title(_("Menu preferences"))
-		wTree.get_widget("mainWindow").set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+		self.mainWindow.set_title(_("Menu preferences"))
+		self.mainWindow.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
 
 		wTree.get_widget("showSidepane").set_label(_("Show sidepane"))
 		wTree.get_widget("showButtonIcon").set_label(_("Show button icon"))
@@ -76,6 +76,33 @@ class mintMenuConfig( object ):
 		wTree.get_widget("label4").set_text(_("Button icon:"))
 		wTree.get_widget("label5").set_text(_("Search command:"))
 
+		wTree.get_widget("placesLabel").set_text(_("Places"))
+		wTree.get_widget("allowscrollbarcheckbutton").set_label(_("Allow Scrollbar"))
+		wTree.get_widget("placesHeightEntryLabel").set_text(_("Height:"))
+		wTree.get_widget("defaultPlacesFrameLabel").set_text(_("Toggle Default Places:"))
+		wTree.get_widget("computercheckbutton").set_label(_("Computer"))
+		wTree.get_widget("homecheckbutton").set_label(_("Home Folder"))
+		wTree.get_widget("networkcheckbutton").set_label(_("Network"))
+		wTree.get_widget("desktopcheckbutton").set_label(_("Desktop"))
+		wTree.get_widget("trashcheckbutton").set_label(_("Trash"))
+		wTree.get_widget("customPlacesFrameLabel").set_text(_("Custom Places:"))
+
+		wTree.get_widget("systemLabel").set_text(_("System"))
+		wTree.get_widget("allowscrollbarcheckbutton1").set_label(_("Allow Scrollbar"))
+		wTree.get_widget("systemHeightEntryLabel").set_text(_("Height:"))
+		wTree.get_widget("defaultItemsFrameLabel").set_text(_("Toggle Default Items:"))
+		wTree.get_widget("softwaremanagercheckbutton").set_label(_("Software Manager"))
+		wTree.get_widget("packagemanagercheckbutton").set_label(_("Package Manager"))
+		wTree.get_widget("controlcentercheckbutton").set_label(_("Control Center"))
+		wTree.get_widget("terminalcheckbutton").set_label(_("Terminal"))
+		wTree.get_widget("lockcheckbutton").set_label(_("Lock Screen"))
+		wTree.get_widget("logoutcheckbutton").set_label(_("Log Out"))
+		wTree.get_widget("quitcheckbutton").set_label(_("Quit"))
+
+		self.editPlaceDialogTitle = (_("Edit Place"))
+		self.newPlaceDialogTitle = (_("New Place"))
+		self.folderChooserDialogTitle = (_("Select a folder"))
+
 		wTree.get_widget("hotkey_label").set_text(_("Keyboard shortcut:"))
 
 		self.showSidepane = wTree.get_widget( "showSidepane" )
@@ -102,12 +129,42 @@ class mintMenuConfig( object ):
 		self.hotkeyText = wTree.get_widget( "hotkeyText" )
 		self.buttonIcon = wTree.get_widget( "buttonIcon" )	
 		self.buttonIconImage = wTree.get_widget( "image_button_icon" )	
-		self.searchCommand = wTree.get_widget( "search_command" )		
+		self.searchCommand = wTree.get_widget( "search_command" )
+		self.computertoggle = wTree.get_widget( "computercheckbutton" )
+		self.homefoldertoggle = wTree.get_widget( "homecheckbutton" )
+		self.networktoggle = wTree.get_widget( "networkcheckbutton" )
+		self.desktoptoggle = wTree.get_widget( "desktopcheckbutton" )
+		self.trashtoggle = wTree.get_widget( "trashcheckbutton" )
+		self.customplacestree = wTree.get_widget( "customplacestree" )
+		self.allowPlacesScrollbarToggle = wTree.get_widget( "allowscrollbarcheckbutton" )
+		self.placesHeightButton = wTree.get_widget( "placesHeightSpinButton" ) 
+		if (self.allowPlacesScrollbarToggle.get_active() == False):
+			self.placesHeightButton.set_sensitive(False)
+		self.allowPlacesScrollbarToggle.connect("toggled", self.togglePlacesHeightEnabled )
+		self.softwareManagerToggle = wTree.get_widget( "softwaremanagercheckbutton" )
+		self.packageManagerToggle = wTree.get_widget( "packagemanagercheckbutton" )
+		self.controlCenterToggle = wTree.get_widget( "controlcentercheckbutton" )
+		self.packageManagerToggle = wTree.get_widget( "packagemanagercheckbutton" )
+		self.terminalToggle = wTree.get_widget( "terminalcheckbutton" )
+		self.lockToggle = wTree.get_widget( "lockcheckbutton" )
+		self.logoutToggle = wTree.get_widget( "logoutcheckbutton" )
+		self.quitToggle = wTree.get_widget( "quitcheckbutton" )
+		self.allowSystemScrollbarToggle = wTree.get_widget( "allowscrollbarcheckbutton1" )
+		self.systemHeightButton = wTree.get_widget( "systemHeightSpinButton" ) 
+		if (self.allowSystemScrollbarToggle.get_active() == False): self.systemHeightButton.set_sensitive(False)
+		self.allowSystemScrollbarToggle.connect("toggled", self.toggleSystemHeightEnabled )
+		if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
+			wTree.get_widget( "softwaremanagercheckbutton" ).show()
+		else:
+			wTree.get_widget( "softwaremanagercheckbutton" ).hide()
+
 		wTree.get_widget( "closeButton" ).connect("clicked", gtk.main_quit )
 
 		
 		self.gconf = EasyGConf( "/apps/mintMenu/" )
 		self.gconfApplications = EasyGConf( "/apps/mintMenu/plugins/applications/" )
+		self.gconfPlaces = EasyGConf( "/apps/mintMenu/plugins/places/" )
+		self.gconfSystem = EasyGConf( "/apps/mintMenu/plugins/system-management/" )
 		
 		self.useCustomColors.connect( "toggled", self.toggleUseCustomColors )
 		
@@ -137,7 +194,48 @@ class mintMenuConfig( object ):
 		self.showRecentPlugin.connect("toggled", self.toggleRecent )
 		self.showRecentPlugin.set_active( self.getRecentToggle() )
 		
-		wTree.get_widget( "mainWindow" ).present()
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_computer", self.computertoggle, "toggled", self.computertoggle.set_active, self.computertoggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_home_folder", self.homefoldertoggle, "toggled", self.homefoldertoggle.set_active, self.homefoldertoggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_network", self.networktoggle, "toggled", self.networktoggle.set_active, self.networktoggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_desktop", self.desktoptoggle, "toggled", self.desktoptoggle.set_active, self.desktoptoggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_trash", self.trashtoggle, "toggled", self.trashtoggle.set_active, self.trashtoggle.get_active )
+		self.bindGconfValueToWidget( self.gconfPlaces, "int", "height", self.placesHeightButton, "value-changed", self.placesHeightButton.set_value, self.placesHeightButton.get_value_as_int )
+		self.bindGconfValueToWidget( self.gconfPlaces, "bool", "allowScrollbar", self.allowPlacesScrollbarToggle, "toggled", self.allowPlacesScrollbarToggle.set_active, self.allowPlacesScrollbarToggle.get_active )
+		
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_software_manager", self.softwareManagerToggle, "toggled", self.softwareManagerToggle.set_active, self.softwareManagerToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_package_manager", self.packageManagerToggle, "toggled", self.packageManagerToggle.set_active, self.packageManagerToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_control_center", self.controlCenterToggle, "toggled", self.controlCenterToggle.set_active, self.controlCenterToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_terminal", self.terminalToggle, "toggled", self.terminalToggle.set_active, self.terminalToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_lock_screen", self.lockToggle, "toggled", self.lockToggle.set_active, self.lockToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_logout", self.logoutToggle, "toggled", self.logoutToggle.set_active, self.logoutToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_quit", self.quitToggle, "toggled", self.quitToggle.set_active, self.quitToggle.get_active )
+		self.bindGconfValueToWidget( self.gconfSystem, "int", "height", self.systemHeightButton, "value-changed", self.systemHeightButton.set_value, self.systemHeightButton.get_value_as_int )
+		self.bindGconfValueToWidget( self.gconfSystem, "bool", "allowScrollbar", self.allowSystemScrollbarToggle, "toggled", self.allowSystemScrollbarToggle.set_active, self.allowSystemScrollbarToggle.get_active )
+
+		self.customplacepaths = self.gconfPlaces.get( "list-string", "custom_paths", [ ] )
+		self.customplacenames = self.gconfPlaces.get( "list-string", "custom_names", [ ] )
+		
+		self.customplacestreemodel = gtk.ListStore( str, str)
+		self.cell = gtk.CellRendererText()
+		
+		for count in range( len(self.customplacepaths) ):
+			self.customplacestreemodel.append( [ self.customplacenames[count], self.customplacepaths[count] ] )
+
+		self.customplacestreemodel.connect("row-changed", self.updatePlacesGconf)
+		self.customplacestreemodel.connect("row-deleted", self.updatePlacesGconf)
+		self.customplacestreemodel.connect("rows-reordered", self.updatePlacesGconf)
+		self.customplacestree.set_model( self.customplacestreemodel )
+		self.namescolumn = gtk.TreeViewColumn( 'Name', self.cell, text = 0 )
+		self.placescolumn = gtk.TreeViewColumn( 'Path', self.cell, text = 1 )
+		self.customplacestree.append_column( self.namescolumn )
+		self.customplacestree.append_column( self.placescolumn )
+		wTree.get_widget("newButton").connect("clicked", self.newPlace)
+		wTree.get_widget("editButton").connect("clicked", self.editPlace)
+		wTree.get_widget("upButton").connect("clicked", self.moveUp)
+		wTree.get_widget("downButton").connect("clicked", self.moveDown)
+		wTree.get_widget("removeButton").connect("clicked", self.removePlace)
+		
+		self.mainWindow.present()
 		
 		self.getBackgroundColor()
 
@@ -204,6 +302,147 @@ class mintMenuConfig( object ):
 		
 	def gdkColorToString( self, gdkColor ):
 		return "#%.2X%.2X%.2X" % ( gdkColor.red / 256, gdkColor.green / 256, gdkColor.blue / 256 )
+		
+	def moveUp( self, upButton ):
+	
+		treeselection = self.customplacestree.get_selection()
+		currentiter = (treeselection.get_selected())[1]
+		
+		if ( treeselection != None ):
+		
+			lagiter = self.customplacestreemodel.get_iter_first()
+			nextiter = self.customplacestreemodel.get_iter_first()
+			
+			while ( (self.customplacestreemodel.get_path(nextiter) != self.customplacestreemodel.get_path(currentiter)) & (nextiter != None)):
+				lagiter = nextiter
+				nextiter = self.customplacestreemodel.iter_next(nextiter)
+				
+			if (nextiter != None):
+				self.customplacestreemodel.swap(currentiter, lagiter)
+		
+		return
+	
+	def newPlace(self, newButton):
+		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
+		wTree = gtk.glade.XML( gladefile, "editPlaceDialog" )
+		folderChooserTree = gtk.glade.XML( gladefile, "fileChooserDialog" )
+		newPlaceDialog = wTree.get_widget( "editPlaceDialog" )
+		folderChooserDialog = folderChooserTree.get_widget( "fileChooserDialog" )
+		newPlaceDialog.set_transient_for(self.mainWindow)
+		newPlaceDialog.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+		newPlaceDialog.set_title(self.newPlaceDialogTitle)
+		folderChooserDialog.set_title(self.folderChooserDialogTitle)
+		newPlaceDialog.set_default_response(gtk.RESPONSE_OK)
+		newPlaceName = wTree.get_widget( "nameEntryBox" )
+		newPlacePath = wTree.get_widget( "pathEntryBox" )
+		folderButton = wTree.get_widget( "folderButton" )
+		def chooseFolder(folderButton):
+			currentPath = newPlacePath.get_text()
+			if (currentPath!=""):
+				folderChooserDialog.select_filename(currentPath)
+			response = folderChooserDialog.run()
+			folderChooserDialog.hide()
+			if (response == gtk.RESPONSE_OK):
+				newPlacePath.set_text( folderChooserDialog.get_filenames()[0] )
+		folderButton.connect("clicked", chooseFolder)
+
+		response = newPlaceDialog.run()
+		newPlaceDialog.hide()
+		if (response == gtk.RESPONSE_OK ):
+			name = newPlaceName.get_text()
+			path = newPlacePath.get_text()
+			if (name != "" and path !=""):
+				self.customplacestreemodel.append( (name, path) )
+			
+	def editPlace(self, editButton):
+		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
+		wTree = gtk.glade.XML( gladefile, "editPlaceDialog" )
+		folderChooserTree = gtk.glade.XML( gladefile, "fileChooserDialog" )
+		editPlaceDialog = wTree.get_widget( "editPlaceDialog" )
+		folderChooserDialog = folderChooserTree.get_widget( "fileChooserDialog" )
+		editPlaceDialog.set_transient_for(self.mainWindow)
+		editPlaceDialog.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+		editPlaceDialog.set_title(self.editPlaceDialogTitle)
+		folderChooserDialog.set_title(self.folderChooserDialogTitle)
+		editPlaceDialog.set_default_response(gtk.RESPONSE_OK)
+		editPlaceName = wTree.get_widget( "nameEntryBox" )
+		editPlacePath = wTree.get_widget( "pathEntryBox" )
+		folderButton = wTree.get_widget( "folderButton" )
+		treeselection = self.customplacestree.get_selection()
+		currentiter = (treeselection.get_selected())[1]
+		
+		if (currentiter != None):
+			
+			initName = self.customplacestreemodel.get_value(currentiter, 0)
+			initPath = self.customplacestreemodel.get_value(currentiter, 1)
+			
+			editPlaceName.set_text(initName)
+			editPlacePath.set_text(initPath)
+			def chooseFolder(folderButton):
+				currentPath = editPlacePath.get_text()
+				if (currentPath!=""):
+					folderChooserDialog.select_filename(currentPath)
+				response = folderChooserDialog.run()
+				folderChooserDialog.hide()
+				if (response == gtk.RESPONSE_OK):
+					editPlacePath.set_text( folderChooserDialog.get_filenames()[0] )
+			folderButton.connect("clicked", chooseFolder)
+			response = editPlaceDialog.run()
+			editPlaceDialog.hide()
+			if (response == gtk.RESPONSE_OK):
+				name = editPlaceName.get_text()
+				path = editPlacePath.get_text()
+				if (name != "" and path != ""):
+					self.customplacestreemodel.set_value(currentiter, 0, name)
+					self.customplacestreemodel.set_value(currentiter, 1, path)
+	
+	def moveDown(self, downButton):
+	
+		treeselection = self.customplacestree.get_selection()
+		currentiter = (treeselection.get_selected())[1]
+		
+		nextiter = self.customplacestreemodel.iter_next(currentiter)
+		
+		if (nextiter != None):
+			self.customplacestreemodel.swap(currentiter, nextiter)
+		
+		return
+		
+		
+	def removePlace(self, removeButton):
+	
+		treeselection = self.customplacestree.get_selection()
+		currentiter = (treeselection.get_selected())[1]
+		
+		if (currentiter != None):
+			self.customplacestreemodel.remove(currentiter)
+		
+		return
+	
+	def togglePlacesHeightEnabled(self, toggle):
+		if (toggle.get_active() == True):
+			self.placesHeightButton.set_sensitive(True)
+		else:
+			self.placesHeightButton.set_sensitive(False)
+		
+	def toggleSystemHeightEnabled(self, toggle):
+		if (toggle.get_active() == True):
+			self.systemHeightButton.set_sensitive(True)
+		else:
+			self.systemHeightButton.set_sensitive(False)
+
+	def updatePlacesGconf(self, treemodel, path, iter = None, new_order = None):
+# Do only if not partway though an append operation; Append = insert+change+change and each creates a signal
+		if ((iter == None) or (self.customplacestreemodel.get_value(iter, 1) != None)):
+			treeiter = self.customplacestreemodel.get_iter_first()
+			customplacenames = [ ]
+			customplacepaths = [ ]
+			while( treeiter != None ):
+				customplacenames = customplacenames + [ self.customplacestreemodel.get_value(treeiter, 0 ) ]
+				customplacepaths = customplacepaths + [ self.customplacestreemodel.get_value(treeiter, 1 ) ]
+				treeiter = self.customplacestreemodel.iter_next(treeiter)
+			self.gconfPlaces.set( "list-string", "custom_paths", customplacepaths)
+			self.gconfPlaces.set( "list-string", "custom_names", customplacenames)
 		
 
 window = mintMenuConfig()

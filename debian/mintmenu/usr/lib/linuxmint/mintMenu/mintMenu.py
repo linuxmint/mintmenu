@@ -97,7 +97,7 @@ class MainWindow( object ):
 		wTree.signal_autoconnect( dic )
 
 		self.gconf = EasyGConf( "/apps/mintMenu/" )
-		self.gconftheme = EasyGConf ( "/desktop/gnome/interface/" )
+		self.gconftheme = EasyGConf( "/desktop/gnome/interface/" )
 
 		self.getSetGconfEntries()
 		self.SetupMintMenuBorder()
@@ -112,6 +112,7 @@ class MainWindow( object ):
 
 		self.gconf.notifyAdd( "plugins_list", self.RegenPlugins )
 		self.gconftheme.notifyAdd( "gtk_theme", self.RegenPlugins )
+		
 		self.gconf.notifyAdd( "show_side_pane", self.toggleShowSidepane )
 		self.gconf.notifyAdd( "/apps/panel/global/tooltips_enabled", self.toggleTooltipsEnabled )
 		self.gconf.notifyAdd( "tooltips_enabled", self.toggleTooltipsEnabled )

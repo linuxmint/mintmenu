@@ -39,7 +39,7 @@ except ImportError:
 	pass
 
 # i18n
-gettext.install("messages", "/usr/lib/linuxmint/mintMenu/locale")
+gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 NAME = _("Menu")
 ICON = "/usr/lib/linuxmint/mintMenu/icon.svg"

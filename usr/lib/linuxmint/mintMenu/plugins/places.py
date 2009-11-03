@@ -16,7 +16,7 @@ from easygconf import EasyGConf
 from user import home
 
 # i18n
-gettext.install("messages", "/usr/lib/linuxmint/mintMenu/locale")
+gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 class pluginclass( object ):
 	

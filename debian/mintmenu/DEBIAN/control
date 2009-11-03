@@ -1,8 +1,8 @@
 Package: mintmenu
-Version: 4.8.1
+Version: 4.8.3
 Architecture: all
 Maintainer: clem <root@linuxmint.com>
-Installed-Size: 1468
+Installed-Size: 1540
 Depends: python (>= 2.4), python (<< 3), python-gtk2, python-glade2, deskbar-applet, mint-common
 Section: admin
 Priority: optional
