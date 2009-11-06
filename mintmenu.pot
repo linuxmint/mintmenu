@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-10 09:26-0500\n"
+"POT-Creation-Date: 2009-11-06 12:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -206,27 +206,27 @@ msgid "Toggle Default Places:"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:83
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:128
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:144
 msgid "Computer"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:84
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:135
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:151
 msgid "Home Folder"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:85
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:142
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:158
 msgid "Network"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:86
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:162
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:178
 msgid "Desktop"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:87
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:169
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:185
 msgid "Trash"
 msgstr ""
 
@@ -244,24 +244,27 @@ msgid "Toggle Default Items:"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:94
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:134
 msgid "Software Manager"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:95
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:141
 msgid "Package Manager"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:96
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:148
 msgid "Control Center"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:97
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:139
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:155
 msgid "Terminal"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:98
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:146
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:162
 msgid "Lock Screen"
 msgstr ""
 
@@ -270,7 +273,7 @@ msgid "Log Out"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:100
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:160
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:176
 msgid "Quit"
 msgstr ""
 
@@ -389,71 +392,59 @@ msgstr ""
 msgid "Show all applications"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:118
-msgid "Software manager"
-msgstr ""
-
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:122
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:138
 msgid "Browse and install available software"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:125
-msgid "Package manager"
-msgstr ""
-
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:129
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:145
 msgid "Install, remove and upgrade software packages"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:132
-msgid "Control center"
-msgstr ""
-
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:136
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:152
 msgid "Configure your system"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:143
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:159
 msgid "Use the command line"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:150
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:166
 msgid "Requires password to unlock"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:153
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:169
 msgid "Logout"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:157
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:173
 msgid "Log out or switch user"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:164
+#: usr/lib/linuxmint/mintMenu/plugins/system_management.py:180
 msgid "Shutdown, restart, suspend or hibernate"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:132
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:148
 msgid ""
 "Browse all local and remote disks and folders accessible from this computer"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:139
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:155
 msgid "Open your personal folder"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:146
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:162
 msgid "Browse bookmarked and local network locations"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:166
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:182
 msgid "Browse items placed on the desktop"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:175
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:191
 msgid "Browse deleted files"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/places.py:188
+#: usr/lib/linuxmint/mintMenu/plugins/places.py:204
 msgid "Empty trash"
 msgstr ""
