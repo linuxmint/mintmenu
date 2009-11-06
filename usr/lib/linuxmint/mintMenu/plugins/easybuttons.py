@@ -170,11 +170,15 @@ class easyButton( gtk.Button ):
 		self.add( Align1 )
 
 		self.connectSelf( "destroy", self.onDestroy )
+		self.connect( "released", self.onRelease )
 		# Reload icons when the theme changed
 		self.themeChangedHandlerId = iconManager.connect("changed", self.themeChanged )
 
 	def connectSelf( self, event, callback ):
 		self.connections.append( self.connect( event, callback ) )
+
+	def onRelease( self, widget ):
+		widget.set_state(gtk.STATE_NORMAL)
 
 	def onDestroy( self, widget ):
 		self.buttonImage.clear()
