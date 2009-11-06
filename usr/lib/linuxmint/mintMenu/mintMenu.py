@@ -42,8 +42,9 @@ except ImportError:
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 NAME = _("Menu")
-ICON = "/usr/lib/linuxmint/mintMenu/icon.svg"
 PATH = os.path.abspath( os.path.dirname( sys.argv[0] ) )
+ICON = "/usr/lib/linuxmint/mintMenu/mintMenu.png"
+ICON_HOVER = "/usr/lib/linuxmint/mintMenu/mintMenu_hover.png"
 
 sys.path.append( os.path.join( PATH , "plugins") )
 
@@ -566,6 +567,8 @@ class MenuWin( object ):
 		self.applet.connect( "button-press-event", self.showMenu )
 		self.applet.connect( "change-orient", self.changeOrientation )
 		self.applet.connect( "change-background", self.changeBackground )
+	        self.applet.connect("enter-notify-event", self.enter_notify)
+	        self.applet.connect("leave-notify-event", self.leave_notify)
 		self.mainwin = MainWindow( self.button_box )
 		self.mainwin.window.connect( "map-event", lambda *args: self.applet.set_state( gtk.STATE_SELECTED ) )
 		self.mainwin.window.connect( "unmap-event", lambda *args: self.applet.set_state( gtk.STATE_NORMAL ) )
@@ -597,6 +600,16 @@ class MenuWin( object ):
 		                #self.mainwin.wTree.get_widget( 'PluginTabs' ).set_curremenu_editor = SetGconf( self.client, "string", "/apps/usp/menu_editor", "alacarte" )		        		        
 		except Exception, cause:
 			print cause
+
+	def enter_notify(self, applet, event):
+	        self.do_image(self.buttonIcon_hover)
+
+	def leave_notify(self, applet, event):
+	        self.do_image(self.buttonIcon)
+
+	def do_image(self, image_file):			
+		pixbuf = gtk.gdk.pixbuf_new_from_file(image_file)
+		self.button_icon.set_from_pixbuf(pixbuf)	
 
 	def createPanelButton( self ):
 		self.button_icon = gtk.image_new_from_file( self.buttonIcon )			
@@ -641,7 +654,8 @@ class MenuWin( object ):
 		self.hideIcon	=  self.gconf.get( "bool", "hide_applet_icon", False )
 		self.buttonText =  self.gconf.get( "string", "applet_text", "Menu" )
 		self.hotkeyText =  self.gconf.get( "string", "hot_key", "<Control>Super_L" )
-		self.buttonIcon =  self.gconf.get( "string", "applet_icon", "/usr/lib/linuxmint/mintMenu/icon.png" )
+		self.buttonIcon =  self.gconf.get( "string", "applet_icon", ICON )
+		self.buttonIcon_hover =  self.gconf.get( "string", "applet_icon_hover", ICON_HOVER )
 		self.setIconSize( self.gconf.get( "int", "applet_icon_size", 2 ) )
 
 	def setIconSize( self, icon_size):
