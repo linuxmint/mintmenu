@@ -142,21 +142,21 @@ class pluginclass( object ):
 
 		if ( self.showcomputer == True ):
 			Button1 = easyButton( "computer", self.iconsize, [_("Computer")], -1, -1 )
-			Button1.connect( "clicked", self.ButtonClicked, "nautilus --no-desktop computer:" )
+			Button1.connect( "clicked", self.ButtonClicked, "nautilus computer:" )
 			Button1.show()
 			self.placesBtnHolder.pack_start( Button1, False, False )
 			self.mintMenuWin.setTooltip( Button1, _("Browse all local and remote disks and folders accessible from this computer") )
 
 		if ( self.showhomefolder == True ):
 			Button2 = easyButton( "user-home", self.iconsize, [_("Home Folder")], -1, -1 )
-			Button2.connect( "clicked", self.ButtonClicked, "nautilus --no-desktop" )
+			Button2.connect( "clicked", self.ButtonClicked, "nautilus" )
 			Button2.show()
 			self.placesBtnHolder.pack_start( Button2, False, False )
 			self.mintMenuWin.setTooltip( Button2, _("Open your personal folder") )
 
 		if ( self.shownetwork == True ):
 			Button3 = easyButton( "network-workgroup", self.iconsize, [_("Network")], -1, -1 )
-			Button3.connect( "clicked", self.ButtonClicked, "nautilus --no-desktop network:" )
+			Button3.connect( "clicked", self.ButtonClicked, "nautilus network:" )
 			Button3.show()
 			self.placesBtnHolder.pack_start( Button3, False, False )
 			self.mintMenuWin.setTooltip( Button3, _("Browse bookmarked and local network locations") )
@@ -183,7 +183,7 @@ class pluginclass( object ):
 
 		if ( self.showtrash == True ):
 			self.trashButton = easyButton( "user-trash", self.iconsize, [_("Trash")], -1, -1 )
-			self.trashButton.connect( "clicked", self.ButtonClicked, "nautilus --no-desktop trash:" )
+			self.trashButton.connect( "clicked", self.ButtonClicked, "nautilus trash:" )
 			self.trashButton.show()
 			self.trashButton.connect( "button-release-event", self.trashPopup )				
 			self.refreshTrash()		
@@ -192,7 +192,7 @@ class pluginclass( object ):
 			
 	def do_custom_places( self ):		
 		for index in range( len(self.custompaths) ):
-			command = ( "nautilus --no-desktop " + self.custompaths[index] )
+			command = ( "nautilus " + self.custompaths[index] )
 			currentbutton = easyButton( "folder", self.iconsize, [self.customnames[index]], -1, -1 )
 			currentbutton.connect( "clicked", self.ButtonClicked, command )
 			currentbutton.show()
