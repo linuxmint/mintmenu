@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-06 12:31+0000\n"
+"POT-Creation-Date: 2009-11-17 12:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,35 +20,35 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:266
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:267
 msgid "Couldn't load plugin:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:340
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:341
 msgid "Couldn't initialize plugin"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:585
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:588
 msgid "Preferences"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:585
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:588
 msgid "Edit menu"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:585
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:588
 msgid "Reload plugins"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:585
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:588
 msgid "About"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:763
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:777
 msgid "Advanced Gnome Menu"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:766
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:780
 msgid "Based on USP from S.Chanderbally"
 msgstr ""
 
@@ -291,6 +291,24 @@ msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:106
 msgid "Keyboard shortcut:"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:228
+msgid "Name"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:229
+msgid "Path"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:328
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:362
+msgid "Name:"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:329
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:363
+msgid "Path:"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/plugins/recent.py:36

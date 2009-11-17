@@ -225,8 +225,8 @@ class mintMenuConfig( object ):
 		self.customplacestreemodel.connect("row-deleted", self.updatePlacesGconf)
 		self.customplacestreemodel.connect("rows-reordered", self.updatePlacesGconf)
 		self.customplacestree.set_model( self.customplacestreemodel )
-		self.namescolumn = gtk.TreeViewColumn( 'Name', self.cell, text = 0 )
-		self.placescolumn = gtk.TreeViewColumn( 'Path', self.cell, text = 1 )
+		self.namescolumn = gtk.TreeViewColumn( _("Name"), self.cell, text = 0 )
+		self.placescolumn = gtk.TreeViewColumn( _("Path"), self.cell, text = 1 )
 		self.customplacestree.append_column( self.namescolumn )
 		self.customplacestree.append_column( self.placescolumn )
 		wTree.get_widget("newButton").connect("clicked", self.newPlace)
@@ -325,6 +325,8 @@ class mintMenuConfig( object ):
 	def newPlace(self, newButton):
 		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
 		wTree = gtk.glade.XML( gladefile, "editPlaceDialog" )
+		wTree.get_widget("label1").set_text(_("Name:"))
+		wTree.get_widget("label2").set_text(_("Path:"))
 		folderChooserTree = gtk.glade.XML( gladefile, "fileChooserDialog" )
 		newPlaceDialog = wTree.get_widget( "editPlaceDialog" )
 		folderChooserDialog = folderChooserTree.get_widget( "fileChooserDialog" )
@@ -357,6 +359,8 @@ class mintMenuConfig( object ):
 	def editPlace(self, editButton):
 		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
 		wTree = gtk.glade.XML( gladefile, "editPlaceDialog" )
+		wTree.get_widget("label1").set_text(_("Name:"))
+		wTree.get_widget("label2").set_text(_("Path:"))
 		folderChooserTree = gtk.glade.XML( gladefile, "fileChooserDialog" )
 		editPlaceDialog = wTree.get_widget( "editPlaceDialog" )
 		folderChooserDialog = folderChooserTree.get_widget( "fileChooserDialog" )
@@ -369,8 +373,8 @@ class mintMenuConfig( object ):
 		editPlacePath = wTree.get_widget( "pathEntryBox" )
 		folderButton = wTree.get_widget( "folderButton" )
 		treeselection = self.customplacestree.get_selection()
-		currentiter = (treeselection.get_selected())[1]
-		
+		currentiter = (treeselection.get_selected())[1]				
+
 		if (currentiter != None):
 			
 			initName = self.customplacestreemodel.get_value(currentiter, 0)
