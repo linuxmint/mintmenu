@@ -1,3 +1,9 @@
+mintmenu (4.8.8) helena; urgency=low
+
+  * Reinstated calls to mouse grabs (needed to hide the menu when desktop is clicked) and added a call to hide_window (found in USP)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu,  19 Nov 2009 09:44:00 +0000
+
 mintmenu (4.8.7) helena; urgency=low
 
   * Replaced xdg with gmenu (Fixes broken Games category)
