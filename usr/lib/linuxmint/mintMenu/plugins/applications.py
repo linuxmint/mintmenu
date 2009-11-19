@@ -20,58 +20,58 @@ from easyfiles import *
 
 from filemonitor import monitor as filemonitor
 
-import xdg.Menu
+#import xdg.Menu
 import gmenu
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 # Evil patching
-def xdgParsePatched(filename=None):
-	# conver to absolute path
-	if filename and not os.path.isabs(filename):
-		filename = xdg.Menu.__getFileName(filename)
-
-	# use default if no filename given
-	if not filename:
-		filename = xdg.Menu.__getFileName("applications.menu")
-
-	if not filename:
-		raise xdg.Menu.ParsingError(_("File not found"), "/etc/xdg/menus/applications.menu")
-
-	# check if it is a .menu file
-	if not os.path.splitext(filename)[1] == ".menu":
-		raise xdg.Menu.ParsingError(_("Not a .menu file"), filename)
-
-	# create xml parser
-	try:
-		doc = xdg.Menu.xml.dom.minidom.parse(filename)
-	except xdg.Menu.xml.parsers.expat.ExpatError:
-		raise xdg.Menu.ParsingError(_("Not a valid .menu file"), filename)
-
-	# parse menufile
-	xdg.Menu.tmp["Root"] = ""
-	xdg.Menu.tmp["mergeFiles"] = []
-	xdg.Menu.tmp["DirectoryDirs"] = []
-	xdg.Menu.tmp["cache"] = xdg.Menu.MenuEntryCache()
-
-	xdg.Menu.__parse(doc, filename, xdg.Menu.tmp["Root"])
-	xdg.Menu.__parsemove(xdg.Menu.tmp["Root"])
-	xdg.Menu.__postparse(xdg.Menu.tmp["Root"])
-
-	xdg.Menu.tmp["Root"].Doc = doc
-	xdg.Menu.tmp["Root"].Filename = filename
-
-	# generate the menu
-	xdg.Menu.__genmenuNotOnlyAllocated(xdg.Menu.tmp["Root"])
-	xdg.Menu.__genmenuOnlyAllocated(xdg.Menu.tmp["Root"])
-
-	# and finally sort
-	xdg.Menu.sort(xdg.Menu.tmp["Root"])
-	xdg.Menu.tmp["Root"].Files = xdg.Menu.tmp["mergeFiles"] + [ xdg.Menu.tmp["Root"].Filename ]
-	return xdg.Menu.tmp["Root"]
-
-xdg.Menu.parse = xdgParsePatched
+#def xdgParsePatched(filename=None):
+#	# conver to absolute path
+#	if filename and not os.path.isabs(filename):
+#		filename = xdg.Menu.__getFileName(filename)
+#
+#	# use default if no filename given
+#	if not filename:
+#		filename = xdg.Menu.__getFileName("applications.menu")
+#
+#	if not filename:
+#		raise xdg.Menu.ParsingError(_("File not found"), "/etc/xdg/menus/applications.menu")
+#
+#	# check if it is a .menu file
+#	if not os.path.splitext(filename)[1] == ".menu":
+#		raise xdg.Menu.ParsingError(_("Not a .menu file"), filename)
+#
+#	# create xml parser
+#	try:
+#		doc = xdg.Menu.xml.dom.minidom.parse(filename)
+#	except xdg.Menu.xml.parsers.expat.ExpatError:
+#		raise xdg.Menu.ParsingError(_("Not a valid .menu file"), filename)
+#
+#	# parse menufile
+#	xdg.Menu.tmp["Root"] = ""
+#	xdg.Menu.tmp["mergeFiles"] = []
+#	xdg.Menu.tmp["DirectoryDirs"] = []
+#	xdg.Menu.tmp["cache"] = xdg.Menu.MenuEntryCache()
+#
+#	xdg.Menu.__parse(doc, filename, xdg.Menu.tmp["Root"])
+#	xdg.Menu.__parsemove(xdg.Menu.tmp["Root"])
+#	xdg.Menu.__postparse(xdg.Menu.tmp["Root"])
+#
+#	xdg.Menu.tmp["Root"].Doc = doc
+#	xdg.Menu.tmp["Root"].Filename = filename
+#
+#	# generate the menu
+#	xdg.Menu.__genmenuNotOnlyAllocated(xdg.Menu.tmp["Root"])
+#	xdg.Menu.__genmenuOnlyAllocated(xdg.Menu.tmp["Root"])
+#
+#	# and finally sort
+#	xdg.Menu.sort(xdg.Menu.tmp["Root"])
+#	xdg.Menu.tmp["Root"].Files = xdg.Menu.tmp["mergeFiles"] + [ xdg.Menu.tmp["Root"].Filename ]
+#	return xdg.Menu.tmp["Root"]
+#
+#xdg.Menu.parse = xdgParsePatched
 
 class Menu:
 	def __init__( self, MenuToLookup ):

@@ -1,3 +1,10 @@
+mintmenu (4.8.7) helena; urgency=low
+
+  * Replaced xdg with gmenu (Fixes broken Games category)
+  * Removed calls to mouse grabs (Could fix weird bug about not being able to grab the mouse)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu,  19 Nov 2009 08:52:00 +0000
+
 mintmenu (4.8.6) helena; urgency=low
 
   * Fixed missing i18n
