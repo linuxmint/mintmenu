@@ -44,7 +44,6 @@ gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 NAME = _("Menu")
 PATH = os.path.abspath( os.path.dirname( sys.argv[0] ) )
 ICON = "/usr/lib/linuxmint/mintMenu/mintMenu.png"
-ICON_HOVER = "/usr/lib/linuxmint/mintMenu/mintMenu_hover.png"
 
 sys.path.append( os.path.join( PATH , "plugins") )
 
@@ -602,13 +601,15 @@ class MenuWin( object ):
 			print cause
 
 	def enter_notify(self, applet, event):
-	        self.do_image(self.buttonIcon_hover)
+	        self.do_image(self.buttonIcon, True)
 
 	def leave_notify(self, applet, event):
-	        self.do_image(self.buttonIcon)
+	        self.do_image(self.buttonIcon, False)
 
-	def do_image(self, image_file):			
+	def do_image(self, image_file, saturate):					
 		pixbuf = gtk.gdk.pixbuf_new_from_file(image_file)
+		if saturate:
+			gtk.gdk.Pixbuf.saturate_and_pixelate(pixbuf, pixbuf, 1.5, False)
 		self.button_icon.set_from_pixbuf(pixbuf)	
 
 	def createPanelButton( self ):
@@ -655,7 +656,6 @@ class MenuWin( object ):
 		self.buttonText =  self.gconf.get( "string", "applet_text", "Menu" )
 		self.hotkeyText =  self.gconf.get( "string", "hot_key", "<Control>Super_L" )
 		self.buttonIcon =  self.gconf.get( "string", "applet_icon", ICON )
-		self.buttonIcon_hover =  self.gconf.get( "string", "applet_icon_hover", ICON_HOVER )
 		self.setIconSize( self.gconf.get( "int", "applet_icon_size", 2 ) )
 
 	def setIconSize( self, icon_size):
