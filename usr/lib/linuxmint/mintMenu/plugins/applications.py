@@ -21,6 +21,7 @@ from easyfiles import *
 from filemonitor import monitor as filemonitor
 
 import xdg.Menu
+import gmenu
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -73,29 +74,30 @@ def xdgParsePatched(filename=None):
 xdg.Menu.parse = xdgParsePatched
 
 class Menu:
-	def __init__( self, menu ):
-		if isinstance( menu , xdg.Menu.Menu):
-			self.directory = menu
+	def __init__( self, MenuToLookup ):
+		self.tree = gmenu.lookup_tree( MenuToLookup )
+		self.directory = self.tree.get_root_directory()
+
+	def getMenus( self, parent=None ):
+		if parent == None:
+			#gives top-level "Applications" item
+			yield self.tree.root
 		else:
-			self.directory = xdg.Menu.parse( menu )
+			for menu in parent.get_contents():
+				if menu.get_type() == gmenu.TYPE_DIRECTORY and self.__isVisible( menu ):
+					yield menu
 
-	def getMenus( self, parent = None ):
-		if not parent:
-			parent = self.directory
-		if not parent:
-			return
-
-		for menu in parent.getEntries():
-			if isinstance( menu, xdg.Menu.Menu ):
-				yield menu
-
-	def getItems( self, recursive = False ):
-		for item in self.directory.getEntries():
-			if isinstance( item, xdg.Menu.MenuEntry ):
+	def getItems( self, menu ):
+		for item in menu.get_contents():
+			if item.get_type() == gmenu.TYPE_ENTRY and item.get_desktop_file_id()[-19:] != '-usercustom.desktop' and self.__isVisible( item ):
 				yield item
-			elif isinstance( item, xdg.Menu.Menu ):
-				for subitem in Menu( item ).getItems( True ):
-					yield subitem
+
+	def __isVisible( self, item ):
+		if item.get_type() == gmenu.TYPE_ENTRY:
+			return not ( item.get_is_excluded() or item.get_is_nodisplay() )
+		if item.get_type() == gmenu.TYPE_DIRECTORY and len( item.get_contents() ):
+			return True
+
 
 
 class SuggestionButton ( gtk.Button ):
@@ -251,10 +253,11 @@ class pluginclass( object ):
 
 		for mainitems in [ "applications.menu", "settings.menu" ]:
 			mymenu = Menu( mainitems )
-			for f in mymenu.directory.Files:
-				self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
-			for f in mymenu.directory.AppDirs:
-				self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
+			mymenu.tree.add_monitor( self.menuChanged, None )
+			#for f in mymenu.directory.Files:
+			#	self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
+			#for f in mymenu.directory.AppDirs:
+			#	self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
 
 		sizeIcon = 0
 		if isinstance(self.iconSize, int):
@@ -1022,7 +1025,7 @@ class pluginclass( object ):
 		if targetType == self.TARGET_TYPE_FAV:
 			self.favoritesReorder( int(selection.data), widget.position )
 
-	def onMenuChanged( self, menu ):
+	def menuChanged( self, x, y ):
 		# wait some miliseconds because there a multiple events send at the same time and we don't want to rebuild the menu for each
 		if self.menuChangedTimer:
 			gobject.source_remove( self.menuChangedTimer )
@@ -1124,7 +1127,7 @@ class pluginclass( object ):
 			for item in newApplicationList:
 				found = False
 				for item2 in self.applicationList:
-					if item["entry"].filename == item2["entry"].filename:
+					if item["entry"].get_desktop_file_path() == item2["entry"].get_desktop_file_path():
 						found = True
 						break
 				if not found:
@@ -1134,7 +1137,7 @@ class pluginclass( object ):
 			for item in self.applicationList:
 				found = False
 				for item2 in newApplicationList:
-					if item["entry"].filename == item2["entry"].filename:
+					if item["entry"].get_desktop_file_path() == item2["entry"].get_desktop_file_path():
 						found = True
 						break
 				if not found:
@@ -1155,8 +1158,8 @@ class pluginclass( object ):
 				self.applicationsBox.remove( item["button"] )
 				sortedApplicationList.append( ( item["button"].appName, item["button"] ) )
 
-			for item in addedApplications:
-				item["button"] = MenuApplicationLauncher( item["entry"], self.iconSize, item["category"], self.showapplicationcomments )
+			for item in addedApplications:		
+				item["button"] = MenuApplicationLauncher( item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments )
 				if item["button"].appExec:
 					self.mintMenuWin.setTooltip( item["button"], item["button"].getTooltip() )
 					item["button"].connect( "button-release-event", self.menuPopup )
@@ -1188,14 +1191,16 @@ class pluginclass( object ):
 	def buildCategoryList( self ):
 		newCategoryList = [ { "name": _("All"), "icon": self.mintMenuWin.icon, "tooltip": _("Show all applications"), "filter":"", "index": 0 } ]
 
-		num = 1
+		num = 1		
+
 		for menu in self.menuFiles:
-			for child in menu.getMenus():
-				icon =  str(child.getIcon())
-				if (icon == "preferences-system"):					
-					self.adminMenu = child.getName()
-				if (icon != "applications-system" and icon != "applications-other"):				
-					newCategoryList.append( { "name": child.getName(), "icon": child.getIcon(), "tooltip": child.getName(), "filter": child.getName(), "index": num } )
+			for child in menu.directory.get_contents():
+				if child.get_type() == gmenu.TYPE_DIRECTORY:	
+					icon =  str(child.icon)
+					if (icon == "preferences-system"):					
+						self.adminMenu = child.name
+					if (icon != "applications-system" and icon != "applications-other"):				
+						newCategoryList.append( { "name": child.name, "icon": child.icon, "tooltip": child.name, "filter": child.name, "index": num } )
 			num += 1
 
 		return newCategoryList
@@ -1206,14 +1211,17 @@ class pluginclass( object ):
 		newApplicationsList = []
 
 		for menu in self.menuFiles:
-			for child in menu.getMenus():
-				for application in Menu(child).getItems( True ):
-					if isinstance( application, xdg.Menu.MenuEntry ):
-						catName = child.getName()						
-						icon = str(child.getIcon())						
-						if (icon == "applications-system" or icon == "applications-other"):
-							catName = self.adminMenu
-						newApplicationsList.append( { "entry": application.DesktopEntry, "category": catName } )
+			for directory in menu.directory.get_contents():
+				if directory.get_type() == gmenu.TYPE_DIRECTORY:		
+					for application in directory.get_contents():
+						if application.get_type() == gmenu.TYPE_ENTRY:						
+							catName = directory.name						
+							icon = str(directory.icon)						
+							if (icon == "applications-system" or icon == "applications-other"):
+								catName = self.adminMenu
+							newApplicationsList.append( { "entry": application, "category": catName } )
+						else:
+							print "Missing something"
 
 		return newApplicationsList
 		
