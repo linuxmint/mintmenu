@@ -1,6 +1,6 @@
 location:/usr/share/applications/firefox.desktop
 location:/usr/share/applications/thunderbird.desktop
-location:/usr/share/applications/xchat.desktop
+location:/usr/share/applications/pidgin.desktop
 location:/usr/share/applications/rhythmbox.desktop
 separator
 location:/usr/share/applications/gcalctool.desktop
