@@ -1,3 +1,9 @@
+mintmenu (4.8.9) helena; urgency=low
+
+  * Inverted labels between name and path in the edit places dialog in preferences
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu,  19 Nov 2009 16:07:00 +0000
+
 mintmenu (4.8.8) helena; urgency=low
 
   * Reinstated calls to mouse grabs (needed to hide the menu when desktop is clicked) and added a call to hide_window (found in USP)

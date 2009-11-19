@@ -325,8 +325,8 @@ class mintMenuConfig( object ):
 	def newPlace(self, newButton):
 		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
 		wTree = gtk.glade.XML( gladefile, "editPlaceDialog" )
-		wTree.get_widget("label1").set_text(_("Name:"))
-		wTree.get_widget("label2").set_text(_("Path:"))
+		wTree.get_widget("label2").set_text(_("Name:"))
+		wTree.get_widget("label1").set_text(_("Path:"))
 		folderChooserTree = gtk.glade.XML( gladefile, "fileChooserDialog" )
 		newPlaceDialog = wTree.get_widget( "editPlaceDialog" )
 		folderChooserDialog = folderChooserTree.get_widget( "fileChooserDialog" )
@@ -359,8 +359,8 @@ class mintMenuConfig( object ):
 	def editPlace(self, editButton):
 		gladefile = os.path.join( self.path, "mintMenuConfig.glade" )
 		wTree = gtk.glade.XML( gladefile, "editPlaceDialog" )
-		wTree.get_widget("label1").set_text(_("Name:"))
-		wTree.get_widget("label2").set_text(_("Path:"))
+		wTree.get_widget("label2").set_text(_("Name:"))
+		wTree.get_widget("label1").set_text(_("Path:"))
 		folderChooserTree = gtk.glade.XML( gladefile, "fileChooserDialog" )
 		editPlaceDialog = wTree.get_widget( "editPlaceDialog" )
 		folderChooserDialog = folderChooserTree.get_widget( "fileChooserDialog" )
