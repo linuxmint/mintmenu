@@ -485,13 +485,13 @@ class MainWindow( object ):
 			self.plugins["applications"].focusSearchEntry()
 
 	def grab( self ):
-		gtk.gdk.pointer_grab( self.window.window, True, gtk.gdk.BUTTON_PRESS_MASK )
+		#gtk.gdk.pointer_grab( self.window.window, True, gtk.gdk.BUTTON_PRESS_MASK )
 		gtk.gdk.keyboard_grab( self.window.window, False )
 		self.window.grab_add()
 
 	def ungrab( self ):
 		self.window.grab_remove()
-		gtk.gdk.pointer_ungrab()
+		#gtk.gdk.pointer_ungrab()
 		gtk.gdk.keyboard_ungrab()
 
 	def onMap( self, widget, event ):
