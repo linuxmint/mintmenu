@@ -433,7 +433,7 @@ class pluginclass( object ):
 		self.favCols = self.gconf.get( "int", "fav_cols", 2 )
 		self.swapgeneric = self.gconf.get( "bool", "swap_generic_name", False )
 		self.showcategoryicons = self.gconf.get( "bool", "show_category_icons", True )
-		self.categoryhoverdelay = self.gconf.get( "int", "category_hover_delay", 150 )
+		self.categoryhoverdelay = self.gconf.get( "int", "category_hover_delay", 50 )
 		self.showapplicationcomments = self.gconf.get( "bool", "show_application_comments", True )
 		
 		self.lastActiveTab =  self.gconf.get( "int", "last_active_tab", 0 )
