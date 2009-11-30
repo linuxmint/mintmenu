@@ -1197,10 +1197,10 @@ class pluginclass( object ):
 			for child in menu.directory.get_contents():
 				if child.get_type() == gmenu.TYPE_DIRECTORY:	
 					icon =  str(child.icon)
-					if (icon == "preferences-system"):					
-						self.adminMenu = child.name
-					if (icon != "applications-system" and icon != "applications-other"):				
-						newCategoryList.append( { "name": child.name, "icon": child.icon, "tooltip": child.name, "filter": child.name, "index": num } )
+					#if (icon == "preferences-system"):					
+					#	self.adminMenu = child.name
+					#if (icon != "applications-system" and icon != "applications-other"):				
+					newCategoryList.append( { "name": child.name, "icon": child.icon, "tooltip": child.name, "filter": child.name, "index": num } )
 			num += 1
 
 		return newCategoryList
@@ -1210,18 +1210,32 @@ class pluginclass( object ):
 
 		newApplicationsList = []
 
-		for menu in self.menuFiles:
-			for directory in menu.directory.get_contents():
-				if directory.get_type() == gmenu.TYPE_DIRECTORY:		
-					for application in directory.get_contents():
-						if application.get_type() == gmenu.TYPE_ENTRY:						
-							catName = directory.name						
-							icon = str(directory.icon)						
-							if (icon == "applications-system" or icon == "applications-other"):
-								catName = self.adminMenu
-							newApplicationsList.append( { "entry": application, "category": catName } )
-						else:
-							print "Missing something"
+		def find_applications_recursively(app_list, directory, catName):
+			for item in directory.get_contents():
+				if item.get_type() == gmenu.TYPE_ENTRY:											
+					print "=======>>> " + str(item.name) + " = " + str(catName)
+					app_list.append( { "entry": item, "category": catName } )
+				elif item.get_type() == gmenu.TYPE_DIRECTORY:				
+					find_applications_recursively(app_list, item, catName)
 
+		for menu in self.menuFiles:
+			directory = menu.directory
+			for entry in directory.get_contents():
+				if entry.get_type() == gmenu.TYPE_DIRECTORY and len(entry.get_contents()):
+					#Entry is a top-level category
+					#catName = entry.name
+					#icon = str(entry.icon)
+					#if (icon == "applications-system" or icon == "applications-other"):
+					#	catName = self.adminMenu
+					for item in entry.get_contents():
+						if item.get_type() == gmenu.TYPE_DIRECTORY:
+							find_applications_recursively(newApplicationsList, item, entry.name)
+						elif item.get_type() == gmenu.TYPE_ENTRY:							
+							newApplicationsList.append( { "entry": item, "category": entry.name } )
+				#elif entry.get_type() == gmenu.TYPE_ENTRY:
+				#	if not (entry.get_is_excluded() or entry.get_is_nodisplay()):
+				#		print "=======>>> " + item.name + " = top level"
+				#		newApplicationsList.append( { "entry": item, "category": "" } )
+										
 		return newApplicationsList
 		

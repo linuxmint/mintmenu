@@ -1,8 +1,16 @@
+mintmenu (4.9.1) helena; urgency=low
+
+  * Split Others, Administration and System tools categories (if we do it again we have to patch Alacarte to reflect this)
+  * Improved gmenu detection (didn't detect applications in sub-categories)
+  * Added dependency on python-gnomeapplet, needed by mintmenu
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon,  30 Nov 2009 14:59:00 +0000
+
 mintmenu (4.9.0) helena; urgency=low
 
   * Changed hover delay from 150 to 50ms
 
- -- Clement Lefebvre <root@linuxmint.com>  Fri,  29 Nov 2009 14:59:00 +0000
+ -- Clement Lefebvre <root@linuxmint.com>  Fri,  27 Nov 2009 14:59:00 +0000
 
 mintmenu (4.8.9) helena; urgency=low
 
