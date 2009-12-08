@@ -691,12 +691,12 @@ class MenuWin( object ):
 			self.button_icon.set_padding( 5, 0 )
 		elif self.applet.get_orient() == gnomeapplet.ORIENT_LEFT:
 			tmpbox = gtk.VBox()
-			self.systemlabel.set_angle( 90 )
+			self.systemlabel.set_angle( 270 )
 			self.button_box.reorder_child( self.button_icon, 1 )
 			self.button_icon.set_padding( 0, 5 )
 		elif self.applet.get_orient() == gnomeapplet.ORIENT_RIGHT:
 			tmpbox = gtk.VBox()
-			self.systemlabel.set_angle( 270 )
+			self.systemlabel.set_angle( 90 )
 			self.button_box.reorder_child( self.button_icon, 0 )
 			self.button_icon.set_padding( 0, 5 )
 
