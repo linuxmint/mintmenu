@@ -22,8 +22,7 @@ except Exception, e:
 global mbindkey
 # Load the key binding lib (developped by deskbar-applet, copied into mintMenu so we don't end up with an unnecessary dependency)
 try:
-	sys.path.append('/usr/lib/pyshared/python2.6/deskbar/core/keybinder')
-        from _keybinder import tomboy_keybinder_bind as bind_key
+	from deskbar.core.keybinder import tomboy_keybinder_bind as bind_key
 except Exception, cause:
         print "*********** Keybind Driver Load Failure **************"
         print "Error Report : ", str(cause)
