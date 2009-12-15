@@ -16,7 +16,7 @@ def RemoveArgs(Execline):
 # Actually execute the command
 def Execute( cmd ):
 	if isinstance( cmd, str ):
-		if (cmd.find("/home/") >= 0):
+		if (cmd.find("/home/") >= 0) or (cmd.find("su-to-root") >= 0) :
 			print "running manually..."
 			os.system(cmd + " &")
 			return True		
