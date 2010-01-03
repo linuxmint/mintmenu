@@ -1,3 +1,9 @@
+mintmenu (4.9.4) helena; urgency=low
+
+  * Fixed: spaces in custom places and/or desktop directory
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sun,  3 Jan 2009 12:50:00 +0000
+
 mintmenu (4.9.3) helena; urgency=low
 
   * Fixed: https://bugs.launchpad.net/linuxmint/+bug/496730

@@ -176,7 +176,7 @@ class pluginclass( object ):
 			except Exception, detail:
 				print detail
 			Button4 = easyButton( "gnome-fs-desktop", self.iconsize, [_("Desktop")], -1, -1 )
-			Button4.connect( "clicked", self.ButtonClicked, "nautilus " + desktopDir )
+			Button4.connect( "clicked", self.ButtonClicked, "nautilus \"" + desktopDir + "\"")
 			Button4.show()
 			self.placesBtnHolder.pack_start( Button4, False, False )
 			self.mintMenuWin.setTooltip( Button4, _("Browse items placed on the desktop") )
@@ -192,7 +192,7 @@ class pluginclass( object ):
 			
 	def do_custom_places( self ):		
 		for index in range( len(self.custompaths) ):
-			command = ( "nautilus " + self.custompaths[index] )
+			command = ( "nautilus \"" + self.custompaths[index] + "\"")
 			currentbutton = easyButton( "folder", self.iconsize, [self.customnames[index]], -1, -1 )
 			currentbutton.connect( "clicked", self.ButtonClicked, command )
 			currentbutton.show()
