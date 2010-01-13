@@ -42,6 +42,7 @@ gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 NAME = _("Menu")
 PATH = os.path.abspath( os.path.dirname( sys.argv[0] ) )
+
 ICON = "/usr/lib/linuxmint/mintMenu/mintMenu.png"
 
 sys.path.append( os.path.join( PATH , "plugins") )
@@ -60,7 +61,7 @@ class MainWindow( object ):
 
 	def __init__( self, toggleButton ):
 
-		self.path = os.path.abspath( os.path.dirname( sys.argv[0] ) )
+		self.path = PATH
 		sys.path.append( os.path.join( self.path, "plugins") )
 
 		self.icon = ICON
@@ -113,6 +114,7 @@ class MainWindow( object ):
 		self.gconftheme.notifyAdd( "gtk_theme", self.RegenPlugins )
 		
 		self.gconf.notifyAdd( "show_side_pane", self.toggleShowSidepane )
+		self.gconf.notifyAdd( "start_with_favorites", self.toggleStartWithFavorites )
 		self.gconf.notifyAdd( "/apps/panel/global/tooltips_enabled", self.toggleTooltipsEnabled )
 		self.gconf.notifyAdd( "tooltips_enabled", self.toggleTooltipsEnabled )
 
@@ -142,6 +144,9 @@ class MainWindow( object ):
 			self.tooltips.enable()
 		else:
 			self.tooltips.disable()
+
+	def toggleStartWithFavorites( self, client, connection_id, entry, args ):
+		self.startWithFavorites = entry.get_value().get_bool()
 
 	def toggleShowSidepane( self, client, connection_id, entry, args ):
 		self.sidepanevisible = entry.get_value().get_bool()
@@ -189,6 +194,7 @@ class MainWindow( object ):
 		self.enableTooltips       = self.gconf.get( "bool", "tooltips_enabled", True )
 		self.globalEnableTooltips = self.gconf.get( "bool", "/apps/panel/global/tooltips_enabled", True )
 		self.sidepanevisible      = self.gconf.get( "bool", "show_side_pane", False )
+		self.startWithFavorites   = self.gconf.get( "bool", "start_with_favorites", False )
 
 
 	def PinMenu(self, *args, **kargs):
@@ -478,8 +484,10 @@ class MainWindow( object ):
 
 	def show( self ):
 		self.window.present()
-
+		
 		if ( "applications" in self.plugins ) and ( hasattr( self.plugins["applications"], "focusSearchEntry" ) ):
+			if (self.startWithFavorites):
+				self.plugins["applications"].changeTab(0)
 			self.plugins["applications"].focusSearchEntry()
 
 	def grab( self ):

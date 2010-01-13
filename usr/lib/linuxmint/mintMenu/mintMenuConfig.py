@@ -42,6 +42,7 @@ class mintMenuConfig( object ):
 		self.mainWindow.set_title(_("Menu preferences"))
 		self.mainWindow.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
 
+		wTree.get_widget("startWithFavorites").set_label(_("Always start with favorites pane"))
 		wTree.get_widget("showSidepane").set_label(_("Show sidepane"))
 		wTree.get_widget("showButtonIcon").set_label(_("Show button icon"))
 		wTree.get_widget("useCustomColors").set_label(_("Use custom colors"))
@@ -105,6 +106,7 @@ class mintMenuConfig( object ):
 
 		wTree.get_widget("hotkey_label").set_text(_("Keyboard shortcut:"))
 
+		self.startWithFavorites = wTree.get_widget( "startWithFavorites" )
 		self.showSidepane = wTree.get_widget( "showSidepane" )
 		self.showAppComments = wTree.get_widget( "showAppComments" )
 		self.showCategoryIcons = wTree.get_widget( "showCategoryIcons" )
@@ -168,6 +170,7 @@ class mintMenuConfig( object ):
 		
 		self.useCustomColors.connect( "toggled", self.toggleUseCustomColors )
 		
+		self.bindGconfValueToWidget( self.gconf, "bool", "start_with_favorites", self.startWithFavorites, "toggled", self.startWithFavorites.set_active, self.startWithFavorites.get_active )
 		self.bindGconfValueToWidget( self.gconf, "bool", "show_side_pane", self.showSidepane, "toggled", self.showSidepane.set_active, self.showSidepane.get_active )
 		self.bindGconfValueToWidget( self.gconfApplications, "bool", "show_application_comments", self.showAppComments, "toggled", self.showAppComments.set_active, self.showAppComments.get_active )
 		self.bindGconfValueToWidget( self.gconfApplications, "bool", "show_category_icons", self.showCategoryIcons, "toggled", self.showCategoryIcons.set_active, self.showCategoryIcons.get_active )
