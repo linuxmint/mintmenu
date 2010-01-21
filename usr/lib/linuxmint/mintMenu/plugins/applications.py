@@ -633,6 +633,7 @@ class pluginclass( object ):
 				mTree = gtk.glade.XML( self.gladefile, "favoritesMenu" )
 				#i18n
 				launchMenuItem = gtk.MenuItem(_("Launch"))
+				editMenuItem = gtk.MenuItem(_("Edit"))
 				removeFromFavMenuItem = gtk.MenuItem(_("Remove from favorites"))
 				startupMenuItem = gtk.CheckMenuItem(_("Launch when I log in"))
 				separator = gtk.SeparatorMenuItem()
@@ -641,11 +642,13 @@ class pluginclass( object ):
 				
 
 				launchMenuItem.connect( "activate", self.onLaunchApp, widget)
+				editMenuItem.connect( "activate", self.onEditApp, widget)
 				removeFromFavMenuItem.connect( "activate", self.onFavoritesRemove, widget )
 				insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
 				insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
 
 				mTree.get_widget("favoritesMenu").append(launchMenuItem)
+				mTree.get_widget("favoritesMenu").append(editMenuItem)
 				mTree.get_widget("favoritesMenu").append(removeFromFavMenuItem)
 				mTree.get_widget("favoritesMenu").append(startupMenuItem)
 				mTree.get_widget("favoritesMenu").append(separator)				
@@ -716,6 +719,11 @@ class pluginclass( object ):
 
 	def onLaunchApp( self, menu, widget ):
 		widget.execute()
+		self.mintMenuWin.hide()
+
+	def onEditApp( self, menu, widget ):
+		# print u"Location of favorite is: " + widget.desktopFile
+		os.system('gnome-desktop-item-edit ' + widget.desktopFile)  
 		self.mintMenuWin.hide()
 
 	def onUninstallApp( self, menu, widget ):
