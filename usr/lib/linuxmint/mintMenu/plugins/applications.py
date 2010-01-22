@@ -12,6 +12,7 @@ import gettext
 import gnomevfs
 import threading
 import commands
+import filecmp
 
 from easybuttons import *
 from execute import Execute
@@ -748,8 +749,14 @@ class pluginclass( object ):
 			open(file_path, 'w').write(data)
 
 		os.system('gnome-desktop-item-edit ' + file_path) 
-		self.mintMenuWin.hide()
 
+		if filecmp.cmp(widget.desktopFile, file_path):
+			try:
+				os.remove(file_path)
+			except os.error:
+				pass
+
+		self.mintMenuWin.hide()
 
 	def onUninstallApp( self, menu, widget ):
 		widget.uninstall()
