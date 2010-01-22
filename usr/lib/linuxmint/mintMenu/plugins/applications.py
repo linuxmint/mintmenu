@@ -73,6 +73,20 @@ gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 #
 #xdg.Menu.parse = xdgParsePatched
 
+# Helper function for retrieving the user's location for storing new or modified menu items
+def getUserItemPath():
+	item_dir = None
+
+	if os.environ.has_key('XDG_DATA_HOME'):
+		item_dir = os.path.join(os.environ['XDG_DATA_HOME'], 'applications')
+	else:
+		item_dir = os.path.join(os.environ['HOME'], '.local', 'share', 'applications')
+
+	if not os.path.isdir(item_dir):
+		os.makedirs(item_dir)
+
+	return item_dir
+
 class Menu:
 	def __init__( self, MenuToLookup ):
 		self.tree = gmenu.lookup_tree( MenuToLookup )
@@ -633,7 +647,7 @@ class pluginclass( object ):
 				mTree = gtk.glade.XML( self.gladefile, "favoritesMenu" )
 				#i18n
 				launchMenuItem = gtk.MenuItem(_("Launch"))
-				editMenuItem = gtk.MenuItem(_("Edit"))
+				propsMenuItem = gtk.MenuItem(_("Properties"))
 				removeFromFavMenuItem = gtk.MenuItem(_("Remove from favorites"))
 				startupMenuItem = gtk.CheckMenuItem(_("Launch when I log in"))
 				separator = gtk.SeparatorMenuItem()
@@ -642,13 +656,13 @@ class pluginclass( object ):
 				
 
 				launchMenuItem.connect( "activate", self.onLaunchApp, widget)
-				editMenuItem.connect( "activate", self.onEditApp, widget)
+				propsMenuItem.connect( "activate", self.onPropsApp, widget)
 				removeFromFavMenuItem.connect( "activate", self.onFavoritesRemove, widget )
 				insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
 				insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
 
 				mTree.get_widget("favoritesMenu").append(launchMenuItem)
-				mTree.get_widget("favoritesMenu").append(editMenuItem)
+				mTree.get_widget("favoritesMenu").append(propsMenuItem)
 				mTree.get_widget("favoritesMenu").append(removeFromFavMenuItem)
 				mTree.get_widget("favoritesMenu").append(startupMenuItem)
 				mTree.get_widget("favoritesMenu").append(separator)				
@@ -687,11 +701,13 @@ class pluginclass( object ):
 
 			#i18n
 			launchMenuItem = gtk.MenuItem(_("Launch"))
+			propsMenuItem = gtk.MenuItem(_("Properties"))
 			favoriteMenuItem = gtk.CheckMenuItem(_("Show in my favorites"))
 			startupMenuItem = gtk.CheckMenuItem(_("Launch when I log in"))
 			separator = gtk.SeparatorMenuItem()			
 			uninstallMenuItem = gtk.MenuItem(_("Uninstall"))
 			mTree.get_widget("applicationsMenu").append(launchMenuItem)
+			mTree.get_widget("applicationsMenu").append(propsMenuItem)
 			mTree.get_widget("applicationsMenu").append(favoriteMenuItem)
 			mTree.get_widget("applicationsMenu").append(startupMenuItem)
 			mTree.get_widget("applicationsMenu").append(separator)
@@ -699,6 +715,7 @@ class pluginclass( object ):
 			mTree.get_widget("applicationsMenu").show_all()
 
 			launchMenuItem.connect( "activate", self.onLaunchApp, widget )
+			propsMenuItem.connect( "activate", self.onPropsApp, widget)
 			uninstallMenuItem.connect ( "activate", self.onUninstallApp, widget )
  
 			if self.isLocationInFavorites( widget.desktopFile ):
@@ -721,10 +738,18 @@ class pluginclass( object ):
 		widget.execute()
 		self.mintMenuWin.hide()
 
-	def onEditApp( self, menu, widget ):
-		# print u"Location of favorite is: " + widget.desktopFile
-		os.system('gnome-desktop-item-edit ' + widget.desktopFile)  
+	def onPropsApp( self, menu, widget ):
+
+		# Building a path to the .desktop file in the user's home directory
+		file_path = os.path.join(getUserItemPath(), os.path.basename(widget.desktopFile))
+
+		if not os.path.isfile(file_path):
+			data = open(widget.desktopFile).read()
+			open(file_path, 'w').write(data)
+
+		os.system('gnome-desktop-item-edit ' + file_path) 
 		self.mintMenuWin.hide()
+
 
 	def onUninstallApp( self, menu, widget ):
 		widget.uninstall()
