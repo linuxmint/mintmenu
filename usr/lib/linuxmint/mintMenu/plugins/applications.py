@@ -748,14 +748,7 @@ class pluginclass( object ):
 			data = open(widget.desktopFile).read()
 			open(file_path, 'w').write(data)
 
-		os.system('gnome-desktop-item-edit ' + file_path) 
-
-		if file_path != widget.desktopFile:
-			if filecmp.cmp(widget.desktopFile, file_path):
-				try:
-					os.remove(file_path)
-				except os.error:
-					pass
+		pid = os.spawnlp(os.P_NOWAIT, "/usr/bin/gnome-desktop-item-edit", "gnome-desktop-item-edit", file_path)
 
 		self.mintMenuWin.hide()
 
