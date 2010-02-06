@@ -75,7 +75,7 @@ gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 #xdg.Menu.parse = xdgParsePatched
 
 # Helper function for retrieving the user's location for storing new or modified menu items
-def getUserItemPath():
+def get_user_item_path():
 	item_dir = None
 
 	if os.environ.has_key('XDG_DATA_HOME'):
@@ -87,6 +87,28 @@ def getUserItemPath():
 		os.makedirs(item_dir)
 
 	return item_dir
+
+
+def rel_path(target, base=os.curdir):
+
+	if not os.path.exists(target):
+		raise OSError, 'Target does not exist: '+target
+
+	if not os.path.isdir(base):
+		raise OSError, 'Base is not a directory or does not exist: '+base
+
+	base_list = (os.path.abspath(base)).split(os.sep)
+	target_list = (os.path.abspath(target)).split(os.sep)
+
+	for i in range(min(len(base_list), len(target_list))):
+		if base_list[i] <> target_list[i]: break
+		else:
+			i += 1
+
+	rel_list = [os.pardir] * (len(base_list)-i) + target_list[i:]
+
+	return os.path.join(*rel_list)
+
 
 class Menu:
 	def __init__( self, MenuToLookup ):
@@ -741,14 +763,23 @@ class pluginclass( object ):
 
 	def onPropsApp( self, menu, widget ):
 
-		# Building a path to the .desktop file in the user's home directory
-		file_path = os.path.join(getUserItemPath(), os.path.basename(widget.desktopFile))
+		relPath = rel_path(widget.desktopFile, "/usr/share/applications")
 
-		if not os.path.isfile(file_path):
-			data = open(widget.desktopFile).read()
-			open(file_path, 'w').write(data)
+		if widget.desktopFile == os.path.join("/usr/share/applications" , relPath):
+			filePath = os.path.join(get_user_item_path(), relPath)
+			(head,tail) = os.path.split(filePath)
 
-		pid = os.spawnlp(os.P_NOWAIT, "/usr/bin/gnome-desktop-item-edit", "gnome-desktop-item-edit", file_path)
+			if not os.path.isdir(head):
+				os.makedirs(head)
+
+			if not os.path.isfile(filePath):
+				data = open(widget.desktopFile).read()
+				open(filePath, 'w').write(data)
+
+		else:
+			filePath = widget.desktopFile
+
+		pid = os.spawnlp(os.P_NOWAIT, "/usr/bin/gnome-desktop-item-edit", "gnome-desktop-item-edit", filePath)
 
 		self.mintMenuWin.hide()
 
