@@ -12,7 +12,7 @@ import gettext
 import gnomevfs
 import threading
 import commands
-import filecmp
+import subprocess
 
 from easybuttons import *
 from execute import Execute
@@ -88,6 +88,15 @@ def get_user_item_path():
 
 	return item_dir
 
+def get_system_item_paths():
+	item_dir = None
+
+	if os.environ.has_key('XDG_DATA_DIRS'):
+		item_dirs = os.environ['XDG_DATA_DIRS'].split(":")
+	else:
+		item_dirs = [os.path.join('usr', 'share')]
+
+	return item_dirs
 
 def rel_path(target, base=os.curdir):
 
@@ -763,23 +772,30 @@ class pluginclass( object ):
 
 	def onPropsApp( self, menu, widget ):
 
-		relPath = rel_path(widget.desktopFile, "/usr/share/applications")
+		sysPaths = get_system_item_paths()
 
-		if widget.desktopFile == os.path.join("/usr/share/applications" , relPath):
-			filePath = os.path.join(get_user_item_path(), relPath)
-			(head,tail) = os.path.split(filePath)
+		for path in sysPaths:
 
-			if not os.path.isdir(head):
-				os.makedirs(head)
+			path += "applications"
 
-			if not os.path.isfile(filePath):
-				data = open(widget.desktopFile).read()
-				open(filePath, 'w').write(data)
+			relPath = os.path.relpath(widget.desktopFile, path)
 
-		else:
-			filePath = widget.desktopFile
+			if widget.desktopFile == os.path.join(path, relPath):
+				filePath = os.path.join(get_user_item_path(), relPath)
+				(head,tail) = os.path.split(filePath)
 
-		pid = os.spawnlp(os.P_NOWAIT, "/usr/bin/gnome-desktop-item-edit", "gnome-desktop-item-edit", filePath)
+				if not os.path.isdir(head):
+					os.makedirs(head)
+
+				if not os.path.isfile(filePath):
+					data = open(widget.desktopFile).read()
+					open(filePath, 'w').write(data)
+				break
+
+			else:
+				filePath = widget.desktopFile
+
+		pid = subprocess.Popen(["/usr/bin/gnome-desktop-item-edit", filePath]).pid
 
 		self.mintMenuWin.hide()
 
