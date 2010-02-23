@@ -633,13 +633,13 @@ class MenuWin( object ):
 		# if we have a vertical panel
 		elif self.applet.get_orient() == gnomeapplet.ORIENT_LEFT:
 			self.button_box = gtk.VBox()
-			self.systemlabel.set_angle( 90 )
+			self.systemlabel.set_angle( 270 )
 			self.button_box.pack_start( self.systemlabel )
 			self.button_box.pack_start( self.button_icon )
 			self.button_icon.set_padding( 5, 0 )
 		elif self.applet.get_orient() == gnomeapplet.ORIENT_RIGHT:
 			self.button_box = gtk.VBox()
-			self.systemlabel.set_angle( 270 )
+			self.systemlabel.set_angle( 90 )
 			self.button_box.pack_start( self.button_icon )
 			self.button_box.pack_start( self.systemlabel )
 			self.button_icon.set_padding( 0, 5 )
