@@ -12,6 +12,7 @@ import gettext
 import gnomevfs
 import threading
 import commands
+import subprocess
 
 from easybuttons import *
 from execute import Execute
@@ -72,6 +73,51 @@ gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 #	return xdg.Menu.tmp["Root"]
 #
 #xdg.Menu.parse = xdgParsePatched
+
+# Helper function for retrieving the user's location for storing new or modified menu items
+def get_user_item_path():
+	item_dir = None
+
+	if os.environ.has_key('XDG_DATA_HOME'):
+		item_dir = os.path.join(os.environ['XDG_DATA_HOME'], 'applications')
+	else:
+		item_dir = os.path.join(os.environ['HOME'], '.local', 'share', 'applications')
+
+	if not os.path.isdir(item_dir):
+		os.makedirs(item_dir)
+
+	return item_dir
+
+def get_system_item_paths():
+	item_dir = None
+
+	if os.environ.has_key('XDG_DATA_DIRS'):
+		item_dirs = os.environ['XDG_DATA_DIRS'].split(":")
+	else:
+		item_dirs = [os.path.join('usr', 'share')]
+
+	return item_dirs
+
+def rel_path(target, base=os.curdir):
+
+	if not os.path.exists(target):
+		raise OSError, 'Target does not exist: '+target
+
+	if not os.path.isdir(base):
+		raise OSError, 'Base is not a directory or does not exist: '+base
+
+	base_list = (os.path.abspath(base)).split(os.sep)
+	target_list = (os.path.abspath(target)).split(os.sep)
+
+	for i in range(min(len(base_list), len(target_list))):
+		if base_list[i] <> target_list[i]: break
+		else:
+			i += 1
+
+	rel_list = [os.pardir] * (len(base_list)-i) + target_list[i:]
+
+	return os.path.join(*rel_list)
+
 
 class Menu:
 	def __init__( self, MenuToLookup ):
@@ -633,6 +679,7 @@ class pluginclass( object ):
 				mTree = gtk.glade.XML( self.gladefile, "favoritesMenu" )
 				#i18n
 				launchMenuItem = gtk.MenuItem(_("Launch"))
+				propsMenuItem = gtk.MenuItem(_("Properties"))
 				removeFromFavMenuItem = gtk.MenuItem(_("Remove from favorites"))
 				startupMenuItem = gtk.CheckMenuItem(_("Launch when I log in"))
 				separator = gtk.SeparatorMenuItem()
@@ -641,11 +688,13 @@ class pluginclass( object ):
 				
 
 				launchMenuItem.connect( "activate", self.onLaunchApp, widget)
+				propsMenuItem.connect( "activate", self.onPropsApp, widget)
 				removeFromFavMenuItem.connect( "activate", self.onFavoritesRemove, widget )
 				insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
 				insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
 
 				mTree.get_widget("favoritesMenu").append(launchMenuItem)
+				mTree.get_widget("favoritesMenu").append(propsMenuItem)
 				mTree.get_widget("favoritesMenu").append(removeFromFavMenuItem)
 				mTree.get_widget("favoritesMenu").append(startupMenuItem)
 				mTree.get_widget("favoritesMenu").append(separator)				
@@ -684,11 +733,13 @@ class pluginclass( object ):
 
 			#i18n
 			launchMenuItem = gtk.MenuItem(_("Launch"))
+			propsMenuItem = gtk.MenuItem(_("Properties"))
 			favoriteMenuItem = gtk.CheckMenuItem(_("Show in my favorites"))
 			startupMenuItem = gtk.CheckMenuItem(_("Launch when I log in"))
 			separator = gtk.SeparatorMenuItem()			
 			uninstallMenuItem = gtk.MenuItem(_("Uninstall"))
 			mTree.get_widget("applicationsMenu").append(launchMenuItem)
+			mTree.get_widget("applicationsMenu").append(propsMenuItem)
 			mTree.get_widget("applicationsMenu").append(favoriteMenuItem)
 			mTree.get_widget("applicationsMenu").append(startupMenuItem)
 			mTree.get_widget("applicationsMenu").append(separator)
@@ -696,6 +747,7 @@ class pluginclass( object ):
 			mTree.get_widget("applicationsMenu").show_all()
 
 			launchMenuItem.connect( "activate", self.onLaunchApp, widget )
+			propsMenuItem.connect( "activate", self.onPropsApp, widget)
 			uninstallMenuItem.connect ( "activate", self.onUninstallApp, widget )
  
 			if self.isLocationInFavorites( widget.desktopFile ):
@@ -716,6 +768,35 @@ class pluginclass( object ):
 
 	def onLaunchApp( self, menu, widget ):
 		widget.execute()
+		self.mintMenuWin.hide()
+
+	def onPropsApp( self, menu, widget ):
+
+		sysPaths = get_system_item_paths()
+
+		for path in sysPaths:
+
+			path += "applications"
+
+			relPath = os.path.relpath(widget.desktopFile, path)
+
+			if widget.desktopFile == os.path.join(path, relPath):
+				filePath = os.path.join(get_user_item_path(), relPath)
+				(head,tail) = os.path.split(filePath)
+
+				if not os.path.isdir(head):
+					os.makedirs(head)
+
+				if not os.path.isfile(filePath):
+					data = open(widget.desktopFile).read()
+					open(filePath, 'w').write(data)
+				break
+
+			else:
+				filePath = widget.desktopFile
+
+		pid = subprocess.Popen(["/usr/bin/gnome-desktop-item-edit", filePath]).pid
+
 		self.mintMenuWin.hide()
 
 	def onUninstallApp( self, menu, widget ):
