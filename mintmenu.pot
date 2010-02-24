@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-23 11:36+0000\n"
+"POT-Creation-Date: 2010-02-24 10:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,7 +138,7 @@ msgid "Options"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:60
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:241
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:243
 msgid "Applications"
 msgstr ""
 
@@ -147,8 +147,8 @@ msgid "Colors"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:63
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:227
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:232
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:229
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:234
 msgid "Favorites"
 msgstr ""
 
@@ -319,91 +319,104 @@ msgstr ""
 msgid "Recent documents"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:225
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:227
 msgid "Filter:"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:229
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:230
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:231
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:232
 msgid "All applications"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:617
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:618
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:631
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:632
 #, python-format
 msgid "Search portal for '%s'"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:621
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:622
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:635
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:636
 #, python-format
 msgid "Search repositories for '%s'"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:625
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:626
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:639
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:640
 #, python-format
 msgid "Show package '%s'"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:629
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:630
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:643
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:644
 #, python-format
 msgid "Install package '%s'"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:681
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:735
-msgid "Launch"
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:696
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:756
+msgid "Add to desktop"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:682
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:736
-msgid "Properties"
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:697
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:757
+msgid "Add to panel"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:683
-msgid "Remove from favorites"
-msgstr ""
-
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:684
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:738
-msgid "Launch when I log in"
-msgstr ""
-
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:686
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:718
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:699
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:739
 msgid "Insert space"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:687
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:719
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:700
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:740
 msgid "Insert separator"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:717
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:702
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:760
+msgid "Launch when I log in"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:704
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:762
+msgid "Launch"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:705
+msgid "Remove from favorites"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:738
 msgid "Remove"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:737
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:759
 msgid "Show in my favorites"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:740
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:763
 msgid "Uninstall"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1090
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:764
+msgid "Delete from menu"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:766
+msgid "Edit properties"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1192
 msgid ""
 "Couldn't save favorites. Check if you have write access to ~/.linuxmint/"
 "mintMenu"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1273
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1375
 msgid "All"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1273
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1375
 msgid "Show all applications"
 msgstr ""
 

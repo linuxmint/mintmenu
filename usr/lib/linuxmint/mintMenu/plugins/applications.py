@@ -24,6 +24,8 @@ from filemonitor import monitor as filemonitor
 #import xdg.Menu
 import gmenu
 
+from user import home
+
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
@@ -329,6 +331,18 @@ class pluginclass( object ):
 		self.suggestSearchButton.connect("clicked", self.search_apt)	
 		self.suggestShowButton.connect("clicked", self.show_apt)	
 		self.suggestInstallButton.connect("clicked", self.install_apt)	
+
+		self.get_panel()
+
+	def get_panel(self):
+		self.panel = None
+		self.panel_position = 0
+		appletidlist = gconf.client_get_default().get_list("/apps/panel/general/applet_id_list", "string")
+		for applet in appletidlist:
+			bonobo_id = gconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/bonobo_iid")		
+			if bonobo_id == "OAFIID:GNOME_mintMenu":
+				self.panel = gconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/toplevel_id")
+				self.panel_position = gconf.client_get_default().get_int("/apps/panel/applets/" + applet + "/position") + 1
 
 	def search_mint(self, widget):
 		os.system("/usr/bin/mint-search-portal " + self.suggestion + " &")
@@ -678,38 +692,45 @@ class pluginclass( object ):
 			if widget.type == "location":
 				mTree = gtk.glade.XML( self.gladefile, "favoritesMenu" )
 				#i18n
-				launchMenuItem = gtk.MenuItem(_("Launch"))
-				propsMenuItem = gtk.MenuItem(_("Properties"))
-				removeFromFavMenuItem = gtk.MenuItem(_("Remove from favorites"))
-				startupMenuItem = gtk.CheckMenuItem(_("Launch when I log in"))
-				separator = gtk.SeparatorMenuItem()
+
+				desktopMenuItem = gtk.MenuItem(_("Add to desktop"))
+				panelMenuItem = gtk.MenuItem(_("Add to panel"))
+				separator1 = gtk.SeparatorMenuItem()		
 				insertSpaceMenuItem = gtk.MenuItem(_("Insert space"))
 				insertSeparatorMenuItem = gtk.MenuItem(_("Insert separator"))
+				separator2 = gtk.SeparatorMenuItem()			
+				startupMenuItem = gtk.CheckMenuItem(_("Launch when I log in"))
+				separator3 = gtk.SeparatorMenuItem()	
+				launchMenuItem = gtk.MenuItem(_("Launch"))
+				removeFromFavMenuItem = gtk.MenuItem(_("Remove from favorites"))
 				
-
-				launchMenuItem.connect( "activate", self.onLaunchApp, widget)
-				propsMenuItem.connect( "activate", self.onPropsApp, widget)
-				removeFromFavMenuItem.connect( "activate", self.onFavoritesRemove, widget )
+				desktopMenuItem.connect("activate", self.add_to_desktop, widget)
+				panelMenuItem.connect("activate", self.add_to_panel, widget)
 				insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
 				insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
-
-				mTree.get_widget("favoritesMenu").append(launchMenuItem)
-				mTree.get_widget("favoritesMenu").append(propsMenuItem)
-				mTree.get_widget("favoritesMenu").append(removeFromFavMenuItem)
-				mTree.get_widget("favoritesMenu").append(startupMenuItem)
-				mTree.get_widget("favoritesMenu").append(separator)				
-				mTree.get_widget("favoritesMenu").append(insertSpaceMenuItem)
-				mTree.get_widget("favoritesMenu").append(insertSeparatorMenuItem)
-				mTree.get_widget("favoritesMenu").show_all()
-
-				mTree.get_widget( "favoritesMenu" ).popup( None, None, None, ev.button, ev.time )
-
 				if widget.isInStartup():
 					startupMenuItem.set_active( True )
 					startupMenuItem.connect( "toggled", self.onRemoveFromStartup, widget )
 				else:
 					startupMenuItem.set_active( False )
 					startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
+				launchMenuItem.connect( "activate", self.onLaunchApp, widget)
+				removeFromFavMenuItem.connect( "activate", self.onFavoritesRemove, widget )
+
+				mTree.get_widget("favoritesMenu").append(desktopMenuItem)
+				mTree.get_widget("favoritesMenu").append(panelMenuItem)				
+				mTree.get_widget("favoritesMenu").append(separator1)				
+				mTree.get_widget("favoritesMenu").append(insertSpaceMenuItem)
+				mTree.get_widget("favoritesMenu").append(insertSeparatorMenuItem)
+				mTree.get_widget("favoritesMenu").append(separator2)				
+				mTree.get_widget("favoritesMenu").append(startupMenuItem)
+				mTree.get_widget("favoritesMenu").append(separator3)
+				mTree.get_widget("favoritesMenu").append(launchMenuItem)
+				mTree.get_widget("favoritesMenu").append(removeFromFavMenuItem)
+
+				mTree.get_widget("favoritesMenu").show_all()
+
+				mTree.get_widget( "favoritesMenu" ).popup( None, None, None, ev.button, ev.time )				
 							
 			else:
 				mTree = gtk.glade.XML( self.gladefile, "favoritesMenuExtra" )
@@ -732,19 +753,42 @@ class pluginclass( object ):
 			mTree = gtk.glade.XML( self.gladefile, "applicationsMenu" )
 
 			#i18n
-			launchMenuItem = gtk.MenuItem(_("Launch"))
-			propsMenuItem = gtk.MenuItem(_("Properties"))
+			desktopMenuItem = gtk.MenuItem(_("Add to desktop"))
+			panelMenuItem = gtk.MenuItem(_("Add to panel"))
+			separator1 = gtk.SeparatorMenuItem()			
 			favoriteMenuItem = gtk.CheckMenuItem(_("Show in my favorites"))
 			startupMenuItem = gtk.CheckMenuItem(_("Launch when I log in"))
-			separator = gtk.SeparatorMenuItem()			
+			separator2 = gtk.SeparatorMenuItem()			
+			launchMenuItem = gtk.MenuItem(_("Launch"))
 			uninstallMenuItem = gtk.MenuItem(_("Uninstall"))
-			mTree.get_widget("applicationsMenu").append(launchMenuItem)
-			mTree.get_widget("applicationsMenu").append(propsMenuItem)
+			deleteMenuItem = gtk.MenuItem(_("Delete from menu"))
+			separator3 = gtk.SeparatorMenuItem()
+			propsMenuItem = gtk.MenuItem(_("Edit properties"))
+
+			mTree.get_widget("applicationsMenu").append(desktopMenuItem)
+			mTree.get_widget("applicationsMenu").append(panelMenuItem)
+
+			mTree.get_widget("applicationsMenu").append(separator1)
+
 			mTree.get_widget("applicationsMenu").append(favoriteMenuItem)
 			mTree.get_widget("applicationsMenu").append(startupMenuItem)
-			mTree.get_widget("applicationsMenu").append(separator)
+
+			mTree.get_widget("applicationsMenu").append(separator2)
+
+			mTree.get_widget("applicationsMenu").append(launchMenuItem)
 			mTree.get_widget("applicationsMenu").append(uninstallMenuItem)
+			if home in widget.desktopFile:
+				mTree.get_widget("applicationsMenu").append(deleteMenuItem)
+				deleteMenuItem.connect("activate", self.delete_from_menu, widget)
+
+			mTree.get_widget("applicationsMenu").append(separator3)
+
+			mTree.get_widget("applicationsMenu").append(propsMenuItem)
+
 			mTree.get_widget("applicationsMenu").show_all()
+
+			desktopMenuItem.connect("activate", self.add_to_desktop, widget)
+			panelMenuItem.connect("activate", self.add_to_panel, widget)
 
 			launchMenuItem.connect( "activate", self.onLaunchApp, widget )
 			propsMenuItem.connect( "activate", self.onPropsApp, widget)
@@ -765,6 +809,64 @@ class pluginclass( object ):
 				startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 			
 			mTree.get_widget( "applicationsMenu" ).popup( None, None, None, event.button, event.time )
+
+	def add_to_desktop(self, widget, desktopEntry):
+		try:
+			# Determine where the Desktop folder is (could be localized)
+			import sys, commands			
+			sys.path.append('/usr/lib/linuxmint/common')
+			from configobj import ConfigObj
+			config = ConfigObj(home + "/.config/user-dirs.dirs")			
+			desktopDir = home + "/Desktop"
+			tmpdesktopDir = config['XDG_DESKTOP_DIR']
+			tmpdesktopDir = commands.getoutput("echo " + tmpdesktopDir)			
+			if os.path.exists(tmpdesktopDir):
+				desktopDir = tmpdesktopDir
+			# Copy the desktop file to the desktop
+			os.system("cp \"%s\" \"%s/\"" % (desktopEntry.desktopFile, desktopDir))		
+			os.system("chmod a+rx %s/*.desktop" % (desktopDir))	
+		except Exception, detail:
+			print detail	
+
+	def add_to_panel(self, widget, desktopEntry):
+		import random
+		object_name = "mintmenu_"+''.join([random.choice('abcdefghijklmnopqrstuvwxyz0123456789') for x in xrange(8)])
+		new_directory = home + "/.gnome2/panel2.d/default/launchers/"
+		os.system("mkdir -p " + new_directory)
+		new_file = new_directory + object_name		
+
+		# Copy the desktop file to the panels directory
+		os.system("cp \"%s\" \"%s\"" % (desktopEntry.desktopFile, new_file))		
+		os.system("chmod a+rx %s" % (new_file))	
+				
+		# Add to Gnome/GConf			
+		object_dir = "/apps/panel/objects/"
+		object_client = gconf.client_get_default()					
+
+		object_client.set_string(object_dir + object_name +"/"+ "menu_path", "applications:/")	
+		object_client.set_bool(object_dir + object_name +"/"+ "locked", False)
+		object_client.set_int(object_dir + object_name +"/"+ "position", self.panel_position)
+		object_client.set_string(object_dir + object_name +"/"+ "object_type", "launcher-object")
+		object_client.set_bool(object_dir + object_name +"/"+ "panel_right_stick", False)
+		object_client.set_bool(object_dir + object_name +"/"+ "use_menu_path", False)
+		object_client.set_string(object_dir + object_name +"/"+ "launcher_location", new_file)
+		object_client.set_string(object_dir + object_name +"/"+ "custom_icon", "")
+		object_client.set_string(object_dir + object_name +"/"+ "tooltip", "")
+		object_client.set_string(object_dir + object_name +"/"+ "action_type", "lock")
+		object_client.set_bool(object_dir + object_name +"/"+ "use_custom_icon", False)
+		object_client.set_string(object_dir + object_name +"/"+ "attached_toplevel_id", "")
+		object_client.set_string(object_dir + object_name +"/"+ "bonobo_iid", "")
+		object_client.set_string(object_dir + object_name +"/"+ "toplevel_id", self.panel)
+
+		launchers_list = object_client.get_list("/apps/panel/general/object_id_list", "string")		
+		launchers_list.append(object_name)
+		object_client.set_list("/apps/panel/general/object_id_list", gconf.VALUE_STRING, launchers_list)
+
+	def delete_from_menu(self, widget, desktopEntry):
+		try:						
+			os.system("rm \"%s\" &" % desktopEntry.desktopFile)
+		except Exception, detail:
+			print detail
 
 	def onLaunchApp( self, menu, widget ):
 		widget.execute()
