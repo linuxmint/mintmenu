@@ -55,6 +55,10 @@ class mintMenuConfig( object ):
 
 		wTree.get_widget("label11").set_text(_("Border width:"))
 		wTree.get_widget("label2").set_text(_("pixels"))
+
+		wTree.get_widget("label8").set_text(_("Opacity:"))
+		wTree.get_widget("label9").set_text("%")
+
 		wTree.get_widget("buttonTextLabel").set_text(_("Button text:"))
 		wTree.get_widget("label1").set_text(_("Options"))
 		wTree.get_widget("label23").set_text(_("Applications"))
@@ -119,6 +123,7 @@ class mintMenuConfig( object ):
 		self.favIconSize = wTree.get_widget( "favIconSize" )
 		self.favCols = wTree.get_widget( "numFavCols" )
 		self.borderWidth = wTree.get_widget( "borderWidth" )
+		self.opacity = wTree.get_widget( "opacity" )
 		self.useCustomColors = wTree.get_widget( "useCustomColors" )
 		self.backgroundColor = wTree.get_widget( "backgroundColor" )
 		self.borderColor = wTree.get_widget( "borderColor" )
@@ -184,6 +189,7 @@ class mintMenuConfig( object ):
 		self.bindGconfValueToWidget( self.gconfApplications, "int", "fav_cols", self.favCols, "value-changed", self.favCols.set_value, self.favCols.get_value )
 
 		self.bindGconfValueToWidget( self.gconf, "int", "border_width", self.borderWidth, "value-changed", self.borderWidth.set_value, self.borderWidth.get_value_as_int )
+		self.bindGconfValueToWidget( self.gconf, "int", "opacity", self.opacity, "value-changed", self.opacity.set_value, self.opacity.get_value_as_int )
 		self.bindGconfValueToWidget( self.gconf, "bool", "use_custom_color", self.useCustomColors, "toggled", self.useCustomColors.set_active, self.useCustomColors.get_active )
 		self.bindGconfValueToWidget( self.gconf, "color", "custom_color", self.backgroundColor, "color-set", self.backgroundColor.set_color, self.getBackgroundColor )
 		self.bindGconfValueToWidget( self.gconf, "color", "custom_heading_color", self.headingColor, "color-set", self.headingColor.set_color, self.getHeadingColor )

@@ -101,6 +101,7 @@ class MainWindow( object ):
 
 		self.getSetGconfEntries()
 		self.SetupMintMenuBorder()
+		self.SetupMintMenuOpacity()
 
 		self.tooltips = gtk.Tooltips()
 		if self.globalEnableTooltips and self.enableTooltips:
@@ -123,6 +124,7 @@ class MainWindow( object ):
 		self.gconf.notifyAdd( "custom_heading_color", self.toggleCustomHeadingColor )
 		self.gconf.notifyAdd( "custom_color", self.toggleCustomBackgroundColor )
 		self.gconf.notifyAdd( "border_width", self.toggleBorderWidth )
+		self.gconf.notifyAdd( "opacity", self.toggleOpacity )
 		
 	def quit_cb (self):
  		gtk.main_quit()
@@ -159,6 +161,10 @@ class MainWindow( object ):
 		self.borderwidth = entry.get_value().get_int()
 		self.SetupMintMenuBorder()
 
+	def toggleOpacity( self, client, connection_id, entry, args ):
+		self.opacity = entry.get_value().get_int()
+		self.SetupMintMenuOpacity()
+
 	def toggleUseCustomColor( self, client, connection_id, entry, args ):
 		self.usecustomcolor = entry.get_value().get_bool()
 		self.SetupMintMenuBorder()
@@ -189,6 +195,7 @@ class MainWindow( object ):
 		self.custombordercolor   = self.gconf.get( "color", "custom_border_color", "#001155" )
 		
 		self.borderwidth          = self.gconf.get( "int", "border_width", 1 )
+		self.opacity          	  = self.gconf.get( "int", "opacity", 100 )
 		self.offset               = self.gconf.get( "int", "mintMenu_offset", 0 )
 		self.pinmenu              = self.gconf.get( "bool", "pin_menu", False )
 		self.enableTooltips       = self.gconf.get( "bool", "tooltips_enabled", True )
@@ -222,6 +229,11 @@ class MainWindow( object ):
 		else:
 			self.sidepane.show()
 
+	def SetupMintMenuOpacity( self ):
+		print "Opacity is: " + str(self.opacity)
+		opacity = float(self.opacity) / float(100)
+		print "Setting opacity to: " + str(opacity)
+		self.window.set_opacity(opacity)
 
 	def PopulatePlugins( self ):
 		self.panesToColor = [ ]
