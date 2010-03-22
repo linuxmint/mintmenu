@@ -7,8 +7,9 @@ mintmenu (4.9.5) isadora; urgency=low
   * Better properties layout
   * Fixed label orientation
   * New option: start with favorites
+  * Transparency option
 
- -- Clement Lefebvre <root@linuxmint.com>  Wed,  24 Feb 2010 10:58:00 +0000
+ -- Clement Lefebvre <root@linuxmint.com>  Mon,  22 Mar 2010 19:47:00 +0000
 
 mintmenu (4.9.4) helena; urgency=low
 
