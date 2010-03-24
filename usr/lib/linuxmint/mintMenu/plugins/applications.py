@@ -13,6 +13,7 @@ import gnomevfs
 import threading
 import commands
 import subprocess
+import filecmp
 
 from easybuttons import *
 from execute import Execute
@@ -874,6 +875,8 @@ class pluginclass( object ):
 
 	def onPropsApp( self, menu, widget ):
 
+		newFileFlag = False
+
 		sysPaths = get_system_item_paths()
 
 		for path in sysPaths:
@@ -892,14 +895,39 @@ class pluginclass( object ):
 				if not os.path.isfile(filePath):
 					data = open(widget.desktopFile).read()
 					open(filePath, 'w').write(data)
+					newFileFlag = True
 				break
 
 			else:
 				filePath = widget.desktopFile
 
-		pid = subprocess.Popen(["/usr/bin/gnome-desktop-item-edit", filePath]).pid
-
 		self.mintMenuWin.hide()
+		gtk.gdk.flush()
+
+		editProcess = subprocess.Popen(["/usr/bin/gnome-desktop-item-edit", filePath])
+		subprocess.Popen.communicate(editProcess)
+
+		if newFileFlag:
+
+			if filecmp.cmp(widget.desktopFile, filePath):
+				os.remove(filePath)
+
+			else: 
+				favoriteChange = 0
+
+				for favorite in self.favorites:
+					if favorite.type == "location":
+						if favorite.desktopFile == widget.desktopFile:
+							favorite.desktopFile = filePath
+							favoriteChange = 1
+
+				if favoriteChange == 1:
+					self.favoritesSave()
+					self.buildFavorites()
+
+		else:
+			self.buildFavorites()
+
 
 	def onUninstallApp( self, menu, widget ):
 		widget.uninstall()
