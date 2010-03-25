@@ -704,6 +704,8 @@ class pluginclass( object ):
 				separator3 = gtk.SeparatorMenuItem()	
 				launchMenuItem = gtk.MenuItem(_("Launch"))
 				removeFromFavMenuItem = gtk.MenuItem(_("Remove from favorites"))
+				separator4 = gtk.SeparatorMenuItem()
+				propsMenuItem = gtk.MenuItem(_("Edit properties"))
 				
 				desktopMenuItem.connect("activate", self.add_to_desktop, widget)
 				panelMenuItem.connect("activate", self.add_to_panel, widget)
@@ -717,6 +719,7 @@ class pluginclass( object ):
 					startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 				launchMenuItem.connect( "activate", self.onLaunchApp, widget)
 				removeFromFavMenuItem.connect( "activate", self.onFavoritesRemove, widget )
+				propsMenuItem.connect( "activate", self.onPropsApp, widget)
 
 				mTree.get_widget("favoritesMenu").append(desktopMenuItem)
 				mTree.get_widget("favoritesMenu").append(panelMenuItem)				
@@ -728,6 +731,8 @@ class pluginclass( object ):
 				mTree.get_widget("favoritesMenu").append(separator3)
 				mTree.get_widget("favoritesMenu").append(launchMenuItem)
 				mTree.get_widget("favoritesMenu").append(removeFromFavMenuItem)
+				mTree.get_widget("favoritesMenu").append(separator4)
+				mTree.get_widget("favoritesMenu").append(propsMenuItem)
 
 				mTree.get_widget("favoritesMenu").show_all()
 
