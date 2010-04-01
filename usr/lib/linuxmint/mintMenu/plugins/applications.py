@@ -1069,9 +1069,9 @@ class pluginclass( object ):
 					self.favorites.append( favButton )
 					self.favoritesPositionOnGrid( favButton )
 					favButton.connect( "drag_data_received", self.onFavButtonDragReorder )
-					favButton.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.fromFav, gtk.gdk.ACTION_MOVE )
+					favButton.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.fromFav, gtk.gdk.ACTION_COPY )
 					favButton.connect( "drag_data_get", self.onFavButtonDragReorderGet )
-					favButton.drag_source_set( gtk.gdk.BUTTON1_MASK, self.toFav, gtk.gdk.ACTION_MOVE )
+					favButton.drag_source_set( gtk.gdk.BUTTON1_MASK, self.toFav, gtk.gdk.ACTION_COPY )
 					position += 1
 		
 			self.favoritesSave()
@@ -1150,9 +1150,9 @@ class pluginclass( object ):
 			self.favoritesPositionOnGrid( favButton )
 			
 			favButton.connect( "drag_data_received", self.onFavButtonDragReorder )
-			favButton.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.toFav, gtk.gdk.ACTION_MOVE )
+			favButton.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.toFav, gtk.gdk.ACTION_COPY )
 			favButton.connect( "drag_data_get", self.onFavButtonDragReorderGet )
-			favButton.drag_source_set( gtk.gdk.BUTTON1_MASK, self.toFav, gtk.gdk.ACTION_MOVE )
+			favButton.drag_source_set( gtk.gdk.BUTTON1_MASK, self.toFav, gtk.gdk.ACTION_COPY )
 			
 			if position >= 0:
 				self.favoritesReorder( favButton.position, position )
