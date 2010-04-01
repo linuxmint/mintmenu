@@ -1,3 +1,9 @@
+mintmenu (4.9.6) isadora; urgency=low
+
+  * Fixed drag and drop from favorites
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thur,  1 Apr 2010 11:40:00 +0000
+
 mintmenu (4.9.5) isadora; urgency=low
 
   * Add to panel
