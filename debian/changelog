@@ -1,3 +1,9 @@
+mintmenu (4.9.7) isadora; urgency=low
+
+  * Imported fixes from icius on editing favorites
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue,  27 Apr 2010 08:37:00 +0000
+
 mintmenu (4.9.6) isadora; urgency=low
 
   * Fixed drag and drop from favorites
