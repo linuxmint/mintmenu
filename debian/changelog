@@ -1,3 +1,9 @@
+mintmenu (4.9.8) isadora; urgency=low
+
+  * Removed suggestion "search in portal"
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sat,  01 May 2010 13:07:00 +0000
+
 mintmenu (4.9.7) isadora; urgency=low
 
   * Imported fixes from icius on editing favorites

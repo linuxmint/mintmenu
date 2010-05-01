@@ -323,12 +323,12 @@ class pluginclass( object ):
 
 		#sizeIcon = gtk.icon_size_lookup( sizeIcon )
 		
-		self.suggestSearchAppButton = SuggestionButton(gtk.STOCK_FIND, self.iconSize, "")		
+		#self.suggestSearchAppButton = SuggestionButton(gtk.STOCK_FIND, self.iconSize, "")		
 		self.suggestSearchButton = SuggestionButton(gtk.STOCK_FIND, self.iconSize, "")
 		self.suggestShowButton = SuggestionButton(gtk.STOCK_INFO, self.iconSize, "")
 		self.suggestInstallButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
 
-		self.suggestSearchAppButton.connect("clicked", self.search_mint)			
+		#self.suggestSearchAppButton.connect("clicked", self.search_mint)			
 		self.suggestSearchButton.connect("clicked", self.search_apt)	
 		self.suggestShowButton.connect("clicked", self.show_apt)	
 		self.suggestInstallButton.connect("clicked", self.install_apt)	
@@ -427,7 +427,7 @@ class pluginclass( object ):
 			except:
 				pass
 
-		self.suggestSearchAppButton.set_icon_size( self.iconSize )
+		#self.suggestSearchAppButton.set_icon_size( self.iconSize )
 		self.suggestSearchButton.set_icon_size( self.iconSize )
 		self.suggestShowButton.set_icon_size( self.iconSize )
 		self.suggestInstallButton.set_icon_size( self.iconSize )
@@ -608,7 +608,7 @@ class pluginclass( object ):
 
 		start = time.time()
 		#print "FILTER"		
-		self.applicationsBox.remove(self.suggestSearchAppButton)
+		#self.applicationsBox.remove(self.suggestSearchAppButton)
 		self.applicationsBox.remove(self.suggestSearchButton)
 		self.applicationsBox.remove(self.suggestShowButton)
 		self.applicationsBox.remove(self.suggestInstallButton)
@@ -628,9 +628,9 @@ class pluginclass( object ):
 				if (not showns and os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg")):					
 					self.suggestion = text
 
-					self.applicationsBox.add(self.suggestSearchAppButton)					
-					self.suggestSearchAppButton.set_text(_("Search portal for '%s'") % text)
-					self.suggestSearchAppButton.set_tooltip_text(_("Search portal for '%s'") % text)					
+					#self.applicationsBox.add(self.suggestSearchAppButton)					
+					#self.suggestSearchAppButton.set_text(_("Search portal for '%s'") % text)
+					#self.suggestSearchAppButton.set_tooltip_text(_("Search portal for '%s'") % text)					
 
 					self.applicationsBox.add(self.suggestSearchButton)
 					self.suggestSearchButton.set_text(_("Search repositories for '%s'") % text)
