@@ -55,6 +55,7 @@ class pluginclass( object ):
 		self.gconf.notifyAdd( "show_network", self.RegenPlugin )
 		self.gconf.notifyAdd( "show_trash", self.RegenPlugin )
 		self.gconf.notifyAdd( "custom_names", self.RegenPlugin )
+		self.gconf.notifyAdd( "custom_paths", self.RegenPlugin )
 		self.gconf.notifyAdd( "allowScrollbar", self.RegenPlugin )
 		self.gconf.notifyAdd( "height", self.changePluginSize )
 		self.gconf.notifyAdd( "width", self.changePluginSize )		
@@ -192,7 +193,9 @@ class pluginclass( object ):
 			
 	def do_custom_places( self ):		
 		for index in range( len(self.custompaths) ):
-			command = ( "nautilus \"" + self.custompaths[index] + "\"")
+			path = self.custompaths[index]
+			path = path.replace("~", home)
+			command = ( "nautilus \"" + path + "\"")
 			currentbutton = easyButton( "folder", self.iconsize, [self.customnames[index]], -1, -1 )
 			currentbutton.connect( "clicked", self.ButtonClicked, command )
 			currentbutton.show()

@@ -444,7 +444,7 @@ class mintMenuConfig( object ):
 		else:
 			self.systemHeightButton.set_sensitive(False)
 
-	def updatePlacesGconf(self, treemodel, path, iter = None, new_order = None):
+	def updatePlacesGconf(self, treemodel, path, iter = None, new_order = None):		
 # Do only if not partway though an append operation; Append = insert+change+change and each creates a signal
 		if ((iter == None) or (self.customplacestreemodel.get_value(iter, 1) != None)):
 			treeiter = self.customplacestreemodel.get_iter_first()
