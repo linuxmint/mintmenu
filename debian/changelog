@@ -1,3 +1,9 @@
+mintmenu (5.0.0) julia; urgency=low
+
+  * Filtering now uses APT to fetch results and apturl to install packages
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon,  06 Sep 2010 15:21:00 +0000
+
 mintmenu (4.9.9) isadora; urgency=low
 
   * Custom places: now understands ~ signs and listens to changes in the path
