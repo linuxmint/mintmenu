@@ -318,10 +318,12 @@
                 <child>
                   <widget class="GtkButton" id="searchButton">
                     <property name="width_request">28</property>
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
                     <property name="has_default">True</property>
                     <property name="receives_default">False</property>
+                    <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
                     <signal name="clicked" handler="on_button17_clicked"/>
                     <child>

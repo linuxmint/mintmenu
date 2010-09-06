@@ -163,12 +163,8 @@ class Menu:
 
 class SuggestionButton ( gtk.Button ):
 
-    def __init__( self, iconName, iconSize, label ):
-        
-            
-        gtk.Button.__init__( self )
-        
-        
+    def __init__( self, iconName, iconSize, label ):                
+        gtk.Button.__init__( self )            
         iconSize = self.get_icon_size(iconSize)
         self.iconName = iconName
         self.set_relief( gtk.RELIEF_NONE )
@@ -193,11 +189,9 @@ class SuggestionButton ( gtk.Button ):
         self.add( Align1 )
         self.show()
         
-        
-        
-		
-        
-
+    def set_image(self, path):
+        self.image.set_from_file(path)
+                        		        
     def get_icon_size (self, iconSize):
         if isinstance(iconSize, int):
             if iconSize >= 4:
@@ -249,7 +243,7 @@ class pluginclass( object ):
         self.applicationsScrolledWindow = self.wTree.get_widget( "applicationsScrolledWindow" )
 
         #i18n
-        self.wTree.get_widget("searchLabel").set_text("<span weight='bold'>" + _("Filter:") + "</span>")
+        self.wTree.get_widget("searchLabel").set_text("<span weight='bold'>" + _("Search:") + "</span>")
         self.wTree.get_widget("searchLabel").set_use_markup(True)
         self.wTree.get_widget("label6").set_text("<span weight='bold'>" + _("Favorites") + "</span>")
         self.wTree.get_widget("label6").set_use_markup(True)
@@ -284,7 +278,7 @@ class pluginclass( object ):
         self.showFavoritesButton.connect( "drag_data_received", self.ReceiveCallback )
         self.showFavoritesButton.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.toButton, gtk.gdk.ACTION_COPY )
 
-        self.searchButton.connect( "button_release_event", self.SearchWithButton )
+       # self.searchButton.connect( "button_release_event", self.SearchWithButton )
 
         self.gconfHandlers = []
         # Gconf stuff
@@ -349,6 +343,8 @@ class pluginclass( object ):
         self.suggestions = []
         self.current_suggestion = None
         self.get_panel()
+        
+        self.wTree.get_widget("searchButton").connect( "button-release-event", self.searchPopup )        
 
     def get_panel(self):
         self.panel = None
@@ -600,6 +596,53 @@ class pluginclass( object ):
             gobject.source_remove( self.filterTimer )
             self.filterTimer = None
 
+    def add_search_suggestions(self, text):
+        
+        text = "<b>%s</b>" % text
+        
+        suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton.connect("clicked", self.search_google)
+        suggestionButton.set_text(_("Search Google for %s") % text)
+        suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/google.ico")
+        self.applicationsBox.add(suggestionButton)
+        self.suggestions.append(suggestionButton)
+        
+        suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton.connect("clicked", self.search_wikipedia)
+        suggestionButton.set_text(_("Search Wikipedia for %s") % text)
+        suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico")
+        self.applicationsBox.add(suggestionButton)
+        self.suggestions.append(suggestionButton)
+                
+        separator = gtk.EventBox()
+        separator.add(gtk.HSeparator())
+        separator.set_size_request(-1, 20)       
+        separator.type = "separator"        
+        separator.show_all()
+        self.applicationsBox.add(separator)
+        self.suggestions.append(separator)
+        
+        suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton.connect("clicked", self.search_dictionary)
+        suggestionButton.set_text(_("Lookup %s in Dictionary") % text)
+        suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/dictionary.png")
+        self.applicationsBox.add(suggestionButton)
+        self.suggestions.append(suggestionButton)  
+        
+        suggestionButton = SuggestionButton(gtk.STOCK_FIND, self.iconSize, "")
+        suggestionButton.connect("clicked", self.Search)
+        suggestionButton.set_text(_("Search Computer for %s") % text)                        
+        self.applicationsBox.add(suggestionButton)
+        self.suggestions.append(suggestionButton)  
+        
+        self.last_separator = gtk.EventBox()
+        self.last_separator.add(gtk.HSeparator())
+        self.last_separator.set_size_request(-1, 20)       
+        self.last_separator.type = "separator"        
+        self.last_separator.show_all()
+        self.applicationsBox.add(self.last_separator)
+        self.suggestions.append(self.last_separator)            
+
     def Filter( self, widget, category = None ):
         self.filterTimer = None
 
@@ -621,33 +664,45 @@ class pluginclass( object ):
                     if (shown):
                         showns = True
                 
-                if (not showns and os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg")):                      
-                    if len(text) >= 3:                        
+                if (not showns and os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg")):
+                    if len(text) >= 3:
                         if self.current_suggestion is not None and self.current_suggestion in text:
-                            # We're restricting our search...
+                            # We're restricting our search...                            
+                            self.add_search_suggestions(text)                               
+                            found_packages = 0
                             for pkg in self.current_results:
                                 if text in pkg.name:
+                                    found_packages+=1
                                     name = pkg.name.replace(text, "<b>%s</b>" % text);
                                     suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
                                     suggestionButton.connect("clicked", self.apturl_install, pkg.name)
                                     suggestionButton.set_text(_("Install package '%s'") % name)
-                                    suggestionButton.set_tooltip_text(_("%s\n\n%s\n\n\n%s") % (pkg.name, pkg.summary.capitalize(), pkg.description))
+                                    suggestionButton.set_tooltip_text("%s\n\n%s\n\n\n%s" % (pkg.name, pkg.summary.capitalize(), pkg.description))
                                     suggestionButton.set_icon_size(self.iconSize)
                                     self.applicationsBox.add(suggestionButton)
                                     self.suggestions.append(suggestionButton)
+                            if found_packages == 0:
+                                self.applicationsBox.remove(self.last_separator)
+                                self.suggestions.remove(self.last_separator)
                         else:
-                            self.current_results = []
+                            self.current_results = []                            
+                            self.add_search_suggestions(text) 
+                            found_packages = 0                                   
                             for pkg in self.apt_cache:
                                 if text in pkg.name:
+                                    found_packages+=1
                                     name = pkg.name.replace(text, "<b>%s</b>" % text);
                                     suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
                                     suggestionButton.connect("clicked", self.apturl_install, pkg.name)
                                     suggestionButton.set_text(_("Install package '%s'") % name)
-                                    suggestionButton.set_tooltip_text(_("%s\n\n%s\n\n%s") % (pkg.name, pkg.summary.capitalize(), pkg.description))
+                                    suggestionButton.set_tooltip_text("%s\n\n%s\n\n%s" % (pkg.name, pkg.summary.capitalize(), pkg.description))
                                     suggestionButton.set_icon_size(self.iconSize)
                                     self.applicationsBox.add(suggestionButton)
                                     self.suggestions.append(suggestionButton)
-                                    self.current_results.append(pkg)                                                                
+                                    self.current_results.append(pkg)
+                            if found_packages == 0:
+                                self.applicationsBox.remove(self.last_separator)
+                                self.suggestions.remove(self.last_separator)
                                     
                         self.current_suggestion = text                        
                     else:
@@ -828,6 +883,139 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             mTree.get_widget( "applicationsMenu" ).popup( None, None, None, event.button, event.time )
+            
+    def searchPopup( self, widget=None, event=None ):    
+        menu = gtk.Menu()   
+             
+        menuItem = gtk.ImageMenuItem(_("Search Google"))
+        img = gtk.Image()
+        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/google.ico')
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.search_google)
+        menu.append(menuItem)
+        
+        menuItem = gtk.ImageMenuItem(_("Search Wikipedia"))
+        img = gtk.Image()
+        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico')
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.search_wikipedia)
+        menu.append(menuItem)
+        
+        menuItem = gtk.SeparatorMenuItem()
+        menu.append(menuItem)
+        
+        menuItem = gtk.ImageMenuItem(_("Lookup Dictionnary"))
+        img = gtk.Image()
+        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/dictionary.png')
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.search_dictionary)
+        menu.append(menuItem)
+        
+        menuItem = gtk.ImageMenuItem(_("Search Computer"))
+        img = gtk.Image()
+        img.set_from_stock(gtk.STOCK_FIND, self.iconSize)
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.Search)
+        menu.append(menuItem)
+        
+        menuItem = gtk.SeparatorMenuItem()
+        menu.append(menuItem)
+        
+        menuItem = gtk.ImageMenuItem(_("Find Software"))
+        img = gtk.Image()
+        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/software.png')
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.search_mint_software)
+        menu.append(menuItem)
+        
+        menuItem = gtk.ImageMenuItem(_("Find Tutorials"))
+        img = gtk.Image()
+        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/tutorials.png')
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.search_mint_tutorials)
+        menu.append(menuItem)
+        
+        menuItem = gtk.ImageMenuItem(_("Find Hardware"))
+        img = gtk.Image()
+        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/hardware.png')
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.search_mint_hardware)
+        menu.append(menuItem)
+        
+        menuItem = gtk.ImageMenuItem(_("Find Ideas"))
+        img = gtk.Image()
+        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/ideas.png')
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.search_mint_ideas)
+        menu.append(menuItem)
+        
+        menuItem = gtk.ImageMenuItem(_("Find Users"))
+        img = gtk.Image()
+        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/users.png')
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.search_mint_users)
+        menu.append(menuItem)
+        
+        menu.show_all()
+        #menu.popup( None, None, self.pos_func, 3, 0)
+        menu.popup( None, None, None, 3, 0)
+        #menu.attach_to_widget(self.searchButton, None)
+        #menu.reposition()
+        #menu.reposition()
+        
+    def pos_func(self, menu=None):
+        rect = self.searchButton.get_allocation()
+        x = rect.x + rect.width
+        y = rect.y + rect.height
+        return (x, y, False)
+        
+    def search_google(self, widget):
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "+")
+        os.system("xdg-open \"http://www.google.com/cse?cx=002683415331144861350%3Atsq8didf9x0&ie=utf-8&sa=Search&q=" + text + "\" &")     
+        self.mintMenuWin.hide()
+        
+    def search_wikipedia(self, widget):
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "+")
+        os.system("xdg-open \"http://en.wikipedia.org/wiki/Special:Search?search=" + text + "\" &")    
+        self.mintMenuWin.hide()    
+        
+    def search_dictionary(self, widget):
+        text = self.searchEntry.get_text()
+        os.system("gnome-dictionary \"" + text + "\" &")
+        self.mintMenuWin.hide()
+        
+    def search_mint_tutorials(self, widget):
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/tutorial/search/0/" + text + "\" &")     
+        self.mintMenuWin.hide()
+    
+    def search_mint_ideas(self, widget):
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/idea/search/0/" + text + "\" &")     
+        self.mintMenuWin.hide()
+    
+    def search_mint_users(self, widget):
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/user/search/0/" + text + "\" &")     
+        self.mintMenuWin.hide()
+    
+    def search_mint_hardware(self, widget):
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/hardware/search/0/" + text + "\" &")     
+        self.mintMenuWin.hide()
+        
+    def search_mint_software(self, widget):
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/software/search/0/" + text + "\" &")     
+        self.mintMenuWin.hide()
+        
 
     def add_to_desktop(self, widget, desktopEntry):
         try:
@@ -985,8 +1173,7 @@ class pluginclass( object ):
 
     def Search( self, widget ):
         text = self.searchEntry.get_text().strip()
-        if text != "":
-            self.searchEntry.set_text( "" )
+        if text != "":            
             self.mintMenuWin.hide()
             fullstring = self.searchtool.replace( "%s", text )
             newstring = fullstring.split()

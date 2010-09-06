@@ -1,3 +1,9 @@
+mintmenu (5.0.1) julia; urgency=low
+
+  * Added search engines to mintMenu
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon,  06 Sep 2010 21:55:00 +0000
+
 mintmenu (5.0.0) julia; urgency=low
 
   * Filtering now uses APT to fetch results and apturl to install packages
