@@ -962,6 +962,7 @@ class pluginclass( object ):
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
+        self.focusSearchEntry()
         
     def pos_func(self, menu=None):
         rect = self.searchButton.get_allocation()
@@ -1176,8 +1177,7 @@ class pluginclass( object ):
         if text != "":            
             self.mintMenuWin.hide()
             fullstring = self.searchtool.replace( "%s", text )
-            newstring = fullstring.split()
-            Execute( newstring )
+            os.system(fullstring + " &")          
 
     def SearchWithButton( self, widget, event ):
         self.Search( widget )

@@ -1,3 +1,10 @@
+mintmenu (5.0.2) julia; urgency=low
+
+  * Fixed space chars in computer search
+  * Fixed focus problems with search entry and search menu
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue,  07 Sep 2010 18:28:00 +0000
+
 mintmenu (5.0.1) julia; urgency=low
 
   * Added search engines to mintMenu
