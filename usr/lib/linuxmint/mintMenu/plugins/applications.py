@@ -618,9 +618,10 @@ class pluginclass( object ):
         separator.add(gtk.HSeparator())
         separator.set_size_request(-1, 20)       
         separator.type = "separator"        
+        self.mintMenuWin.SetPaneColors( [ separator ] )
         separator.show_all()
         self.applicationsBox.add(separator)
-        self.suggestions.append(separator)
+        self.suggestions.append(separator)        
         
         suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
         suggestionButton.connect("clicked", self.search_dictionary)
@@ -638,7 +639,8 @@ class pluginclass( object ):
         self.last_separator = gtk.EventBox()
         self.last_separator.add(gtk.HSeparator())
         self.last_separator.set_size_request(-1, 20)       
-        self.last_separator.type = "separator"        
+        self.last_separator.type = "separator"   
+        self.mintMenuWin.SetPaneColors( [  self.last_separator ] )     
         self.last_separator.show_all()
         self.applicationsBox.add(self.last_separator)
         self.suggestions.append(self.last_separator)            
