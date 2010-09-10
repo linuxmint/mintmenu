@@ -221,7 +221,12 @@ class pluginclass( object ):
     @print_timing
     def __init__( self, mintMenuWin, toggleButton ):
 
-        self.apt_cache = apt.Cache()
+        self.apt_cache = None
+        try:
+            self.apt_cache = apt.Cache()
+        except Exception, detail:
+            print "Could not initialize APT cache"
+            pass            
 
         self.mintMenuWin = mintMenuWin
 
@@ -456,7 +461,15 @@ class pluginclass( object ):
             self.favoritesBox.remove( fav )
             self.favoritesPositionOnGrid( fav )
 
-    def RegenPlugin( self, *args, **kargs ):
+    def RegenPlugin( self, *args, **kargs ):            
+        try:
+            apt_cache = apt.Cache()
+            if apt_cache != None: 
+                self.apt_cache = apt_cache
+        except Exception, detail:
+            print "Could not refresh APT cache"
+            pass     
+        
         # save old config - this is necessary because the app will notified when it sets the default values and you don't want the to reload itself several times
         oldcategories_mouse_over = self.categories_mouse_over
         oldtotalrecent = self.totalrecent
@@ -689,19 +702,20 @@ class pluginclass( object ):
                         else:
                             self.current_results = []                            
                             self.add_search_suggestions(text) 
-                            found_packages = 0                                   
-                            for pkg in self.apt_cache:
-                                if text in pkg.name:
-                                    found_packages+=1
-                                    name = pkg.name.replace(text, "<b>%s</b>" % text);
-                                    suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
-                                    suggestionButton.connect("clicked", self.apturl_install, pkg.name)
-                                    suggestionButton.set_text(_("Install package '%s'") % name)
-                                    suggestionButton.set_tooltip_text("%s\n\n%s\n\n%s" % (pkg.name, pkg.summary.capitalize(), pkg.description))
-                                    suggestionButton.set_icon_size(self.iconSize)
-                                    self.applicationsBox.add(suggestionButton)
-                                    self.suggestions.append(suggestionButton)
-                                    self.current_results.append(pkg)
+                            found_packages = 0  
+                            if self.apt_cache is not None:                                 
+                                for pkg in self.apt_cache:
+                                    if text in pkg.name:
+                                        found_packages+=1
+                                        name = pkg.name.replace(text, "<b>%s</b>" % text);
+                                        suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
+                                        suggestionButton.connect("clicked", self.apturl_install, pkg.name)
+                                        suggestionButton.set_text(_("Install package '%s'") % name)
+                                        suggestionButton.set_tooltip_text("%s\n\n%s\n\n%s" % (pkg.name, pkg.summary.capitalize(), pkg.description))
+                                        suggestionButton.set_icon_size(self.iconSize)
+                                        self.applicationsBox.add(suggestionButton)
+                                        self.suggestions.append(suggestionButton)
+                                        self.current_results.append(pkg)
                             if found_packages == 0:
                                 self.applicationsBox.remove(self.last_separator)
                                 self.suggestions.remove(self.last_separator)

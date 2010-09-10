@@ -1,3 +1,9 @@
+mintmenu (5.0.4) julia; urgency=low
+
+  * Don't break menu if apt fails to initialize
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Fri,  10 Sep 2010 13:34:00 +0000
+
 mintmenu (5.0.3) julia; urgency=low
 
   * Fixed separators colors in search results
