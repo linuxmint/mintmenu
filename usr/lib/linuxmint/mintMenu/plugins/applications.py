@@ -910,6 +910,7 @@ class pluginclass( object ):
                 mTree.get_widget("favoritesMenu").show_all()
 
                 mTree.get_widget( "favoritesMenu" ).popup( None, None, None, ev.button, ev.time )
+                self.mintMenuWin.grab()
 
             else:
                 mTree = gtk.glade.XML( self.gladefile, "favoritesMenuExtra" )
@@ -926,6 +927,7 @@ class pluginclass( object ):
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
                 mTree.get_widget( "favoritesMenuExtra" ).popup( None, None, None, ev.button, ev.time )
+                self.mintMenuWin.grab()
 
     def menuPopup( self, widget, event ):
         if event.button == 3:
@@ -988,6 +990,7 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             mTree.get_widget( "applicationsMenu" ).popup( None, None, None, event.button, event.time )
+            self.mintMenuWin.grab()
             
     def searchPopup( self, widget=None, event=None ):    
         menu = gtk.Menu()   
@@ -1067,6 +1070,7 @@ class pluginclass( object ):
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
+        self.mintMenuWin.grab()
         self.focusSearchEntry()
         
     def pos_func(self, menu=None):

@@ -2,6 +2,7 @@ mintmenu (5.0.5) julia; urgency=low
 
   * Multi-threaded search
   * Multiple keywords search
+  * Fixed grab focus bugs
   
  -- Clement Lefebvre <root@linuxmint.com>  Sun,  12 Sep 2010 12:21:00 +0000
 
