@@ -1,3 +1,10 @@
+mintmenu (5.0.5) julia; urgency=low
+
+  * Multi-threaded search
+  * Multiple keywords search
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Sun,  12 Sep 2010 12:21:00 +0000
+
 mintmenu (5.0.4) julia; urgency=low
 
   * Don't break menu if apt fails to initialize

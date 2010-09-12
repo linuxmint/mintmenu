@@ -29,6 +29,8 @@ import apt
 
 from user import home
 
+gtk.gdk.threads_init()
+
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
@@ -649,27 +651,141 @@ class pluginclass( object ):
         self.applicationsBox.add(suggestionButton)
         self.suggestions.append(suggestionButton)  
         
-        self.last_separator = gtk.EventBox()
-        self.last_separator.add(gtk.HSeparator())
-        self.last_separator.set_size_request(-1, 20)       
-        self.last_separator.type = "separator"   
-        self.mintMenuWin.SetPaneColors( [  self.last_separator ] )     
-        self.last_separator.show_all()
-        self.applicationsBox.add(self.last_separator)
-        self.suggestions.append(self.last_separator)            
+        #self.last_separator = gtk.EventBox()
+        #self.last_separator.add(gtk.HSeparator())
+        #self.last_separator.set_size_request(-1, 20)       
+        #self.last_separator.type = "separator"   
+        #self.mintMenuWin.SetPaneColors( [  self.last_separator ] )     
+        #self.last_separator.show_all()
+        #self.applicationsBox.add(self.last_separator)
+        #self.suggestions.append(self.last_separator)            
 
+    def add_apt_filter_results(self, cache, keyword):
+        try:   
+            # Wait to see if the keyword has changed.. before doing anything
+            time.sleep(0.3)
+            current_keyword = keyword
+            gtk.gdk.threads_enter()
+            try:
+                current_keyword = self.searchEntry.get_text()
+            finally:
+                gtk.gdk.threads_leave()
+            if keyword != current_keyword:
+                return
+                
+            found_packages = []
+            keywords = keyword.split(" ")
+            i = 0
+            if cache is not None:
+                for pkg in cache:
+                    i = i +1               
+                    if i%1000==0:
+                        time.sleep(0.01)                    
+                    some_found = False
+                    some_not_found = False
+                    for word in keywords:
+                        if word in pkg.name:
+                            some_found = True
+                        else:
+                            some_not_found = True
+                    if some_found and not some_not_found:
+                        found_packages.append(pkg)                                            
+            
+            gtk.gdk.threads_enter()                                    
+            try:
+                if keyword == self.searchEntry.get_text() and len(found_packages) > 0:         
+                    last_separator = gtk.EventBox()
+                    last_separator.add(gtk.HSeparator())
+                    last_separator.set_size_request(-1, 20)       
+                    last_separator.type = "separator"   
+                    self.mintMenuWin.SetPaneColors( [  last_separator ] )     
+                    last_separator.show_all()
+                    self.applicationsBox.add(last_separator)
+                    self.suggestions.append(last_separator)
+                    for pkg in found_packages:                        
+                        name = pkg.name
+                        for word in keywords: 
+                            if word != "":             
+                                name = name.replace(word, "<b>%s</b>" % word);
+                        suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
+                        suggestionButton.connect("clicked", self.apturl_install, pkg.name)
+                        suggestionButton.set_text(_("Install package '%s'") % name)
+                        suggestionButton.set_tooltip_text("%s\n\n%s\n\n%s" % (pkg.name, pkg.summary.capitalize(), pkg.description))
+                        suggestionButton.set_icon_size(self.iconSize)
+                        self.applicationsBox.add(suggestionButton)
+                        self.suggestions.append(suggestionButton)
+                        if cache != self.current_results:
+                            self.current_results.append(pkg)
+            finally:        
+                gtk.gdk.threads_leave()            
+                        
+            #if len(found_packages) == 0:
+            #    gtk.gdk.threads_enter()
+            #    try:
+            #        self.applicationsBox.remove(self.last_separator)
+            #        self.suggestions.remove(self.last_separator)
+            #    finally:
+            #        gtk.gdk.threads_leave()           
+                
+        except Exception, detail:
+            print detail
+            
+    def add_apt_filter_results_sync(self, cache, keyword):
+        try:           
+            found_packages = []           
+            keywords = keyword.split(" ")
+            if cache is not None:
+                for pkg in cache:                      
+                    some_found = False
+                    some_not_found = False
+                    for word in keywords:
+                        if word in pkg.name:
+                            some_found = True
+                        else:
+                            some_not_found = True
+                    if some_found and not some_not_found:
+                        found_packages.append(pkg)                     
+                                                           
+            if len(found_packages) > 0:         
+                    last_separator = gtk.EventBox()
+                    last_separator.add(gtk.HSeparator())
+                    last_separator.set_size_request(-1, 20)       
+                    last_separator.type = "separator"   
+                    self.mintMenuWin.SetPaneColors( [  last_separator ] )     
+                    last_separator.show_all()
+                    self.applicationsBox.add(last_separator)
+                    self.suggestions.append(last_separator)
+            
+            for pkg in found_packages:
+                name = pkg.name
+                for word in keywords:
+                    if word != "":                    
+                        name = name.replace(word, "<b>%s</b>" % word);
+                suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
+                suggestionButton.connect("clicked", self.apturl_install, pkg.name)
+                suggestionButton.set_text(_("Install package '%s'") % name)
+                suggestionButton.set_tooltip_text("%s\n\n%s\n\n%s" % (pkg.name, pkg.summary.capitalize(), pkg.description))
+                suggestionButton.set_icon_size(self.iconSize)
+                self.applicationsBox.add(suggestionButton)
+                self.suggestions.append(suggestionButton)
+                        
+            #if len(found_packages) == 0:
+            #    self.applicationsBox.remove(self.last_separator)
+            #    self.suggestions.remove(self.last_separator)
+                
+        except Exception, detail:
+            print detail
+            
     def Filter( self, widget, category = None ):
         self.filterTimer = None
-
-        start = time.time()
-        #print "FILTER"
+       
         for suggestion in self.suggestions:
             self.applicationsBox.remove(suggestion)
         self.suggestions = []
 
         if widget == self.searchEntry:
             if self.donotfilterapps:
-                widget.set_text( "" )
+                widget.set_text( "" )    
             else:
                 self.changeTab( 1 )
                 text = widget.get_text()
@@ -682,45 +798,19 @@ class pluginclass( object ):
                 if (not showns and os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg")):
                     if len(text) >= 3:
                         if self.current_suggestion is not None and self.current_suggestion in text:
-                            # We're restricting our search...                            
-                            self.add_search_suggestions(text)                               
-                            found_packages = 0
-                            for pkg in self.current_results:
-                                if text in pkg.name:
-                                    found_packages+=1
-                                    name = pkg.name.replace(text, "<b>%s</b>" % text);
-                                    suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
-                                    suggestionButton.connect("clicked", self.apturl_install, pkg.name)
-                                    suggestionButton.set_text(_("Install package '%s'") % name)
-                                    suggestionButton.set_tooltip_text("%s\n\n%s\n\n\n%s" % (pkg.name, pkg.summary.capitalize(), pkg.description))
-                                    suggestionButton.set_icon_size(self.iconSize)
-                                    self.applicationsBox.add(suggestionButton)
-                                    self.suggestions.append(suggestionButton)
-                            if found_packages == 0:
-                                self.applicationsBox.remove(self.last_separator)
-                                self.suggestions.remove(self.last_separator)
+                            # We're restricting our search... 
+                            self.add_search_suggestions(text)
+                            if (len(self.current_results) > 0):
+                                self.add_apt_filter_results_sync(self.current_results, text)
+                            else:
+                                thr = threading.Thread(name="mint-menu-apt-filter", group=None, target=self.add_apt_filter_results, args=(self.apt_cache, text), kwargs={})
+                                thr.start()  
                         else:
-                            self.current_results = []                            
+                            self.current_results = []  
                             self.add_search_suggestions(text) 
-                            found_packages = 0  
-                            if self.apt_cache is not None:                                 
-                                for pkg in self.apt_cache:
-                                    if text in pkg.name:
-                                        found_packages+=1
-                                        name = pkg.name.replace(text, "<b>%s</b>" % text);
-                                        suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
-                                        suggestionButton.connect("clicked", self.apturl_install, pkg.name)
-                                        suggestionButton.set_text(_("Install package '%s'") % name)
-                                        suggestionButton.set_tooltip_text("%s\n\n%s\n\n%s" % (pkg.name, pkg.summary.capitalize(), pkg.description))
-                                        suggestionButton.set_icon_size(self.iconSize)
-                                        self.applicationsBox.add(suggestionButton)
-                                        self.suggestions.append(suggestionButton)
-                                        self.current_results.append(pkg)
-                            if found_packages == 0:
-                                self.applicationsBox.remove(self.last_separator)
-                                self.suggestions.remove(self.last_separator)
-                                    
-                        self.current_suggestion = text                        
+                            thr = threading.Thread(name="mint-menu-apt-filter", group=None, target=self.add_apt_filter_results, args=(self.apt_cache, text), kwargs={})
+                            thr.start()                                    
+                        self.current_suggestion = text
                     else:
                         self.current_suggestion = None
                         self.current_results = []
@@ -752,10 +842,9 @@ class pluginclass( object ):
             widget.grab_focus()
 
             self.searchEntry.set_text( "" )
-
+   
         self.applicationsScrolledWindow.get_vadjustment().set_value( 0 )
-        #print u"Filtertime: ", (time.time() - start), "s"
-
+        
     # Forward all text to the search box
     def keyPress( self, widget, event ):
         if event.string.strip() != "" or event.keyval == gtk.keysyms.BackSpace:
