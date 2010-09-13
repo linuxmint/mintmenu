@@ -315,9 +315,7 @@ class MainWindow( object ):
                     if hasattr( MyPlugin, 'height' ):
                         MyPlugin.content_holder.set_size_request( -1, MyPlugin.height )
                     if hasattr( MyPlugin, 'itemstocolor' ):
-                        self.SetPaneColors( MyPlugin.itemstocolor )
-                    if hasattr( MyPlugin, 'minimized' ) and MyPlugin.minimized:
-                        self.HidePlugin( MyPlugin.container, MyPlugin.icon, MyPlugin.heading, MyPlugin )
+                        self.SetPaneColors( MyPlugin.itemstocolor )                   
                 except:
                     # create traceback
                     info = sys.exc_info()

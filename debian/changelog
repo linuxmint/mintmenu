@@ -1,3 +1,9 @@
+mintmenu (5.0.7) julia; urgency=low
+
+  * Fixed called to HidePlugin
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Mon,  13 Sep 2010 16:57:00 +0000
+
 mintmenu (5.0.6) julia; urgency=low
 
   * Removed sidepane (confusing), plugins are now enabled/disabled in preferences  
