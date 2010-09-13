@@ -1,3 +1,10 @@
+mintmenu (5.0.6) julia; urgency=low
+
+  * Removed sidepane (confusing), plugins are now enabled/disabled in preferences  
+  * UI improvements (dotted separators, layout)
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Mon,  13 Sep 2010 12:09:00 +0000
+
 mintmenu (5.0.5) julia; urgency=low
 
   * Multi-threaded search

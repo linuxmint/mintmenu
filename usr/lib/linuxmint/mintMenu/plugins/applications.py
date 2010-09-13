@@ -252,12 +252,12 @@ class pluginclass( object ):
         #i18n
         self.wTree.get_widget("searchLabel").set_text("<span weight='bold'>" + _("Search:") + "</span>")
         self.wTree.get_widget("searchLabel").set_use_markup(True)
-        self.wTree.get_widget("label6").set_text("<span weight='bold'>" + _("Favorites") + "</span>")
-        self.wTree.get_widget("label6").set_use_markup(True)
-        self.wTree.get_widget("label7").set_text(_("All applications"))
-        self.wTree.get_widget("label2").set_text("<span weight='bold'>" + _("All applications") + "</span>")
-        self.wTree.get_widget("label2").set_use_markup(True)
+        self.wTree.get_widget("label6").set_text(_("Favorites"))
         self.wTree.get_widget("label3").set_text(_("Favorites"))
+        self.wTree.get_widget("label7").set_text(_("All applications"))
+        self.wTree.get_widget("label2").set_text(_("Applications"))                
+        
+        self.mintMenuWin.SetHeadingStyle( [self.wTree.get_widget("label6"), self.wTree.get_widget("label2")] )
 
         self.numApps = 0
         # These properties are NECESSARY to maintain consistency
@@ -266,7 +266,7 @@ class pluginclass( object ):
         self.window = self.wTree.get_widget( "mainWindow" )
 
         # Set 'heading' property for plugin
-        self.heading = _("Applications")
+        self.heading = ""#_("Applications")
 
         # This should be the first item added to the window in glade
         self.content_holder = self.wTree.get_widget( "Applications" )
