@@ -221,8 +221,7 @@ class pluginclass( object ):
     fromFav = [ ( "FAVORITES", gtk.TARGET_SAME_APP, TARGET_TYPE_FAV ) ]
 
     @print_timing
-    def __init__( self, mintMenuWin, toggleButton ):
-        os.system("echo `date` > /var/tmp/mintmenu.log")
+    def __init__( self, mintMenuWin, toggleButton ):        
         self.apt_cache = None
         try:
             self.apt_cache = apt.Cache()
@@ -586,8 +585,7 @@ class pluginclass( object ):
         self.searchEntry.grab_focus()
         self.searchEntry.select_region( sel[0], sel[1] )
 
-    def buildButtonList( self ): 
-        os.system("echo buildButtonList >> /var/tmp/mintmenu.log")       
+    def buildButtonList( self ):         
         if self.buildingButtonList:
             self.stopBuildingButtonList = True
             gobject.timeout_add( 100, self.buildButtonList )
@@ -595,7 +593,7 @@ class pluginclass( object ):
 
         self.stopBuildingButtonList = False
 
-        self.updateBoxes()
+        self.updateBoxes(False)
 
     def categoryBtnFocus( self, widget, event, category ):
         self.scrollItemIntoView( widget )
@@ -1556,34 +1554,28 @@ class pluginclass( object ):
         if self.menuChangedTimer:
             gobject.source_remove( self.menuChangedTimer )
 
-        self.menuChangedTimer = gobject.timeout_add( 100, self.updateBoxes )
+        self.menuChangedTimer = gobject.timeout_add( 100, self.updateBoxes, True )
 
-    def updateBoxes( self ):
-        os.system("echo updateboxes >> /var/tmp/mintmenu.log")
+    def updateBoxes( self, menu_has_changed ):        
         # FIXME: This is really bad!
-        if self.rebuildLock:
-            os.system("echo rebuildLock >> /var/tmp/mintmenu.log")
+        if self.rebuildLock:            
             return
 
         self.rebuildLock = True
 
         self.menuChangedTimer = None
-
-        os.system("echo step1 >> /var/tmp/mintmenu.log")
+        
         self.loadMenuFiles()
-        os.system("echo step2 >> /var/tmp/mintmenu.log")
+
         # Find added and removed categories than update the category list
         newCategoryList = self.buildCategoryList()
-        os.system("echo \"%d categories\" >> /var/tmp/mintmenu.log" % len(newCategoryList))
         addedCategories = []
         removedCategories = []
 
         # TODO: optimize this!!!
         if not self.categoryList:
-            os.system("echo a >> /var/tmp/mintmenu.log")
             addedCategories = newCategoryList
         else:
-            os.system("echo b >> /var/tmp/mintmenu.log")
             for item in newCategoryList:
                 found = False
                 for item2 in self.categoryList:
@@ -1611,17 +1603,12 @@ class pluginclass( object ):
         else:
             categoryIconSize = 0
 
-        os.system("echo c >> /var/tmp/mintmenu.log")
-
         for key in removedCategories:
             self.categoryList[key]["button"].destroy()
             del self.categoryList[key]
 
-        os.system("echo d >> /var/tmp/mintmenu.log")
-
         if addedCategories:
             sortedCategoryList = []
-            os.system("echo e >> /var/tmp/mintmenu.log")
             for item in self.categoryList:
                 self.categoriesBox.remove( item["button"] )
                 sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
@@ -1642,10 +1629,8 @@ class pluginclass( object ):
 
                 self.categoryList.append( item )
                 sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
-            os.system("echo f >> /var/tmp/mintmenu.log")
             sortedCategoryList.sort()
 
-            os.system("echo g >> /var/tmp/mintmenu.log")
             for item in sortedCategoryList:
                 self.categoriesBox.pack_start( item[1], False )
 
@@ -1654,14 +1639,11 @@ class pluginclass( object ):
         newApplicationList = self.buildApplicationList()
         addedApplications = []
         removedApplications = []
-
-        os.system("echo h >> /var/tmp/mintmenu.log")
+        
         # TODO: optimize this!!!
         if not self.applicationList:
-            os.system("echo i >> /var/tmp/mintmenu.log")
             addedApplications = newApplicationList
         else:
-            os.system("echo j >> /var/tmp/mintmenu.log")
             for item in newApplicationList:
                 found = False
                 for item2 in self.applicationList:
@@ -1685,25 +1667,22 @@ class pluginclass( object ):
                     # because when it is removed the index of all later items is
                     # going to be decreased
                     key += 1
-        os.system("echo k >> /var/tmp/mintmenu.log")
+        
         for key in removedApplications:
             self.applicationList[key]["button"].destroy()
-            del self.applicationList[key]
-        os.system("echo l >> /var/tmp/mintmenu.log")
+            del self.applicationList[key]        
         if addedApplications:
             sortedApplicationList = []
             for item in self.applicationList:
                 self.applicationsBox.remove( item["button"] )
                 sortedApplicationList.append( ( item["button"].appName, item["button"] ) )
-            os.system("echo \"%d added apps\" >> /var/tmp/mintmenu.log" % len(addedApplications))
             for item in addedApplications:
-                item["button"] = MenuApplicationLauncher( item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments )
+                item["button"] = MenuApplicationLauncher( item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments, highlight=(True and menu_has_changed) )                
                 if item["button"].appExec:
                     self.mintMenuWin.setTooltip( item["button"], item["button"].getTooltip() )
                     item["button"].connect( "button-release-event", self.menuPopup )
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )
-                    item["button"].connect( "clicked", lambda w: self.mintMenuWin.hide() )
-                    os.system("echo \"%s '%s' filter\" >> /var/tmp/mintmenu.log" % (self.activeFilter[0], self.activeFilter[1]))
+                    item["button"].connect( "clicked", lambda w: self.mintMenuWin.hide() )                    
                     if self.activeFilter[0] == 0:
                         item["button"].filterText( self.activeFilter[1] )
                     else:
@@ -1714,14 +1693,11 @@ class pluginclass( object ):
                     item["button"].destroy()
 
 
-            sortedApplicationList.sort()
-            os.system("echo \"%d apps\" >> /var/tmp/mintmenu.log" % len(sortedApplicationList))
+            sortedApplicationList.sort()            
             for item in sortedApplicationList:
                 self.applicationsBox.pack_start( item[1], False )
                       
-        self.rebuildLock = False
-        os.system("echo fin >> /var/tmp/mintmenu.log")
-
+        self.rebuildLock = False        
 
     # Reload the menufiles from the filesystem
     def loadMenuFiles( self ):

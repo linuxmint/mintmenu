@@ -5,6 +5,7 @@ mintmenu (5.0.6) julia; urgency=low
   * 150ms default hover delay
   * Fixed empty application list bug
   * Fixed mouse grab issue
+  * Highlights newly installed applications
   
  -- Clement Lefebvre <root@linuxmint.com>  Mon,  13 Sep 2010 12:09:00 +0000
 
