@@ -494,9 +494,8 @@ class MainWindow( object ):
         if event.type == gtk.gdk.UNMAP or event.type == gtk.gdk.SELECTION_CLEAR:
             self.grab()
 
-    def hide( self, forceHide = False ):
-        if forceHide:
-            self.window.hide()
+    def hide(self, forceHide = False):        
+        self.window.hide()
 
 class MenuWin( object ):
     def __init__( self, applet, iid ):

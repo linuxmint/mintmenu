@@ -222,7 +222,7 @@ class pluginclass( object ):
 
     @print_timing
     def __init__( self, mintMenuWin, toggleButton ):
-
+        os.system("echo `date` > /var/tmp/mintmenu.log")
         self.apt_cache = None
         try:
             self.apt_cache = apt.Cache()
@@ -502,7 +502,7 @@ class pluginclass( object ):
         self.favCols = self.gconf.get( "int", "fav_cols", 2 )
         self.swapgeneric = self.gconf.get( "bool", "swap_generic_name", False )
         self.showcategoryicons = self.gconf.get( "bool", "show_category_icons", True )
-        self.categoryhoverdelay = self.gconf.get( "int", "category_hover_delay", 50 )
+        self.categoryhoverdelay = self.gconf.get( "int", "category_hover_delay", 150 )
         self.showapplicationcomments = self.gconf.get( "bool", "show_application_comments", True )
 
         self.lastActiveTab =  self.gconf.get( "int", "last_active_tab", 0 )
@@ -586,7 +586,8 @@ class pluginclass( object ):
         self.searchEntry.grab_focus()
         self.searchEntry.select_region( sel[0], sel[1] )
 
-    def buildButtonList( self ):
+    def buildButtonList( self ): 
+        os.system("echo buildButtonList >> /var/tmp/mintmenu.log")       
         if self.buildingButtonList:
             self.stopBuildingButtonList = True
             gobject.timeout_add( 100, self.buildButtonList )
@@ -594,7 +595,7 @@ class pluginclass( object ):
 
         self.stopBuildingButtonList = False
 
-        gobject.idle_add( self.updateBoxes )
+        self.updateBoxes()
 
     def categoryBtnFocus( self, widget, event, category ):
         self.scrollItemIntoView( widget )
@@ -1185,7 +1186,7 @@ class pluginclass( object ):
         except Exception, detail:
             print detail
 
-    def onLaunchApp( self, menu, widget ):
+    def onLaunchApp( self, menu, widget ):         
         widget.execute()
         self.mintMenuWin.hide()
 
@@ -1293,7 +1294,7 @@ class pluginclass( object ):
 
     def do_plugin( self ):
         self.Todos()
-        self.buildFavorites()
+        self.buildFavorites()        
 
     # Scroll button into view
     def scrollItemIntoView( self, widget, event = None ):
@@ -1558,26 +1559,31 @@ class pluginclass( object ):
         self.menuChangedTimer = gobject.timeout_add( 100, self.updateBoxes )
 
     def updateBoxes( self ):
+        os.system("echo updateboxes >> /var/tmp/mintmenu.log")
         # FIXME: This is really bad!
         if self.rebuildLock:
+            os.system("echo rebuildLock >> /var/tmp/mintmenu.log")
             return
 
         self.rebuildLock = True
 
         self.menuChangedTimer = None
 
+        os.system("echo step1 >> /var/tmp/mintmenu.log")
         self.loadMenuFiles()
-
+        os.system("echo step2 >> /var/tmp/mintmenu.log")
         # Find added and removed categories than update the category list
         newCategoryList = self.buildCategoryList()
-
+        os.system("echo \"%d categories\" >> /var/tmp/mintmenu.log" % len(newCategoryList))
         addedCategories = []
         removedCategories = []
 
         # TODO: optimize this!!!
         if not self.categoryList:
+            os.system("echo a >> /var/tmp/mintmenu.log")
             addedCategories = newCategoryList
         else:
+            os.system("echo b >> /var/tmp/mintmenu.log")
             for item in newCategoryList:
                 found = False
                 for item2 in self.categoryList:
@@ -1605,14 +1611,17 @@ class pluginclass( object ):
         else:
             categoryIconSize = 0
 
+        os.system("echo c >> /var/tmp/mintmenu.log")
 
         for key in removedCategories:
             self.categoryList[key]["button"].destroy()
             del self.categoryList[key]
 
+        os.system("echo d >> /var/tmp/mintmenu.log")
+
         if addedCategories:
             sortedCategoryList = []
-
+            os.system("echo e >> /var/tmp/mintmenu.log")
             for item in self.categoryList:
                 self.categoriesBox.remove( item["button"] )
                 sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
@@ -1633,9 +1642,10 @@ class pluginclass( object ):
 
                 self.categoryList.append( item )
                 sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
-
+            os.system("echo f >> /var/tmp/mintmenu.log")
             sortedCategoryList.sort()
 
+            os.system("echo g >> /var/tmp/mintmenu.log")
             for item in sortedCategoryList:
                 self.categoriesBox.pack_start( item[1], False )
 
@@ -1645,10 +1655,13 @@ class pluginclass( object ):
         addedApplications = []
         removedApplications = []
 
+        os.system("echo h >> /var/tmp/mintmenu.log")
         # TODO: optimize this!!!
         if not self.applicationList:
+            os.system("echo i >> /var/tmp/mintmenu.log")
             addedApplications = newApplicationList
         else:
+            os.system("echo j >> /var/tmp/mintmenu.log")
             for item in newApplicationList:
                 found = False
                 for item2 in self.applicationList:
@@ -1672,17 +1685,17 @@ class pluginclass( object ):
                     # because when it is removed the index of all later items is
                     # going to be decreased
                     key += 1
-
+        os.system("echo k >> /var/tmp/mintmenu.log")
         for key in removedApplications:
             self.applicationList[key]["button"].destroy()
             del self.applicationList[key]
-
+        os.system("echo l >> /var/tmp/mintmenu.log")
         if addedApplications:
             sortedApplicationList = []
             for item in self.applicationList:
                 self.applicationsBox.remove( item["button"] )
                 sortedApplicationList.append( ( item["button"].appName, item["button"] ) )
-
+            os.system("echo \"%d added apps\" >> /var/tmp/mintmenu.log" % len(addedApplications))
             for item in addedApplications:
                 item["button"] = MenuApplicationLauncher( item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments )
                 if item["button"].appExec:
@@ -1690,6 +1703,7 @@ class pluginclass( object ):
                     item["button"].connect( "button-release-event", self.menuPopup )
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )
                     item["button"].connect( "clicked", lambda w: self.mintMenuWin.hide() )
+                    os.system("echo \"%s '%s' filter\" >> /var/tmp/mintmenu.log" % (self.activeFilter[0], self.activeFilter[1]))
                     if self.activeFilter[0] == 0:
                         item["button"].filterText( self.activeFilter[1] )
                     else:
@@ -1701,9 +1715,12 @@ class pluginclass( object ):
 
 
             sortedApplicationList.sort()
+            os.system("echo \"%d apps\" >> /var/tmp/mintmenu.log" % len(sortedApplicationList))
             for item in sortedApplicationList:
                 self.applicationsBox.pack_start( item[1], False )
+                      
         self.rebuildLock = False
+        os.system("echo fin >> /var/tmp/mintmenu.log")
 
 
     # Reload the menufiles from the filesystem

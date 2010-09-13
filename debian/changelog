@@ -2,6 +2,9 @@ mintmenu (5.0.6) julia; urgency=low
 
   * Removed sidepane (confusing), plugins are now enabled/disabled in preferences  
   * UI improvements (dotted separators, layout)
+  * 150ms default hover delay
+  * Fixed empty application list bug
+  * Fixed mouse grab issue
   
  -- Clement Lefebvre <root@linuxmint.com>  Mon,  13 Sep 2010 12:09:00 +0000
 
