@@ -65,7 +65,7 @@ class mintMenuConfig( object ):
         wTree.get_widget("label1").set_text(_("Options"))
         wTree.get_widget("label23").set_text(_("Applications"))
 
-        wTree.get_widget("colorsLabel").set_text(_("Colors"))
+        wTree.get_widget("colorsLabel").set_text(_("Theme"))
         wTree.get_widget("favLabel").set_text(_("Favorites"))
         wTree.get_widget("label3").set_text(_("Main button"))
 
