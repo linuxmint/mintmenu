@@ -501,6 +501,7 @@ class MenuWin( object ):
 
         self.gconf = EasyGConf( "/apps/mintMenu/" )
         self.gconf.notifyAdd( "applet_text", self.gconfEntriesChanged )
+        self.gconf.notifyAdd( "theme_name", self.changeTheme )
         self.gconf.notifyAdd( "hot_key", self.gconfEntriesChanged )
         self.gconf.notifyAdd( "applet_icon", self.gconfEntriesChanged )
         self.gconf.notifyAdd( "hide_applet_icon", self.gconfEntriesChanged )
@@ -603,6 +604,7 @@ class MenuWin( object ):
     def getGconfEntries( self, *args, **kargs ):
         self.hideIcon   =  self.gconf.get( "bool", "hide_applet_icon", False )
         self.buttonText =  self.gconf.get( "string", "applet_text", "Menu" )
+        self.theme_name =  self.gconf.get( "string", "theme_name", "default" )
         self.hotkeyText =  self.gconf.get( "string", "hot_key", "<Control>Super_L" )
         self.buttonIcon =  self.gconf.get( "string", "applet_icon", ICON )
         self.setIconSize( self.gconf.get( "int", "applet_icon_size", 2 ) )
@@ -618,6 +620,9 @@ class MenuWin( object ):
             self.iconSize = gtk.ICON_SIZE_MENU
 
     def changeBackground( self, applet, type, color, pixmap ):
+        
+        self.applyTheme()
+        
         # get reset style
         self.applet.set_style(None)
         rc_style = gtk.RcStyle()
@@ -629,7 +634,22 @@ class MenuWin( object ):
             style = applet.style
             style.bg_pixmap[ gtk.STATE_NORMAL ] = pixmap
             applet.set_style( style )
-
+            
+    def changeTheme(self, *args):
+        self.gconfEntriesChanged()
+        self.applyTheme()
+        self.mainwin.RegenPlugins()
+    
+    def applyTheme(self):
+        style_settings = gtk.settings_get_default()
+        desktop_theme = self.gconf.get( "string", '/desktop/gnome/interface/gtk_theme', "")
+        if self.theme_name == "default":
+            style_settings.set_property("gtk-theme-name", desktop_theme)
+        else:
+            try:
+                style_settings.set_property("gtk-theme-name", self.theme_name)
+            except:
+                style_settings.set_property("gtk-theme-name", desktop_theme)            
 
     def changeOrientation( self, *args, **kargs ):
 
@@ -701,8 +721,7 @@ class MenuWin( object ):
 
     def gconfEntriesChanged( self, *args ):
         self.getGconfEntries()
-        self.updateButton()
-
+        self.updateButton()        
 
     def showAboutDialog( self, uicomponent, verb ):
 

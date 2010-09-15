@@ -72,6 +72,7 @@ class mintMenuConfig( object ):
         wTree.get_widget("backgroundColorLabel").set_text(_("Background:"))
         wTree.get_widget("headingColorLabel").set_text(_("Headings:"))
         wTree.get_widget("borderColorLabel").set_text(_("Borders:"))
+        wTree.get_widget("themeLabel").set_text(_("Theme:"))
 
         #wTree.get_widget("applicationsLabel").set_text(_("Applications"))
         #wTree.get_widget("favoritesLabel").set_text(_("Favorites"))
@@ -250,10 +251,34 @@ class mintMenuConfig( object ):
         wTree.get_widget("upButton").connect("clicked", self.moveUp)
         wTree.get_widget("downButton").connect("clicked", self.moveDown)
         wTree.get_widget("removeButton").connect("clicked", self.removePlace)
-
+        
+        #Detect themes and show theme here
+        theme_name = commands.getoutput("gconftool-2 --get /apps/mintMenu/theme_name").strip()
+        themes = commands.getoutput("find /usr/share/themes -name gtkrc")
+        themes = themes.split("\n")
+        model = gtk.ListStore(str, str)   
+        wTree.get_widget("themesCombo").set_model(model)
+        selected_theme = model.append([_("Desktop theme"), "default"])
+        for theme in themes:
+            if theme.startswith("/usr/share/themes") and theme.endswith("/gtk-2.0/gtkrc"):
+                theme = theme.replace("/usr/share/themes/", "")
+                theme = theme.replace("gtk-2.0", "")
+                theme = theme.replace("gtkrc", "")
+                theme = theme.replace("/", "")
+                theme = theme.strip()
+                iter = model.append([theme, theme])
+                if theme == theme_name:
+                    selected_theme = iter
+        wTree.get_widget("themesCombo").set_active_iter(selected_theme)
+        wTree.get_widget("themesCombo").connect("changed", self.set_theme)
         self.mainWindow.present()
-
         self.getBackgroundColor()
+        
+    def set_theme(self, widget):
+        model = widget.get_model()
+        iter = widget.get_active_iter()
+        theme_name = model.get_value(iter, 1)
+        os.system("gconftool-2 --type string --set /apps/mintMenu/theme_name \"%s\"" % theme_name)
 
     def getPluginsToggle(self):
         if (commands.getoutput("gconftool-2 --get /apps/mintMenu/plugins_list | grep recent | wc -l") == "0"):
