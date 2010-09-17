@@ -523,6 +523,8 @@ class MenuWin( object ):
         self.mainwin.window.connect( "unmap-event", lambda *args: self.applet.set_state( gtk.STATE_NORMAL ) )
         self.mainwin.window.connect( "size-allocate", lambda *args: self.positionMenu() )
 
+        self.mainwin.window.set_name("mintmenu") # Name used in Gtk RC files
+
         icon = iconManager.getIcon( self.mainwin.icon, 1 )
         if icon:
             gtk.window_set_default_icon( icon )
@@ -644,7 +646,7 @@ class MenuWin( object ):
         style_settings = gtk.settings_get_default()
         desktop_theme = self.gconf.get( "string", '/desktop/gnome/interface/gtk_theme', "")
         if self.theme_name == "default":
-            style_settings.set_property("gtk-theme-name", desktop_theme)
+            style_settings.set_property("gtk-theme-name", desktop_theme)        
         else:
             try:
                 style_settings.set_property("gtk-theme-name", self.theme_name)
