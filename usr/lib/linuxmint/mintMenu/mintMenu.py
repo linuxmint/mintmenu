@@ -183,7 +183,7 @@ class MainWindow( object ):
         self.custombordercolor   = self.gconf.get( "color", "custom_border_color", "#001155" )
 
         self.borderwidth          = self.gconf.get( "int", "border_width", 1 )
-        self.opacity              = self.gconf.get( "int", "opacity", 100 )
+        self.opacity              = self.gconf.get( "int", "opacity", 98 )
         self.offset               = self.gconf.get( "int", "mintMenu_offset", 0 )        
         self.enableTooltips       = self.gconf.get( "bool", "tooltips_enabled", True )
         self.globalEnableTooltips = self.gconf.get( "bool", "/apps/panel/global/tooltips_enabled", True )        
