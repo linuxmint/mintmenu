@@ -1,3 +1,9 @@
+mintmenu (5.1.1) julia; urgency=low
+
+  * Fixed launching apps with quotes
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Thu,  23 Sep 2010 11:29:00 +0000
+
 mintmenu (5.1.0) julia; urgency=low
 
   * Added GTK bookmarks in places
