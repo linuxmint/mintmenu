@@ -86,6 +86,7 @@ class mintMenuConfig( object ):
 
         wTree.get_widget("placesLabel").set_text(_("Places"))
         wTree.get_widget("allowscrollbarcheckbutton").set_label(_("Allow Scrollbar"))
+        wTree.get_widget("showgtkbookmarkscheckbutton").set_label(_("Show GTK Bookmarks"))
         wTree.get_widget("placesHeightEntryLabel").set_text(_("Height:"))
         wTree.get_widget("defaultPlacesFrameLabel").set_text(_("Toggle Default Places:"))
         wTree.get_widget("computercheckbutton").set_label(_("Computer"))
@@ -149,10 +150,11 @@ class mintMenuConfig( object ):
         self.trashtoggle = wTree.get_widget( "trashcheckbutton" )
         self.customplacestree = wTree.get_widget( "customplacestree" )
         self.allowPlacesScrollbarToggle = wTree.get_widget( "allowscrollbarcheckbutton" )
+        self.showgtkbookmarksToggle = wTree.get_widget( "showgtkbookmarkscheckbutton" )
         self.placesHeightButton = wTree.get_widget( "placesHeightSpinButton" )
         if (self.allowPlacesScrollbarToggle.get_active() == False):
             self.placesHeightButton.set_sensitive(False)
-        self.allowPlacesScrollbarToggle.connect("toggled", self.togglePlacesHeightEnabled )
+        self.allowPlacesScrollbarToggle.connect("toggled", self.togglePlacesHeightEnabled )   
         self.softwareManagerToggle = wTree.get_widget( "softwaremanagercheckbutton" )
         self.packageManagerToggle = wTree.get_widget( "packagemanagercheckbutton" )
         self.controlCenterToggle = wTree.get_widget( "controlcentercheckbutton" )
@@ -218,6 +220,7 @@ class mintMenuConfig( object ):
         self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_trash", self.trashtoggle, "toggled", self.trashtoggle.set_active, self.trashtoggle.get_active )
         self.bindGconfValueToWidget( self.gconfPlaces, "int", "height", self.placesHeightButton, "value-changed", self.placesHeightButton.set_value, self.placesHeightButton.get_value_as_int )
         self.bindGconfValueToWidget( self.gconfPlaces, "bool", "allowScrollbar", self.allowPlacesScrollbarToggle, "toggled", self.allowPlacesScrollbarToggle.set_active, self.allowPlacesScrollbarToggle.get_active )
+        self.bindGconfValueToWidget( self.gconfPlaces, "bool", "show_gtk_bookmarks", self.showgtkbookmarksToggle, "toggled", self.showgtkbookmarksToggle.set_active, self.showgtkbookmarksToggle.get_active )
 
         self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_software_manager", self.softwareManagerToggle, "toggled", self.softwareManagerToggle.set_active, self.softwareManagerToggle.get_active )
         self.bindGconfValueToWidget( self.gconfSystem, "bool", "show_package_manager", self.packageManagerToggle, "toggled", self.packageManagerToggle.set_active, self.packageManagerToggle.get_active )

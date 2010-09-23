@@ -57,6 +57,7 @@ class pluginclass( object ):
         self.gconf.notifyAdd( "custom_names", self.RegenPlugin )
         self.gconf.notifyAdd( "custom_paths", self.RegenPlugin )
         self.gconf.notifyAdd( "allowScrollbar", self.RegenPlugin )
+        self.gconf.notifyAdd( "show_gtk_bookmarks", self.RegenPlugin )
         self.gconf.notifyAdd( "height", self.changePluginSize )
         self.gconf.notifyAdd( "width", self.changePluginSize )
         self.gconf.bindGconfEntryToVar( "bool", "sticky", self, "sticky" )
@@ -73,7 +74,7 @@ class pluginclass( object ):
         self.gconf.notifyRemoveAll()
 
     def changePluginSize( self, client, connection_id, entry, args ):
-        self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
+        self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)        
         if entry.get_key() == self.gconf.gconfDir+"width":
             self.width = entry.get_value().get_int()
         elif entry.get_key() == self.gconf.gconfDir+"height":
@@ -93,11 +94,13 @@ class pluginclass( object ):
         self.ClearAll()
         self.do_standard_places()
         self.do_custom_places()
+        self.do_gtk_bookmarks()
 
     def GetGconfEntries( self ):
 
         self.width = self.gconf.get( "int", "width", 200 )
-        self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
+        self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", True)
+        self.showGTKBookmarks = self.gconf.get( "bool", "show_gtk_bookmarks", False)
         self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC )
         self.height = self.gconf.get( "int", "height", 180 )
         self.content_holder.set_size_request( self.width, self.height )
@@ -201,6 +204,28 @@ class pluginclass( object ):
             currentbutton.show()
             self.placesBtnHolder.pack_start( currentbutton, False, False )
 
+    def do_gtk_bookmarks( self ):
+        if self.showGTKBookmarks:
+            bookmarks = {}
+            with open(os.path.expanduser('~/.gtk-bookmarks'), 'r') as f:
+                for line in f:
+                    line = line.replace('file://', '')
+                    line = line.rstrip()
+                    parts = line.split(' ')
+
+                    if len(parts) == 2:
+                        bookmarks[parts[1]] = parts[0]
+                    elif len(parts) == 1:
+                        junk = os.path.split(parts[0])
+                        bookmarks[junk[len(junk) - 1]] = parts[0]
+                        
+            for name, path in bookmarks.iteritems():
+                command = ( "nautilus \"" + path + "\"")
+                currentbutton = easyButton( "folder", self.iconsize, [name], -1, -1 )
+                currentbutton.connect( "clicked", self.ButtonClicked, command )
+                currentbutton.show()
+                self.placesBtnHolder.pack_start( currentbutton, False, False )
+
     def trashPopup( self, widget, event ):
         if event.button == 3:
             trashMenu = gtk.Menu()
@@ -225,6 +250,7 @@ class pluginclass( object ):
     def do_plugin( self ):
         self.do_standard_places()
         self.do_custom_places()
+        self.do_gtk_bookmarks()
 
     def refreshTrash (self):
         iconName = "user-trash"

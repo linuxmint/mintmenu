@@ -1096,6 +1096,18 @@
                           </packing>
                         </child>
                         <child>
+                          <widget class="GtkCheckButton" id="showgtkbookmarkscheckbutton">
+                            <property name="label" translatable="yes">Show GTK bookmarks</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="draw_indicator">True</property>
+                          </widget>
+                          <packing>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
                           <widget class="GtkFrame" id="frame2">
                             <property name="visible">True</property>
                             <property name="label_xalign">0</property>
