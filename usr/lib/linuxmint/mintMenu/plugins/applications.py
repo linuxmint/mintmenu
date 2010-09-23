@@ -586,7 +586,7 @@ class pluginclass( object ):
 
 		self.stopBuildingButtonList = False
 
-		gobject.idle_add( self.updateBoxes )
+		self.updateBoxes ()
 
 	def categoryBtnFocus( self, widget, event, category ):
 		self.scrollItemIntoView( widget )
