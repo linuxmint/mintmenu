@@ -23,11 +23,13 @@ if hasInotify:
 
 
         def addMonitor( self, filename, callback, args = None ):
-            mask = pyinotify.IN_DELETE | pyinotify.IN_CREATE | pyinotify.IN_MODIFY
-            mId = self.wm.add_watch( filename, mask, rec = True)[filename]
-            if mId >= 0:
-                self.callbacks[mId] = ( callback, args )
-
+            try:
+                mask = pyinotify.IN_DELETE | pyinotify.IN_CREATE | pyinotify.IN_MODIFY
+                mId = self.wm.add_watch( filename, mask, rec = True)[filename]
+                if mId >= 0:
+                    self.callbacks[mId] = ( callback, args )
+            except Exception, detail:
+                mId = 0                
             return mId
 
         def removeMonitor( self, monitorId ):
