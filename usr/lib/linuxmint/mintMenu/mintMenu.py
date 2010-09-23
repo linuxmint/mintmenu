@@ -609,17 +609,7 @@ class MenuWin( object ):
         self.theme_name =  self.gconf.get( "string", "theme_name", "default" )
         self.hotkeyText =  self.gconf.get( "string", "hot_key", "<Control>Super_L" )
         self.buttonIcon =  self.gconf.get( "string", "applet_icon", ICON )
-        self.setIconSize( self.gconf.get( "int", "applet_icon_size", 2 ) )
-
-    def setIconSize( self, icon_size):
-        if icon_size >= 4:
-            self.iconSize = gtk.ICON_SIZE_DIALOG
-        elif icon_size == 3:
-            self.iconSize = gtk.ICON_SIZE_DND
-        elif icon_size == 2:
-            self.iconSize = gtk.ICON_SIZE_BUTTON
-        else:
-            self.iconSize = gtk.ICON_SIZE_MENU
+        self.iconSize = self.gconf.get( "int", "applet_icon_size", 22 )    
 
     def changeBackground( self, applet, type, color, pixmap ):
         

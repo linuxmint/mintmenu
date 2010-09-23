@@ -193,19 +193,7 @@ class SuggestionButton ( gtk.Button ):
         
     def set_image(self, path):
         self.image.set_from_file(path)
-                        		        
-    def get_icon_size (self, iconSize):
-        if isinstance(iconSize, int):
-            if iconSize >= 4:
-                iconSize = gtk.ICON_SIZE_DIALOG
-            elif iconSize == 3:
-                iconSize = gtk.ICON_SIZE_DND
-            elif iconSize == 2:
-                iconSize = gtk.ICON_SIZE_BUTTON
-            elif iconSize == 1:
-                iconSize = gtk.ICON_SIZE_MENU
-        return iconSize
-
+                        		            
     def set_text( self, text):
         self.label.set_markup(text)
 
@@ -331,21 +319,7 @@ class pluginclass( object ):
             #       self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
             #for f in mymenu.directory.AppDirs:
             #       self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
-
-        sizeIcon = 0
-        if isinstance(self.iconSize, int):
-            if self.iconSize >= 4:
-                sizeIcon = gtk.ICON_SIZE_DIALOG
-            elif self.iconSize == 3:
-                sizeIcon = gtk.ICON_SIZE_DND
-            elif self.iconSize == 2:
-                sizeIcon = gtk.ICON_SIZE_BUTTON
-            elif self.iconSize == 1:
-                sizeIcon = gtk.ICON_SIZE_MENU
-            elif self.iconSize <= 0:
-                return ( 0, 0 )
-
-        #sizeIcon = gtk.icon_size_lookup( sizeIcon )
+        
         self.suggestions = []
         self.current_suggestion = None
         self.get_panel()
@@ -496,8 +470,8 @@ class pluginclass( object ):
         self.width = self.gconf.get( "int", "width", 480 )
         self.height = self.gconf.get( "int", "height", 410 )
         self.donotfilterapps = self.gconf.get( "bool", "do_not_filter", False )
-        self.iconSize = self.gconf.get( "int", "icon_size", 2 )
-        self.faviconsize = self.gconf.get( "int", "favicon_size", 3 )
+        self.iconSize = self.gconf.get( "int", "icon_size", 24 )
+        self.faviconsize = self.gconf.get( "int", "favicon_size", 48 )
         self.favCols = self.gconf.get( "int", "fav_cols", 2 )
         self.swapgeneric = self.gconf.get( "bool", "swap_generic_name", False )
         self.showcategoryicons = self.gconf.get( "bool", "show_category_icons", True )

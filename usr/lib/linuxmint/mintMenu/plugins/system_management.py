@@ -100,7 +100,7 @@ class pluginclass( object ):
 			self.height = -1
 			self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
 		self.content_holder.set_size_request( self.width, self.height )
-		self.iconsize = self.gconf.get( "int","icon_size", 2 )
+		self.iconsize = self.gconf.get( "int","icon_size", 22 )
 
 		# Check toggles
 

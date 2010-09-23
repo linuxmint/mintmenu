@@ -55,8 +55,8 @@ class IconManager(gobject.GObject):
             return None
 
         try:
-            [ iconWidth, iconHeight ] = self.getIconSize( iconSize )
-            if iconWidth <= 0 or iconHeight <= 0:
+            #[ iconWidth, iconHeight ] = self.getIconSize( iconSize )
+            if iconSize <= 0:
                 return None
 
             if iconName in self.cache and iconSize in self.cache[iconName]:
@@ -71,7 +71,7 @@ class IconManager(gobject.GObject):
                 tmp = None
                 for theme in self.themes:
                     if theme.has_icon( realIconName ):
-                        tmp = theme.lookup_icon( realIconName, iconWidth, 0 )
+                        tmp = theme.lookup_icon( realIconName, iconSize, 0 )
                         if tmp:
                             break
 
@@ -81,17 +81,17 @@ class IconManager(gobject.GObject):
                     iconFileName = ""
 
             if iconFileName and os.path.exists( iconFileName ):
-                icon = gtk.gdk.pixbuf_new_from_file_at_size( iconFileName, iconWidth, iconHeight )
+                icon = gtk.gdk.pixbuf_new_from_file_at_size( iconFileName, iconSize, iconSize )
             else:
                 icon = None
 
 
             # if the actual icon size is to far from the desired size resize it
-            if icon and (( icon.get_width() - iconWidth ) > 5 or ( icon.get_height() - iconHeight ) > 5):
+            if icon and (( icon.get_width() - iconSize ) > 5 or ( icon.get_height() - iconSize ) > 5):
                 if icon.get_width() > icon.get_height():
-                    newIcon = icon.scale_simple( iconWidth, icon.get_height() * iconWidth / icon.get_width(), gtk.gdk.INTERP_BILINEAR )
+                    newIcon = icon.scale_simple( iconSize, icon.get_height() * iconSize / icon.get_width(), gtk.gdk.INTERP_BILINEAR )
                 else:
-                    newIcon = icon.scale_simple( icon.get_width() * iconHeight / icon.get_height(), iconWidth, gtk.gdk.INTERP_BILINEAR )
+                    newIcon = icon.scale_simple( icon.get_width() * iconSize / icon.get_height(), iconSize, gtk.gdk.INTERP_BILINEAR )
                 del icon
                 icon = newIcon
 
@@ -104,21 +104,6 @@ class IconManager(gobject.GObject):
         except Exception, e:
             print "Exception " + e.__class__.__name__ + ": " + e.message
             return None
-
-    def getIconSize( self, iconSize ):
-        if isinstance(iconSize, int):
-            if iconSize >= 4:
-                iconSize = gtk.ICON_SIZE_DIALOG
-            elif iconSize == 3:
-                iconSize = gtk.ICON_SIZE_DND
-            elif iconSize == 2:
-                iconSize = gtk.ICON_SIZE_BUTTON
-            elif iconSize == 1:
-                iconSize = gtk.ICON_SIZE_MENU
-            elif iconSize <= 0:
-                return ( 0, 0 )
-
-        return gtk.icon_size_lookup( iconSize )
 
     def themeChanged( self, theme ):
         self.cache = { }
@@ -149,8 +134,8 @@ class easyButton( gtk.Button ):
             self.buttonImage.set_from_pixbuf( icon )
             del icon
         else:
-            [ iW, iH ] = iconManager.getIconSize( self.iconSize )
-            self.buttonImage.set_size_request( iW, iH  )
+            #[ iW, iH ] = iconManager.getIconSize( self.iconSize )
+            self.buttonImage.set_size_request( self.iconSize, self.iconSize  )
         self.buttonImage.show()
         HBox1.pack_start( self.buttonImage, False, False, 5 )        
 
@@ -232,8 +217,8 @@ class easyButton( gtk.Button ):
             self.buttonImage.set_size_request( -1, -1 )
             del icon
         else:
-            [iW, iH ] = iconManager.getIconSize( self.iconSize )
-            self.buttonImage.set_size_request( iW, iH  )
+            #[iW, iH ] = iconManager.getIconSize( self.iconSize )
+            self.buttonImage.set_size_request( self.iconSize, self.iconSize  )
 
     def setIconSize( self, size ):
         self.iconSize = size
@@ -244,8 +229,8 @@ class easyButton( gtk.Button ):
             self.buttonImage.set_size_request( -1, -1 )
             del icon
         elif self.iconSize:
-            [ iW, iH ] = iconManager.getIconSize( self.iconSize )
-            self.buttonImage.set_size_request( iW, iH  )
+            #[ iW, iH ] = iconManager.getIconSize( self.iconSize )
+            self.buttonImage.set_size_request( self.iconSize, self.iconSize  )
 
 class ApplicationLauncher( easyButton ):
 
