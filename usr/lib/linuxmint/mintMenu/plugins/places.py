@@ -99,7 +99,7 @@ class pluginclass( object ):
     def GetGconfEntries( self ):
 
         self.width = self.gconf.get( "int", "width", 200 )
-        self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", True)
+        self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
         self.showGTKBookmarks = self.gconf.get( "bool", "show_gtk_bookmarks", False)
         self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC )
         self.height = self.gconf.get( "int", "height", 180 )
@@ -109,7 +109,7 @@ class pluginclass( object ):
             self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
         self.content_holder.set_size_request( self.width, self.height )
         self.execapp = self.gconf.get( "string", "execute_app", "nautilus" )
-        self.iconsize = self.gconf.get( "int","icon_size", 22 )
+        self.iconsize = self.gconf.get( "int","icon_size", 16 )
 
         # Check default items
 
@@ -159,7 +159,7 @@ class pluginclass( object ):
             self.mintMenuWin.setTooltip( Button2, _("Open your personal folder") )
 
         if ( self.shownetwork == True ):
-            Button3 = easyButton( "network-workgroup", self.iconsize, [_("Network")], -1, -1 )
+            Button3 = easyButton( "notification-network-ethernet-connected", self.iconsize, [_("Network")], -1, -1 )
             Button3.connect( "clicked", self.ButtonClicked, "nautilus network:" )
             Button3.show()
             self.placesBtnHolder.pack_start( Button3, False, False )

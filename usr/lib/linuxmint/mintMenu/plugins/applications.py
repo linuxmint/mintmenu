@@ -166,8 +166,7 @@ class Menu:
 class SuggestionButton ( gtk.Button ):
 
     def __init__( self, iconName, iconSize, label ):                
-        gtk.Button.__init__( self )            
-        iconSize = self.get_icon_size(iconSize)
+        gtk.Button.__init__( self )                    
         self.iconName = iconName
         self.set_relief( gtk.RELIEF_NONE )
         self.set_size_request( -1, -1 )
@@ -197,8 +196,7 @@ class SuggestionButton ( gtk.Button ):
     def set_text( self, text):
         self.label.set_markup(text)
 
-    def set_icon_size (self, size):
-        size = self.get_icon_size(size)
+    def set_icon_size (self, size):        
         self.image.set_from_stock( self.iconName, size )
 
 class pluginclass( object ):
@@ -470,7 +468,7 @@ class pluginclass( object ):
         self.width = self.gconf.get( "int", "width", 480 )
         self.height = self.gconf.get( "int", "height", 410 )
         self.donotfilterapps = self.gconf.get( "bool", "do_not_filter", False )
-        self.iconSize = self.gconf.get( "int", "icon_size", 24 )
+        self.iconSize = self.gconf.get( "int", "icon_size", 22 )
         self.faviconsize = self.gconf.get( "int", "favicon_size", 48 )
         self.favCols = self.gconf.get( "int", "fav_cols", 2 )
         self.swapgeneric = self.gconf.get( "bool", "swap_generic_name", False )

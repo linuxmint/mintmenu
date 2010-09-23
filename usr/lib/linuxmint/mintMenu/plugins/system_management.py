@@ -100,7 +100,7 @@ class pluginclass( object ):
 			self.height = -1
 			self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
 		self.content_holder.set_size_request( self.width, self.height )
-		self.iconsize = self.gconf.get( "int","icon_size", 22 )
+		self.iconsize = self.gconf.get( "int","icon_size", 16 )
 
 		# Check toggles
 
@@ -131,14 +131,14 @@ class pluginclass( object ):
 
 		if ( self.showSoftwareManager == True ):
 			if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
-				Button1 = easyButton( "/usr/lib/linuxmint/mintInstall/icon.svg", self.iconsize, [_("Software Manager")], -1, -1 )
+				Button1 = easyButton( "applications-other", self.iconsize, [_("Software Manager")], -1, -1 )
 				Button1.connect( "clicked", self.ButtonClicked, "mintinstall" )
 				Button1.show()
 				self.systemBtnHolder.pack_start( Button1, False, False )
 				self.mintMenuWin.setTooltip( Button1, _("Browse and install available software") )
 
 		if ( self.showPackageManager == True ):
-			Button2 = easyButton( "synaptic", self.iconsize, [_("Package Manager")], -1, -1 )
+			Button2 = easyButton( "applications-system", self.iconsize, [_("Package Manager")], -1, -1 )
 			Button2.connect( "clicked", self.ButtonClicked, "gksu /usr/sbin/synaptic" )
 			Button2.show()
 			self.systemBtnHolder.pack_start( Button2, False, False )
