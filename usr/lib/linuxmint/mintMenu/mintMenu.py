@@ -43,7 +43,7 @@ gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 NAME = _("Menu")
 PATH = os.path.abspath( os.path.dirname( sys.argv[0] ) )
 
-ICON = "/usr/lib/linuxmint/mintMenu/mintMenu.png"
+ICON = "/usr/lib/linuxmint/mintMenu/visualisation-logo.png"
 
 sys.path.append( os.path.join( PATH , "plugins") )
 
@@ -737,7 +737,7 @@ class MenuWin( object ):
         about.set_comments( _("Advanced Gnome Menu") )
         about.set_authors( ["Clement Lefebvre <clem@linuxmint.com>", "Lars-Peter Clausen <lars@laprican.de>"] )
         about.set_translator_credits(("translator-credits") )
-        about.set_copyright( _("Based on USP from S.Chanderbally") )
+        #about.set_copyright( _("Based on USP from S.Chanderbally") )
         about.set_logo( gtk.gdk.pixbuf_new_from_file("/usr/lib/linuxmint/mintMenu/icon.svg") )
         about.connect( "response", lambda dialog, r: dialog.destroy() )
         about.show()
