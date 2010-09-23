@@ -1681,7 +1681,7 @@ class pluginclass( object ):
 
     # Build a list of all categories in the menu ( [ { "name", "icon", tooltip" } ]
     def buildCategoryList( self ):
-        newCategoryList = [ { "name": _("All"), "icon": self.mintMenuWin.icon, "tooltip": _("Show all applications"), "filter":"", "index": 0 } ]
+        newCategoryList = [ { "name": _("All"), "icon": "stock_select-all", "tooltip": _("Show all applications"), "filter":"", "index": 0 } ]
 
         num = 1
 
