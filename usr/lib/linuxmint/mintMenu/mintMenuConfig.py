@@ -53,6 +53,7 @@ class mintMenuConfig( object ):
         wTree.get_widget("showAppComments").set_label(_("Show application comments"))
         wTree.get_widget("showCategoryIcons").set_label(_("Show category icons"))
         wTree.get_widget("hover").set_label(_("Hover"))
+        wTree.get_widget("use_apt").set_label(_("Search for packages to install"))
         wTree.get_widget("swapGeneric").set_label(_("Swap name and generic name"))
 
         wTree.get_widget("label11").set_text(_("Border width:"))
@@ -117,6 +118,7 @@ class mintMenuConfig( object ):
 
         self.startWithFavorites = wTree.get_widget( "startWithFavorites" )
         self.showAppComments = wTree.get_widget( "showAppComments" )
+        self.useAPT = wTree.get_widget( "use_apt" )
         self.showCategoryIcons = wTree.get_widget( "showCategoryIcons" )
         self.showRecentPlugin = wTree.get_widget( "showRecentPlugin" )
         self.showApplicationsPlugin = wTree.get_widget( "showApplicationsPlugin" )
@@ -186,6 +188,7 @@ class mintMenuConfig( object ):
 
         self.bindGconfValueToWidget( self.gconf, "bool", "start_with_favorites", self.startWithFavorites, "toggled", self.startWithFavorites.set_active, self.startWithFavorites.get_active )
         self.bindGconfValueToWidget( self.gconfApplications, "bool", "show_application_comments", self.showAppComments, "toggled", self.showAppComments.set_active, self.showAppComments.get_active )
+        self.bindGconfValueToWidget( self.gconfApplications, "bool", "use_apt", self.useAPT, "toggled", self.useAPT.set_active, self.useAPT.get_active )
         self.bindGconfValueToWidget( self.gconfApplications, "bool", "show_category_icons", self.showCategoryIcons, "toggled", self.showCategoryIcons.set_active, self.showCategoryIcons.get_active )
         self.bindGconfValueToWidget( self.gconfApplications, "bool", "categories_mouse_over", self.hover, "toggled", self.hover.set_active, self.hover.get_active )
         self.bindGconfValueToWidget( self.gconfApplications, "bool", "swap_generic_name", self.swapGeneric, "toggled", self.swapGeneric.set_active, self.swapGeneric.get_active )

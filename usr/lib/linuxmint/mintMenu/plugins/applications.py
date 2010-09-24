@@ -207,14 +207,7 @@ class pluginclass( object ):
     fromFav = [ ( "FAVORITES", gtk.TARGET_SAME_APP, TARGET_TYPE_FAV ) ]
 
     @print_timing
-    def __init__( self, mintMenuWin, toggleButton ):        
-        self.apt_cache = None
-        try:
-            self.apt_cache = apt.Cache()
-        except Exception, detail:
-            print "Could not initialize APT cache"
-            pass            
-
+    def __init__( self, mintMenuWin, toggleButton ):
         self.mintMenuWin = mintMenuWin
 
         self.mainMenus = [ ]
@@ -284,6 +277,7 @@ class pluginclass( object ):
         self.gconf.notifyAdd( "swap_generic_name", self.changeSwapGenericName )
         self.gconf.notifyAdd( "show_category_icons", self.changeShowCategoryIcons )
         self.gconf.notifyAdd( "show_application_comments", self.changeShowApplicationComments )
+        self.gconf.notifyAdd( "use_apt", self.switchAPTUsage)
         self.gconf.notifyAdd( "fav_cols", self.changeFavCols )
 
         self.gconf.bindGconfEntryToVar( "int", "category_hover_delay", self, "categoryhoverdelay" )
@@ -317,6 +311,14 @@ class pluginclass( object ):
             #       self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
             #for f in mymenu.directory.AppDirs:
             #       self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
+        
+        self.apt_cache = None
+        if self.useAPT:
+            try:
+                self.apt_cache = apt.Cache()
+            except Exception, detail:
+                print "Could not initialize APT cache"
+                pass            
         
         self.suggestions = []
         self.current_suggestion = None
@@ -410,6 +412,19 @@ class pluginclass( object ):
         for child in self.favoritesBox:
             if isinstance( child, FavApplicationLauncher):
                 child.setIconSize( self.faviconsize )
+                
+    def switchAPTUsage( self, client, connection_id, entry, args ):
+        self.useAPT = entry.get_value().get_bool()
+        if self.useAPT:
+            try:
+                apt_cache = apt.Cache()
+                if apt_cache != None: 
+                    self.apt_cache = apt_cache
+            except Exception, detail:
+                print "Could not refresh APT cache"
+                pass     
+        else:
+            self.apt_cache = None
 
     def changeShowApplicationComments( self, client, connection_id, entry, args ):
         self.showapplicationcomments = entry.get_value().get_bool()
@@ -435,13 +450,16 @@ class pluginclass( object ):
             self.favoritesPositionOnGrid( fav )
 
     def RegenPlugin( self, *args, **kargs ):            
-        try:
-            apt_cache = apt.Cache()
-            if apt_cache != None: 
-                self.apt_cache = apt_cache
-        except Exception, detail:
-            print "Could not refresh APT cache"
-            pass     
+        if self.useAPT:
+            try:
+                apt_cache = apt.Cache()
+                if apt_cache != None: 
+                    self.apt_cache = apt_cache
+            except Exception, detail:
+                print "Could not refresh APT cache"
+                pass     
+        else:
+            self.apt_cache = None
         
         # save old config - this is necessary because the app will notified when it sets the default values and you don't want the to reload itself several times
         oldcategories_mouse_over = self.categories_mouse_over
@@ -475,6 +493,7 @@ class pluginclass( object ):
         self.showcategoryicons = self.gconf.get( "bool", "show_category_icons", True )
         self.categoryhoverdelay = self.gconf.get( "int", "category_hover_delay", 150 )
         self.showapplicationcomments = self.gconf.get( "bool", "show_application_comments", True )
+        self.useAPT = self.gconf.get( "bool", "use_apt", True )
 
         self.lastActiveTab =  self.gconf.get( "int", "last_active_tab", 0 )
         self.defaultTab = self.gconf.get( "int", "default_tab", -1 )
