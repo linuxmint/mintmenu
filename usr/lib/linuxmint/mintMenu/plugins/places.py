@@ -14,6 +14,7 @@ from easybuttons import *
 from execute import Execute
 from easygconf import EasyGConf
 from user import home
+from urllib import unquote
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -206,10 +207,10 @@ class pluginclass( object ):
 
     def do_gtk_bookmarks( self ):
         if self.showGTKBookmarks:
-            bookmarks = {}
+            bookmarks = {}            
             with open(os.path.expanduser('~/.gtk-bookmarks'), 'r') as f:
                 for line in f:
-                    line = line.replace('file://', '')
+                    #line = line.replace('file://', '')
                     line = line.rstrip()
                     parts = line.split(' ')
 
@@ -219,12 +220,16 @@ class pluginclass( object ):
                         junk = os.path.split(parts[0])
                         bookmarks[junk[len(junk) - 1]] = parts[0]
                         
-            for name, path in bookmarks.iteritems():
-                command = ( "nautilus \"" + path + "\"")
+            for name, path in bookmarks.iteritems():                          
+                name = unquote(name)
                 currentbutton = easyButton( "folder", self.iconsize, [name], -1, -1 )
-                currentbutton.connect( "clicked", self.ButtonClicked, command )
+                currentbutton.connect( "clicked", self.launch_gtk_bookmark, path )
                 currentbutton.show()
                 self.placesBtnHolder.pack_start( currentbutton, False, False )
+                
+    def launch_gtk_bookmark (self, widget, path):
+        self.mintMenuWin.hide()
+        os.system("xdg-open %s &" % path)        
 
     def trashPopup( self, widget, event ):
         if event.button == 3:
