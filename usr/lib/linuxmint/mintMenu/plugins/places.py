@@ -135,7 +135,7 @@ class pluginclass( object ):
         # Allow plugin to be minimized to the left plugin pane
         self.sticky = self.gconf.get( "bool", "sticky", False )
         self.minimized = self.gconf.get( "bool", "minimized", False )
-
+        
     def ClearAll(self):
         for child in self.placesBtnHolder.get_children():
             child.destroy()
@@ -159,8 +159,13 @@ class pluginclass( object ):
             self.placesBtnHolder.pack_start( Button2, False, False )
             self.mintMenuWin.setTooltip( Button2, _("Open your personal folder") )
 
-        if ( self.shownetwork == True ):
-            Button3 = easyButton( "notification-network-ethernet-connected", self.iconsize, [_("Network")], -1, -1 )
+        if ( self.shownetwork == True ):   
+            gconftheme = EasyGConf( "/desktop/gnome/interface/" )
+            icon_theme = gconftheme.get("string", "icon_theme", "Mint-X")                     
+            if "Mint-X" in icon_theme:
+                Button3 = easyButton( "notification-network-ethernet-connected", self.iconsize, [_("Network")], -1, -1)
+            else:
+                Button3 = easyButton( "network-workgroup", self.iconsize, [_("Network")], -1, -1)
             Button3.connect( "clicked", self.ButtonClicked, "nautilus network:" )
             Button3.show()
             self.placesBtnHolder.pack_start( Button3, False, False )

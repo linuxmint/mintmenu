@@ -1,8 +1,9 @@
 mintmenu (5.1.6) julia; urgency=low
 
   * Highlighted apps now appear in bold, as opposed to using the fg[gtk.SELECTED] color (to avoid white on white issues with certain themes)
+  * Network icon in places uses "network-workgroup" icon name when the theme is not Mint-X.
   
- -- Clement Lefebvre <root@linuxmint.com>  Tue,  26 Oct 2010 13:57:00 +0000
+ -- Clement Lefebvre <root@linuxmint.com>  Tue,  26 Oct 2010 14:44:00 +0000
 
 mintmenu (5.1.5) julia; urgency=low
 
