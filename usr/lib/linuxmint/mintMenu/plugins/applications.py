@@ -20,7 +20,7 @@ from execute import Execute
 from easygconf import EasyGConf
 from easyfiles import *
 
-from filemonitor import monitor as filemonitor
+#from filemonitor import monitor as filemonitor
 
 #import xdg.Menu
 import gmenu
@@ -300,7 +300,7 @@ class pluginclass( object ):
 
         self.categoryList = []
         self.applicationList = []
-        self.menuFileMonitors = []
+        #self.menuFileMonitors = []
 
         self.rebuildLock = False
         self.activeFilter = (1, "")
@@ -359,8 +359,8 @@ class pluginclass( object ):
 
         self.gconf.notifyRemoveAll()
 
-        for mId in self.menuFileMonitors:
-            filemonitor.removeMonitor( mId )
+        #for mId in self.menuFileMonitors:
+        #    filemonitor.removeMonitor( mId )
 
     def changePluginSize( self, client, connection_id, entry, args ):
         if entry.get_key() == self.gconf.gconfDir+"width":
