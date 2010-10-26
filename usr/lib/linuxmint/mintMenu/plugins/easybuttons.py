@@ -490,13 +490,17 @@ class MenuApplicationLauncher( ApplicationLauncher ):
         appComment = self.appComment
         if self.highlight: 
             try:
-                color = self.labelBox.rc_get_style().fg[ gtk.STATE_SELECTED ].to_string()                
-                if len(color) > 0 and color[0] == "#":
-                    appName = "<span foreground=\"%s\"><b>%s</b></span>" % (color, appName);
-                    appComment = "<span foreground=\"%s\"><b>%s</b></span>" % (color, appComment);
-                else:
-                    appName = "<b>%s</b>" % (appName);
-                    appComment = "<b>%s</b>" % (appComment);
+                #color = self.labelBox.rc_get_style().fg[ gtk.STATE_SELECTED ].to_string()                
+                #if len(color) > 0 and color[0] == "#":
+                    #appName = "<span foreground=\"%s\"><b>%s</b></span>" % (color, appName);
+                    #appComment = "<span foreground=\"%s\"><b>%s</b></span>" % (color, appComment);
+                    #appName = "<b>%s</b>" % (appName);
+                    #appComment = "<b>%s</b>" % (appComment);
+                #else:
+                    #appName = "<b>%s</b>" % (appName);
+                    #appComment = "<b>%s</b>" % (appComment);
+                appName = "<b>%s</b>" % (appName);
+                appComment = "<b>%s</b>" % (appComment);
             except Exception, detail:
                 print detail
                 pass
