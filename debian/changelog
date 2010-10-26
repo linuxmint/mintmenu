@@ -1,3 +1,15 @@
+mintmenu (5.1.5) julia; urgency=low
+
+  * Faster initialization
+  * Fixed memory leak
+  * Faster APT search
+  * APT search results now include packages which summary or description match the keywords
+  * APT search results: packages which name match the keywords are placed at the top of the list
+  * Fixed process name on 64-bit platforms
+  * Menu now properly redraws itself when theme is changed
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Tue,  26 Oct 2010 12:00:00 +0000
+
 mintmenu (5.1.4) julia; urgency=low
 
   * Unicode support in GTK bookmarks

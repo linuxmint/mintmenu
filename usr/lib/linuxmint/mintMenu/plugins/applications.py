@@ -25,8 +25,6 @@ from filemonitor import monitor as filemonitor
 #import xdg.Menu
 import gmenu
 
-import apt
-
 from user import home
 
 gtk.gdk.threads_init()
@@ -34,6 +32,11 @@ gtk.gdk.threads_init()
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
+class PackageDescriptor():
+    def __init__(self, name, summary, description):
+        self.name = name
+        self.summary = summary
+        self.description = description
 
 def print_timing(func):
     def wrapper(*arg):
@@ -311,20 +314,18 @@ class pluginclass( object ):
             #       self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
             #for f in mymenu.directory.AppDirs:
             #       self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
-        
-        self.apt_cache = None
-        if self.useAPT:
-            try:
-                self.apt_cache = apt.Cache()
-            except Exception, detail:
-                print "Could not initialize APT cache"
-                pass            
-        
+                        
+        self.refresh_apt_cache()        
         self.suggestions = []
         self.current_suggestion = None
         self.get_panel()
         
         self.wTree.get_widget("searchButton").connect( "button-release-event", self.searchPopup )        
+
+    def refresh_apt_cache(self):
+        if self.useAPT:
+            os.system("mkdir -p %s/.linuxmint/mintMenu/" % home)
+            os.system("/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py > %s/.linuxmint/mintMenu/apt.cache &" % home)            
 
     def get_panel(self):
         self.panel = None
@@ -414,17 +415,8 @@ class pluginclass( object ):
                 child.setIconSize( self.faviconsize )
                 
     def switchAPTUsage( self, client, connection_id, entry, args ):
-        self.useAPT = entry.get_value().get_bool()
-        if self.useAPT:
-            try:
-                apt_cache = apt.Cache()
-                if apt_cache != None: 
-                    self.apt_cache = apt_cache
-            except Exception, detail:
-                print "Could not refresh APT cache"
-                pass     
-        else:
-            self.apt_cache = None
+        self.useAPT = entry.get_value().get_bool()        
+        self.refresh_apt_cache()
 
     def changeShowApplicationComments( self, client, connection_id, entry, args ):
         self.showapplicationcomments = entry.get_value().get_bool()
@@ -450,16 +442,7 @@ class pluginclass( object ):
             self.favoritesPositionOnGrid( fav )
 
     def RegenPlugin( self, *args, **kargs ):            
-        if self.useAPT:
-            try:
-                apt_cache = apt.Cache()
-                if apt_cache != None: 
-                    self.apt_cache = apt_cache
-            except Exception, detail:
-                print "Could not refresh APT cache"
-                pass     
-        else:
-            self.apt_cache = None
+        self.refresh_apt_cache()
         
         # save old config - this is necessary because the app will notified when it sets the default values and you don't want the to reload itself several times
         oldcategories_mouse_over = self.categories_mouse_over
@@ -650,7 +633,7 @@ class pluginclass( object ):
         #self.applicationsBox.add(self.last_separator)
         #self.suggestions.append(self.last_separator)            
 
-    def add_apt_filter_results(self, cache, keyword):
+    def add_apt_filter_results(self, keyword):
         try:   
             # Wait to see if the keyword has changed.. before doing anything
             time.sleep(0.3)
@@ -661,26 +644,43 @@ class pluginclass( object ):
             finally:
                 gtk.gdk.threads_leave()
             if keyword != current_keyword:
-                return
-                
+                return            
             found_packages = []
+            found_in_name = []
+            found_elsewhere = []
             keywords = keyword.split(" ")
-            i = 0
-            if cache is not None:
-                for pkg in cache:
-                    i = i +1               
-                    if i%1000==0:
-                        time.sleep(0.01)                    
-                    some_found = False
-                    some_not_found = False
-                    for word in keywords:
-                        if word in pkg.name:
-                            some_found = True
-                        else:
-                            some_not_found = True
-                    if some_found and not some_not_found:
-                        found_packages.append(pkg)                                            
-            
+            command = "cat %(home)s/.linuxmint/mintMenu/apt.cache" % {'home':home}
+            for word in keywords:
+                command = "%(command)s | grep %(word)s" % {'command':command, 'word':word}            
+            pkgs = commands.getoutput(command)
+            pkgs = pkgs.split("\n")
+            for pkg in pkgs:
+                values = string.split(pkg, "###")
+                if len(values) == 4:
+                    status = values[0]
+                    if (status == "ERROR"):
+                        print "Could not refresh APT cache"
+                    elif (status == "CACHE"):
+                        name = values[1]
+                        summary = values[2]
+                        description = values[3].replace("~~~", "\n")
+                        package = PackageDescriptor(name, summary, description)
+                        #See if all keywords are in the name (so we put these results at the top of the list)
+                        some_found = False
+                        some_not_found = False
+                        for word in keywords:
+                            if word in package.name:
+                                some_found = True
+                            else:
+                                some_not_found = True
+                        if some_found and not some_not_found:
+                            found_in_name.append(package)
+                        else:                        
+                            found_elsewhere.append(package)                                        
+                    else:
+                        print "Invalid status code: " + status
+            found_packages.extend(found_in_name)
+            found_packages.extend(found_elsewhere)
             gtk.gdk.threads_enter()                                    
             try:
                 if keyword == self.searchEntry.get_text() and len(found_packages) > 0:         
@@ -700,12 +700,12 @@ class pluginclass( object ):
                         suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
                         suggestionButton.connect("clicked", self.apturl_install, pkg.name)
                         suggestionButton.set_text(_("Install package '%s'") % name)
-                        suggestionButton.set_tooltip_text("%s\n\n%s\n\n%s" % (pkg.name, pkg.summary.capitalize(), pkg.description))
+                        suggestionButton.set_tooltip_text("%s\n\n%s\n\n%s" % (pkg.name, pkg.summary, pkg.description))
                         suggestionButton.set_icon_size(self.iconSize)
                         self.applicationsBox.add(suggestionButton)
                         self.suggestions.append(suggestionButton)
-                        if cache != self.current_results:
-                            self.current_results.append(pkg)
+                        #if cache != self.current_results:
+                        #    self.current_results.append(pkg)
             finally:        
                 gtk.gdk.threads_leave()            
                         
@@ -718,7 +718,8 @@ class pluginclass( object ):
             #        gtk.gdk.threads_leave()           
                 
         except Exception, detail:
-            print detail
+            print detail           
+
             
     def add_apt_filter_results_sync(self, cache, keyword):
         try:           
@@ -790,15 +791,15 @@ class pluginclass( object ):
                         if self.current_suggestion is not None and self.current_suggestion in text:
                             # We're restricting our search... 
                             self.add_search_suggestions(text)
-                            if (len(self.current_results) > 0):
-                                self.add_apt_filter_results_sync(self.current_results, text)
-                            else:
-                                thr = threading.Thread(name="mint-menu-apt-filter", group=None, target=self.add_apt_filter_results, args=(self.apt_cache, text), kwargs={})
-                                thr.start()  
+                            #if (len(self.current_results) > 0):
+                                #self.add_apt_filter_results_sync(self.current_results, text)
+                            #else:
+                            thr = threading.Thread(name="mint-menu-apt-filter", group=None, target=self.add_apt_filter_results, args=([text]), kwargs={})
+                            thr.start()  
                         else:
                             self.current_results = []  
                             self.add_search_suggestions(text) 
-                            thr = threading.Thread(name="mint-menu-apt-filter", group=None, target=self.add_apt_filter_results, args=(self.apt_cache, text), kwargs={})
+                            thr = threading.Thread(name="mint-menu-apt-filter", group=None, target=self.add_apt_filter_results, args=([text]), kwargs={})
                             thr.start()                                    
                         self.current_suggestion = text
                     else:

@@ -6,6 +6,7 @@ try:
     import gtk.glade
     import pango
     import os
+    import commands
     import gnomeapplet
     import gettext
     import gnomevfs
@@ -29,13 +30,15 @@ except Exception, cause:
     pass
 
 # Rename the process
-try:
+architecture = commands.getoutput("uname -a")
+if (architecture.find("x86_64") >= 0):
+    import ctypes
+    libc = ctypes.CDLL('libc.so.6')
+    libc.prctl(15, 'mintmenu', 0, 0, 0)
+else:
     import dl
-    libc = dl.open( "/lib/libc.so.6" )
-    libc.call( "prctl", 15, "mintmenu", 0, 0, 0 )
-    libc.close()
-except ImportError:
-    pass
+    libc = dl.open('/lib/libc.so.6')
+    libc.call('prctl', 15, 'mintmenu', 0, 0, 0)
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -93,7 +96,6 @@ class MainWindow( object ):
         wTree.signal_autoconnect( dic )
 
         self.gconf = EasyGConf( "/apps/mintMenu/" )
-        self.gconftheme = EasyGConf( "/desktop/gnome/interface/" )
 
         self.getSetGconfEntries()
         self.SetupMintMenuBorder()
@@ -108,8 +110,7 @@ class MainWindow( object ):
         self.PopulatePlugins();
 
         self.gconf.notifyAdd( "plugins_list", self.RegenPlugins )
-        self.gconftheme.notifyAdd( "gtk_theme", self.RegenPlugins )
-        
+                
         self.gconf.notifyAdd( "start_with_favorites", self.toggleStartWithFavorites )
         self.gconf.notifyAdd( "/apps/panel/global/tooltips_enabled", self.toggleTooltipsEnabled )
         self.gconf.notifyAdd( "tooltips_enabled", self.toggleTooltipsEnabled )
@@ -508,7 +509,8 @@ class MenuWin( object ):
         self.gconf.notifyAdd( "applet_icon_size", self.gconfEntriesChanged )
         self.getGconfEntries()
 
-
+        self.gconftheme = EasyGConf( "/desktop/gnome/interface/" )
+        self.gconftheme.notifyAdd( "gtk_theme", self.changeTheme )
 
         self.createPanelButton()
 
@@ -627,7 +629,7 @@ class MenuWin( object ):
             style.bg_pixmap[ gtk.STATE_NORMAL ] = pixmap
             applet.set_style( style )
             
-    def changeTheme(self, *args):
+    def changeTheme(self, *args):        
         self.gconfEntriesChanged()
         self.applyTheme()
         self.mainwin.RegenPlugins()
