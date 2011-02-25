@@ -59,6 +59,10 @@ class pluginclass( object ):
 		self.gconf.notifyAdd( "width", self.changePluginSize )		
 		self.gconf.bindGconfEntryToVar( "bool", "sticky", self, "sticky" )
 
+		#Get Terminal Info
+		self.tconf = EasyGConf( "/desktop/gnome/applications/terminal/" )
+		self.term = self.tconf.get("string", "exec", "gnome-terminal")
+
 		self.GetGconfEntries()
 		
 		self.content_holder.set_size_request( self.width, self.height )
@@ -152,7 +156,7 @@ class pluginclass( object ):
 			self.mintMenuWin.setTooltip( Button3, _("Configure your system") )
 		
 		if ( self.showTerminal == True ):
-			Button4 = easyButton( "gnome-terminal", self.iconsize, [_("Terminal")], -1, -1 )
+			Button4 = easyButton( self.term, self.iconsize, [_("Terminal")], -1, -1 )
 			Button4.connect( "clicked", self.ButtonClicked, "x-terminal-emulator" )
 			Button4.show()
 			self.systemBtnHolder.pack_start( Button4, False, False )
