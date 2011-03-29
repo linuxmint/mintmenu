@@ -21,10 +21,11 @@ gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 class pluginclass( object ):
 
-    def __init__( self, mintMenuWin, toggleButton ):
+    def __init__( self, mintMenuWin, toggleButton, de ):
 
         self.mintMenuWin = mintMenuWin
         self.toggleButton = toggleButton
+        self.de = de
 
         # Read GLADE file
         gladefile = os.path.join( os.path.dirname( __file__ ), "places.glade" )
@@ -65,18 +66,7 @@ class pluginclass( object ):
 
         self.GetGconfEntries()
 
-        self.content_holder.set_size_request( self.width, self.height )
-        
-        self.detect_desktop_environment()
-        
-    def detect_desktop_environment (self):
-        self.de = "gnome"
-        try:
-            de = commands.getoutput("/usr/lib/linuxmint/mintMenu/detectDE")
-            if de in ["gnome", "kde", "xfce"]:
-                self.de = de
-        except Exception, detail:
-            print detail
+        self.content_holder.set_size_request( self.width, self.height )                            
 
     def wake (self) :
         if ( self.showtrash == True ):

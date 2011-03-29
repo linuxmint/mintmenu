@@ -67,6 +67,8 @@ class MainWindow( object ):
         self.path = PATH
         sys.path.append( os.path.join( self.path, "plugins") )
 
+        self.detect_desktop_environment()
+
         self.icon = ICON
 
         self.toggle = toggleButton
@@ -202,6 +204,15 @@ class MainWindow( object ):
         opacity = float(self.opacity) / float(100)
         print "Setting opacity to: " + str(opacity)
         self.window.set_opacity(opacity)
+        
+    def detect_desktop_environment (self):
+        self.de = "gnome"
+        try:
+            de = commands.getoutput("/usr/lib/linuxmint/mintMenu/detectDE")
+            if de in ["gnome", "kde", "xfce"]:
+                self.de = de
+        except Exception, detail:
+            print detail
 
     def PopulatePlugins( self ):
         self.panesToColor = [ ]
@@ -233,7 +244,7 @@ class MainWindow( object ):
                         MyPlugin = X.pluginclass()
                     else:
                         # pass mintMenu and togglebutton instance so that the plugin can use it
-                        MyPlugin = X.pluginclass( self, self.toggle )
+                        MyPlugin = X.pluginclass( self, self.toggle, self.de )
 
                     if not MyPlugin.icon:
                         MyPlugin.icon = "gnome-logo-icon.png"

@@ -18,10 +18,11 @@ class pluginclass:
 	"""This is the main class for the plugin"""
 	"""It MUST be named pluginclass"""
 
-	def __init__( self, mintMenuWin, toggleButton ):
+	def __init__( self, mintMenuWin, toggleButton, de ):
 
 		self.Win = mintMenuWin
 		self.toggleButton = toggleButton
+        self.de = de
 
 		#The Glade file for the plugin
 		self.gladefile = os.path.join( os.path.dirname( __file__ ), "recent.glade" )

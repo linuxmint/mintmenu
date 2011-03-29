@@ -210,12 +210,14 @@ class pluginclass( object ):
     fromFav = [ ( "FAVORITES", gtk.TARGET_SAME_APP, TARGET_TYPE_FAV ) ]
 
     @print_timing
-    def __init__( self, mintMenuWin, toggleButton ):
+    def __init__( self, mintMenuWin, toggleButton, de ):
         self.mintMenuWin = mintMenuWin
 
         self.mainMenus = [ ]
 
         self.toggleButton = toggleButton
+        self.de = de
+        
         # The Glade file for the plugin
         self.gladefile = os.path.join( os.path.dirname( __file__ ), "applications.glade" )
 

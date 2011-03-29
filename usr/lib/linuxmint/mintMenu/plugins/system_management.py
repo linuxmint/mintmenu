@@ -17,10 +17,11 @@ gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
 class pluginclass( object ):
 	
-	def __init__( self, mintMenuWin, toggleButton ):
+	def __init__( self, mintMenuWin, toggleButton, de ):
 		
 		self.mintMenuWin = mintMenuWin
 		self.toggleButton = toggleButton
+        self.de = de
 		
 		# Read GLADE file
 		gladefile 				= os.path.join( os.path.dirname( __file__ ), "system_management.glade" )
