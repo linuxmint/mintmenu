@@ -66,6 +66,17 @@ class pluginclass( object ):
         self.GetGconfEntries()
 
         self.content_holder.set_size_request( self.width, self.height )
+        
+        self.detect_desktop_environment()
+        
+    def detect_desktop_environment (self):
+        self.de = "gnome"
+        try:
+            de = commands.getoutput("/usr/lib/linuxmint/mintMenu/detectDE")
+            if de in ["gnome", "kde", "xfce"]:
+                self.de = de
+        except Exception, detail:
+            print detail
 
     def wake (self) :
         if ( self.showtrash == True ):
@@ -147,19 +158,22 @@ class pluginclass( object ):
 
         if ( self.showcomputer == True ):
             Button1 = easyButton( "computer", self.iconsize, [_("Computer")], -1, -1 )
-            Button1.connect( "clicked", self.ButtonClicked, "nautilus computer:" )
+            if self.de == "gnome":
+                Button1.connect( "clicked", self.ButtonClicked, "nautilus computer:" )
+            else:
+                Button1.connect( "clicked", self.ButtonClicked, "xdg-open /" )
             Button1.show()
             self.placesBtnHolder.pack_start( Button1, False, False )
             self.mintMenuWin.setTooltip( Button1, _("Browse all local and remote disks and folders accessible from this computer") )
 
         if ( self.showhomefolder == True ):
             Button2 = easyButton( "user-home", self.iconsize, [_("Home Folder")], -1, -1 )
-            Button2.connect( "clicked", self.ButtonClicked, "nautilus" )
+            Button2.connect( "clicked", self.ButtonClicked, "xdg-open %s " % home )
             Button2.show()
             self.placesBtnHolder.pack_start( Button2, False, False )
             self.mintMenuWin.setTooltip( Button2, _("Open your personal folder") )
 
-        if ( self.shownetwork == True ):   
+        if ( self.shownetwork == True and self.de == "gnome"):   
             gconftheme = EasyGConf( "/desktop/gnome/interface/" )
             icon_theme = gconftheme.get("string", "icon_theme", "Mint-X")                     
             if "Mint-X" in icon_theme:
@@ -186,14 +200,14 @@ class pluginclass( object ):
             except Exception, detail:
                 print detail
             Button4 = easyButton( "gnome-fs-desktop", self.iconsize, [_("Desktop")], -1, -1 )
-            Button4.connect( "clicked", self.ButtonClicked, "nautilus \"" + desktopDir + "\"")
+            Button4.connect( "clicked", self.ButtonClicked, "xdg-open \"" + desktopDir + "\"")
             Button4.show()
             self.placesBtnHolder.pack_start( Button4, False, False )
             self.mintMenuWin.setTooltip( Button4, _("Browse items placed on the desktop") )
 
         if ( self.showtrash == True ):
             self.trashButton = easyButton( "user-trash", self.iconsize, [_("Trash")], -1, -1 )
-            self.trashButton.connect( "clicked", self.ButtonClicked, "nautilus trash:" )
+            self.trashButton.connect( "clicked", self.ButtonClicked, "xdg-open trash:" )
             self.trashButton.show()
             self.trashButton.connect( "button-release-event", self.trashPopup )
             self.refreshTrash()
@@ -204,7 +218,7 @@ class pluginclass( object ):
         for index in range( len(self.custompaths) ):
             path = self.custompaths[index]
             path = path.replace("~", home)
-            command = ( "nautilus \"" + path + "\"")
+            command = ( "xdg-open \"" + path + "\"")
             currentbutton = easyButton( "folder", self.iconsize, [self.customnames[index]], -1, -1 )
             currentbutton.connect( "clicked", self.ButtonClicked, command )
             currentbutton.show()
