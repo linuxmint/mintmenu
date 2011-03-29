@@ -887,9 +887,10 @@ class pluginclass( object ):
                 removeFromFavMenuItem.connect( "activate", self.onFavoritesRemove, widget )
                 propsMenuItem.connect( "activate", self.onPropsApp, widget)
 
-                mTree.get_widget("favoritesMenu").append(desktopMenuItem)
-                mTree.get_widget("favoritesMenu").append(panelMenuItem)
-                mTree.get_widget("favoritesMenu").append(separator1)
+                if self.de == "gnome":
+                    mTree.get_widget("favoritesMenu").append(desktopMenuItem)
+                    mTree.get_widget("favoritesMenu").append(panelMenuItem)
+                    mTree.get_widget("favoritesMenu").append(separator1)
                 mTree.get_widget("favoritesMenu").append(insertSpaceMenuItem)
                 mTree.get_widget("favoritesMenu").append(insertSeparatorMenuItem)
                 mTree.get_widget("favoritesMenu").append(separator2)
@@ -939,10 +940,10 @@ class pluginclass( object ):
             separator3 = gtk.SeparatorMenuItem()
             propsMenuItem = gtk.MenuItem(_("Edit properties"))
 
-            mTree.get_widget("applicationsMenu").append(desktopMenuItem)
-            mTree.get_widget("applicationsMenu").append(panelMenuItem)
-
-            mTree.get_widget("applicationsMenu").append(separator1)
+            if self.de == "gnome":
+                mTree.get_widget("applicationsMenu").append(desktopMenuItem)
+                mTree.get_widget("applicationsMenu").append(panelMenuItem)
+                mTree.get_widget("applicationsMenu").append(separator1)
 
             mTree.get_widget("applicationsMenu").append(favoriteMenuItem)
             mTree.get_widget("applicationsMenu").append(startupMenuItem)
