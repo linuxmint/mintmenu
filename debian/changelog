@@ -1,3 +1,9 @@
+mintmenu (5.1.7) katya; urgency=low
+  
+  * Added support for Xfce
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Tue,  29 Mar 2011 19:52:00 +0000
+
 mintmenu (5.1.6) julia; urgency=low
 
   * Highlighted apps now appear in bold, as opposed to using the fg[gtk.SELECTED] color (to avoid white on white issues with certain themes)
