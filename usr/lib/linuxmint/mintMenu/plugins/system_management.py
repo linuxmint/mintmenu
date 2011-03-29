@@ -147,7 +147,10 @@ class pluginclass( object ):
 
         if ( self.showControlCenter == True ):
             Button3 = easyButton( "gtk-preferences", self.iconsize, [_("Control Center")], -1, -1 )
-            Button3.connect( "clicked", self.ButtonClicked, "gnome-control-center" )
+            if self.de == "xfce":
+                Button3.connect( "clicked", self.ButtonClicked, "xfce4-settings-manager" )
+            else:
+                Button3.connect( "clicked", self.ButtonClicked, "gnome-control-center" )
             Button3.show()
             self.systemBtnHolder.pack_start( Button3, False, False )
             self.mintMenuWin.setTooltip( Button3, _("Configure your system") )
@@ -159,26 +162,33 @@ class pluginclass( object ):
             self.systemBtnHolder.pack_start( Button4, False, False )
             self.mintMenuWin.setTooltip( Button4, _("Use the command line") )
 
-        if ( self.showLockScreen == True ):
-            Button5 = easyButton( "system-lock-screen", self.iconsize, [_("Lock Screen")], -1, -1 )
-            Button5.connect( "clicked", self.ButtonClicked, "xdg-screensaver lock" )
-            Button5.show()
-            self.systemBtnHolder.pack_start( Button5, False, False )
-            self.mintMenuWin.setTooltip( Button5, _("Requires password to unlock") )
+        if self.de == "xfce":
+                Button6 = easyButton( "system-log-out", self.iconsize, [_("Logout")], -1, -1 )
+                Button6.connect( "clicked", self.ButtonClicked, "xfce4-session-logout" )
+                Button6.show()
+                self.systemBtnHolder.pack_start( Button6, False, False )
+                self.mintMenuWin.setTooltip( Button6, _("Log out or switch user") )
+        else:
+            if ( self.showLockScreen == True ):
+                Button5 = easyButton( "system-lock-screen", self.iconsize, [_("Lock Screen")], -1, -1 )
+                Button5.connect( "clicked", self.ButtonClicked, "xdg-screensaver lock" )
+                Button5.show()
+                self.systemBtnHolder.pack_start( Button5, False, False )
+                self.mintMenuWin.setTooltip( Button5, _("Requires password to unlock") )
 
-        if ( self.showLogout == True ):
-            Button6 = easyButton( "system-log-out", self.iconsize, [_("Logout")], -1, -1 )
-            Button6.connect( "clicked", self.ButtonClicked, "gnome-session-save --logout-dialog" )
-            Button6.show()
-            self.systemBtnHolder.pack_start( Button6, False, False )
-            self.mintMenuWin.setTooltip( Button6, _("Log out or switch user") )
+            if ( self.showLogout == True ):
+                Button6 = easyButton( "system-log-out", self.iconsize, [_("Logout")], -1, -1 )
+                Button6.connect( "clicked", self.ButtonClicked, "gnome-session-save --logout-dialog" )
+                Button6.show()
+                self.systemBtnHolder.pack_start( Button6, False, False )
+                self.mintMenuWin.setTooltip( Button6, _("Log out or switch user") )
 
-        if ( self.showQuit == True ):
-            Button7 = easyButton( "system-shutdown", self.iconsize, [_("Quit")], -1, -1 )
-            Button7.connect( "clicked", self.ButtonClicked, "gnome-session-save --shutdown-dialog" )
-            Button7.show()
-            self.systemBtnHolder.pack_start( Button7, False, False )
-            self.mintMenuWin.setTooltip( Button7, _("Shutdown, restart, suspend or hibernate") )
+            if ( self.showQuit == True ):
+                Button7 = easyButton( "system-shutdown", self.iconsize, [_("Quit")], -1, -1 )
+                Button7.connect( "clicked", self.ButtonClicked, "gnome-session-save --shutdown-dialog" )
+                Button7.show()
+                self.systemBtnHolder.pack_start( Button7, False, False )
+                self.mintMenuWin.setTooltip( Button7, _("Shutdown, restart, suspend or hibernate") )
 
     def ButtonClicked( self, widget, Exec ):
         self.mintMenuWin.hide()
