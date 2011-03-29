@@ -207,7 +207,10 @@ class pluginclass( object ):
 
         if ( self.showtrash == True ):
             self.trashButton = easyButton( "user-trash", self.iconsize, [_("Trash")], -1, -1 )
-            self.trashButton.connect( "clicked", self.ButtonClicked, "xdg-open trash:" )
+            if self.de == "xfce":
+                self.trashButton.connect( "clicked", self.ButtonClicked, "thunar trash:" )
+            else:
+                self.trashButton.connect( "clicked", self.ButtonClicked, "xdg-open trash:" )
             self.trashButton.show()
             self.trashButton.connect( "button-release-event", self.trashPopup )
             self.refreshTrash()
