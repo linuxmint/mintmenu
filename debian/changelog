@@ -1,3 +1,9 @@
+mintmenu (5.1.9) katya; urgency=low
+  
+  * Compatible with Ubuntu 11.04 (which changed its libc.so.6 path)
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Tue,  12 Apr 2011 17:43:00 +0000
+
 mintmenu (5.1.8) katya; urgency=low
   
   * Fixed indentation issue in recent documents plugin
