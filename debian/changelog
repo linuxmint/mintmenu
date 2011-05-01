@@ -1,3 +1,10 @@
+mintmenu (5.2.0) katya; urgency=low
+  
+  * Banshee replaces Rhythmbox in default favorites
+  * Star icon for mintInstall in system plugin
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Sun,  1 May 2011 17:45:00 +0000
+
 mintmenu (5.1.9) katya; urgency=low
   
   * Compatible with Ubuntu 11.04 (which changed its libc.so.6 path)
