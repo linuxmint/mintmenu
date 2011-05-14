@@ -79,7 +79,7 @@ class mintMenuConfig( object ):
         #wTree.get_widget("favoritesLabel").set_text(_("Favorites"))
         wTree.get_widget("numberColumnsLabel").set_text(_("Number of columns:"))
         wTree.get_widget("iconSizeLabel").set_text(_("Icon size:"))
-        wTree.get_widget("iconSizeLabel2").set_text(_("Icon size:"))        
+        wTree.get_widget("iconSizeLabel2").set_text(_("Icon size:"))
         wTree.get_widget("placesIconSizeLabel").set_text(_("Icon size:"))
         wTree.get_widget("systemIconSizeLabel").set_text(_("Icon size:"))
         wTree.get_widget("hoverLabel").set_text(_("Hover delay (ms):"))
@@ -126,7 +126,7 @@ class mintMenuConfig( object ):
         self.showPlacesPlugin = wTree.get_widget( "showPlacesPlugin" )
         self.swapGeneric = wTree.get_widget("swapGeneric")
         self.hover = wTree.get_widget( "hover" )
-        self.hoverDelay = wTree.get_widget( "hoverDelay" )        
+        self.hoverDelay = wTree.get_widget( "hoverDelay" )
         self.iconSize = wTree.get_widget( "iconSize" )
         self.favIconSize = wTree.get_widget( "favIconSize" )
         self.placesIconSize = wTree.get_widget( "placesIconSize" )
@@ -145,7 +145,19 @@ class mintMenuConfig( object ):
         self.buttonText = wTree.get_widget( "buttonText" )
         self.hotkeyText = wTree.get_widget( "hotkeyText" )
         self.buttonIcon = wTree.get_widget( "buttonIcon" )
-        self.buttonIconImage = wTree.get_widget( "image_button_icon" )
+        self.buttonIconChooser = wTree.get_widget( "button_icon_chooser" )
+        self.image_filter = gtk.FileFilter()
+        self.image_filter.set_name(_("Images"))
+        self.image_filter.add_pattern("*.png")
+        self.image_filter.add_pattern("*.jpg")
+        self.image_filter.add_pattern("*.jpeg")
+        self.image_filter.add_pattern("*.bmp")
+        self.image_filter.add_pattern("*.ico")
+        self.image_filter.add_pattern("*.xpm")
+        self.image_filter.add_pattern("*.svg")
+        self.buttonIconChooser.add_filter(self.image_filter)
+        self.buttonIconChooser.set_filter(self.image_filter)
+        self.buttonIconImage = wTree.get_widget("image_button_icon")
         self.searchCommand = wTree.get_widget( "search_command" )
         self.computertoggle = wTree.get_widget( "computercheckbutton" )
         self.homefoldertoggle = wTree.get_widget( "homecheckbutton" )
@@ -158,7 +170,7 @@ class mintMenuConfig( object ):
         self.placesHeightButton = wTree.get_widget( "placesHeightSpinButton" )
         if (self.allowPlacesScrollbarToggle.get_active() == False):
             self.placesHeightButton.set_sensitive(False)
-        self.allowPlacesScrollbarToggle.connect("toggled", self.togglePlacesHeightEnabled )   
+        self.allowPlacesScrollbarToggle.connect("toggled", self.togglePlacesHeightEnabled )
         self.softwareManagerToggle = wTree.get_widget( "softwaremanagercheckbutton" )
         self.packageManagerToggle = wTree.get_widget( "packagemanagercheckbutton" )
         self.controlCenterToggle = wTree.get_widget( "controlcentercheckbutton" )
@@ -194,12 +206,12 @@ class mintMenuConfig( object ):
         self.bindGconfValueToWidget( self.gconfApplications, "bool", "swap_generic_name", self.swapGeneric, "toggled", self.swapGeneric.set_active, self.swapGeneric.get_active )
 
         self.bindGconfValueToWidget( self.gconfApplications, "int", "category_hover_delay", self.hoverDelay, "value-changed", self.hoverDelay.set_value, self.hoverDelay.get_value )
-        self.bindGconfValueToWidget( self.gconfApplications, "int", "icon_size", self.iconSize, "value-changed", self.iconSize.set_value, self.iconSize.get_value )        
+        self.bindGconfValueToWidget( self.gconfApplications, "int", "icon_size", self.iconSize, "value-changed", self.iconSize.set_value, self.iconSize.get_value )
         self.bindGconfValueToWidget( self.gconfApplications, "int", "favicon_size", self.favIconSize, "value-changed", self.favIconSize.set_value, self.favIconSize.get_value )
         self.bindGconfValueToWidget( self.gconfApplications, "int", "fav_cols", self.favCols, "value-changed", self.favCols.set_value, self.favCols.get_value )
-        
-        self.bindGconfValueToWidget( self.gconfPlaces, "int", "icon_size", self.placesIconSize, "value-changed", self.placesIconSize.set_value, self.placesIconSize.get_value )        
-        self.bindGconfValueToWidget( self.gconfSystem, "int", "icon_size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value )                    
+
+        self.bindGconfValueToWidget( self.gconfPlaces, "int", "icon_size", self.placesIconSize, "value-changed", self.placesIconSize.set_value, self.placesIconSize.get_value )
+        self.bindGconfValueToWidget( self.gconfSystem, "int", "icon_size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value )
 
         self.bindGconfValueToWidget( self.gconf, "int", "border_width", self.borderWidth, "value-changed", self.borderWidth.set_value, self.borderWidth.get_value_as_int )
         self.bindGconfValueToWidget( self.gconf, "int", "opacity", self.opacity, "value-changed", self.opacity.set_value, self.opacity.get_value_as_int )
@@ -210,7 +222,7 @@ class mintMenuConfig( object ):
         self.bindGconfValueToWidget( self.gconf, "bool", "hide_applet_icon", self.showButtonIcon, "toggled", self.setShowButtonIcon, self.getShowButtonIcon )
         self.bindGconfValueToWidget( self.gconf, "string", "applet_text", self.buttonText, "changed", self.buttonText.set_text, self.buttonText.get_text )
         self.bindGconfValueToWidget( self.gconf, "string", "hot_key", self.hotkeyText, "changed", self.hotkeyText.set_text, self.hotkeyText.get_text )
-        self.bindGconfValueToWidget( self.gconf, "string", "applet_icon", self.buttonIcon, "changed", self.setButtonIcon, self.buttonIcon.get_text )
+        self.bindGconfValueToWidget( self.gconf, "string", "applet_icon", self.buttonIconChooser, "file-set", self.setButtonIcon, self.buttonIconChooser.get_filename )
         self.bindGconfValueToWidget( self.gconfApplications, "string", "search_command", self.searchCommand, "changed", self.searchCommand.set_text, self.searchCommand.get_text )
 
         self.getPluginsToggle()
@@ -261,12 +273,12 @@ class mintMenuConfig( object ):
         wTree.get_widget("upButton").connect("clicked", self.moveUp)
         wTree.get_widget("downButton").connect("clicked", self.moveDown)
         wTree.get_widget("removeButton").connect("clicked", self.removePlace)
-        
+
         #Detect themes and show theme here
         theme_name = commands.getoutput("gconftool-2 --get /apps/mintMenu/theme_name").strip()
         themes = commands.getoutput("find /usr/share/themes -name gtkrc")
         themes = themes.split("\n")
-        model = gtk.ListStore(str, str)   
+        model = gtk.ListStore(str, str)
         wTree.get_widget("themesCombo").set_model(model)
         selected_theme = model.append([_("Desktop theme"), "default"])
         for theme in themes:
@@ -283,7 +295,7 @@ class mintMenuConfig( object ):
         wTree.get_widget("themesCombo").connect("changed", self.set_theme)
         self.mainWindow.present()
         self.getBackgroundColor()
-        
+
     def set_theme(self, widget):
         model = widget.get_model()
         iter = widget.get_active_iter()
@@ -324,7 +336,7 @@ class mintMenuConfig( object ):
             visiblePlugins.append("recent")
         layout = ""
         for plugin in visiblePlugins:
-            layout = layout + plugin + ","            
+            layout = layout + plugin + ","
         if len(layout) > 0 and layout[-1] == ",":
             layout = layout[0:-1]
         os.system("gconftool-2 --type list --list-type string --set /apps/mintMenu/plugins_list [%s]" % layout)
@@ -333,7 +345,7 @@ class mintMenuConfig( object ):
         self.showButtonIcon.set_active(not value )
 
     def setButtonIcon( self, value ):
-        self.buttonIcon.set_text(value)
+        self.buttonIconChooser.set_filename(value)
         self.buttonIconImage.set_from_file(value)
 
     def getShowButtonIcon( self ):
