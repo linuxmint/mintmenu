@@ -1311,8 +1311,8 @@ class pluginclass( object ):
         return space
 
     def favoritesBuildSeparator( self ):
-        separator = gtk.EventBox()
-        separator.add( gtk.HSeparator() )
+        separator = gtk.HSeparator()
+        #separator.add( gtk.HSeparator() )
         separator.set_size_request( -1, 20 )
         separator.connect( "button_release_event", self.favPopup )
         separator.type = "separator"

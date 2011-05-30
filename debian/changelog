@@ -1,3 +1,9 @@
+mintmenu (5.2.2) katya; urgency=low
+  
+  * Compatibility with new Mint-X-Theme (dropped embedded gtk.Separator in Event boxes in favorites plugin)
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Mon,  30 May 2011 16:00:00 +0000
+
 mintmenu (5.2.1) katya; urgency=low
   
   * Bug fix, preferences now work as expected again.
