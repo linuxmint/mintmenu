@@ -359,7 +359,10 @@ class mintMenuConfig( object ):
             args[1]( gtk.gdk.color_parse( entry.get_value().get_string() ) )
 
     def callGetter( self, gconf, gconfType, gconfPath, getter ):
-        gconf.set( gconfType, gconfPath, getter() )
+        if (gconfType == "int"):
+            gconf.set( gconfType, gconfPath, int(getter()))
+        else:
+            gconf.set( gconfType, gconfPath, getter())
 
     def toggleUseCustomColors( self, widget ):
         self.backgroundColor.set_sensitive( widget.get_active() )
