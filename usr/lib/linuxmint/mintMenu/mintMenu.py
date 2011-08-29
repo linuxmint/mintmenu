@@ -55,10 +55,10 @@ ICON = "/usr/lib/linuxmint/mintMenu/visualisation-logo.png"
 sys.path.append( os.path.join( PATH , "plugins") )
 
 # FIX: Get the window manager from the GDMSESSION environment variable, fallback to GNOME if it's not set
-windowManager = os.getenv("GDMSESSION").upper()
+windowManager = os.getenv("GDMSESSION")
 if not windowManager:
     windowManager = "GNOME"
-xdg.Config.setWindowManager( windowManager )
+xdg.Config.setWindowManager( windowManager.upper() )
 
 from easybuttons import iconManager
 from easygconf import EasyGConf
