@@ -432,7 +432,7 @@ class pluginclass( object ):
                 startId = child.connect( "enter", self.StartFilter, child.filter )
                 stopId = child.connect( "leave", self.StopFilter )
                 child.mouseOverHandlerIds = ( startId, stopId )
-            elif self.categories_mouse_over and child.mouseOverHandlerIds:
+            elif not self.categories_mouse_over and child.mouseOverHandlerIds:
                 child.disconnect( child.mouseOverHandlerIds[0] )
                 child.disconnect( child.mouseOverHandlerIds[1] )
                 child.mouseOverHandlerIds = None
@@ -1617,6 +1617,8 @@ class pluginclass( object ):
                     startId = item["button"].connect( "enter", self.StartFilter, item["filter"] )
                     stopId = item["button"].connect( "leave", self.StopFilter )
                     item["button"].mouseOverHandlerIds = ( startId, stopId )
+                else:
+                    item["button"].mouseOverHandlerIds = None
 
                 item["button"].connect( "clicked", self.Filter, item["filter"] )
                 item["button"].connect( "focus-in-event", self.categoryBtnFocus, item["filter"] )
