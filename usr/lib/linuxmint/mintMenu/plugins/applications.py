@@ -983,9 +983,12 @@ class pluginclass( object ):
                 startupMenuItem.set_active( False )
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
+            mTree.get_widget( "applicationsMenu" ).connect( 'deactivate', self.onMenuPopupDeactivate)
             mTree.get_widget( "applicationsMenu" ).popup( None, None, None, event.button, event.time )
-            self.mintMenuWin.grab()
             
+    def onMenuPopupDeactivate( self, widget):
+        self.mintMenuWin.grab()
+    
     def searchPopup( self, widget=None, event=None ):    
         menu = gtk.Menu()   
              
@@ -1677,7 +1680,7 @@ class pluginclass( object ):
                 item["button"] = MenuApplicationLauncher( item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments, highlight=(True and menu_has_changed) )                
                 if item["button"].appExec:
                     self.mintMenuWin.setTooltip( item["button"], item["button"].getTooltip() )
-                    item["button"].connect( "button-release-event", self.menuPopup )
+                    item["button"].connect( "button-press-event", self.menuPopup )
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )
                     item["button"].connect( "clicked", lambda w: self.mintMenuWin.hide() )                    
                     if self.activeFilter[0] == 0:
