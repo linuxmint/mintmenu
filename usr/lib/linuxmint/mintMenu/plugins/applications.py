@@ -821,13 +821,16 @@ class pluginclass( object ):
             #print "CATFILTER"
             self.activeFilter = (1, category)
             if category == "":
+                listedDesktopFiles = []
                 for i in self.applicationsBox.get_children():
-                    i.show_all()
+                    if not i.desktop_file_path in listedDesktopFiles:
+                        listedDesktopFiles.append( i.desktop_file_path )
+                        i.show_all()
+                    else:
+                        i.hide()
             else:
                 for i in self.applicationsBox.get_children():
                     i.filterCategory( category )
-            for i in self.applicationsBox.get_children():
-                i.filterCategory( category )
 
             for i in self.categoriesBox.get_children():
                 i.set_relief( gtk.RELIEF_NONE )
@@ -1687,6 +1690,7 @@ class pluginclass( object ):
                         item["button"].filterText( self.activeFilter[1] )
                     else:
                         item["button"].filterCategory( self.activeFilter[1] )
+                    item["button"].desktop_file_path = item["entry"].get_desktop_file_path()
                     sortedApplicationList.append( ( item["button"].appName.upper(), item["button"] ) )
                     self.applicationList.append( item )
                 else:
