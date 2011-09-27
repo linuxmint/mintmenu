@@ -432,7 +432,7 @@ class pluginclass( object ):
                 startId = child.connect( "enter", self.StartFilter, child.filter )
                 stopId = child.connect( "leave", self.StopFilter )
                 child.mouseOverHandlerIds = ( startId, stopId )
-            elif self.categories_mouse_over and child.mouseOverHandlerIds:
+            elif not self.categories_mouse_over and child.mouseOverHandlerIds:
                 child.disconnect( child.mouseOverHandlerIds[0] )
                 child.disconnect( child.mouseOverHandlerIds[1] )
                 child.mouseOverHandlerIds = None
@@ -821,13 +821,16 @@ class pluginclass( object ):
             #print "CATFILTER"
             self.activeFilter = (1, category)
             if category == "":
+                listedDesktopFiles = []
                 for i in self.applicationsBox.get_children():
-                    i.show_all()
+                    if not i.desktop_file_path in listedDesktopFiles:
+                        listedDesktopFiles.append( i.desktop_file_path )
+                        i.show_all()
+                    else:
+                        i.hide()
             else:
                 for i in self.applicationsBox.get_children():
                     i.filterCategory( category )
-            for i in self.applicationsBox.get_children():
-                i.filterCategory( category )
 
             for i in self.categoriesBox.get_children():
                 i.set_relief( gtk.RELIEF_NONE )
@@ -983,9 +986,12 @@ class pluginclass( object ):
                 startupMenuItem.set_active( False )
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
+            mTree.get_widget( "applicationsMenu" ).connect( 'deactivate', self.onMenuPopupDeactivate)
             mTree.get_widget( "applicationsMenu" ).popup( None, None, None, event.button, event.time )
-            self.mintMenuWin.grab()
             
+    def onMenuPopupDeactivate( self, widget):
+        self.mintMenuWin.grab()
+    
     def searchPopup( self, widget=None, event=None ):    
         menu = gtk.Menu()   
              
@@ -1617,6 +1623,8 @@ class pluginclass( object ):
                     startId = item["button"].connect( "enter", self.StartFilter, item["filter"] )
                     stopId = item["button"].connect( "leave", self.StopFilter )
                     item["button"].mouseOverHandlerIds = ( startId, stopId )
+                else:
+                    item["button"].mouseOverHandlerIds = None
 
                 item["button"].connect( "clicked", self.Filter, item["filter"] )
                 item["button"].connect( "focus-in-event", self.categoryBtnFocus, item["filter"] )
@@ -1675,13 +1683,14 @@ class pluginclass( object ):
                 item["button"] = MenuApplicationLauncher( item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments, highlight=(True and menu_has_changed) )                
                 if item["button"].appExec:
                     self.mintMenuWin.setTooltip( item["button"], item["button"].getTooltip() )
-                    item["button"].connect( "button-release-event", self.menuPopup )
+                    item["button"].connect( "button-press-event", self.menuPopup )
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )
                     item["button"].connect( "clicked", lambda w: self.mintMenuWin.hide() )                    
                     if self.activeFilter[0] == 0:
                         item["button"].filterText( self.activeFilter[1] )
                     else:
                         item["button"].filterCategory( self.activeFilter[1] )
+                    item["button"].desktop_file_path = item["entry"].get_desktop_file_path()
                     sortedApplicationList.append( ( item["button"].appName.upper(), item["button"] ) )
                     self.applicationList.append( item )
                 else:
