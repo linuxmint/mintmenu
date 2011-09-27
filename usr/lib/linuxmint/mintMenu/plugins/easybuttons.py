@@ -545,12 +545,12 @@ class FavApplicationLauncher( ApplicationLauncher ):
                 self.addLabel( self.appGenericName, [ pango.AttrWeight( pango.WEIGHT_BOLD, 0, -1 ) ] )
                 self.addLabel( self.appName )
         else:
+            self.addLabel( self.appName, [ pango.AttrWeight( pango.WEIGHT_BOLD, 0, -1 ) ] )
             if self.appComment != "":
-                self.addLabel( self.appName, [ pango.AttrWeight( pango.WEIGHT_BOLD, 0, -1 ) ] )
                 self.addLabel( self.appComment )
             else:
-                self.addLabel( self.appName )
-
+                self.addLabel ( "" )
+                
     def setSwapGeneric( self, swapGeneric ):
         self.swapGeneric = swapGeneric
         for child in self.labelBox:
