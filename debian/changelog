@@ -1,3 +1,9 @@
+mintmenu (5.2.4) katya; urgency=low
+  
+  * Improvements in Unicode support
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Tue,  27 Sep 2011 14:14:00 +0000
+
 mintmenu (5.2.3) katya; urgency=low
   
   * Fix for applications with no comments/generic_names in favorites
