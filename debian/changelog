@@ -1,3 +1,13 @@
+mintmenu (5.2.3) katya; urgency=low
+  
+  * Fix for applications with no comments/generic_names in favorites
+  * Get the Window manager from env(GDMSESSION)
+  * Changing the hover delay now takes effect immediately
+  * Right click menus now open on press (instead of release), which also solves some focus problems
+  * Fixed duplicate entries in the "All" category
+  
+ -- Clement Lefebvre <root@linuxmint.com>  Tue,  27 Sep 2011 13:55:00 +0000
+
 mintmenu (5.2.2) katya; urgency=low
   
   * Compatibility with new Mint-X-Theme (dropped embedded gtk.Separator in Event boxes in favorites plugin)
