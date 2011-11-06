@@ -1,3 +1,10 @@
+mintmenu (5.2.4+nmu1) katya; urgency=low
+
+  * Non-maintainer upload.
+  * Added python-xdg as depends.
+
+ -- Stefano Karapetsas <stefano@karapetsas.com>  Sun, 06 Nov 2011 23:52:57 +0100
+
 mintmenu (5.2.4) katya; urgency=low
   
   * Improvements in Unicode support

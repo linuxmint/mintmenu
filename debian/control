@@ -7,6 +7,6 @@ Standards-Version: 3.7.2
 
 Package: mintmenu
 Architecture: all
-Depends: python (>= 2.4), python (<< 3), python-gtk2, python-glade2, deskbar-applet, mint-common, python-gmenu, python-gnomeapplet
+Depends: python (>= 2.4), python (<< 3), python-gtk2, python-glade2, deskbar-applet, mint-common, python-gmenu, python-gnomeapplet, python-xdg
 Description: Advanced Gnome menu
  One of the most advanced menus under Linux. MintMenu supports filtering, favorites, easy-uninstallation, autosession, and many other features.
