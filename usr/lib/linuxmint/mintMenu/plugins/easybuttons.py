@@ -283,7 +283,7 @@ class ApplicationLauncher( easyButton ):
             self.appName = desktopItem.getName()
             self.appGenericName = desktopItem.getGenericName()
             self.appComment = desktopItem.getComment()
-            self.appExec = desktopItem.getExec()
+            self.appExec = desktopItem.getExec().replace("\\\\", "\\")
             self.appIconName = desktopItem.getIcon()
             self.appCategories = desktopItem.getCategories()
             self.appGnomeDocPath = desktopItem.get( "X-GNOME-DocPath" ) or ""
