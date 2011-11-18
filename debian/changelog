@@ -1,3 +1,9 @@
+mintmenu (5.2.6) lisa; urgency=low
+
+  * Adjusted dependencies for MATE
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 18 Nov 2011 17:58:00 +0000
+
 mintmenu (5.2.5) lisa; urgency=low
 
   * Switched support from Gnome/Bonobo to Mate/MateComponent
