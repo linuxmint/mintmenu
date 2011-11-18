@@ -4,12 +4,11 @@ import gtk
 import gtk.glade
 import gobject
 import os
-import gconf
+import mateconf
 import fnmatch
 import time
 import string
 import gettext
-import gnomevfs
 import threading
 import commands
 import subprocess
@@ -23,7 +22,7 @@ from easyfiles import *
 #from filemonitor import monitor as filemonitor
 
 #import xdg.Menu
-import gmenu
+import matemenu
 
 from user import home
 
@@ -141,7 +140,7 @@ def rel_path(target, base=os.curdir):
 
 class Menu:
     def __init__( self, MenuToLookup ):
-        self.tree = gmenu.lookup_tree( MenuToLookup )
+        self.tree = matemenu.lookup_tree( MenuToLookup )
         self.directory = self.tree.get_root_directory()
 
     def getMenus( self, parent=None ):
@@ -150,18 +149,18 @@ class Menu:
             yield self.tree.root
         else:
             for menu in parent.get_contents():
-                if menu.get_type() == gmenu.TYPE_DIRECTORY and self.__isVisible( menu ):
+                if menu.get_type() == matemenu.TYPE_DIRECTORY and self.__isVisible( menu ):
                     yield menu
 
     def getItems( self, menu ):
         for item in menu.get_contents():
-            if item.get_type() == gmenu.TYPE_ENTRY and item.get_desktop_file_id()[-19:] != '-usercustom.desktop' and self.__isVisible( item ):
+            if item.get_type() == matemenu.TYPE_ENTRY and item.get_desktop_file_id()[-19:] != '-usercustom.desktop' and self.__isVisible( item ):
                 yield item
 
     def __isVisible( self, item ):
-        if item.get_type() == gmenu.TYPE_ENTRY:
+        if item.get_type() == matemenu.TYPE_ENTRY:
             return not ( item.get_is_excluded() or item.get_is_nodisplay() )
-        if item.get_type() == gmenu.TYPE_DIRECTORY and len( item.get_contents() ):
+        if item.get_type() == matemenu.TYPE_DIRECTORY and len( item.get_contents() ):
             return True
 
 
@@ -332,12 +331,12 @@ class pluginclass( object ):
     def get_panel(self):
         self.panel = None
         self.panel_position = 0
-        appletidlist = gconf.client_get_default().get_list("/apps/panel/general/applet_id_list", "string")
+        appletidlist = mateconf.client_get_default().get_list("/apps/panel/general/applet_id_list", "string")
         for applet in appletidlist:
-            bonobo_id = gconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/bonobo_iid")
-            if bonobo_id == "OAFIID:GNOME_mintMenu":
-                self.panel = gconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/toplevel_id")
-                self.panel_position = gconf.client_get_default().get_int("/apps/panel/applets/" + applet + "/position") + 1
+            bonobo_id = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/bonobo_iid")
+            if bonobo_id == "OAFIID:MATE_mintMenu":
+                self.panel = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/toplevel_id")
+                self.panel_position = mateconf.client_get_default().get_int("/apps/panel/applets/" + applet + "/position") + 1
       
     def apturl_install(self, widget, pkg_name):
         os.system("xdg-open apt://" + pkg_name + " &")
@@ -489,10 +488,10 @@ class pluginclass( object ):
         self.minimized = self.gconf.get( "bool", "minimized", False )
 
         # Search tool
-        self.searchtool = self.gconf.get( "string", "search_command", "gnome-search-tool --named \"%s\" --start" )
+        self.searchtool = self.gconf.get( "string", "search_command", "mate-search-tool --named \"%s\" --start" )
         if self.searchtool == "beagle-search SEARCH_STRING":
-            self.searchtool = "gnome-search-tool --named \"%s\" --start"
-            self.gconf.set( "string", "search_command", "gnome-search-tool --named \"%s\" --start" )
+            self.searchtool = "mate-search-tool --named \"%s\" --start"
+            self.gconf.set( "string", "search_command", "mate-search-tool --named \"%s\" --start" )
 
         # Plugin icon
         self.icon = self.gconf.get( "string", "icon", "applications-accessories" )
@@ -890,7 +889,7 @@ class pluginclass( object ):
                 removeFromFavMenuItem.connect( "activate", self.onFavoritesRemove, widget )
                 propsMenuItem.connect( "activate", self.onPropsApp, widget)
 
-                if self.de == "gnome":
+                if self.de == "mate":
                     mTree.get_widget("favoritesMenu").append(desktopMenuItem)
                     mTree.get_widget("favoritesMenu").append(panelMenuItem)
                     mTree.get_widget("favoritesMenu").append(separator1)
@@ -943,7 +942,7 @@ class pluginclass( object ):
             separator3 = gtk.SeparatorMenuItem()
             propsMenuItem = gtk.MenuItem(_("Edit properties"))
 
-            if self.de == "gnome":
+            if self.de == "mate":
                 mTree.get_widget("applicationsMenu").append(desktopMenuItem)
                 mTree.get_widget("applicationsMenu").append(panelMenuItem)
                 mTree.get_widget("applicationsMenu").append(separator1)
@@ -1093,7 +1092,7 @@ class pluginclass( object ):
         
     def search_dictionary(self, widget):
         text = self.searchEntry.get_text()
-        os.system("gnome-dictionary \"" + text + "\" &")
+        os.system("mate-dictionary \"" + text + "\" &")
         self.mintMenuWin.hide()
         
     def search_mint_tutorials(self, widget):
@@ -1148,7 +1147,7 @@ class pluginclass( object ):
     def add_to_panel(self, widget, desktopEntry):
         import random
         object_name = "mintmenu_"+''.join([random.choice('abcdefghijklmnopqrstuvwxyz0123456789') for x in xrange(8)])
-        new_directory = home + "/.gnome2/panel2.d/default/launchers/"
+        new_directory = home + "/.mate2/panel2.d/default/launchers/"
         os.system("mkdir -p " + new_directory)
         new_file = new_directory + object_name
 
@@ -1158,7 +1157,7 @@ class pluginclass( object ):
 
         # Add to Gnome/GConf
         object_dir = "/apps/panel/objects/"
-        object_client = gconf.client_get_default()
+        object_client = mateconf.client_get_default()
 
         object_client.set_string(object_dir + object_name +"/"+ "menu_path", "applications:/")
         object_client.set_bool(object_dir + object_name +"/"+ "locked", False)
@@ -1177,7 +1176,7 @@ class pluginclass( object ):
 
         launchers_list = object_client.get_list("/apps/panel/general/object_id_list", "string")
         launchers_list.append(object_name)
-        object_client.set_list("/apps/panel/general/object_id_list", gconf.VALUE_STRING, launchers_list)
+        object_client.set_list("/apps/panel/general/object_id_list", mateconf.VALUE_STRING, launchers_list)
 
     def delete_from_menu(self, widget, desktopEntry):
         try:
@@ -1220,7 +1219,7 @@ class pluginclass( object ):
         self.mintMenuWin.hide()
         gtk.gdk.flush()
 
-        editProcess = subprocess.Popen(["/usr/bin/gnome-desktop-item-edit", filePath])
+        editProcess = subprocess.Popen(["/usr/bin/mate-desktop-item-edit", filePath])
         subprocess.Popen.communicate(editProcess)
 
         if newFileFlag:
@@ -1334,10 +1333,10 @@ class pluginclass( object ):
             location = string.join( location.split( "%20" ) )
 
             if location.startswith( "file" ):
-                ButtonIcon = "gnome-fs-directory"
+                ButtonIcon = "mate-fs-directory"
 
             if location.startswith( "smb" ) or location.startswith( "ssh" ) or location.startswith( "network" ):
-                ButtonIcon = "gnome-fs-network"
+                ButtonIcon = "mate-fs-network"
 
             #For Special locations
             if location == "x-nautilus-desktop:///computer":
@@ -1706,7 +1705,7 @@ class pluginclass( object ):
     # Reload the menufiles from the filesystem
     def loadMenuFiles( self ):
         self.menuFiles = []
-        for mainitems in [ "applications.menu", "settings.menu" ]:
+        for mainitems in [ "mate-applications.menu", "mate-settings.menu" ]:
             self.menuFiles.append( Menu( mainitems) )
 
     # Build a list of all categories in the menu ( [ { "name", "icon", tooltip" } ]
@@ -1717,7 +1716,7 @@ class pluginclass( object ):
 
         for menu in self.menuFiles:
             for child in menu.directory.get_contents():
-                if child.get_type() == gmenu.TYPE_DIRECTORY:
+                if child.get_type() == matemenu.TYPE_DIRECTORY:
                     icon =  str(child.icon)
                     #if (icon == "preferences-system"):
                     #       self.adminMenu = child.name
@@ -1734,27 +1733,27 @@ class pluginclass( object ):
 
         def find_applications_recursively(app_list, directory, catName):
             for item in directory.get_contents():
-                if item.get_type() == gmenu.TYPE_ENTRY:
+                if item.get_type() == matemenu.TYPE_ENTRY:
                     print "=======>>> " + str(item.name) + " = " + str(catName)
                     app_list.append( { "entry": item, "category": catName } )
-                elif item.get_type() == gmenu.TYPE_DIRECTORY:
+                elif item.get_type() == matemenu.TYPE_DIRECTORY:
                     find_applications_recursively(app_list, item, catName)
 
         for menu in self.menuFiles:
             directory = menu.directory
             for entry in directory.get_contents():
-                if entry.get_type() == gmenu.TYPE_DIRECTORY and len(entry.get_contents()):
+                if entry.get_type() == matemenu.TYPE_DIRECTORY and len(entry.get_contents()):
                     #Entry is a top-level category
                     #catName = entry.name
                     #icon = str(entry.icon)
                     #if (icon == "applications-system" or icon == "applications-other"):
                     #       catName = self.adminMenu
                     for item in entry.get_contents():
-                        if item.get_type() == gmenu.TYPE_DIRECTORY:
+                        if item.get_type() == matemenu.TYPE_DIRECTORY:
                             find_applications_recursively(newApplicationsList, item, entry.name)
-                        elif item.get_type() == gmenu.TYPE_ENTRY:
+                        elif item.get_type() == matemenu.TYPE_ENTRY:
                             newApplicationsList.append( { "entry": item, "category": entry.name } )
-                #elif entry.get_type() == gmenu.TYPE_ENTRY:
+                #elif entry.get_type() == matemenu.TYPE_ENTRY:
                 #       if not (entry.get_is_excluded() or entry.get_is_nodisplay()):
                 #               print "=======>>> " + item.name + " = top level"
                 #               newApplicationsList.append( { "entry": item, "category": "" } )

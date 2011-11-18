@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 
-import gconf
+import mateconf
 
 class EasyGConf:
 
 	def __init__( self, gconfDir = None, client = None ):
 
 		if not client:
-			client = gconf.client_get_default()
+			client = mateconf.client_get_default()
 		
 		self.client = client
 		self.gconfDir = gconfDir
 
-		self.client.add_dir( self.gconfDir[:-1], gconf.CLIENT_PRELOAD_NONE )
+		self.client.add_dir( self.gconfDir[:-1], mateconf.CLIENT_PRELOAD_NONE )
 
 		self.handlerIds = [ ]
 

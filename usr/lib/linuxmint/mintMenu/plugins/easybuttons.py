@@ -2,11 +2,11 @@
 
 import gtk
 import pango
-import gnomedesktop
+import matedesktop
 import gobject
 import os.path
 import shutil
-import gnomevfs
+import matevfs
 import re
 from execute import *
 import xdg.DesktopEntry
@@ -286,7 +286,7 @@ class ApplicationLauncher( easyButton ):
             self.appExec = desktopItem.getExec()
             self.appIconName = desktopItem.getIcon()
             self.appCategories = desktopItem.getCategories()
-            self.appGnomeDocPath = desktopItem.get( "X-GNOME-DocPath" ) or ""
+            self.appGnomeDocPath = desktopItem.get( "X-MATE-DocPath" ) or ""
             self.useTerminal = desktopItem.getTerminal()
 
             if not self.appGnomeDocPath:
@@ -396,11 +396,11 @@ class ApplicationLauncher( easyButton ):
         shutil.copyfile( self.desktopFile, self.startupFilePath )
 
         # Remove %u, etc. from Exec entry, because gnome will not replace them when it starts the app
-        item = gnomedesktop.item_new_from_uri( self.startupFilePath, gnomedesktop.LOAD_ONLY_IF_EXISTS )
+        item = matedesktop.item_new_from_uri( self.startupFilePath, matedesktop.LOAD_ONLY_IF_EXISTS )
         if item:
             r = re.compile("%[A-Za-z]");
-            tmp = r.sub("", item.get_string( gnomedesktop.KEY_EXEC ) ).strip()
-            item.set_string( gnomedesktop.KEY_EXEC, tmp )
+            tmp = r.sub("", item.get_string( matedesktop.KEY_EXEC ) ).strip()
+            item.set_string( matedesktop.KEY_EXEC, tmp )
             item.save( self.startupFilePath, 0 )
 
     def removeFromStartup( self ):
@@ -431,12 +431,12 @@ class ApplicationLauncher( easyButton ):
             dn = os.path.dirname( self.appGnomeDocPath )
             if self.appGnomeDocPath[0:6] != "ghelp:":
                 self.appGnomeDocPath = "ghelp:" + self.appGnomeDocPath
-            gnomevfs.url_show( self.appGnomeDocPath )
+            matevfs.url_show( self.appGnomeDocPath )
         elif self.appKdeDocPath:
             if self.appKdeDocPath[0:6] != "help:/" and self.appKdeDocPath[0:6] != "file:/":
                 self.appKdeDocPath = "help:/" + self.appKdeDocPath
             if self.appKdeDocPath[0:6] == "file:/":
-                gnomevfs.url_show( self.appKdeDocPath )
+                matevfs.url_show( self.appKdeDocPath )
             else:
                 Execute( [ "khelpcenter", self.appKdeDocPath ] )
 

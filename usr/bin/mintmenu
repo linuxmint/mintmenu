@@ -4,9 +4,9 @@ import sys, os
 
 if len(sys.argv) > 1:
     if (sys.argv[1] in ["clean", "clear", "reset", "--clean", "--clear", "--reset"]):
-        os.system("gconftool-2 --recursive-unset /apps/mintMenu")
+        os.system("mateconftool-2 --recursive-unset /apps/mintMenu")
         os.system("rm -rf ~/.linuxmint/mintMenu")
-        os.system("gconftool-2 --recursive-unset /apps/mintMenu")
+        os.system("mateconftool-2 --recursive-unset /apps/mintMenu")
         os.system("rm -rf ~/.linuxmint/mintMenu")
         print "All mintMenu settings are now restored to default"
 else:

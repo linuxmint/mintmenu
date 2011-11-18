@@ -7,9 +7,9 @@ try:
     import pango
     import os
     import commands
-    import gnomeapplet
+    import mateapplet
     import gettext
-    import gnomevfs
+    import matevfs
     import traceback
     import time
     import gc
@@ -54,10 +54,9 @@ ICON = "/usr/lib/linuxmint/mintMenu/visualisation-logo.png"
 
 sys.path.append( os.path.join( PATH , "plugins") )
 
-# FIX: Get the window manager from the GDMSESSION environment variable, fallback to GNOME if it's not set
-windowManager = os.getenv("GDMSESSION")
+windowManager = os.getenv("DESKTOP_SESSION")
 if not windowManager:
-    windowManager = "GNOME"
+    windowManager = "MATE"
 xdg.Config.setWindowManager( windowManager.upper() )
 
 from easybuttons import iconManager
@@ -213,10 +212,10 @@ class MainWindow( object ):
         self.window.set_opacity(opacity)
         
     def detect_desktop_environment (self):
-        self.de = "gnome"
+        self.de = "mate"
         try:
-            de = commands.getoutput("/usr/lib/linuxmint/mintMenu/detectDE")
-            if de in ["gnome", "kde", "xfce"]:
+            de = os.environ["DESKTOP_SESSION"]
+            if de in ["gnome", "gnome-shell", "mate", "kde", "xfce"]:
                 self.de = de
         except Exception, detail:
             print detail
@@ -254,7 +253,7 @@ class MainWindow( object ):
                         MyPlugin = X.pluginclass( self, self.toggle, self.de )
 
                     if not MyPlugin.icon:
-                        MyPlugin.icon = "gnome-logo-icon.png"
+                        MyPlugin.icon = "mate-logo-icon.png"
 
                     #if hasattr( MyPlugin, "hideseparator" ) and not MyPlugin.hideseparator:
                     #    Image1 = gtk.Image()
@@ -282,7 +281,7 @@ class MainWindow( object ):
                     MyPlugin.content_holder.add( errorLabel )
                     MyPlugin.add( MyPlugin.content_holder )
                     MyPlugin.width = 270
-                    MyPlugin.icon = 'gnome-logo-icon.png'
+                    MyPlugin.icon = 'mate-logo-icon.png'
                     print u"Unable to load " + plugin + " plugin :-("
 
 
@@ -527,12 +526,12 @@ class MenuWin( object ):
         self.gconf.notifyAdd( "applet_icon_size", self.gconfEntriesChanged )
         self.getGconfEntries()
 
-        self.gconftheme = EasyGConf( "/desktop/gnome/interface/" )
+        self.gconftheme = EasyGConf( "/desktop/mate/interface/" )
         self.gconftheme.notifyAdd( "gtk_theme", self.changeTheme )
 
         self.createPanelButton()
 
-        self.applet.set_applet_flags( gnomeapplet.EXPAND_MINOR )
+        self.applet.set_applet_flags( mateapplet.EXPAND_MINOR )
         self.applet.connect( "button-press-event", self.showMenu )
         self.applet.connect( "change-orient", self.changeOrientation )
         self.applet.connect( "change-background", self.changeBackground )
@@ -596,20 +595,20 @@ class MenuWin( object ):
             self.systemlabel.set_tooltip_text(tooltip)
             self.button_icon.set_tooltip_text(tooltip)
 
-        if self.applet.get_orient() == gnomeapplet.ORIENT_UP or self.applet.get_orient() == gnomeapplet.ORIENT_DOWN:
+        if self.applet.get_orient() == mateapplet.ORIENT_UP or self.applet.get_orient() == mateapplet.ORIENT_DOWN:
             self.button_box = gtk.HBox()
             self.button_box.pack_start( self.button_icon, False, False )
             self.button_box.pack_start( self.systemlabel, False, False )
 
             self.button_icon.set_padding( 5, 0 )
         # if we have a vertical panel
-        elif self.applet.get_orient() == gnomeapplet.ORIENT_LEFT:
+        elif self.applet.get_orient() == mateapplet.ORIENT_LEFT:
             self.button_box = gtk.VBox()
             self.systemlabel.set_angle( 270 )
             self.button_box.pack_start( self.systemlabel )
             self.button_box.pack_start( self.button_icon )
             self.button_icon.set_padding( 5, 0 )
-        elif self.applet.get_orient() == gnomeapplet.ORIENT_RIGHT:
+        elif self.applet.get_orient() == mateapplet.ORIENT_RIGHT:
             self.button_box = gtk.VBox()
             self.systemlabel.set_angle( 90 )
             self.button_box.pack_start( self.button_icon )
@@ -640,9 +639,9 @@ class MenuWin( object ):
         rc_style = gtk.RcStyle()
         self.applet.modify_style(rc_style)
 
-        if gnomeapplet.COLOR_BACKGROUND == type:
+        if mateapplet.COLOR_BACKGROUND == type:
             applet.modify_bg( gtk.STATE_NORMAL, color )
-        elif gnomeapplet.PIXMAP_BACKGROUND == type:
+        elif mateapplet.PIXMAP_BACKGROUND == type:
             style = applet.style
             style.bg_pixmap[ gtk.STATE_NORMAL ] = pixmap
             applet.set_style( style )
@@ -654,7 +653,7 @@ class MenuWin( object ):
     
     def applyTheme(self):
         style_settings = gtk.settings_get_default()
-        desktop_theme = self.gconf.get( "string", '/desktop/gnome/interface/gtk_theme', "")
+        desktop_theme = self.gconf.get( "string", '/desktop/mate/interface/gtk_theme', "")
         if self.theme_name == "default":
             style_settings.set_property("gtk-theme-name", desktop_theme)        
         else:
@@ -665,17 +664,17 @@ class MenuWin( object ):
 
     def changeOrientation( self, *args, **kargs ):
 
-        if self.applet.get_orient() == gnomeapplet.ORIENT_UP or self.applet.get_orient() == gnomeapplet.ORIENT_DOWN:
+        if self.applet.get_orient() == mateapplet.ORIENT_UP or self.applet.get_orient() == mateapplet.ORIENT_DOWN:
             tmpbox = gtk.HBox()
             self.systemlabel.set_angle( 0 )
             self.button_box.reorder_child( self.button_icon, 0 )
             self.button_icon.set_padding( 5, 0 )
-        elif self.applet.get_orient() == gnomeapplet.ORIENT_LEFT:
+        elif self.applet.get_orient() == mateapplet.ORIENT_LEFT:
             tmpbox = gtk.VBox()
             self.systemlabel.set_angle( 270 )
             self.button_box.reorder_child( self.button_icon, 1 )
             self.button_icon.set_padding( 0, 5 )
-        elif self.applet.get_orient() == gnomeapplet.ORIENT_RIGHT:
+        elif self.applet.get_orient() == mateapplet.ORIENT_RIGHT:
             tmpbox = gtk.VBox()
             self.systemlabel.set_angle( 90 )
             self.button_box.reorder_child( self.button_icon, 0 )
@@ -720,7 +719,7 @@ class MenuWin( object ):
             self.button_icon.show()
         # This code calculates width and height for the button_box
         # and takes the orientation in account
-        if self.applet.get_orient() == gnomeapplet.ORIENT_UP or self.applet.get_orient() == gnomeapplet.ORIENT_DOWN:
+        if self.applet.get_orient() == mateapplet.ORIENT_UP or self.applet.get_orient() == mateapplet.ORIENT_DOWN:
             if self.hideIcon:
                 self.applet.set_size_request( self.systemlabel.size_request()[0] + 2, -1 )
             else:
@@ -764,7 +763,7 @@ class MenuWin( object ):
 
 
     def showPreferences( self, uicomponent, verb ):
-#               Execute( "gconf-editor /apps/mintMenu" )
+#               Execute( "mateconf-editor /apps/mintMenu" )
         Execute( os.path.join( PATH, "mintMenuConfig.py" ) )
 
     def showMenuEditor( self, uicomponent, verb ):
@@ -805,7 +804,7 @@ class MenuWin( object ):
         screenHeight = gtk.gdk.screen_height()
         screenWidth = gtk.gdk.screen_width()
 
-        if self.applet.get_orient() == gnomeapplet.ORIENT_UP or self.applet.get_orient() == gnomeapplet.ORIENT_DOWN:
+        if self.applet.get_orient() == mateapplet.ORIENT_UP or self.applet.get_orient() == mateapplet.ORIENT_DOWN:
             if entryX + ourWidth < screenWidth or  entryX + entryWidth / 2 < screenWidth / 2:
             # Align to the left of the entry
                 newX = entryX
@@ -852,7 +851,7 @@ if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":
     main_window = gtk.Window( gtk.WINDOW_TOPLEVEL )
     main_window.set_title( NAME )
     main_window.connect( "destroy", quit_all )
-    app = gnomeapplet.Applet()
+    app = mateapplet.Applet()
     menu_factory( app, None )
     app.reparent( main_window )
     main_window.show()
@@ -860,6 +859,6 @@ if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":
     gtk.main()
     gtk.gdk.threads_leave()
 else:
-    gnomeapplet.bonobo_factory("OAFIID:GNOME_mintMenu_Factory",
-                         gnomeapplet.Applet.__gtype__,
+    mateapplet.bonobo_factory("OAFIID:MATE_mintMenu_Factory",
+                         mateapplet.Applet.__gtype__,
                          "mintMenu", "0", menu_factory)
