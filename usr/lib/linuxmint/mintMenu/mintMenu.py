@@ -859,6 +859,6 @@ if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":
     gtk.main()
     gtk.gdk.threads_leave()
 else:
-    mateapplet.bonobo_factory("OAFIID:MATE_mintMenu_Factory",
+    mateapplet.matecomponent_factory("OAFIID:MATE_mintMenu_Factory",
                          mateapplet.Applet.__gtype__,
                          "mintMenu", "0", menu_factory)

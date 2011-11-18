@@ -1,3 +1,9 @@
+mintmenu (5.2.5) lisa; urgency=low
+
+  * Switched support from Gnome/Bonobo to Mate/MateComponent
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 18 Nov 2011 10:47:16 +0000
+
 mintmenu (5.2.4) katya; urgency=low
   
   * Improvements in Unicode support
