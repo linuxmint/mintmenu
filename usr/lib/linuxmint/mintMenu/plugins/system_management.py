@@ -155,7 +155,10 @@ class pluginclass( object ):
 
         if ( self.showTerminal == True ):
             Button4 = easyButton( "mate-terminal", self.iconsize, [_("Terminal")], -1, -1 )
-            Button4.connect( "clicked", self.ButtonClicked, "x-terminal-emulator" )
+            if os.path.exists("/usr/bin/mate-terminal"):
+                Button4.connect( "clicked", self.ButtonClicked, "mate-terminal" )
+            else:
+                Button4.connect( "clicked", self.ButtonClicked, "x-terminal-emulator" )
             Button4.show()
             self.systemBtnHolder.pack_start( Button4, False, False )
             self.mintMenuWin.setTooltip( Button4, _("Use the command line") )
