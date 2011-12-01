@@ -1,3 +1,9 @@
+mintmenu (5.2.8) lisa; urgency=low
+
+  * Fixed "Add to panel" in applications plugin
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 01 Dec 2011 20:05:40 +0000
+
 mintmenu (5.2.7) lisa; urgency=low
 
   * Replaced system and places shortcut in MATE to use caja and mate-terminal
