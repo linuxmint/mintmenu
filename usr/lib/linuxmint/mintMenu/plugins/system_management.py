@@ -3,8 +3,6 @@
 import gtk
 import gtk.glade
 import os
-import gconf
-import gnomevfs
 import string
 import gettext
 
@@ -150,13 +148,13 @@ class pluginclass( object ):
             if self.de == "xfce":
                 Button3.connect( "clicked", self.ButtonClicked, "xfce4-settings-manager" )
             else:
-                Button3.connect( "clicked", self.ButtonClicked, "gnome-control-center" )
+                Button3.connect( "clicked", self.ButtonClicked, "mate-control-center" )
             Button3.show()
             self.systemBtnHolder.pack_start( Button3, False, False )
             self.mintMenuWin.setTooltip( Button3, _("Configure your system") )
 
         if ( self.showTerminal == True ):
-            Button4 = easyButton( "gnome-terminal", self.iconsize, [_("Terminal")], -1, -1 )
+            Button4 = easyButton( "mate-terminal", self.iconsize, [_("Terminal")], -1, -1 )
             Button4.connect( "clicked", self.ButtonClicked, "x-terminal-emulator" )
             Button4.show()
             self.systemBtnHolder.pack_start( Button4, False, False )
@@ -178,14 +176,14 @@ class pluginclass( object ):
 
             if ( self.showLogout == True ):
                 Button6 = easyButton( "system-log-out", self.iconsize, [_("Logout")], -1, -1 )
-                Button6.connect( "clicked", self.ButtonClicked, "gnome-session-save --logout-dialog" )
+                Button6.connect( "clicked", self.ButtonClicked, "mate-session-save --logout-dialog" )
                 Button6.show()
                 self.systemBtnHolder.pack_start( Button6, False, False )
                 self.mintMenuWin.setTooltip( Button6, _("Log out or switch user") )
 
             if ( self.showQuit == True ):
                 Button7 = easyButton( "system-shutdown", self.iconsize, [_("Quit")], -1, -1 )
-                Button7.connect( "clicked", self.ButtonClicked, "gnome-session-save --shutdown-dialog" )
+                Button7.connect( "clicked", self.ButtonClicked, "mate-session-save --shutdown-dialog" )
                 Button7.show()
                 self.systemBtnHolder.pack_start( Button7, False, False )
                 self.mintMenuWin.setTooltip( Button7, _("Shutdown, restart, suspend or hibernate") )

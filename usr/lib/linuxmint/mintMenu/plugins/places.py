@@ -3,8 +3,6 @@
 import gtk
 import gtk.glade
 import os
-import gconf
-import gnomevfs
 import string
 import gettext
 import commands
@@ -132,7 +130,7 @@ class pluginclass( object ):
         # Hide vertical dotted separator
         self.hideseparator = self.gconf.get( "bool", "hide_separator", False )
         # Plugin icon
-        self.icon = self.gconf.get( "string", 'icon', "gnome-fs-directory.png" )
+        self.icon = self.gconf.get( "string", 'icon', "mate-fs-directory.png" )
         # Allow plugin to be minimized to the left plugin pane
         self.sticky = self.gconf.get( "bool", "sticky", False )
         self.minimized = self.gconf.get( "bool", "minimized", False )
@@ -148,7 +146,7 @@ class pluginclass( object ):
 
         if ( self.showcomputer == True ):
             Button1 = easyButton( "computer", self.iconsize, [_("Computer")], -1, -1 )
-            if self.de == "gnome":
+            if self.de == "mate":
                 Button1.connect( "clicked", self.ButtonClicked, "nautilus computer:" )
             else:
                 Button1.connect( "clicked", self.ButtonClicked, "xdg-open /" )
@@ -163,8 +161,8 @@ class pluginclass( object ):
             self.placesBtnHolder.pack_start( Button2, False, False )
             self.mintMenuWin.setTooltip( Button2, _("Open your personal folder") )
 
-        if ( self.shownetwork == True and self.de == "gnome"):   
-            gconftheme = EasyGConf( "/desktop/gnome/interface/" )
+        if ( self.shownetwork == True and self.de == "mate"):   
+            gconftheme = EasyGConf( "/desktop/mate/interface/" )
             icon_theme = gconftheme.get("string", "icon_theme", "Mint-X")                     
             if "Mint-X" in icon_theme:
                 Button3 = easyButton( "notification-network-ethernet-connected", self.iconsize, [_("Network")], -1, -1)
@@ -189,7 +187,7 @@ class pluginclass( object ):
                     desktopDir = tmpdesktopDir
             except Exception, detail:
                 print detail
-            Button4 = easyButton( "gnome-fs-desktop", self.iconsize, [_("Desktop")], -1, -1 )
+            Button4 = easyButton( "mate-fs-desktop", self.iconsize, [_("Desktop")], -1, -1 )
             Button4.connect( "clicked", self.ButtonClicked, "xdg-open \"" + desktopDir + "\"")
             Button4.show()
             self.placesBtnHolder.pack_start( Button4, False, False )

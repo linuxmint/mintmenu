@@ -4,7 +4,7 @@ import sys
 import os
 import gobject
 import datetime
-import gconf
+import mateconf
 import fcntl
 import pango
 from execute import Execute
@@ -43,11 +43,11 @@ class pluginclass:
         self.width = 250
 
         #Plugin icon
-        self.icon = 'gnome-folder.png'
+        self.icon = 'mate-folder.png'
 
         self.gconf_dir = '/apps/mintMenu/plugins/recent'
-        self.client = gconf.client_get_default()
-        self.client.add_dir( '/apps/mintMenu/plugins/recent', gconf.CLIENT_PRELOAD_NONE )
+        self.client = mateconf.client_get_default()
+        self.client.add_dir( '/apps/mintMenu/plugins/recent', mateconf.CLIENT_PRELOAD_NONE )
         self.client.notify_add( '/apps/mintMenu/plugins/recent/height', self.RegenPlugin )
         self.client.notify_add( '/apps/mintMenu/plugins/recent/width', self.RegenPlugin )
         self.client.notify_add( '/apps/mintMenu/plugins/recent/num_recent_docs_to_show', self.RegenPlugin )
@@ -81,7 +81,7 @@ class pluginclass:
         # Hide vertical dotted separator
         self.hideseparator = self.gconf.get( "bool", "hide_separator", False )
         # Plugin icon
-        self.icon = self.gconf.get( "string", 'icon', "gnome-fs-directory" )
+        self.icon = self.gconf.get( "string", 'icon', "mate-fs-directory" )
         # Allow plugin to be minimized to the left plugin pane
         self.sticky = self.gconf.get( "bool", "sticky", False )
         self.minimized = self.gconf.get( "bool", "minimized", False )
@@ -165,7 +165,7 @@ class pluginclass:
     def callback(self, widget, filename=None):
         self.Win.hide()
 
-        x = os.system("gnome-open \""+filename+"\"")
+        x = os.system("mate-open \""+filename+"\"")
         if x == 256:
             dia = gtk.Dialog('File not found!',
                              None,  #the toplevel wgt of your app

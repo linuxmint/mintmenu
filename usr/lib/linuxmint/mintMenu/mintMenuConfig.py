@@ -275,7 +275,7 @@ class mintMenuConfig( object ):
         wTree.get_widget("removeButton").connect("clicked", self.removePlace)
 
         #Detect themes and show theme here
-        theme_name = commands.getoutput("gconftool-2 --get /apps/mintMenu/theme_name").strip()
+        theme_name = commands.getoutput("mateconftool-2 --get /apps/mintMenu/theme_name").strip()
         themes = commands.getoutput("find /usr/share/themes -name gtkrc")
         themes = themes.split("\n")
         model = gtk.ListStore(str, str)
@@ -300,22 +300,22 @@ class mintMenuConfig( object ):
         model = widget.get_model()
         iter = widget.get_active_iter()
         theme_name = model.get_value(iter, 1)
-        os.system("gconftool-2 --type string --set /apps/mintMenu/theme_name \"%s\"" % theme_name)
+        os.system("mateconftool-2 --type string --set /apps/mintMenu/theme_name \"%s\"" % theme_name)
 
     def getPluginsToggle(self):
-        if (commands.getoutput("gconftool-2 --get /apps/mintMenu/plugins_list | grep recent | wc -l") == "0"):
+        if (commands.getoutput("mateconftool-2 --get /apps/mintMenu/plugins_list | grep recent | wc -l") == "0"):
             self.showRecentPlugin.set_active(False)
         else:
             self.showRecentPlugin.set_active(True)
-        if (commands.getoutput("gconftool-2 --get /apps/mintMenu/plugins_list | grep applications | wc -l") == "0"):
+        if (commands.getoutput("mateconftool-2 --get /apps/mintMenu/plugins_list | grep applications | wc -l") == "0"):
             self.showApplicationsPlugin.set_active(False)
         else:
             self.showApplicationsPlugin.set_active(True)
-        if (commands.getoutput("gconftool-2 --get /apps/mintMenu/plugins_list | grep system_management | wc -l") == "0"):
+        if (commands.getoutput("mateconftool-2 --get /apps/mintMenu/plugins_list | grep system_management | wc -l") == "0"):
             self.showSystemPlugin.set_active(False)
         else:
             self.showSystemPlugin.set_active(True)
-        if (commands.getoutput("gconftool-2 --get /apps/mintMenu/plugins_list | grep places | wc -l") == "0"):
+        if (commands.getoutput("mateconftool-2 --get /apps/mintMenu/plugins_list | grep places | wc -l") == "0"):
             self.showPlacesPlugin.set_active(False)
         else:
             self.showPlacesPlugin.set_active(True)
@@ -339,7 +339,7 @@ class mintMenuConfig( object ):
             layout = layout + plugin + ","
         if len(layout) > 0 and layout[-1] == ",":
             layout = layout[0:-1]
-        os.system("gconftool-2 --type list --list-type string --set /apps/mintMenu/plugins_list [%s]" % layout)
+        os.system("mateconftool-2 --type list --list-type string --set /apps/mintMenu/plugins_list [%s]" % layout)
 
     def setShowButtonIcon( self, value ):
         self.showButtonIcon.set_active(not value )

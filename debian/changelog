@@ -1,9 +1,8 @@
-mintmenu (5.2.4+nmu1) katya; urgency=low
+mintmenu (5.2.5) lisa; urgency=low
 
-  * Non-maintainer upload.
-  * Added python-xdg as depends.
+  * Switched support from Gnome/Bonobo to Mate/MateComponent
 
- -- Stefano Karapetsas <stefano@karapetsas.com>  Sun, 06 Nov 2011 23:52:57 +0100
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 18 Nov 2011 10:47:16 +0000
 
 mintmenu (5.2.4) katya; urgency=low
   

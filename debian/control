@@ -3,10 +3,11 @@ Section: admin
 Priority: optional
 Maintainer: clem <root@linuxmint.com>
 Build-Depends: debhelper (>= 5)
-Standards-Version: 3.7.2
+Standards-Version: 3.9.2
 
 Package: mintmenu
 Architecture: all
-Depends: python (>= 2.4), python (<< 3), python-gtk2, python-glade2, deskbar-applet, mint-common, python-gmenu, python-gnomeapplet, python-xdg
-Description: Advanced Gnome menu
+Depends: python (>= 2.4), python (<< 3), python-gtk2, python-glade2, python-mate-menu, python-mate, python-mate-desktop, python-xdg
+Recommends: deskbar-applet, mint-common
+Description: Advanced Mate menu
  One of the most advanced menus under Linux. MintMenu supports filtering, favorites, easy-uninstallation, autosession, and many other features.
