@@ -1,13 +1,20 @@
-Source: mintmenu
+Source: mintmenu-mate
 Section: admin
 Priority: optional
 Maintainer: clem <root@linuxmint.com>
 Build-Depends: debhelper (>= 5)
 Standards-Version: 3.9.2
 
-Package: mintmenu
+Package: mintmenu-mate
 Architecture: all
-Depends: python (>= 2.4), python (<< 3), python-gtk2, python-glade2, python-mate-menu, python-mate, python-mate-desktop, python-xdg
-Recommends: deskbar-applet, mint-common
-Description: Advanced Mate menu
- One of the most advanced menus under Linux. MintMenu supports filtering, favorites, easy-uninstallation, autosession, and many other features.
+Depends: python (>= 2.4), python (<< 3), python-gtk2, python-glade2, python-mate-menu, python-mate, python-mate-desktop, python-xdg, python-corba
+Suggests: mint-common
+Provides: mintmenu
+Replaces: mintmenu
+Conflicts: mintmenu
+Description: Advanced Mate menu (MATE EDITION)
+ One of the most advanced menus under Linux. MintMenu supports filtering,
+ favorites, easy-uninstallation, autosession, and many other features.
+ .
+ This package is built from MATE Team. It will dropped when mintmenu for
+ MATE will added in LMDE repository.

@@ -333,7 +333,7 @@ class pluginclass( object ):
         self.panel_position = 0
         appletidlist = mateconf.client_get_default().get_list("/apps/panel/general/applet_id_list", "string")
         for applet in appletidlist:
-            bonobo_id = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/bonobo_iid")
+            bonobo_id = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/applet_iid")
             if bonobo_id == "OAFIID:MATE_mintMenu":
                 self.panel = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/toplevel_id")
                 self.panel_position = mateconf.client_get_default().get_int("/apps/panel/applets/" + applet + "/position") + 1

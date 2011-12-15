@@ -1,3 +1,21 @@
+mintmenu (5.2.8) lisa; urgency=low
+
+  * Fixed "Add to panel" in applications plugin
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 01 Dec 2011 20:05:40 +0000
+
+mintmenu (5.2.7) lisa; urgency=low
+
+  * Replaced system and places shortcut in MATE to use caja and mate-terminal
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 28 Nov 2011 12:43:49 +0000
+
+mintmenu (5.2.6) lisa; urgency=low
+
+  * Adjusted dependencies for MATE
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 18 Nov 2011 17:58:00 +0000
+
 mintmenu (5.2.5) lisa; urgency=low
 
   * Switched support from Gnome/Bonobo to Mate/MateComponent
