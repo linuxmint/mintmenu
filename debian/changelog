@@ -1,3 +1,9 @@
+mintmenu (5.2.9) maya; urgency=low
+
+  * Replaced alacarte with mozo
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 22 Mar 2012 13:11:39 +0000
+
 mintmenu (5.2.8) lisa; urgency=low
 
   * Fixed "Add to panel" in applications plugin

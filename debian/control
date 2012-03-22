@@ -1,7 +1,7 @@
 Source: mintmenu
 Section: admin
 Priority: optional
-Maintainer: clem <root@linuxmint.com>
+Maintainer: Clement Lefebvre <root@linuxmint.com>
 Build-Depends: debhelper (>= 5)
 Standards-Version: 3.7.2
 

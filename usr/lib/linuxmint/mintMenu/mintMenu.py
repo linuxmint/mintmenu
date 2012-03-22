@@ -567,7 +567,7 @@ class MenuWin( object ):
             else:
                 MenuWin.showMenu(self,self.mainwin.toggle)
                 self.mainwin.window.show()
-                #self.mainwin.wTree.get_widget( 'PluginTabs' ).set_curremenu_editor = SetGconf( self.client, "string", "/apps/usp/menu_editor", "alacarte" )
+                #self.mainwin.wTree.get_widget( 'PluginTabs' ).set_curremenu_editor = SetGconf( self.client, "string", "/apps/usp/menu_editor", "mozo" )
         except Exception, cause:
             print cause
 
@@ -767,7 +767,7 @@ class MenuWin( object ):
         Execute( os.path.join( PATH, "mintMenuConfig.py" ) )
 
     def showMenuEditor( self, uicomponent, verb ):
-        Execute( "alacarte" )
+        Execute( "mozo" )
 
     def showMenu( self, widget=None, event=None ):
         if event == None or event.button == 1:
