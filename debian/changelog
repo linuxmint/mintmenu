@@ -1,3 +1,9 @@
+mintmenu (5.3.1) oneiric; urgency=low
+
+  * Monitor MATE menu files for changes instead of GNOME ones
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 04 Apr 2012 14:38:38 +0100
+
 mintmenu (5.3.0) oneiric; urgency=low
 
   * Changed gnome favs with mate alternatives

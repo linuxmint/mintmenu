@@ -308,7 +308,7 @@ class pluginclass( object ):
 
         self.adminMenu = None
 
-        for mainitems in [ "applications.menu", "settings.menu" ]:
+        for mainitems in [ "mate-applications.menu", "mate-settings.menu" ]:
             mymenu = Menu( mainitems )
             mymenu.tree.add_monitor( self.menuChanged, None )
             #for f in mymenu.directory.Files:
