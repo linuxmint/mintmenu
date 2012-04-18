@@ -1,10 +1,16 @@
-mintmenu (5.3.1) oneiric; urgency=low
+mintmenu (5.3.2) maya; urgency=low
+
+  * Call mate-screensaver-command instead of xdg-screensaver in MATE
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 18 Apr 2012 11:03:54 +0100
+
+mintmenu (5.3.1) maya; urgency=low
 
   * Monitor MATE menu files for changes instead of GNOME ones
 
  -- Clement Lefebvre <root@linuxmint.com>  Wed, 04 Apr 2012 14:38:38 +0100
 
-mintmenu (5.3.0) oneiric; urgency=low
+mintmenu (5.3.0) maya; urgency=low
 
   * Changed gnome favs with mate alternatives
 

@@ -172,7 +172,10 @@ class pluginclass( object ):
         else:
             if ( self.showLockScreen == True ):
                 Button5 = easyButton( "system-lock-screen", self.iconsize, [_("Lock Screen")], -1, -1 )
-                Button5.connect( "clicked", self.ButtonClicked, "xdg-screensaver lock" )
+                if os.path.exists("/usr/bin/mate-screensaver-command"):
+                    Button5.connect( "clicked", self.ButtonClicked, "mate-screensaver-command -l" )
+                else:
+                    Button5.connect( "clicked", self.ButtonClicked, "xdg-screensaver lock" )
                 Button5.show()
                 self.systemBtnHolder.pack_start( Button5, False, False )
                 self.mintMenuWin.setTooltip( Button5, _("Requires password to unlock") )
