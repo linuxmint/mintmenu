@@ -1,3 +1,9 @@
+mintmenu (5.3.3) maya; urgency=low
+
+  * Use apturl directly if it's installed (instead of relying on MIME types being properly assigned)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 09 May 2012 13:49:19 +0100
+
 mintmenu (5.3.2) maya; urgency=low
 
   * Call mate-screensaver-command instead of xdg-screensaver in MATE

@@ -339,8 +339,11 @@ class pluginclass( object ):
                 self.panel_position = mateconf.client_get_default().get_int("/apps/panel/applets/" + applet + "/position") + 1
       
     def apturl_install(self, widget, pkg_name):
-        os.system("xdg-open apt://" + pkg_name + " &")
-        self.mintMenuWin.hide()
+		if os.path.exists("/usr/bin/apturl"):
+			os.system("/usr/bin/apturl apt://%s &" % pkg_name)
+		else:
+			os.system("xdg-open apt://" + pkg_name + " &")    
+		self.mintMenuWin.hide()
     
     def __del__( self ):
         print u"Applications plugin deleted"
