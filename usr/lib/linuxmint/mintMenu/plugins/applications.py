@@ -658,6 +658,7 @@ class pluginclass( object ):
                 command = "%(command)s | grep %(word)s" % {'command':command, 'word':word}            
             pkgs = commands.getoutput(command)
             pkgs = pkgs.split("\n")
+            num_pkg_found = 0
             for pkg in pkgs:
                 values = string.split(pkg, "###")
                 if len(values) == 4:
@@ -681,8 +682,11 @@ class pluginclass( object ):
                             found_in_name.append(package)
                         else:                        
                             found_elsewhere.append(package)                                        
+                        num_pkg_found+=1
                     else:
                         print "Invalid status code: " + status
+                if num_pkg_found >= 3:
+                    break
             found_packages.extend(found_in_name)
             found_packages.extend(found_elsewhere)
             gtk.gdk.threads_enter()                                    

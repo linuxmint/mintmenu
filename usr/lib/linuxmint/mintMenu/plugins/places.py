@@ -193,7 +193,7 @@ class pluginclass( object ):
                     desktopDir = tmpdesktopDir
             except Exception, detail:
                 print detail
-            Button4 = easyButton( "mate-fs-desktop", self.iconsize, [_("Desktop")], -1, -1 )
+            Button4 = easyButton( "desktop", self.iconsize, [_("Desktop")], -1, -1 )
             if self.de == "mate":
                 Button4.connect( "clicked", self.ButtonClicked, "caja \"" + desktopDir + "\"")
             else:

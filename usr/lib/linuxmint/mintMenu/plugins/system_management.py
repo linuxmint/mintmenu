@@ -154,7 +154,7 @@ class pluginclass( object ):
             self.mintMenuWin.setTooltip( Button3, _("Configure your system") )
 
         if ( self.showTerminal == True ):
-            Button4 = easyButton( "mate-terminal", self.iconsize, [_("Terminal")], -1, -1 )
+            Button4 = easyButton( "terminal", self.iconsize, [_("Terminal")], -1, -1 )
             if os.path.exists("/usr/bin/mate-terminal"):
                 Button4.connect( "clicked", self.ButtonClicked, "mate-terminal" )
             else:

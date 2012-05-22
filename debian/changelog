@@ -1,3 +1,15 @@
+mintmenu (5.3.5) maya; urgency=low
+
+  * Fixed terminal and desktop icons
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 22 May 2012 16:42:57 +0100
+
+mintmenu (5.3.4) maya; urgency=low
+
+  * Limit number of APT suggestions to 3
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 18 May 2012 13:16:51 +0100
+
 mintmenu (5.3.3) maya; urgency=low
 
   * Use apturl directly if it's installed (instead of relying on MIME types being properly assigned)
