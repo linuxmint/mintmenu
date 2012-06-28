@@ -217,6 +217,11 @@ class MainWindow( object ):
             de = os.environ["DESKTOP_SESSION"]
             if de in ["gnome", "gnome-shell", "mate", "kde", "xfce"]:
                 self.de = de
+            else:
+                if os.path.exists("/usr/bin/caja"):
+                    self.de = "mate"
+                elif os.path.exists("/usr/bin/thunar"):
+                    self.de = "xfce"
         except Exception, detail:
             print detail
 
