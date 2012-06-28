@@ -1,6 +1,7 @@
 mintmenu (5.3.7) maya; urgency=low
 
   * Added missing dependencies
+  * Added XFCE favorites
 
  -- Clement Lefebvre <root@linuxmint.com>  Thu, 28 Jun 2012 13:02:20 +0100
 

@@ -4,9 +4,15 @@ location:/usr/share/applications/pidgin.desktop
 location:/usr/share/applications/banshee.desktop
 separator
 location:/usr/share/applications/mate-calc.desktop
+location:/usr/share/applications/gcalctool.desktop
 location:/usr/share/applications/pluma.desktop
+location:/usr/share/applications/gedit.desktop
 location:/usr/share/applications/mate-terminal.desktop
+location:/usr/share/applications/gnome-terminal.desktop
 location:/usr/share/applications/mate-volume-control.desktop
+location:/usr/share/applications/xfce4-mixer.desktop
 separator
 location:/usr/share/applications/display-properties.desktop
+location:/usr/share/applications/xfce-display-settings.desktop
 location:/usr/share/applications/mate-system-monitor.desktop
+location:/usr/share/applications/xfce4-taskmanager.desktop
