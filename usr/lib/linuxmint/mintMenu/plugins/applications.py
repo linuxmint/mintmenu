@@ -1018,7 +1018,7 @@ class pluginclass( object ):
         menuItem = gtk.SeparatorMenuItem()
         menu.append(menuItem)
         
-        menuItem = gtk.ImageMenuItem(_("Lookup Dictionnary"))
+        menuItem = gtk.ImageMenuItem(_("Lookup Dictionary"))
         img = gtk.Image()
         img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/dictionary.png')
         menuItem.set_image(img)
