@@ -1,3 +1,9 @@
+mintmenu (5.3.7) maya; urgency=low
+
+  * Added missing dependencies
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 28 Jun 2012 13:02:20 +0100
+
 mintmenu (5.3.6) maya; urgency=low
 
   * Fixed typo on "Lookup Dictionnary"
