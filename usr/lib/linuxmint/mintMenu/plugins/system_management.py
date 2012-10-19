@@ -103,6 +103,7 @@ class pluginclass( object ):
 
         # Check toggles
 
+        self.showSoftwareCenter = self.gconf.get( "bool", "show_software_center", True )
         self.showSoftwareManager = self.gconf.get( "bool", "show_software_manager", True )
         self.showPackageManager = self.gconf.get( "bool", "show_package_manager", True )
         self.showControlCenter = self.gconf.get( "bool", "show_control_center", True )
@@ -127,6 +128,16 @@ class pluginclass( object ):
 
     #Add standard items
     def do_standard_items( self ):
+
+        
+        if ( self.showSoftwareCenter == True ):
+            if os.path.exists("/usr/share/icons/hicolor/scalable/apps/softwarecenter.svg"):
+                Button1 = easyButton( "/usr/share/icons/hicolor/scalable/apps/softwarecenter.svg", self.iconsize, [_("Software Center")], -1, -1 )
+                Button1.connect( "clicked", self.ButtonClicked, "software-center" )
+                Button1.show()
+                self.systemBtnHolder.pack_start( Button1, False, False )
+                self.mintMenuWin.setTooltip( Button1, _("Install Paid and free apps") )    
+
 
         if ( self.showSoftwareManager == True ):
             if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
