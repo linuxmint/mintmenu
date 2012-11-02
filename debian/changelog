@@ -1,3 +1,9 @@
+mintmenu (5.3.8) nadia; urgency=low
+
+  * Launch mintinstall as root
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 02 Nov 2012 15:00:53 +0000
+
 mintmenu (5.3.7) maya; urgency=low
 
   * Added missing dependencies

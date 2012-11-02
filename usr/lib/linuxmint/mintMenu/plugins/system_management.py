@@ -131,7 +131,7 @@ class pluginclass( object ):
         if ( self.showSoftwareManager == True ):
             if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
                 Button1 = easyButton( "/usr/lib/linuxmint/mintInstall/icon.svg", self.iconsize, [_("Software Manager")], -1, -1 )
-                Button1.connect( "clicked", self.ButtonClicked, "mintinstall" )
+                Button1.connect( "clicked", self.ButtonClicked, "gksu mintinstall" )
                 Button1.show()
                 self.systemBtnHolder.pack_start( Button1, False, False )
                 self.mintMenuWin.setTooltip( Button1, _("Browse and install available software") )
