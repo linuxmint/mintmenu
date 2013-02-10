@@ -14,16 +14,25 @@ def RemoveArgs(Execline):
 	return NewExecline
 
 # Actually execute the command
-def Execute( cmd ):
+def Execute( cmd , commandCwd=None):
+	if not commandCwd:
+		cwd = os.path.expanduser( "~" );
+	else:
+		tmpCwd = os.path.expanduser( commandCwd );
+		if (os.path.exists(tmpCwd)):
+			cwd = tmpCwd
+	
 	if isinstance( cmd, str ):
 		if (cmd.find("/home/") >= 0) or (cmd.find("su-to-root") >= 0) or (cmd.find("\"") >= 0):
 			print "running manually..."
+			os.chdir(cwd)
 			os.system(cmd + " &")
 			return True		
 		cmd = cmd.split()
 	cmd = RemoveArgs(cmd)
+	
 	try:
-		os.chdir( os.path.expanduser( "~" ) )
+		os.chdir( cwd )
 		subprocess.Popen( cmd )
 		return True
 	except Exception, detail:
