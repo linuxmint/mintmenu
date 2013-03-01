@@ -10,4 +10,4 @@ if len(sys.argv) > 1:
         os.system("rm -rf ~/.linuxmint/mintMenu")
         print "All mintMenu settings are now restored to default"
 else:
-    os.system("/usr/lib/linuxmint/mintMenu/mintMenu.py run-in-window")
+    os.system("/usr/lib/linuxmint/mintMenu/mintMenu.py")

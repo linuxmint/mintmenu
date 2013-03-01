@@ -1,32 +1,33 @@
 #!/usr/bin/env python
 
+import gi
+gi.require_version("Gtk", "2.0")
+ 
+from gi.repository import Gtk, Gdk
+from gi.repository import MatePanelApplet
+
 try:
     import sys
-    import gtk
-    import gtk.glade
     import pango
     import os
     import commands
-    import mateapplet
     import gettext
     import traceback
     import time
     import gc
     import xdg.Config
-    import pygtk
-    pygtk.require( "2.0" )
 except Exception, e:
     print e
     sys.exit( 1 )
 
-global mbindkey
+#global mbindkey
 # Load the key binding lib (developped by deskbar-applet, copied into mintMenu so we don't end up with an unnecessary dependency)
-try:
-    from deskbar.core.keybinder import tomboy_keybinder_bind as bind_key
-except Exception, cause:
-    print "*********** Keybind Driver Load Failure **************"
-    print "Error Report : ", str(cause)
-    pass
+#try:
+#    from deskbar.core.keybinder import tomboy_keybinder_bind as bind_key
+#except Exception, cause:
+#    print "*********** Keybind Driver Load Failure **************"
+#    print "Error Report : ", str(cause)
+#    pass
 
 # Rename the process
 architecture = commands.getoutput("uname -a")
@@ -841,7 +842,7 @@ class MenuWin( object ):
     def create_menu(self):
         self.applet.setup_menu(self.propxml, self.verbs, None)
 
-def menu_factory( applet, iid ):
+def applet_factory( applet, iid, data ):
     MenuWin( applet, iid )
     applet.show()
     return True
@@ -850,19 +851,7 @@ def quit_all(widget):
     gtk.main_quit()
     sys.exit(0)
 
-if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":
-    gtk.gdk.threads_init()
-    main_window = gtk.Window( gtk.WINDOW_TOPLEVEL )
-    main_window.set_title( NAME )
-    main_window.connect( "destroy", quit_all )
-    app = mateapplet.Applet()
-    menu_factory( app, None )
-    app.reparent( main_window )
-    main_window.show()
-    gtk.gdk.threads_enter()
-    gtk.main()
-    gtk.gdk.threads_leave()
-else:
-    mateapplet.matecomponent_factory("OAFIID:MATE_mintMenu_Factory",
-                         mateapplet.Applet.__gtype__,
-                         "mintMenu", "0", menu_factory)
+MatePanelApplet.Applet.factory_main("MintMenuAppletFactory", True,
+                                    MatePanelApplet.Applet.__gtype__,
+                                    applet_factory, None)
+                                    
