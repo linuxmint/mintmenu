@@ -1,4 +1,3 @@
-
 import os
 import subprocess
 
@@ -15,7 +14,7 @@ def RemoveArgs(Execline):
 
 # Actually execute the command
 def Execute( cmd ):
-	if isinstance( cmd, str ):
+	if isinstance( cmd, str ) or isinstance( cmd, unicode):
 		if (cmd.find("/home/") >= 0) or (cmd.find("su-to-root") >= 0) or (cmd.find("\"") >= 0):
 			print "running manually..."
 			os.system(cmd + " &")
