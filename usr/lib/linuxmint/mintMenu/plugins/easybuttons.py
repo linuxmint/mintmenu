@@ -6,7 +6,6 @@ import matedesktop
 import gobject
 import os.path
 import shutil
-import matevfs
 import re
 from execute import *
 import xdg.DesktopEntry
@@ -421,24 +420,6 @@ class ApplicationLauncher( easyButton ):
     def isInStartup( self ):
         #return self.inStartup
         return os.path.exists( self.startupFilePath )
-
-    def hasHelp( self ):
-        return self.appGnomeDocPath or self.appKdeDocPath
-
-    def launchHelp( self ):
-        if self.appGnomeDocPath:
-            bn = os.path.basename( self.appGnomeDocPath )
-            dn = os.path.dirname( self.appGnomeDocPath )
-            if self.appGnomeDocPath[0:6] != "ghelp:":
-                self.appGnomeDocPath = "ghelp:" + self.appGnomeDocPath
-            matevfs.url_show( self.appGnomeDocPath )
-        elif self.appKdeDocPath:
-            if self.appKdeDocPath[0:6] != "help:/" and self.appKdeDocPath[0:6] != "file:/":
-                self.appKdeDocPath = "help:/" + self.appKdeDocPath
-            if self.appKdeDocPath[0:6] == "file:/":
-                matevfs.url_show( self.appKdeDocPath )
-            else:
-                Execute( [ "khelpcenter", self.appKdeDocPath ] )
 
     def onDestroy( self, widget ):
         easyButton.onDestroy( self, widget )

@@ -9,7 +9,6 @@ try:
     import commands
     import mateapplet
     import gettext
-    import matevfs
     import traceback
     import time
     import gc
