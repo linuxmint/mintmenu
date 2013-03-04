@@ -3,7 +3,7 @@
 import gi
 gi.require_version("Gtk", "2.0")
  
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, GdkPixbuf, Gdk
 from gi.repository import MatePanelApplet
 from gi.repository import Gio
 
@@ -21,14 +21,14 @@ except Exception, e:
     print e
     sys.exit( 1 )
 
-#global mbindkey
+global mbindkey
 # Load the key binding lib (developped by deskbar-applet, copied into mintMenu so we don't end up with an unnecessary dependency)
-#try:
-#    from deskbar.core.keybinder import tomboy_keybinder_bind as bind_key
-#except Exception, cause:
-#    print "*********** Keybind Driver Load Failure **************"
-#    print "Error Report : ", str(cause)
-#    pass
+try:
+    from deskbar.core.keybinder import tomboy_keybinder_bind as bind_key
+except Exception, cause:
+    print "*********** Keybind Driver Load Failure **************"
+    print "Error Report : ", str(cause)
+    pass
 
 # Rename the process
 architecture = commands.getoutput("uname -a")
@@ -58,8 +58,8 @@ if not windowManager:
     windowManager = "MATE"
 xdg.Config.setWindowManager( windowManager.upper() )
 
-#from easybuttons import iconManager
-#from execute import *
+from easybuttons import iconManager
+#from execute import * COMMENTED DURING MIGRATION
 
 class MainWindow( object ):
     """This is the main class for the application"""
@@ -76,12 +76,14 @@ class MainWindow( object ):
         self.icon = "/usr/lib/linuxmint/mintMenu/visualisation-logo.png"
 
         self.toggle = toggleButton
-        # Load glade file and extract widgets
-        gladefile       = os.path.join( self.path, "mintMenu.glade" )
-        wTree           = Gtk.glade.XML( gladefile, "mainWindow" )
-        self.window     = wTree.get_widget( "mainWindow" )
-        self.paneholder = wTree.get_widget( "paneholder" )        
-        self.border     = wTree.get_widget( "border" )
+        # Load UI file and extract widgets   
+        builder = Gtk.Builder()
+        builder.add_from_file(os.path.join( self.path, "mintMenu.ui" ))
+        self.window     = builder.get_object( "mainWindow" )
+        self.paneholder = builder.get_object( "paneholder" )
+        self.border     = builder.get_object( "border" )
+        
+        builder.connect_signals(self)
 
         self.panesToColor = [ ]
         self.headingsToColor = [ ]
@@ -97,10 +99,7 @@ class MainWindow( object ):
 
         plugindir = os.path.join( os.path.expanduser( "~" ), ".linuxmint/mintMenu/plugins" )
         sys.path.append( plugindir )
-
-        dic = {"on_window1_destroy" : self.quit_cb}
-        wTree.signal_autoconnect( dic )
-               
+                      
         self.getSetGconfEntries()
         self.SetupMintMenuBorder()
         self.SetupMintMenuOpacity()
@@ -126,7 +125,7 @@ class MainWindow( object ):
         self.settings.connect( "changed::border_width", self.toggleBorderWidth )
         self.settings.connect( "changed::opacity", self.toggleOpacity )
 
-    def quit_cb (self):
+    def on_window1_destroy (self, widget, data=None):
         Gtk.main_quit()
         sys.exit(0)
 
@@ -196,10 +195,11 @@ class MainWindow( object ):
         self.globalEnableTooltips = mate_settings.get_boolean( "tooltips-enabled" )
 
     def SetupMintMenuBorder( self ):
-        if self.usecustomcolor:
-            self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.custombordercolor ) )
-        else:
-            self.window.modify_bg( Gtk.StateType.NORMAL, self.window.rc_get_style().bg[ Gtk.StateType.SELECTED ] )
+		# COMMENTED DURING MIGRATION
+        #if self.usecustomcolor:
+        #    self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.custombordercolor ) )
+        #else:
+        #    self.window.modify_bg( Gtk.StateType.NORMAL, self.window.rc_get_style().bg[ Gtk.StateType.SELECTED ] )
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )        
 
     def SetupMintMenuOpacity( self ):
@@ -239,9 +239,7 @@ class MainWindow( object ):
 
         self.plugins = {}
 
-        for plugin in self.pluginlist:
-            #Bypass
-            break
+        for plugin in self.pluginlist:            
             if plugin in self.plugins:
                 print u"Duplicate plugin in list: ", plugin
                 continue
@@ -384,13 +382,13 @@ class MainWindow( object ):
         for item in items:
             if item not in self.panesToColor:
                 self.panesToColor.append( item )
-
-        if self.usecustomcolor:
-            for item in items:
-                item.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.customcolor ) )
-        else:
-            for item in items:
-                item.modify_bg( Gtk.StateType.NORMAL, self.paneholder.rc_get_style().bg[ Gtk.StateType.NORMAL ] )
+		#COMMENTED DURING MIGRATION
+        #if self.usecustomcolor:
+        #    for item in items:
+        #        item.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.customcolor ) )
+        #else:
+        #    for item in items:
+        #        item.modify_bg( Gtk.StateType.NORMAL, self.paneholder.rc_get_style().bg[ Gtk.StateType.NORMAL ] )
 
 
     def SetHeadingStyle( self, items ):
@@ -466,7 +464,8 @@ class MainWindow( object ):
         Gdk.keyboard_ungrab()
 
     def onMap( self, widget, event ):
-        self.grab()
+        #self.grab() COMMENTED DURING MIGRATION
+        pass
 
     def onShow( self, widget ):
         for plugin in self.plugins.values():
@@ -474,7 +473,7 @@ class MainWindow( object ):
                 plugin.onShowMenu()
 
     def onUnmap( self, widget, event ):
-        self.ungrab()
+        #self.ungrab() COMMENTED DURING MIGRATION
 
         for plugin in self.plugins.values():
             if hasattr( plugin, "onHideMenu" ):
@@ -520,7 +519,7 @@ class MainWindow( object ):
 class MenuWin( object ):
     def __init__( self, applet, iid ):
         self.applet = applet        
-        self.settings = Gio.Settings.new_with_path("com.linuxmint.mintmenu", self.applet.get_preferences_path())
+        self.settings = Gio.Settings.new("com.linuxmint.mintmenu")
                
         self.settings.connect( "changed::applet_text", self.reloadSettings )
         self.settings.connect( "changed::theme_name", self.changeTheme )
@@ -550,7 +549,7 @@ class MenuWin( object ):
 
         icon = iconManager.getIcon( self.mainwin.icon, 1 )
         if icon:
-            Gtk.window_set_default_icon( icon )
+            Gtk.Window.set_default_icon( icon )
 
         self.propxml = """
                 <popup name="button3">
@@ -722,6 +721,7 @@ class MenuWin( object ):
             self.button_icon.hide()
         else:
             self.button_icon.show()
+        # COMMENTED DURING MIGRATION
         # This code calculates width and height for the button_box
         # and takes the orientation in account
         #if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
@@ -801,7 +801,7 @@ class MenuWin( object ):
         ourHeight = self.mainwin.window.get_size()[1] + self.mainwin.offset
 
         # Get the dimensions/position of the widgetToAlignWith
-        entryX, entryY = self.applet.window.get_origin()
+        entryX, entryY = self.applet.get_allocation().x, self.applet.get_allocation().y
         entryWidth, entryHeight =  self.applet.get_allocation().width, self.applet.get_allocation().height
         entryHeight = entryHeight + self.mainwin.offset
 

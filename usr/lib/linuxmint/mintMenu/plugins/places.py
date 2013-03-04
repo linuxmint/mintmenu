@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-import gtk
-import gtk.glade
+from gi.repository import Gtk
 import os
 import string
 import gettext
@@ -10,7 +9,6 @@ import time
 
 from easybuttons import *
 from execute import Execute
-from easygconf import EasyGConf
 from user import home
 from urllib import unquote
 
@@ -25,44 +23,44 @@ class pluginclass( object ):
         self.toggleButton = toggleButton
         self.de = de
 
-        # Read GLADE file
-        gladefile = os.path.join( os.path.dirname( __file__ ), "places.glade" )
-        wTree   = gtk.glade.XML( gladefile, "mainWindow" )
-        self.placesBtnHolder    = wTree.get_widget( "places_button_holder" )
-        self.editableBtnHolder  = wTree.get_widget( "editable_button_holder" )
-        self.scrolledWindow=wTree.get_widget("scrolledwindow2")
+        # Read UI file        
+        builder = Gtk.Builder()
+        builder.add_from_file(os.path.join( os.path.dirname( __file__ ), "places.ui" ))        
+               
+        self.placesBtnHolder    = builder.get_object( "places_button_holder" )
+        self.editableBtnHolder  = builder.get_object( "editable_button_holder" )
+        self.scrolledWindow=builder.get_object("scrolledwindow2")
         # These properties are NECESSARY to maintain consistency
 
         # Set 'window' property for the plugin (Must be the root widget)
-        self.window = wTree.get_widget( "mainWindow" )
+        self.window = builder.get_object( "mainWindow" )
 
         # Set 'heading' property for plugin
         self.heading = _("Places")
 
         # This should be the first item added to the window in glade
-        self.content_holder = wTree.get_widget( "Places" )
+        self.content_holder = builder.get_object( "Places" )
 
         # Items to get custom colors
-        self.itemstocolor = [ wTree.get_widget( "viewport2" ) ]
+        self.itemstocolor = [ builder.get_object( "viewport2" ) ]
 
-        # Gconf stuff
-        self.gconf = EasyGConf( "/apps/mintMenu/plugins/places/" )
+        # Settings        
+        self.settings = Gio.Settings.new("com.linuxmint.mintmenu")  
 
-        self.gconf.notifyAdd( "icon_size", self.RegenPlugin )
-        self.gconf.notifyAdd( "show_computer", self.RegenPlugin )
-        self.gconf.notifyAdd( "show_desktop", self.RegenPlugin )
-        self.gconf.notifyAdd( "show_home_folder", self.RegenPlugin )
-        self.gconf.notifyAdd( "show_network", self.RegenPlugin )
-        self.gconf.notifyAdd( "show_trash", self.RegenPlugin )
-        self.gconf.notifyAdd( "custom_names", self.RegenPlugin )
-        self.gconf.notifyAdd( "custom_paths", self.RegenPlugin )
-        self.gconf.notifyAdd( "allowScrollbar", self.RegenPlugin )
-        self.gconf.notifyAdd( "show_gtk_bookmarks", self.RegenPlugin )
-        self.gconf.notifyAdd( "height", self.changePluginSize )
-        self.gconf.notifyAdd( "width", self.changePluginSize )
-        self.gconf.bindGconfEntryToVar( "bool", "sticky", self, "sticky" )
+        self.settings.connect( "changed::places-icon-size", self.RegenPlugin )
+        self.settings.connect( "changed::places-show-computer", self.RegenPlugin )
+        self.settings.connect( "changed::places-show-desktop", self.RegenPlugin )
+        self.settings.connect( "changed::places-show-home_folder", self.RegenPlugin )
+        self.settings.connect( "changed::places-show-network", self.RegenPlugin )
+        self.settings.connect( "changed::places-show-trash", self.RegenPlugin )
+        self.settings.connect( "changed::places-custom-names", self.RegenPlugin )
+        self.settings.connect( "changed::places-custom-paths", self.RegenPlugin )
+        self.settings.connect( "changed::places-allow-scrollbar", self.RegenPlugin )
+        self.settings.connect( "changed::places-show-gtk-bookmarks", self.RegenPlugin )
+        self.settings.connect( "changed::places-height", self.changePluginSize )
+        self.settings.connect( "changed::places-width", self.changePluginSize )        
 
-        self.GetGconfEntries()
+        self.loadSettings()
 
         self.content_holder.set_size_request( self.width, self.height )                            
 
@@ -71,69 +69,60 @@ class pluginclass( object ):
             self.refreshTrash()
 
     def destroy( self ):
-        self.gconf.notifyRemoveAll()
+        self.settings.disconnect_all()
 
     def changePluginSize( self, client, connection_id, entry, args ):
-        self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)        
-        if entry.get_key() == self.gconf.gconfDir+"width":
-            self.width = entry.get_value().get_int()
-        elif entry.get_key() == self.gconf.gconfDir+"height":
-            if (self.allowScrollbar == False):
-                self.height = -1
-                self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
-            else:
-                self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC )
-                self.height = entry.get_value().get_int()
-
+        self.allowScrollbar = self.settings.get_boolean( "places-allow-scrollbar" )
+        self.width = self.settings.get_int( "places-width" )               
+        if (self.allowScrollbar == False):
+            self.height = -1
+            self.scrolledWindow.set_policy( Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER )
+        else:
+            self.scrolledWindow.set_policy( Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC )
+            self.height = self.settings.get_int( "places-height" )
         self.content_holder.set_size_request( self.width, self.height )
 
-
-
     def RegenPlugin( self, *args, **kargs ):
-        self.GetGconfEntries()
+        self.loadSettings()
         self.ClearAll()
         self.do_standard_places()
         self.do_custom_places()
         self.do_gtk_bookmarks()
 
-    def GetGconfEntries( self ):
-
-        self.width = self.gconf.get( "int", "width", 200 )
-        self.allowScrollbar = self.gconf.get( "bool", "allowScrollbar", False)
-        self.showGTKBookmarks = self.gconf.get( "bool", "show_gtk_bookmarks", False)
-        self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC )
-        self.height = self.gconf.get( "int", "height", 180 )
+    def loadSettings( self ):
+        self.width = self.settings.get_int( "places-width" )
+        self.allowScrollbar = self.settings.get_boolean( "places-allow-scrollbar" )
+        self.showGTKBookmarks = self.settings.get_boolean( "places-show-gtk-bookmarks" )
+        self.scrolledWindow.set_policy( Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC )
+        self.height = self.settings.get_int( "places-height" )
         self.content_holder.set_size_request( self.width, self.height )
         if (self.allowScrollbar == False):
             self.height = -1
-            self.scrolledWindow.set_policy( gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER )
-        self.content_holder.set_size_request( self.width, self.height )
-        self.execapp = self.gconf.get( "string", "execute_app", "nautilus" )
-        self.iconsize = self.gconf.get( "int","icon_size", 16 )
+            self.scrolledWindow.set_policy( Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER )
+        self.content_holder.set_size_request( self.width, self.height )        
+        self.iconsize = self.settings.get_int( "places-icon-size" )
 
         # Check default items
 
-        self.showcomputer = self.gconf.get( "bool", "show_computer", True )
-        self.showhomefolder = self.gconf.get( "bool", "show_home_folder", True )
-        self.shownetwork = self.gconf.get( "bool", "show_network", True )
-        self.showdesktop = self.gconf.get( "bool", "show_desktop", True )
-        self.showtrash = self.gconf.get( "bool", "show_trash", True )
+        self.showcomputer = self.settings.get_boolean( "places-show_computer" )
+        self.showhomefolder = self.settings.get_boolean( "places-show-home-folder" )
+        self.shownetwork = self.settings.get_boolean( "places-show-network" )
+        self.showdesktop = self.settings.get_boolean( "places-show-desktop" )
+        self.showtrash = self.settings.get_boolean( "places-show-trash" )
 
         # Get paths for custom items
-
-        self.custompaths = self.gconf.get( "list-string", "custom_paths", [ ] )
+        self.custompaths = self.settings.get_strv( "places-custom-paths" )
 
         # Get names for custom items
-
-        self.customnames = self.gconf.get( "list-string", "custom_names", [ ] )
+        self.customnames = self.settings.get_strv( "places-custom-names" )
 
         # Hide vertical dotted separator
-        self.hideseparator = self.gconf.get( "bool", "hide_separator", False )
+        self.hideseparator = self.settings.get_boolean( "places-hide-separator" )
         # Plugin icon
-        self.icon = self.gconf.get( "string", 'icon', "mate-fs-directory.png" )
+        self.icon = self.settings_get_string( "places-icon" )
         # Allow plugin to be minimized to the left plugin pane
-        self.sticky = self.gconf.get( "bool", "sticky", False )
-        self.minimized = self.gconf.get( "bool", "minimized", False )
+        self.sticky = self.settings.get_boolean( "places-sticky", False )
+        self.minimized = self.settings.get_boolean( "places-minimized", False )
         
     def ClearAll(self):
         for child in self.placesBtnHolder.get_children():
@@ -164,9 +153,9 @@ class pluginclass( object ):
             self.placesBtnHolder.pack_start( Button2, False, False )
             self.mintMenuWin.setTooltip( Button2, _("Open your personal folder") )
 
-        if ( self.shownetwork == True and self.de == "mate"):   
-            gconftheme = EasyGConf( "/desktop/mate/interface/" )
-            icon_theme = gconftheme.get("string", "icon_theme", "Mint-X")                     
+        if ( self.shownetwork == True and self.de == "mate"):
+            mate_settings = Gio.Settings.new("org.mate.interface")
+            icon_theme = mate_settings.get_string( "icon-theme" )
             if "Mint-X" in icon_theme:
                 Button3 = easyButton( "notification-network-ethernet-connected", self.iconsize, [_("Network")], -1, -1)
             else:
@@ -260,8 +249,8 @@ class pluginclass( object ):
 
     def trashPopup( self, widget, event ):
         if event.button == 3:
-            trashMenu = gtk.Menu()
-            emptyTrashMenuItem = gtk.MenuItem(_("Empty trash"))
+            trashMenu = Gtk.Menu()
+            emptyTrashMenuItem = Gtk.MenuItem(_("Empty trash"))
             trashMenu.append(emptyTrashMenuItem)
             trashMenu.show_all()
             emptyTrashMenuItem.connect ( "activate", self.emptyTrash, widget )

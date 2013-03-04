@@ -1,40 +1,40 @@
 #!/usr/bin/env python
 
-import gtk
-import pango
-import matedesktop
-import gobject
+from gi.repository import Gtk, GdkPixbuf, Gdk
+from gi.repository import Pango
+#import matedesktop
+from gi.repository import GObject
 import os.path
 import shutil
 import re
-from execute import *
+#from execute import *
 import xdg.DesktopEntry
 import xdg.Menu
 from filemonitor import monitor as filemonitor
 import glib
 
 
-class IconManager(gobject.GObject):
+class IconManager(GObject.GObject):
 
     __gsignals__ = {
-            "changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, () )
+            "changed" : (GObject.SignalFlags.RUN_LAST, None, () )
     }
 
     def __init__( self ):
-        gobject.GObject.__init__( self )
+        GObject.GObject.__init__( self )
         self.icons = { }
         self.count = 0
 
         # Some apps don't put a default icon in the default theme folder, so we will search all themes
         def createTheme( d ):
-            theme = gtk.IconTheme()
+            theme = Gtk.IconTheme()
             theme.set_custom_theme( d )
             return theme
 
         # This takes to much time and there are only a very few applications that use icons from different themes
         #self.themes = map(  createTheme, [ d for d in os.listdir( "/usr/share/icons" ) if os.path.isdir( os.path.join( "/usr/share/icons", d ) ) ] )
 
-        defaultTheme = gtk.icon_theme_get_default()
+        defaultTheme = Gtk.IconTheme()
         defaultKdeTheme = createTheme( "kde.default" )
 
         # Themes with the same content as the default them aren't needed
@@ -80,7 +80,7 @@ class IconManager(gobject.GObject):
                     iconFileName = ""
 
             if iconFileName and os.path.exists( iconFileName ):
-                icon = gtk.gdk.pixbuf_new_from_file_at_size( iconFileName, iconSize, iconSize )
+                icon = GdkPixbuf.Pixbuf.new_from_file_at_size( iconFileName, iconSize, iconSize )
             else:
                 icon = None
 
@@ -88,9 +88,9 @@ class IconManager(gobject.GObject):
             # if the actual icon size is to far from the desired size resize it
             if icon and (( icon.get_width() - iconSize ) > 5 or ( icon.get_height() - iconSize ) > 5):
                 if icon.get_width() > icon.get_height():
-                    newIcon = icon.scale_simple( iconSize, icon.get_height() * iconSize / icon.get_width(), gtk.gdk.INTERP_BILINEAR )
+                    newIcon = icon.scale_simple( iconSize, icon.get_height() * iconSize / icon.get_width(), GdkPixbuf.InterpType.BILINEAR )
                 else:
-                    newIcon = icon.scale_simple( icon.get_width() * iconSize / icon.get_height(), iconSize, gtk.gdk.INTERP_BILINEAR )
+                    newIcon = icon.scale_simple( icon.get_width() * iconSize / icon.get_height(), iconSize, GdkPixbuf.InterpType.BILINEAR )
                 del icon
                 icon = newIcon
 
@@ -108,26 +108,26 @@ class IconManager(gobject.GObject):
         self.cache = { }
         self.emit( "changed" )
 
-gobject.type_register(IconManager)
+GObject.type_register(IconManager)
 
-class easyButton( gtk.Button ):
+class easyButton( Gtk.Button ):
 
     def __init__( self, iconName, iconSize, labels = None, buttonWidth = -1, buttonHeight = -1 ):
-        gtk.Button.__init__( self )
+        GObject.GObject.__init__( self )
         self.connections = [ ]
         self.iconName = iconName
         self.iconSize = iconSize
         self.showIcon = True
 
-        self.set_relief( gtk.RELIEF_NONE )
+        self.set_relief( Gtk.ReliefStyle.NONE )
         self.set_size_request( buttonWidth, buttonHeight )
 
-        Align1 = gtk.Alignment( 0, 0.5, 1.0, 0 )
-        HBox1 = gtk.HBox()
-        self.labelBox = gtk.VBox( False, 2 )
+        Align1 = Gtk.Alignment.new( 0, 0.5, 1.0, 0 )
+        HBox1 = Gtk.HBox()
+        self.labelBox = Gtk.VBox( False, 2 )
 
 
-        self.buttonImage = gtk.Image()
+        self.buttonImage = Gtk.Image()
         icon = self.getIcon( self.iconSize )
         if icon:
             self.buttonImage.set_from_pixbuf( icon )
@@ -146,7 +146,7 @@ class easyButton( gtk.Button ):
                     self.addLabel( label[0], label[1] )
 
         self.labelBox.show()
-        HBox1.pack_start( self.labelBox )
+        HBox1.pack_start( self.labelBox , True, True, 0)
         HBox1.show()
         Align1.add( HBox1 )
         Align1.show()
@@ -161,7 +161,7 @@ class easyButton( gtk.Button ):
         self.connections.append( self.connect( event, callback ) )
 
     def onRelease( self, widget ):
-        widget.set_state(gtk.STATE_NORMAL)
+        widget.set_state(Gtk.StateType.NORMAL)
 
     def onDestroy( self, widget ):
         self.buttonImage.clear()
@@ -172,22 +172,22 @@ class easyButton( gtk.Button ):
 
 
     def addLabel( self, text, styles = None ):
-        label = gtk.Label()
+        label = Gtk.Label()
         if "<b>" in text:
             label.set_markup(text) # don't remove our pango
         else:
             label.set_markup(glib.markup_escape_text(text))
 
         if styles:
-            labelStyle = pango.AttrList()
+            labelStyle = Pango.AttrList()
             for attr in styles:
                 labelStyle.insert( attr )
             label.set_attributes( labelStyle )
 
-        label.set_ellipsize( pango.ELLIPSIZE_END )
+        label.set_ellipsize( Pango.EllipsizeMode.END )
         label.set_alignment( 0.0, 1.0 )
         label.show()
-        self.labelBox.pack_start( label )
+        self.labelBox.pack_start( label , True, True, 0)
 
 
     def getIcon ( self, iconSize ):
@@ -263,9 +263,9 @@ class ApplicationLauncher( easyButton ):
 
         # Drag and Drop
         self.connectSelf( "drag_data_get", self.dragDataGet )
-        self.drag_source_set( gtk.gdk.BUTTON1_MASK  , [ ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) ], gtk.gdk.ACTION_COPY )
+        self.drag_source_set( Gdk.ModifierType.BUTTON1_MASK  , [ ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) ], Gdk.DragAction.COPY )
 
-        icon = self.getIcon( gtk.ICON_SIZE_DND )
+        icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
             self.drag_source_set_icon_pixbuf( icon )
             del icon
@@ -315,10 +315,10 @@ class ApplicationLauncher( easyButton ):
 
 
     def onFocusIn( self, widget, event ):
-        self.set_relief( gtk.RELIEF_HALF )
+        self.set_relief( Gtk.ReliefStyle.HALF )
 
     def onFocusOut( self, widget, event ):
-        self.set_relief( gtk.RELIEF_NONE )
+        self.set_relief( Gtk.ReliefStyle.NONE )
 
     def onEnterNotify( self, widget, event ):
         self.grab_focus()
@@ -379,7 +379,7 @@ class ApplicationLauncher( easyButton ):
     def iconChanged( self ):
         easyButton.iconChanged( self )
 
-        icon = self.getIcon( gtk.ICON_SIZE_DND )
+        icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
             self.drag_source_set_icon_pixbuf( icon )
             del icon
@@ -471,7 +471,7 @@ class MenuApplicationLauncher( ApplicationLauncher ):
         appComment = self.appComment
         if self.highlight: 
             try:
-                #color = self.labelBox.rc_get_style().fg[ gtk.STATE_SELECTED ].to_string()                
+                #color = self.labelBox.rc_get_style().fg[ Gtk.StateType.SELECTED ].to_string()                
                 #if len(color) > 0 and color[0] == "#":
                     #appName = "<span foreground=\"%s\"><b>%s</b></span>" % (color, appName);
                     #appComment = "<span foreground=\"%s\"><b>%s</b></span>" % (color, appComment);
@@ -488,11 +488,11 @@ class MenuApplicationLauncher( ApplicationLauncher ):
         
         if self.showComment and self.appComment != "":
             if self.iconSize <= 2:
-                self.addLabel( appName, [ pango.AttrScale( pango.SCALE_SMALL, 0, -1 ) ] )
-                self.addLabel( appComment, [ pango.AttrScale( pango.SCALE_X_SMALL, 0, -1 ) ] )
+                self.addLabel( appName, [ Pango.AttrScale( Pango.SCALE_SMALL, 0, -1 ) ] )
+                self.addLabel( appComment, [ Pango.AttrScale( Pango.SCALE_X_SMALL, 0, -1 ) ] )
             else:
                 self.addLabel( appName )
-                self.addLabel( appComment, [ pango.AttrScale( pango.SCALE_SMALL, 0, -1 ) ] )
+                self.addLabel( appComment, [ Pango.AttrScale( Pango.SCALE_SMALL, 0, -1 ) ] )
         else:
             self.addLabel( appName )
     
@@ -520,13 +520,13 @@ class FavApplicationLauncher( ApplicationLauncher ):
     def setupLabels( self ):
         if self.appGenericName:
             if self.swapGeneric:
-                self.addLabel( self.appName, [ pango.AttrWeight( pango.WEIGHT_BOLD, 0, -1 ) ] )
+                self.addLabel( self.appName, [ Pango.AttrWeight( Pango.Weight.BOLD, 0, -1 ) ] )
                 self.addLabel( self.appGenericName )
             else:
-                self.addLabel( self.appGenericName, [ pango.AttrWeight( pango.WEIGHT_BOLD, 0, -1 ) ] )
+                self.addLabel( self.appGenericName, [ Pango.AttrWeight( Pango.Weight.BOLD, 0, -1 ) ] )
                 self.addLabel( self.appName )
         else:
-            self.addLabel( self.appName, [ pango.AttrWeight( pango.WEIGHT_BOLD, 0, -1 ) ] )
+            self.addLabel( self.appName, [ Pango.AttrWeight( Pango.Weight.BOLD, 0, -1 ) ] )
             if self.appComment != "":
                 self.addLabel( self.appComment )
             else:

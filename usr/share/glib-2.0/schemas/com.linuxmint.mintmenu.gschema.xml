@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="com.linuxmint.mintmenu">
+  <schema id="com.linuxmint.mintmenu" path="/com/linuxmint/mintmenu/">
             
     <key type="b" name="hide-applet-icon">
       <default>false</default>
@@ -97,6 +97,102 @@
       <summary></summary>
       <description></description>
     </key>
-                       
+    
+    <key type="b" name="places-sticky">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+    <key type="b" name="places-minimized">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+    <key type="b" name="places-allow-scrollbar">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+    <key type="b" name="places-show-gtk-bookmarks">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+    <key type="b" name="places-hide-separator">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="places-height">
+      <default>180</default>
+      <summary></summary>
+      <description></description>
+    </key>
+        
+    <key type="i" name="places-width">
+      <default>200</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+    <key type="i" name="places-icon-size">
+      <default>16</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+    <key type="b" name="places-show-computer">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+        
+    <key type="b" name="places-show-home-folder">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+    <key type="b" name="places-show-network">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+    <key type="b" name="places-show-desktop">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+    <key type="b" name="places-show-trash">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+   
+     <key type="as" name="places-custom-paths">
+      <default>[]</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+     <key type="as" name="places-custom-names">
+      <default>[]</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    
+    <key type="s" name="places-icon">
+      <default>"mate-fs-directory.png"</default>
+      <summary></summary>
+      <description></description>
+    </key>
+  
   </schema>
 </schemalist>
