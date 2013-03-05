@@ -316,9 +316,9 @@ class MainWindow( object ):
 
                     heading.add( Align1 )
                     heading.show()
-                    VBox1.pack_start( heading, False )                    
+                    VBox1.pack_start( heading, False, False, 0 )                    
                 VBox1.show()
-                MyPlugin.container = VBox1
+                #MyPlugin.container = VBox1
                 #Add plugin to Plugin Box under heading button
                 MyPlugin.content_holder.reparent( VBox1 )
 
@@ -365,7 +365,7 @@ class MainWindow( object ):
                     Image1.show()
                     #ImageBox.add( Image1 )
                     
-                    Align1 = Gtk.Alignment.new()
+                    Align1 = Gtk.Alignment.new(0, 0, 0, 0)
                     Align1.set_padding( 0, 0, 6, 6 )
                     Align1.add(Image1)
                     ImageBox.add(Align1)
@@ -392,6 +392,7 @@ class MainWindow( object ):
 
 
     def SetHeadingStyle( self, items ):
+        return
         for item in items:
             if item not in self.headingsToColor:
                 self.headingsToColor.append( item )
@@ -486,14 +487,28 @@ class MainWindow( object ):
 
     def onButtonPress( self, widget, event ):
         # Check if the pointer is within the menu, else hide the menu
+
         winatptr = Gdk.window_at_pointer()
+        widget_win = widget.get_window()
+
+        print winatptr
+        print widget_win
+
+        if winatptr[0] != widget_win:
+            self.hide(True)
+
+        return True
+
+
 
         if winatptr:
             win = winatptr[0]
             while win:
+                print "xx"
+                print self.window.window
                 if win == self.window.window:
                     break
-                win = win.get_parent()
+                win = win.get_toplevels()
             if not win:
                 self.hide( True )
         else:
@@ -707,14 +722,15 @@ class MenuWin( object ):
         self.sizeButton()
 
     def bind_hot_key (self):
-        try:
-            # Binding menu to hotkey
-            print "Binding to Hot Key: " + self.hotkeyText
-            bind_key( self.hotkeyText, self.onBindingPress )
-        except Exception, cause:
-            print "** WARNING ** - Menu Hotkey Binding Error"
-            print "Error Report :\n", str(cause)
-            pass
+        pass
+        # try:
+        #     # Binding menu to hotkey
+        #     print "Binding to Hot Key: " + self.hotkeyText
+        #     bind_key( self.hotkeyText, self.onBindingPress )
+        # except Exception, cause:
+        #     print "** WARNING ** - Menu Hotkey Binding Error"
+        #     print "Error Report :\n", str(cause)
+        #     pass
 
     def sizeButton( self ):
         if self.hideIcon:

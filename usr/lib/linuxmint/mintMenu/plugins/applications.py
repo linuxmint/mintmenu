@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
-import gtk
-import gtk.glade
-import gobject
+import gi
+gi.require_version("Gtk", "2.0")
+
+from gi.repository import Gtk, GObject, Pango, Gdk
+
 import os
 import mateconf
 import fnmatch
@@ -26,7 +28,7 @@ import matemenu
 
 from user import home
 
-gtk.gdk.threads_init()
+GObject.threads_init()
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -165,22 +167,22 @@ class Menu:
 
 
 
-class SuggestionButton ( gtk.Button ):
+class SuggestionButton ( Gtk.Button ):
 
     def __init__( self, iconName, iconSize, label ):                
-        gtk.Button.__init__( self )                    
+        Gtk.Button.__init__( self )                    
         self.iconName = iconName
-        self.set_relief( gtk.RELIEF_NONE )
+        self.set_relief( Gtk.ReliefStyle.NONE )
         self.set_size_request( -1, -1 )
-        Align1 = gtk.Alignment( 0, 0.5, 1.0, 0 )
-        HBox1 = gtk.HBox()
-        labelBox = gtk.VBox( False, 2 )
-        self.image = gtk.Image()
+        Align1 = Gtk.Alignment( 0, 0.5, 1.0, 0 )
+        HBox1 = Gtk.HBox()
+        labelBox = Gtk.VBox( False, 2 )
+        self.image = Gtk.Image()
         self.image.set_from_stock( self.iconName, iconSize )
         self.image.show()
         HBox1.pack_start( self.image, False, False, 5 )
-        self.label = gtk.Label()
-        self.label.set_ellipsize( pango.ELLIPSIZE_END )
+        self.label = Gtk.Label()
+        self.label.set_ellipsize( Pango.EllipsizeMode.END )
         self.label.set_alignment( 0.0, 1.0 )
         self.label.show()
         labelBox.pack_start( self.label )
@@ -205,8 +207,8 @@ class pluginclass( object ):
     TARGET_TYPE_TEXT = 80
     toButton = [ ( "text/uri-list", 0, TARGET_TYPE_TEXT ) ]
     TARGET_TYPE_FAV = 81
-    toFav = [ ( "FAVORITES", gtk.TARGET_SAME_APP, TARGET_TYPE_FAV ), ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) ]
-    fromFav = [ ( "FAVORITES", gtk.TARGET_SAME_APP, TARGET_TYPE_FAV ) ]
+    toFav = [ ( "FAVORITES", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_FAV ), ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) ]
+    fromFav = [ ( "FAVORITES", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_FAV ) ]
 
     @print_timing
     def __init__( self, mintMenuWin, toggleButton, de ):
@@ -217,44 +219,45 @@ class pluginclass( object ):
         self.toggleButton = toggleButton
         self.de = de
         
+        builder = Gtk.Builder()
         # The Glade file for the plugin
-        self.gladefile = os.path.join( os.path.dirname( __file__ ), "applications.glade" )
+        builder.add_from_file (os.path.join( os.path.dirname( __file__ ), "applications.glade" ))
 
         # Read GLADE file
-        self.wTree = gtk.glade.XML( self.gladefile, "mainWindow" )
-        self.searchEntry = self.wTree.get_widget( "searchEntry" )
-        self.searchButton = self.wTree.get_widget( "searchButton" )
-        self.showAllAppsButton = self.wTree.get_widget( "showAllAppsButton" )
-        self.showFavoritesButton = self.wTree.get_widget( "showFavoritesButton" )
-        self.applicationsBox = self.wTree.get_widget( "applicationsBox" )
-        self.categoriesBox = self.wTree.get_widget( "categoriesBox" )
-        self.favoritesBox = self.wTree.get_widget( "favoritesBox" )
-        self.applicationsScrolledWindow = self.wTree.get_widget( "applicationsScrolledWindow" )
+        self.wTree = builder.get_object( "mainWindow" )
+        self.searchEntry = builder.get_object( "searchEntry" )
+        self.searchButton = builder.get_object( "searchButton" )
+        self.showAllAppsButton = builder.get_object( "showAllAppsButton" )
+        self.showFavoritesButton = builder.get_object( "showFavoritesButton" )
+        self.applicationsBox = builder.get_object( "applicationsBox" )
+        self.categoriesBox = builder.get_object( "categoriesBox" )
+        self.favoritesBox = builder.get_object( "favoritesBox" )
+        self.applicationsScrolledWindow = builder.get_object( "applicationsScrolledWindow" )
 
         #i18n
-        self.wTree.get_widget("searchLabel").set_text("<span weight='bold'>" + _("Search:") + "</span>")
-        self.wTree.get_widget("searchLabel").set_use_markup(True)
-        self.wTree.get_widget("label6").set_text(_("Favorites"))
-        self.wTree.get_widget("label3").set_text(_("Favorites"))
-        self.wTree.get_widget("label7").set_text(_("All applications"))
-        self.wTree.get_widget("label2").set_text(_("Applications"))                
+        builder.get_object("searchLabel").set_text("<span weight='bold'>" + _("Search:") + "</span>")
+        builder.get_object("searchLabel").set_use_markup(True)
+        builder.get_object("label6").set_text(_("Favorites"))
+        builder.get_object("label3").set_text(_("Favorites"))
+        builder.get_object("label7").set_text(_("All applications"))
+        builder.get_object("label2").set_text(_("Applications"))                
         
-        self.mintMenuWin.SetHeadingStyle( [self.wTree.get_widget("label6"), self.wTree.get_widget("label2")] )
+        self.mintMenuWin.SetHeadingStyle( [builder.get_object("label6"), builder.get_object("label2")] )
 
         self.numApps = 0
         # These properties are NECESSARY to maintain consistency
 
         # Set 'window' property for the plugin (Must be the root widget)
-        self.window = self.wTree.get_widget( "mainWindow" )
+        self.window = builder.get_object( "mainWindow" )
 
         # Set 'heading' property for plugin
         self.heading = ""#_("Applications")
 
         # This should be the first item added to the window in glade
-        self.content_holder = self.wTree.get_widget( "Applications" )
+        self.content_holder = builder.get_object( "Applications" )
 
         # Items to get custom colors
-        self.itemstocolor = [ self.wTree.get_widget( "viewport1" ), self.wTree.get_widget( "viewport2" ), self.wTree.get_widget( "viewport3" ), self.wTree.get_widget( "notebook2" ) ]
+        self.itemstocolor = [ builder.get_object( "viewport1" ), builder.get_object( "viewport2" ), builder.get_object( "viewport3" ), builder.get_object( "notebook2" ) ]
 
         # Unset all timers
         self.filterTimer = None
@@ -263,7 +266,7 @@ class pluginclass( object ):
         self.content_holder.connect( "key-press-event", self.keyPress )
 
         self.favoritesBox.connect( "drag_data_received", self.ReceiveCallback )
-        self.favoritesBox.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.toButton, gtk.gdk.ACTION_COPY )
+        self.favoritesBox.drag_dest_set( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, gtk.gdk.ACTION_COPY )
         self.showFavoritesButton.connect( "drag_data_received", self.ReceiveCallback )
         self.showFavoritesButton.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.toButton, gtk.gdk.ACTION_COPY )
 
@@ -321,7 +324,7 @@ class pluginclass( object ):
         self.current_suggestion = None
         self.get_panel()
         
-        self.wTree.get_widget("searchButton").connect( "button-release-event", self.searchPopup )        
+        builder.get_object("searchButton").connect( "button-release-event", self.searchPopup )        
 
     def refresh_apt_cache(self):
         if self.useAPT:
@@ -580,34 +583,34 @@ class pluginclass( object ):
     def StartFilter( self, widget, category ):
         # if there is a timer for a different category running stop it
         if self.filterTimer:
-            gobject.source_remove( self.filterTimer )
-        self.filterTimer = gobject.timeout_add( self.categoryhoverdelay, self.Filter, widget, category )
+            GObject.source_remove( self.filterTimer )
+        self.filterTimer = GObject.timeout_add( self.categoryhoverdelay, self.Filter, widget, category )
 
     def StopFilter( self, widget ):
         if self.filterTimer:
-            gobject.source_remove( self.filterTimer )
+            GObject.source_remove( self.filterTimer )
             self.filterTimer = None
 
     def add_search_suggestions(self, text):
         
         text = "<b>%s</b>" % text
         
-        suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
         suggestionButton.connect("clicked", self.search_google)
         suggestionButton.set_text(_("Search Google for %s") % text)
         suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/google.ico")
         self.applicationsBox.add(suggestionButton)
         self.suggestions.append(suggestionButton)
         
-        suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
         suggestionButton.connect("clicked", self.search_wikipedia)
         suggestionButton.set_text(_("Search Wikipedia for %s") % text)
         suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico")
         self.applicationsBox.add(suggestionButton)
         self.suggestions.append(suggestionButton)
                 
-        separator = gtk.EventBox()
-        separator.add(gtk.HSeparator())
+        separator = Gtk.EventBox()
+        separator.add(Gtk.HSeparator())
         separator.set_size_request(-1, 20)       
         separator.type = "separator"        
         self.mintMenuWin.SetPaneColors( [ separator ] )
@@ -615,14 +618,14 @@ class pluginclass( object ):
         self.applicationsBox.add(separator)
         self.suggestions.append(separator)        
         
-        suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
         suggestionButton.connect("clicked", self.search_dictionary)
         suggestionButton.set_text(_("Lookup %s in Dictionary") % text)
         suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/dictionary.png")
         self.applicationsBox.add(suggestionButton)
         self.suggestions.append(suggestionButton)  
         
-        suggestionButton = SuggestionButton(gtk.STOCK_FIND, self.iconSize, "")
+        suggestionButton = SuggestionButton(Gtk.STOCK_FIND, self.iconSize, "")
         suggestionButton.connect("clicked", self.Search)
         suggestionButton.set_text(_("Search Computer for %s") % text)                        
         self.applicationsBox.add(suggestionButton)
@@ -1641,7 +1644,7 @@ class pluginclass( object ):
             sortedCategoryList.sort()
 
             for item in sortedCategoryList:
-                self.categoriesBox.pack_start( item[1], False )
+                self.categoriesBox.pack_start( item[1], False, False, 0 )
 
 
         # Find added and removed applications add update the application list
@@ -1705,7 +1708,7 @@ class pluginclass( object ):
 
             sortedApplicationList.sort()            
             for item in sortedApplicationList:
-                self.applicationsBox.pack_start( item[1], False )
+                self.applicationsBox.pack_start( item[1], False, False, 0 )
                       
         self.rebuildLock = False        
 

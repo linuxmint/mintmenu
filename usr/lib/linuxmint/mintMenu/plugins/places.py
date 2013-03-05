@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio
 import os
 import string
 import gettext
@@ -25,7 +25,7 @@ class pluginclass( object ):
 
         # Read UI file        
         builder = Gtk.Builder()
-        builder.add_from_file(os.path.join( os.path.dirname( __file__ ), "places.ui" ))        
+        builder.add_from_file(os.path.join( os.path.dirname( __file__ ), "places.glade" ))        
                
         self.placesBtnHolder    = builder.get_object( "places_button_holder" )
         self.editableBtnHolder  = builder.get_object( "editable_button_holder" )
@@ -104,7 +104,7 @@ class pluginclass( object ):
 
         # Check default items
 
-        self.showcomputer = self.settings.get_boolean( "places-show_computer" )
+        self.showcomputer = self.settings.get_boolean( "places-show-computer" )
         self.showhomefolder = self.settings.get_boolean( "places-show-home-folder" )
         self.shownetwork = self.settings.get_boolean( "places-show-network" )
         self.showdesktop = self.settings.get_boolean( "places-show-desktop" )
@@ -119,10 +119,10 @@ class pluginclass( object ):
         # Hide vertical dotted separator
         self.hideseparator = self.settings.get_boolean( "places-hide-separator" )
         # Plugin icon
-        self.icon = self.settings_get_string( "places-icon" )
+        self.icon = self.settings.get_string( "places-icon" )
         # Allow plugin to be minimized to the left plugin pane
-        self.sticky = self.settings.get_boolean( "places-sticky", False )
-        self.minimized = self.settings.get_boolean( "places-minimized", False )
+        self.sticky = self.settings.get_boolean( "places-sticky")
+        self.minimized = self.settings.get_boolean( "places-minimized")
         
     def ClearAll(self):
         for child in self.placesBtnHolder.get_children():
@@ -140,7 +140,7 @@ class pluginclass( object ):
             else:
                 Button1.connect( "clicked", self.ButtonClicked, "xdg-open /" )
             Button1.show()
-            self.placesBtnHolder.pack_start( Button1, False, False )
+            self.placesBtnHolder.pack_start( Button1, False, False, 0)
             self.mintMenuWin.setTooltip( Button1, _("Browse all local and remote disks and folders accessible from this computer") )
 
         if ( self.showhomefolder == True ):
@@ -150,7 +150,7 @@ class pluginclass( object ):
             else:
                 Button2.connect( "clicked", self.ButtonClicked, "xdg-open %s " % home )
             Button2.show()
-            self.placesBtnHolder.pack_start( Button2, False, False )
+            self.placesBtnHolder.pack_start( Button2, False, False, 0)
             self.mintMenuWin.setTooltip( Button2, _("Open your personal folder") )
 
         if ( self.shownetwork == True and self.de == "mate"):
@@ -165,7 +165,7 @@ class pluginclass( object ):
             else:
                 Button3.connect( "clicked", self.ButtonClicked, "xdg-open network:" )
             Button3.show()
-            self.placesBtnHolder.pack_start( Button3, False, False )
+            self.placesBtnHolder.pack_start( Button3, False, False, 0)
             self.mintMenuWin.setTooltip( Button3, _("Browse bookmarked and local network locations") )
 
         if ( self.showdesktop == True ):
@@ -188,7 +188,7 @@ class pluginclass( object ):
             else:
                 Button4.connect( "clicked", self.ButtonClicked, "xdg-open \"" + desktopDir + "\"")
             Button4.show()
-            self.placesBtnHolder.pack_start( Button4, False, False )
+            self.placesBtnHolder.pack_start( Button4, False, False, 0)
             self.mintMenuWin.setTooltip( Button4, _("Browse items placed on the desktop") )
 
         if ( self.showtrash == True ):
@@ -202,7 +202,7 @@ class pluginclass( object ):
             self.trashButton.show()
             self.trashButton.connect( "button-release-event", self.trashPopup )
             self.refreshTrash()
-            self.placesBtnHolder.pack_start( self.trashButton, False, False )
+            self.placesBtnHolder.pack_start( self.trashButton, False, False, 0)
             self.mintMenuWin.setTooltip( self.trashButton, _("Browse deleted files") )
 
     def do_custom_places( self ):
@@ -216,7 +216,7 @@ class pluginclass( object ):
             currentbutton = easyButton( "folder", self.iconsize, [self.customnames[index]], -1, -1 )
             currentbutton.connect( "clicked", self.ButtonClicked, command )
             currentbutton.show()
-            self.placesBtnHolder.pack_start( currentbutton, False, False )
+            self.placesBtnHolder.pack_start( currentbutton, False, False, 0)
 
     def do_gtk_bookmarks( self ):
         if self.showGTKBookmarks:
