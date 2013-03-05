@@ -263,11 +263,11 @@ class ApplicationLauncher( easyButton ):
 
         # Drag and Drop
         self.connectSelf( "drag_data_get", self.dragDataGet )
-        self.drag_source_set( Gdk.ModifierType.BUTTON1_MASK  , [ ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) ], Gdk.DragAction.COPY )
+#FIX        self.drag_source_set( Gdk.ModifierType.BUTTON1_MASK  , [ ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) ], Gdk.DragAction.COPY )
 
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
-            self.drag_source_set_icon_pixbuf( icon )
+#FIX          #  self.drag_source_set_icon_pixbuf( icon )
             del icon
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
@@ -486,15 +486,15 @@ class MenuApplicationLauncher( ApplicationLauncher ):
                 print detail
                 pass
         
-        if self.showComment and self.appComment != "":
-            if self.iconSize <= 2:
-                self.addLabel( appName, [ Pango.AttrScale( Pango.SCALE_SMALL, 0, -1 ) ] )
-                self.addLabel( appComment, [ Pango.AttrScale( Pango.SCALE_X_SMALL, 0, -1 ) ] )
-            else:
-                self.addLabel( appName )
-                self.addLabel( appComment, [ Pango.AttrScale( Pango.SCALE_SMALL, 0, -1 ) ] )
-        else:
-            self.addLabel( appName )
+        # if self.showComment and self.appComment != "":
+        #     if self.iconSize <= 2:
+#FIX    #         self.addLabel( appName, [ Pango.AttrScale( Pango.SCALE_SMALL, 0, -1 ) ] )
+        #         self.addLabel( appComment, [ Pango.AttrScale( Pango.SCALE_X_SMALL, 0, -1 ) ] )
+        #     else:
+        #         self.addLabel( appName )
+        #         self.addLabel( appComment, [ Pango.AttrScale( Pango.SCALE_SMALL, 0, -1 ) ] )
+        # else:
+        self.addLabel( appName )
     
     def execute( self, *args ):        
         self.highlight = False
