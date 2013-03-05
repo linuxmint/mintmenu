@@ -1,39 +1,39 @@
-<?xml version="1.0"?>
-<interface>
+<?xml version="1.0" encoding="UTF-8"?>
+<glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
-  <object class="GtkWindow" id="mainWindow">
+  <widget class="GtkWindow" id="mainWindow">
     <property name="can_focus">False</property>
-    <signal handler="on_window1_destroy" name="destroy" swapped="no"/>
+    <signal name="destroy" handler="on_window1_destroy" swapped="no"/>
     <child>
-      <object class="GtkEventBox" id="Places">
+      <widget class="GtkEventBox" id="Places">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow2">
+          <widget class="GtkScrolledWindow" id="scrolledwindow2">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">automatic</property>
             <property name="vscrollbar_policy">automatic</property>
-            <signal handler="on_scrolledwindow_drag_drop" name="drag_drop" swapped="no"/>
-            <signal handler="on_scrolledwindow_drag_data_received" name="drag_data_received" swapped="no"/>
-            <signal handler="on_scrolledwindow_drag_motion" name="drag_motion" swapped="no"/>
+            <signal name="drag_drop" handler="on_scrolledwindow_drag_drop" swapped="no"/>
+            <signal name="drag_data_received" handler="on_scrolledwindow_drag_data_received" swapped="no"/>
+            <signal name="drag_motion" handler="on_scrolledwindow_drag_motion" swapped="no"/>
             <child>
-              <object class="GtkViewport" id="viewport2">
+              <widget class="GtkViewport" id="viewport2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkVBox" id="vbox1">
+                  <widget class="GtkVBox" id="vbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkVBox" id="places_button_holder">
+                      <widget class="GtkVBox" id="places_button_holder">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="spacing">2</property>
-                      </object>
+                      </widget>
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
@@ -41,24 +41,24 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVButtonBox" id="editable_button_holder">
+                      <widget class="GtkVButtonBox" id="editable_button_holder">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="layout_style">start</property>
-                      </object>
+                      </widget>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
-                  </object>
+                  </widget>
                 </child>
-              </object>
+              </widget>
             </child>
-          </object>
+          </widget>
         </child>
-      </object>
+      </widget>
     </child>
-  </object>
-</interface>
+  </widget>
+</glade-interface>
