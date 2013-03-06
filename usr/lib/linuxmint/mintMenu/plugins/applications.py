@@ -1000,7 +1000,7 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
-            gtk.gtk_menu_popup(hash(mTree), None, hash(widget), None, 0, event.time)
+            gtk.gtk_menu_popup(hash(mTree), None, None, None, 0, 0)
             #mTree.popup_for_device( None, None, None, event.button, event.time )
             return True
             

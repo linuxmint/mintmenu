@@ -458,7 +458,7 @@ class MainWindow( object ):
             self.plugins["applications"].focusSearchEntry()
 
     def grab( self ):
-        Gdk.pointer_grab( self.window.window, True, Gdk.EventMask.BUTTON_PRESS_MASK, self.window.window, Gdk.Cursor(Gdk.CursorType.ARROW), Gdk.CURRENT_TIME)
+        gdk.gdk_pointer_grab (hash(self.window.window), True, Gdk.EventMask.BUTTON_PRESS_MASK, None, None, 0)
         Gdk.keyboard_grab( self.window.window, False, Gdk.CURRENT_TIME )
         Gtk.grab_add(self.window)
 
