@@ -493,7 +493,6 @@ class MainWindow( object ):
 
     def onButtonPress( self, widget, event ):
         # Check if the pointer is within the menu, else hide the menu
-
         winatptr = Gdk.window_at_pointer()
         if winatptr:
             win = winatptr[0]
@@ -604,7 +603,6 @@ class MenuWin( object ):
             tooltip = tooltip.replace("\"", "")
             self.systemlabel.set_tooltip_text(tooltip)
             self.button_icon.set_tooltip_text(tooltip)
-
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
             self.button_box = Gtk.HBox()
             self.button_box.pack_start( self.button_icon, False, False, 0 )
@@ -816,7 +814,6 @@ class MenuWin( object ):
         # Get the screen dimensions
         screenHeight = Gdk.Screen.height()
         screenWidth = Gdk.Screen.width()
-
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
             if entryX + ourWidth < screenWidth or  entryX + entryWidth / 2 < screenWidth / 2:
             # Align to the left of the entry

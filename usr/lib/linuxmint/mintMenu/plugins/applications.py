@@ -15,13 +15,16 @@ import threading
 import commands
 import subprocess
 import filecmp
-
+import ctypes
+from ctypes import *
 from easybuttons import *
 from execute import Execute
 from easygsettings import EasyGSettings
 from easyfiles import *
 
-#from filemonitor import monitor as filemonitor
+gtk = CDLL("libgtk-x11-2.0.so.0")
+
+from filemonitor import monitor as filemonitor
 
 #import xdg.Menu
 import matemenu
@@ -914,7 +917,8 @@ class pluginclass( object ):
 
                 mTree.show_all()
 
-                mTree.popup( None, None, None, ev.button, ev.time )
+                #mTree.popup( None, None, None, ev.button, ev.time )
+                gtk.gtk_menu_popup(hash(mTree), None, None, None, None, None)
                 self.mintMenuWin.grab()
 
             else:
@@ -931,7 +935,8 @@ class pluginclass( object ):
                 removeMenuItem.connect( "activate", self.onFavoritesRemove, widget )
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
-                mTree.popup( None, None, None, ev.button, ev.time )
+                #mTree.popup( None, None, None, ev.button, ev.time )
+                gtk.gtk_menu_popup(hash(mTree), None, None, None, None, None)
                 self.mintMenuWin.grab()
 
     def menuPopup( self, widget, event ):
@@ -995,7 +1000,9 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
-            mTree.popup( None, None, None, event.button, event.time )
+
+            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, None)
+            #mTree.popup( None, None, None, event.button, event.time )
             
     def onMenuPopupDeactivate( self, widget):
         self.mintMenuWin.grab()
@@ -1074,7 +1081,8 @@ class pluginclass( object ):
         
         menu.show_all()
         #menu.popup( None, None, self.pos_func, 3, 0)
-        menu.popup( None, None, None, 3, 0)
+        gtk.gtk_menu_popup(hash(menu), None, None, None, 3, 0)
+        #menu.popup( None, None, None, 3, 0)
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()

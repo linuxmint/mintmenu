@@ -6,11 +6,15 @@ import string
 import gettext
 import commands
 import time
+import ctypes
+from ctypes import *
 
 from easybuttons import *
 from execute import Execute
 from user import home
 from urllib import unquote
+
+gtk = CDLL("libgtk-x11-2.0.so.0")
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -254,8 +258,9 @@ class pluginclass( object ):
             trashMenu.append(emptyTrashMenuItem)
             trashMenu.show_all()
             emptyTrashMenuItem.connect ( "activate", self.emptyTrash, widget )
-            trashMenu.popup( None, None, None, event.button, event.time )
-            self.mintMenuWin.grab()
+            gtk.gtk_menu_popup(hash(trashMenu), None, None, None, event.button, event.time)
+            #trashMenu.popup( None, None, None, event.button, event.time )
+         #   self.mintMenuWin.grab()
 
 
     def emptyTrash( self, menu, widget):
