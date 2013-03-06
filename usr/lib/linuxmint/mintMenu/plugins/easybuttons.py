@@ -7,7 +7,7 @@ from gi.repository import GObject
 import os.path
 import shutil
 import re
-#from execute import *
+from execute import *
 import xdg.DesktopEntry
 import xdg.Menu
 from filemonitor import monitor as filemonitor

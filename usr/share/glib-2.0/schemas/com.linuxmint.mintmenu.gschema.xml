@@ -195,4 +195,126 @@
     </key>
   
   </schema>
+
+
+  <schema id="com.linuxmint.mintmenu.plugins.applications" path="/com/linuxmint/mintmenu/plugins/applications/">
+
+    <key type="b" name="categories-mouse-over">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="width">
+      <default>480</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="height">
+      <default>410</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="do-not-filter">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="icon-size">
+      <default>22</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="favicon-size">
+      <default>48</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="fav-cols">
+      <default>2</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="swap-generic-name">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="show-category-icons">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="category-hover-delay">
+      <default>150</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="show-application-comments">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="use-apt">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="last-active-tab">
+      <default>0</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="default-tab">
+      <default>-1</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="sticky">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="minimized">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="s" name="search-command">
+      <default>"mate-search-tool --named \"%s\" --start"</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="s" name="icon">
+      <default>"applications-accessories"</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="hide-separator">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+
+
+  </schema>
+
 </schemalist>

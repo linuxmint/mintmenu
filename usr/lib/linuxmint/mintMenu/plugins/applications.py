@@ -18,7 +18,7 @@ import filecmp
 
 from easybuttons import *
 from execute import Execute
-from easygconf import EasyGConf
+from easygsettings import EasyGSettings
 from easyfiles import *
 
 #from filemonitor import monitor as filemonitor
@@ -270,27 +270,27 @@ class pluginclass( object ):
 #FIX     self.showFavoritesButton.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.toButton, gtk.gdk.ACTION_COPY )
 
        # self.searchButton.connect( "button_release_event", self.SearchWithButton )
+        try:
+        # GSettings stuff
+            self.settings = EasyGSettings( "com.linuxmint.mintmenu.plugins.applications" )
+            self.GetGSettingsEntries()
+            self.settings.notifyAdd( "icon-size", self.changeIconSize )
+            self.settings.notifyAdd( "favicon-size", self.changeFavIconSize )
+            self.settings.notifyAdd( "height", self.changePluginSize )
+            self.settings.notifyAdd( "width", self.changePluginSize )
+            self.settings.notifyAdd( "categories-mouse-over", self.changeCategoriesMouseOver )
+            self.settings.notifyAdd( "swap-generic-name", self.changeSwapGenericName )
+            self.settings.notifyAdd( "show-category-icons", self.changeShowCategoryIcons )
+            self.settings.notifyAdd( "show-application-comments", self.changeShowApplicationComments )
+            self.settings.notifyAdd( "use-apt", self.switchAPTUsage)
+            self.settings.notifyAdd( "fav-cols", self.changeFavCols )
 
-        self.gconfHandlers = []
-        # Gconf stuff
-        self.gconf = EasyGConf( "/apps/mintMenu/plugins/applications/" )
-        self.GetGconfEntries()
-        self.gconf.notifyAdd( "icon_size", self.changeIconSize )
-        self.gconf.notifyAdd( "favicon_size", self.changeFavIconSize )
-        self.gconf.notifyAdd( "height", self.changePluginSize )
-        self.gconf.notifyAdd( "width", self.changePluginSize )
-        self.gconf.notifyAdd( "categories_mouse_over", self.changeCategoriesMouseOver )
-        self.gconf.notifyAdd( "swap_generic_name", self.changeSwapGenericName )
-        self.gconf.notifyAdd( "show_category_icons", self.changeShowCategoryIcons )
-        self.gconf.notifyAdd( "show_application_comments", self.changeShowApplicationComments )
-        self.gconf.notifyAdd( "use_apt", self.switchAPTUsage)
-        self.gconf.notifyAdd( "fav_cols", self.changeFavCols )
-
-        self.gconf.bindGconfEntryToVar( "int", "category_hover_delay", self, "categoryhoverdelay" )
-        self.gconf.bindGconfEntryToVar( "bool", "do_not_filter", self, "donotfilterapps" )
-        self.gconf.bindGconfEntryToVar( "string", "search_command", self, "searchtool" )
-        self.gconf.bindGconfEntryToVar( "int", "default_tab", self, "defaultTab" )
-
+            self.settings.bindGSettingsEntryToVar( "int", "category-hover-delay", self, "categoryhoverdelay" )
+            self.settings.bindGSettingsEntryToVar( "bool", "do-not-filter", self, "donotfilterapps" )
+            self.settings.bindGSettingsEntryToVar( "string", "search-command", self, "searchtool" )
+            self.settings.bindGSettingsEntryToVar( "int", "default-tab", self, "defaultTab" )
+        except Exception, detail:
+            print detail
         self.currentFavCol = 0
         self.favorites = []
 
@@ -363,30 +363,30 @@ class pluginclass( object ):
         self.categoriesBox.destroy()
         self.favoritesBox.destroy()
 
-        self.gconf.notifyRemoveAll()
+        self.settings.notifyRemoveAll()
 
         #for mId in self.menuFileMonitors:
         #    filemonitor.removeMonitor( mId )
 
-    def changePluginSize( self, client, connection_id, entry, args ):
-        if entry.get_key() == self.gconf.gconfDir+"width":
-            self.width = entry.get_value().get_int()
+    def changePluginSize( self, settings, key, args ):
+        if key == "width":
+            self.width = settings.get_int(key)
             self.categoriesBox.set_size_request( self.width / 3, -1 )
             self.applicationsBox.set_size_request( self.width / 2, -1 )
 
-        elif entry.get_key() == self.gconf.gconfDir+"height":
-            self.heigth = entry.get_value().get_int()
+        elif key == "height":
+            self.heigth = settings.get_int(key)
         self.content_holder.set_size_request( self.width, self.height )
 
-    def changeSwapGenericName( self, client, connection_id, entry, args ):
-        self.swapgeneric = entry.get_value().get_bool()
+    def changeSwapGenericName( self, settings, key, args ):
+        self.swapgeneric = settings.get_boolean(key)
 
         for child in self.favoritesBox:
             if isinstance( child, FavApplicationLauncher):
                 child.setSwapGeneric( self.swapgeneric )
 
-    def changeShowCategoryIcons( self, client, connection_id, entry, args ):
-        self.showcategoryicons = entry.get_value().get_bool()
+    def changeShowCategoryIcons( self, settings, key, args ):
+        self.showcategoryicons = settings.get_boolean(key)
 
         if self.showcategoryicons:
             categoryIconSize = self.iconSize
@@ -396,8 +396,8 @@ class pluginclass( object ):
         for child in self.categoriesBox:
             child.setIconSize( categoryIconSize )
 
-    def changeIconSize( self, client, connection_id, entry, args ):
-        self.iconSize = entry.get_value().get_int()
+    def changeIconSize( self, settings, key, args ):
+        self.iconSize = settings.get_int(key)
 
         if self.showcategoryicons:
             categoryIconSize = self.iconSize
@@ -413,24 +413,24 @@ class pluginclass( object ):
             except:
                 pass        
 
-    def changeFavIconSize( self, client, connection_id, entry, args ):
-        self.faviconsize = entry.get_value().get_int()
+    def changeFavIconSize( self, settings, key, args ):
+        self.faviconsize = settings.get_int(key)
 
         for child in self.favoritesBox:
             if isinstance( child, FavApplicationLauncher):
                 child.setIconSize( self.faviconsize )
                 
-    def switchAPTUsage( self, client, connection_id, entry, args ):
-        self.useAPT = entry.get_value().get_bool()        
+    def switchAPTUsage( self, settings, key, args ):
+        self.useAPT = settings.get_boolean(key)
         self.refresh_apt_cache()
 
-    def changeShowApplicationComments( self, client, connection_id, entry, args ):
-        self.showapplicationcomments = entry.get_value().get_bool()
+    def changeShowApplicationComments( self, settings, key, args ):
+        self.showapplicationcomments = settings.get_boolean(key)
         for child in self.applicationsBox:
             child.setShowComment( self.showapplicationcomments )
 
-    def changeCategoriesMouseOver( self, client, connection_id, entry, args ):
-        self.categories_mouse_over = entry.get_value().get_bool()
+    def changeCategoriesMouseOver( self, settings, key, args ):
+        self.categories_mouse_over = settings.get_boolean(key)
         for child in self.categoriesBox:
             if self.categories_mouse_over and not child.mouseOverHandlerIds:
                 startId = child.connect( "enter", self.StartFilter, child.filter )
@@ -441,8 +441,8 @@ class pluginclass( object ):
                 child.disconnect( child.mouseOverHandlerIds[1] )
                 child.mouseOverHandlerIds = None
 
-    def changeFavCols(self, client, connection_id, entry, args):
-        self.favCols = entry.get_value().get_int()
+    def changeFavCols(self, settings, key, args):
+        self.favCols = settings.get_int(key)
         for fav in self.favorites:
             self.favoritesBox.remove( fav )
             self.favoritesPositionOnGrid( fav )
@@ -459,7 +459,7 @@ class pluginclass( object ):
         oldhideseparator = self.hideseparator
         oldshowapplicationcomments = self.showapplicationcomments
 
-        self.GetGconfEntries()
+        self.GetGSettingsEntries()
 
         # if the config hasn't changed return
         if oldcategories_mouse_over == self.categories_mouse_over and oldiconsize == self.iconSize and oldfaviconsize == self.faviconsize and oldtotalrecent == self.totalrecent and oldswapgeneric == self.swapgeneric and oldshowcategoryicons == self.showcategoryicons and oldcategoryhoverdelay == self.categoryhoverdelay and oldsticky == self.sticky and oldminimized == self.minimized and oldicon == self.icon and oldhideseparator == self.hideseparator and oldshowapplicationcomments == self.showapplicationcomments:
@@ -469,46 +469,46 @@ class pluginclass( object ):
         self.buildFavorites()
         self.RebuildPlugin()
 
-    def GetGconfEntries( self ):
+    def GetGSettingsEntries( self ):
 
-        self.categories_mouse_over = self.gconf.get( "bool", "categories_mouse_over", True )
-        self.width = self.gconf.get( "int", "width", 480 )
-        self.height = self.gconf.get( "int", "height", 410 )
-        self.donotfilterapps = self.gconf.get( "bool", "do_not_filter", False )
-        self.iconSize = self.gconf.get( "int", "icon_size", 22 )
-        self.faviconsize = self.gconf.get( "int", "favicon_size", 48 )
-        self.favCols = self.gconf.get( "int", "fav_cols", 2 )
-        self.swapgeneric = self.gconf.get( "bool", "swap_generic_name", False )
-        self.showcategoryicons = self.gconf.get( "bool", "show_category_icons", True )
-        self.categoryhoverdelay = self.gconf.get( "int", "category_hover_delay", 150 )
-        self.showapplicationcomments = self.gconf.get( "bool", "show_application_comments", True )
-        self.useAPT = self.gconf.get( "bool", "use_apt", True )
+        self.categories_mouse_over = self.settings.get( "bool", "categories-mouse-over")
+        self.width = self.settings.get( "int", "width")
+        self.height = self.settings.get( "int", "height")
+        self.donotfilterapps = self.settings.get( "bool", "do-not-filter")
+        self.iconSize = self.settings.get( "int", "icon-size")
+        self.faviconsize = self.settings.get( "int", "favicon-size")
+        self.favCols = self.settings.get( "int", "fav-cols")
+        self.swapgeneric = self.settings.get( "bool", "swap-generic-name")
+        self.showcategoryicons = self.settings.get( "bool", "show-category-icons")
+        self.categoryhoverdelay = self.settings.get( "int", "category-hover-delay")
+        self.showapplicationcomments = self.settings.get( "bool", "show-application-comments")
+        self.useAPT = self.settings.get( "bool", "use-apt")
 
-        self.lastActiveTab =  self.gconf.get( "int", "last_active_tab", 0 )
-        self.defaultTab = self.gconf.get( "int", "default_tab", -1 )
+        self.lastActiveTab =  self.settings.get( "int", "last-active-tab")
+        self.defaultTab = self.settings.get( "int", "default-tab")
 
 
         # Allow plugin to be minimized to the left plugin pane
-        self.sticky = self.gconf.get( "bool", "sticky", False )
-        self.minimized = self.gconf.get( "bool", "minimized", False )
+        self.sticky = self.settings.get( "bool", "sticky")
+        self.minimized = self.settings.get( "bool", "minimized")
 
         # Search tool
-        self.searchtool = self.gconf.get( "string", "search_command", "mate-search-tool --named \"%s\" --start" )
+        self.searchtool = self.settings.get( "string", "search-command")
         if self.searchtool == "beagle-search SEARCH_STRING":
             self.searchtool = "mate-search-tool --named \"%s\" --start"
-            self.gconf.set( "string", "search_command", "mate-search-tool --named \"%s\" --start" )
+            self.settings.set( "string", "search-command", "mate-search-tool --named \"%s\" --start" )
 
         # Plugin icon
-        self.icon = self.gconf.get( "string", "icon", "applications-accessories" )
+        self.icon = self.settings.get( "string", "icon" )
 
         # Hide vertical dotted separator
-        self.hideseparator = self.gconf.get( "bool", "hide_separator", False )
+        self.hideseparator = self.settings.get( "bool", "hide-separator")
 
     def SetHidden( self, state ):
         if state == True:
-            self.gconf.set( "bool", "minimized", True )
+            self.settings.set( "bool", "minimized", True )
         else:
-            self.gconf.set( "bool", "minimized", False )
+            self.settings.set( "bool", "minimized", False )
 
     def RebuildPlugin(self):
         self.content_holder.set_size_request( self.width, self.height )
@@ -536,7 +536,7 @@ class pluginclass( object ):
         self.searchEntry.select_region( 0, -1 )
 
     def onHideMenu( self ):
-        self.gconf.set( "int", "last_active_tab", self.lastActiveTab )
+        self.settings.set( "int", "last-active-tab", self.lastActiveTab )
 
     def changeTab( self, tabNum ):
         notebook = self.builder.get_object( "notebook2" )
