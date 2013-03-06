@@ -868,7 +868,7 @@ class pluginclass( object ):
                 insertBefore = True
 
             if widget.type == "location":
-                mTree = self.builder( "favoritesMenu" )
+                mTree = self.builder.get_object( "favoritesMenu" )
                 #i18n
 
                 desktopMenuItem = Gtk.MenuItem(_("Add to desktop"))
@@ -899,44 +899,44 @@ class pluginclass( object ):
                 propsMenuItem.connect( "activate", self.onPropsApp, widget)
 
                 if self.de == "mate":
-                    mTree.get_widget("favoritesMenu").append(desktopMenuItem)
-                    mTree.get_widget("favoritesMenu").append(panelMenuItem)
-                    mTree.get_widget("favoritesMenu").append(separator1)
-                mTree.get_widget("favoritesMenu").append(insertSpaceMenuItem)
-                mTree.get_widget("favoritesMenu").append(insertSeparatorMenuItem)
-                mTree.get_widget("favoritesMenu").append(separator2)
-                mTree.get_widget("favoritesMenu").append(startupMenuItem)
-                mTree.get_widget("favoritesMenu").append(separator3)
-                mTree.get_widget("favoritesMenu").append(launchMenuItem)
-                mTree.get_widget("favoritesMenu").append(removeFromFavMenuItem)
-                mTree.get_widget("favoritesMenu").append(separator4)
-                mTree.get_widget("favoritesMenu").append(propsMenuItem)
+                    mTree.append(desktopMenuItem)
+                    mTree.append(panelMenuItem)
+                    mTree.append(separator1)
+                mTree.append(insertSpaceMenuItem)
+                mTree.append(insertSeparatorMenuItem)
+                mTree.append(separator2)
+                mTree.append(startupMenuItem)
+                mTree.append(separator3)
+                mTree.append(launchMenuItem)
+                mTree.append(removeFromFavMenuItem)
+                mTree.append(separator4)
+                mTree.append(propsMenuItem)
 
-                mTree.get_widget("favoritesMenu").show_all()
+                mTree.show_all()
 
-                mTree.get_widget( "favoritesMenu" ).popup( None, None, None, ev.button, ev.time )
+                mTree.popup( None, None, None, ev.button, ev.time )
                 self.mintMenuWin.grab()
 
             else:
-                mTree = self.builder( "favoritesMenuExtra" )
+                mTree = self.builder.get_object( "favoritesMenuExtra" )
                 #i18n
                 removeMenuItem = Gtk.MenuItem(_("Remove"))
                 insertSpaceMenuItem = Gtk.MenuItem(_("Insert space"))
                 insertSeparatorMenuItem = Gtk.MenuItem(_("Insert separator"))
-                mTree.get_widget("favoritesMenuExtra").append(removeMenuItem)
-                mTree.get_widget("favoritesMenuExtra").append(insertSpaceMenuItem)
-                mTree.get_widget("favoritesMenuExtra").append(insertSeparatorMenuItem)
-                mTree.get_widget("favoritesMenuExtra").show_all()
+                mTree.append(removeMenuItem)
+                mTree.append(insertSpaceMenuItem)
+                mTree.append(insertSeparatorMenuItem)
+                mTree.show_all()
 
                 removeMenuItem.connect( "activate", self.onFavoritesRemove, widget )
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
-                mTree.get_widget( "favoritesMenuExtra" ).popup( None, None, None, ev.button, ev.time )
+                mTree.popup( None, None, None, ev.button, ev.time )
                 self.mintMenuWin.grab()
 
     def menuPopup( self, widget, event ):
         if event.button == 3:
-            mTree = self.builder ( "applicationsMenu" )
+            mTree = self.builder.get_object ( "applicationsMenu" )
 
             #i18n
             desktopMenuItem = Gtk.MenuItem(_("Add to desktop"))
@@ -952,26 +952,26 @@ class pluginclass( object ):
             propsMenuItem = Gtk.MenuItem(_("Edit properties"))
 
             if self.de == "mate":
-                mTree.get_widget("applicationsMenu").append(desktopMenuItem)
-                mTree.get_widget("applicationsMenu").append(panelMenuItem)
-                mTree.get_widget("applicationsMenu").append(separator1)
+                mTree.append(desktopMenuItem)
+                mTree.append(panelMenuItem)
+                mTree.append(separator1)
 
-            mTree.get_widget("applicationsMenu").append(favoriteMenuItem)
-            mTree.get_widget("applicationsMenu").append(startupMenuItem)
+            mTree.append(favoriteMenuItem)
+            mTree.append(startupMenuItem)
 
-            mTree.get_widget("applicationsMenu").append(separator2)
+            mTree.append(separator2)
 
-            mTree.get_widget("applicationsMenu").append(launchMenuItem)
-            mTree.get_widget("applicationsMenu").append(uninstallMenuItem)
+            mTree.append(launchMenuItem)
+            mTree.append(uninstallMenuItem)
             if home in widget.desktopFile:
-                mTree.get_widget("applicationsMenu").append(deleteMenuItem)
+                mTree.append(deleteMenuItem)
                 deleteMenuItem.connect("activate", self.delete_from_menu, widget)
 
-            mTree.get_widget("applicationsMenu").append(separator3)
+            mTree.append(separator3)
 
-            mTree.get_widget("applicationsMenu").append(propsMenuItem)
+            mTree.append(propsMenuItem)
 
-            mTree.get_widget("applicationsMenu").show_all()
+            mTree.show_all()
 
             desktopMenuItem.connect("activate", self.add_to_desktop, widget)
             panelMenuItem.connect("activate", self.add_to_panel, widget)
@@ -994,8 +994,8 @@ class pluginclass( object ):
                 startupMenuItem.set_active( False )
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
-            mTree.get_widget( "applicationsMenu" ).connect( 'deactivate', self.onMenuPopupDeactivate)
-            mTree.get_widget( "applicationsMenu" ).popup( None, None, None, event.button, event.time )
+            mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
+            mTree.popup( None, None, None, event.button, event.time )
             
     def onMenuPopupDeactivate( self, widget):
         self.mintMenuWin.grab()

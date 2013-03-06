@@ -312,9 +312,102 @@
       <summary></summary>
       <description></description>
     </key>
+  </schema>
 
+  <schema id="com.linuxmint.mintmenu.plugins.system_management" path="/com/linuxmint/mintmenu/plugins/system_management/">
+
+    <key type="i" name="width">
+      <default>200</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="height">
+      <default>180</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="allow-scrollbar">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="icon-size">
+      <default>16</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="show-software-manager">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="show-package-manager">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="show-control-center">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="show-terminal">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="show-lock-screen">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="show-logout">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="show-quit">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="hide-separator">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="sticky">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="minimized">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="s" name="icon">
+      <default>"preferences-system"</default>
+      <summary></summary>
+      <description></description>
+    </key>
 
 
   </schema>
+
 
 </schemalist>
