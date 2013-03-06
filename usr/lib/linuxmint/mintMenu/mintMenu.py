@@ -16,10 +16,16 @@ try:
     import traceback
     import time
     import gc
+    import ctypes
+    from ctypes import *
+    import capi
     import xdg.Config
 except Exception, e:
     print e
     sys.exit( 1 )
+
+gtk = CDLL("libgtk-x11-2.0.so.0")
+gdk = CDLL("libgdk-x11-2.0.so.0")
 
 global mbindkey
 # Load the key binding lib (developped by deskbar-applet, copied into mintMenu so we don't end up with an unnecessary dependency)
@@ -489,26 +495,12 @@ class MainWindow( object ):
         # Check if the pointer is within the menu, else hide the menu
 
         winatptr = Gdk.window_at_pointer()
-        widget_win = widget.get_window()
-
-        print winatptr
-        print widget_win
-
-        if winatptr[0] != widget_win:
-            self.hide(True)
-
-        return True
-
-
-
         if winatptr:
             win = winatptr[0]
             while win:
-                print "xx"
-                print self.window.window
                 if win == self.window.window:
                     break
-                win = win.get_toplevels()
+                win = capi.get_widget(gdk.gdk_window_get_parent (hash(win)))
             if not win:
                 self.hide( True )
         else:
