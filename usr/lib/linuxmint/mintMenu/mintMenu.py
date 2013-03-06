@@ -807,8 +807,13 @@ class MenuWin( object ):
         ourWidth  = self.mainwin.window.get_size()[0]
         ourHeight = self.mainwin.window.get_size()[1] + self.mainwin.offset
 
+        x = c_int()
+        y = c_int()
         # Get the dimensions/position of the widgetToAlignWith
-        entryX, entryY = self.applet.get_allocation().x, self.applet.get_allocation().y
+        gdk.gdk_window_get_origin(hash(self.applet.window), byref(x), byref(y))
+        entryX = x.value
+        entryY = y.value
+
         entryWidth, entryHeight =  self.applet.get_allocation().width, self.applet.get_allocation().height
         entryHeight = entryHeight + self.mainwin.offset
 
