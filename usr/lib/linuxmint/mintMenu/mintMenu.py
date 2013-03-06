@@ -201,11 +201,10 @@ class MainWindow( object ):
         self.globalEnableTooltips = mate_settings.get_boolean( "tooltips-enabled" )
 
     def SetupMintMenuBorder( self ):
-		# COMMENTED DURING MIGRATION
-        #if self.usecustomcolor:
-        #    self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.custombordercolor ) )
-        #else:
-        #    self.window.modify_bg( Gtk.StateType.NORMAL, self.window.rc_get_style().bg[ Gtk.StateType.SELECTED ] )
+        if self.usecustomcolor:
+            self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.custombordercolor ) )
+        else:
+            self.window.modify_bg( Gtk.StateType.NORMAL, self.window.rc_get_style().bg[ Gtk.StateType.SELECTED ] )
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )        
 
     def SetupMintMenuOpacity( self ):
@@ -388,13 +387,12 @@ class MainWindow( object ):
         for item in items:
             if item not in self.panesToColor:
                 self.panesToColor.append( item )
-		#COMMENTED DURING MIGRATION
-        #if self.usecustomcolor:
-        #    for item in items:
-        #        item.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.customcolor ) )
-        #else:
-        #    for item in items:
-        #        item.modify_bg( Gtk.StateType.NORMAL, self.paneholder.rc_get_style().bg[ Gtk.StateType.NORMAL ] )
+        if self.usecustomcolor:
+            for item in items:
+                item.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.customcolor ) )
+        else:
+            for item in items:
+                item.modify_bg( Gtk.StateType.NORMAL, self.paneholder.rc_get_style().bg[ Gtk.StateType.NORMAL ] )
 
 
     def SetHeadingStyle( self, items ):
@@ -460,19 +458,18 @@ class MainWindow( object ):
             self.plugins["applications"].focusSearchEntry()
 
     def grab( self ):
-        Gdk.pointer_grab( self.window.window, True, Gdk.EventMask.BUTTON_PRESS_MASK )
-        Gdk.keyboard_grab( self.window.window, False )
-        self.window.grab_add()
+        Gdk.pointer_grab( self.window.window, True, Gdk.EventMask.BUTTON_PRESS_MASK, self.window.window, Gdk.Cursor(Gdk.CursorType.ARROW), Gdk.CURRENT_TIME)
+        Gdk.keyboard_grab( self.window.window, False, Gdk.CURRENT_TIME )
+        Gtk.grab_add(self.window)
 
     def ungrab( self ):
-        self.window.grab_remove()
+        Gtk.grab_remove(self.window)
         self.window.hide()
-        Gdk.pointer_ungrab()
-        Gdk.keyboard_ungrab()
+        Gdk.pointer_ungrab(Gdk.CURRENT_TIME)
+        Gdk.keyboard_ungrab(Gdk.CURRENT_TIME)
 
     def onMap( self, widget, event ):
-        #self.grab() COMMENTED DURING MIGRATION
-        pass
+        self.grab()
 
     def onShow( self, widget ):
         for plugin in self.plugins.values():
@@ -480,7 +477,7 @@ class MainWindow( object ):
                 plugin.onShowMenu()
 
     def onUnmap( self, widget, event ):
-        #self.ungrab() COMMENTED DURING MIGRATION
+        self.ungrab()
 
         for plugin in self.plugins.values():
             if hasattr( plugin, "onHideMenu" ):
@@ -508,9 +505,9 @@ class MainWindow( object ):
         return True
 
     def onGrabBroken( self, widget, event ):
-        if event.grab_window:
+        if event.grab_broken.grab_window:
             try:
-                theft = event.grab_window.get_user_data()
+                theft = event.grab_broken.grab_window.get_user_data()
                 theft.connect( "event", self.onGrabTheftEvent )
             except:
                 self.window.hide( True )
@@ -727,19 +724,23 @@ class MenuWin( object ):
             self.button_icon.hide()
         else:
             self.button_icon.show()
-        # COMMENTED DURING MIGRATION
-        # This code calculates width and height for the button_box
-        # and takes the orientation in account
-        #if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
-        #    if self.hideIcon:
-        #        self.applet.set_size_request( self.systemlabel.size_request()[0] + 2, -1 )
-        #    else:				
-        #        self.applet.set_size_request( self.systemlabel.size_request()[0] + self.button_icon.size_request()[0] + 5, self.button_icon.size_request()[1] )
-        #else:
-        #    if self.hideIcon:
-        #        self.applet.set_size_request( self.button_icon.size_request()[0], self.systemlabel.size_request()[1] + 2 )
-        #    else:
-        #        self.applet.set_size_request( self.button_icon.size_request()[0], self.systemlabel.size_request()[1] + self.button_icon.size_request()[1] + 5 )
+     #   This code calculates width and height for the button_box
+     #   and takes the orientation in account
+        sl_req = Gtk.Requisition()
+        bi_req = Gtk.Requisition()
+        self.button_icon.size_request(bi_req)
+        self.systemlabel.size_request(sl_req)
+        if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
+           if self.hideIcon:
+               self.systemlabel.size_request(sl_req)
+               self.applet.set_size_request( sl_req.width + 2, -1 )
+           else:
+               self.applet.set_size_request( sl_req.width + bi_req.width + 5, bi_req.height )
+        else:
+           if self.hideIcon:
+               self.applet.set_size_request( bi_req.width, sl_req.height + 2 )
+           else:
+               self.applet.set_size_request( bi_req.width, sl_req.height + bi_req.height + 5 )
 
     def reloadSettings( self, *args ):
         self.loadSettings()

@@ -854,11 +854,11 @@ class pluginclass( object ):
         
     # Forward all text to the search box
     def keyPress( self, widget, event ):
-        if event.string.strip() != "" or event.keyval == gtk.keysyms.BackSpace:
+        if event.string.strip() != "" or event.keyval == Gdk.KEY_BackSpace:
             self.searchEntry.event( event )
             return True
 
-        if event.keyval == gtk.keysyms.Down and self.searchEntry.is_focus():
+        if event.keyval == Gdk.KEY_Down and self.searchEntry.is_focus():
             self.applicationsBox.get_children()[0].grab_focus()
 
         return False
@@ -936,13 +936,13 @@ class pluginclass( object ):
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
                 #mTree.popup( None, None, None, ev.button, ev.time )
-                gtk.gtk_menu_popup(hash(mTree), None, None, None, None, None)
+                gtk.gtk_menu_popup(hash(mTree), None, None, None, ev.button, ev.time)
                 self.mintMenuWin.grab()
+                return True
 
     def menuPopup( self, widget, event ):
         if event.button == 3:
             mTree = self.builder.get_object ( "applicationsMenu" )
-
             #i18n
             desktopMenuItem = Gtk.MenuItem(_("Add to desktop"))
             panelMenuItem = Gtk.MenuItem(_("Add to panel"))
@@ -1000,11 +1000,12 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
-
-            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, None)
-            #mTree.popup( None, None, None, event.button, event.time )
+            gtk.gtk_menu_popup(hash(mTree), None, hash(widget), None, 0, event.time)
+            #mTree.popup_for_device( None, None, None, event.button, event.time )
+            return True
             
     def onMenuPopupDeactivate( self, widget):
+        print "what"
         self.mintMenuWin.grab()
     
     def searchPopup( self, widget=None, event=None ):    
@@ -1088,6 +1089,7 @@ class pluginclass( object ):
         #menu.reposition()
         self.mintMenuWin.grab()
         self.focusSearchEntry()
+        return True
         
     def pos_func(self, menu=None):
         rect = self.searchButton.get_allocation()
@@ -1314,7 +1316,7 @@ class pluginclass( object ):
     # Scroll button into view
     def scrollItemIntoView( self, widget, event = None ):
         viewport = widget.parent
-        while not isinstance( viewport, gtk.Viewport ):
+        while not isinstance( viewport, Gtk.Viewport ):
             if not viewport.parent:
                 return
             viewport = viewport.parent
