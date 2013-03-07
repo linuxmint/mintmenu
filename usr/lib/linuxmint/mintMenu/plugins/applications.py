@@ -873,7 +873,9 @@ class pluginclass( object ):
                 insertBefore = True
 
             if widget.type == "location":
-                mTree = self.builder.get_object( "favoritesMenu" )
+                mTree = Gtk.Menu()
+                mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
+                                 Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK)
                 #i18n
 
                 desktopMenuItem = Gtk.MenuItem(_("Add to desktop"))
@@ -919,12 +921,14 @@ class pluginclass( object ):
 
                 mTree.show_all()
 
-                #mTree.popup( None, None, None, ev.button, ev.time )
-                gtk.gtk_menu_popup(hash(mTree), None, None, None, None, None)
+                gtk.gtk_menu_popup(hash(mTree), None, None, None, ev.button, ev.time)
             #    self.mintMenuWin.grab()
 
             else:
-                mTree = self.builder.get_object( "favoritesMenuExtra" )
+                mTree = Gtk.Menu()
+                mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
+                                 Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK)
+
                 #i18n
                 removeMenuItem = Gtk.MenuItem(_("Remove"))
                 insertSpaceMenuItem = Gtk.MenuItem(_("Insert space"))
@@ -937,14 +941,13 @@ class pluginclass( object ):
                 removeMenuItem.connect( "activate", self.onFavoritesRemove, widget )
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
-                #mTree.popup( None, None, None, ev.button, ev.time )
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, ev.button, ev.time)
            #     self.mintMenuWin.grab()
                 return True
 
     def menuPopup( self, widget, event ):
         if event.button == 3:
-            mTree = self.builder.get_object ( "applicationsMenu" )
+            mTree = Gtk.Menu()
             #i18n
             desktopMenuItem = Gtk.MenuItem(_("Add to desktop"))
             panelMenuItem = Gtk.MenuItem(_("Add to panel"))
@@ -1003,13 +1006,10 @@ class pluginclass( object ):
 
             mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
             gtk.gtk_menu_popup(hash(mTree), None, None, None, None, 0, 0)
-            #mTree.popup( None, None, None, None, event.button, event.time )
-            print "sdfdfs"
-            return True
-            
+
     def onMenuPopupDeactivate( self, widget):
-        print "what"
-        self.mintMenuWin.grab()
+        pass
+        #self.mintMenuWin.grab()
     
     def searchPopup( self, widget=None, event=None ):    
         menu = Gtk.Menu()
@@ -1084,9 +1084,9 @@ class pluginclass( object ):
         menu.append(menuItem)
         
         menu.show_all()
-        #menu.popup( None, None, self.pos_func, 3, 0)
+
         gtk.gtk_menu_popup(hash(menu), None, None, None, None, 3, 0)
-        #menu.popup( None, None, None, 3, 0)
+
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
