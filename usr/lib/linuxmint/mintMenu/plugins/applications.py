@@ -16,6 +16,7 @@ import commands
 import subprocess
 import filecmp
 import ctypes
+import capi
 from ctypes import *
 from easybuttons import *
 from execute import Execute
@@ -1000,8 +1001,8 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
-            gtk.gtk_menu_popup(hash(mTree), None, None, None, 0, 0)
-            #mTree.popup_for_device( None, None, None, event.button, event.time )
+            gtk.gtk_menu_popup(hash(mTree), None, None, None, 3, 0)
+            #mTree.popup( None, None, None, event.button, event.time )
             return True
             
     def onMenuPopupDeactivate( self, widget):
@@ -1009,8 +1010,8 @@ class pluginclass( object ):
         self.mintMenuWin.grab()
     
     def searchPopup( self, widget=None, event=None ):    
-        menu = Gtk.Menu()   
-             
+        menu = Gtk.Menu()
+
         menuItem = Gtk.ImageMenuItem(_("Search Google"))
         img = Gtk.Image()
         img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/google.ico')
@@ -1081,6 +1082,7 @@ class pluginclass( object ):
         menu.append(menuItem)
         
         menu.show_all()
+        print "show"
         #menu.popup( None, None, self.pos_func, 3, 0)
         gtk.gtk_menu_popup(hash(menu), None, None, None, 3, 0)
         #menu.popup( None, None, None, 3, 0)

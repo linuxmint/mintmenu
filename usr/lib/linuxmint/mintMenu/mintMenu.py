@@ -9,6 +9,7 @@ from gi.repository import Gio
 
 try:
     import sys
+    sys.path.append('/usr/lib/linuxmint/mintMenu/plugins')
     from gi.repository import Pango
     import os
     import commands
@@ -19,6 +20,7 @@ try:
     import ctypes
     from ctypes import *
     import capi
+    from execute import *
     import xdg.Config
 except Exception, e:
     print e
@@ -554,15 +556,6 @@ class MenuWin( object ):
         if icon:
             Gtk.Window.set_default_icon( icon )
 
-        self.propxml = """
-                <popup name="button3">
-                                <menuitem name="Item 1" verb="Preferences" label="%s" pixtype="stock" pixname="gtk-preferences" />
-                                <menuitem name="Item 1" verb="Edit" label="%s" pixtype="stock" pixname="gtk-edit" />
-                                <menuitem name="Item 2" verb="Reload" label="%s" pixtype="stock" pixname="gtk-refresh" />
-                                <menuitem name="Item 3" verb="About" label="%s" pixtype="stock" pixname="gtk-about" />
-                </popup>
-                """ % ( _("Preferences"), _("Edit menu"), _("Reload plugins"), _("About") )
-        self.verbs = [ ("Preferences", self.showPreferences), ("Edit", self.showMenuEditor), ("About", self.showAboutDialog), ("Reload",self.mainwin.RegenPlugins) ]
         self.bind_hot_key()
 
     def onBindingPress(self):
@@ -774,11 +767,11 @@ class MenuWin( object ):
         about.show()
 
 
-    def showPreferences( self, uicomponent, verb ):
+    def showPreferences( self, action, userdata = None ):
 #               Execute( "mateconf-editor /apps/mintMenu" )
         Execute( os.path.join( PATH, "mintMenuConfig.py" ) )
 
-    def showMenuEditor( self, uicomponent, verb ):
+    def showMenuEditor( self, action, userdata = None ):
         Execute( "mozo" )
 
     def showMenu( self, widget=None, event=None ):
@@ -851,7 +844,23 @@ class MenuWin( object ):
 
     # this callback is to create a context menu
     def create_menu(self):
-        self.applet.setup_menu(self.propxml, self.verbs, None)
+        action_group = Gtk.ActionGroup("context-menu")
+        action = Gtk.Action("MintMenuPrefs", _("Preferences"), None, "gtk-preferences")
+        action.connect("activate", self.showPreferences)
+        action_group.add_action(action)
+        action = Gtk.Action("MintMenuEdit", _("Edit menu"), None, "gtk-edit")
+        action.connect("activate", self.showMenuEditor)
+        action_group.add_action(action)
+        action = Gtk.Action("MintMenuReload", _("Reload plugins"), None, "gtk-refresh")
+        action.connect("activate", self.mainwin.RegenPlugins)
+        action_group.add_action(action)
+        action = Gtk.Action("MintMenuAbout", _("About"), None, "gtk-about")
+        action.connect("activate", self.showAboutDialog)
+        action_group.add_action(action)
+        action_group.set_translation_domain ("mintmenu")
+
+        xml = os.path.join( os.path.join( os.path.dirname( __file__ )), "menu.xml" )
+        self.applet.setup_menu_from_file(xml, action_group)
 
 def applet_factory( applet, iid, data ):
     MenuWin( applet, iid )
