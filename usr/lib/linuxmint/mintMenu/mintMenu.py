@@ -9,7 +9,6 @@ from gi.repository import Gio
 
 try:
     import sys
-    sys.path.append('/usr/lib/linuxmint/mintMenu/plugins')
     from gi.repository import Pango
     import os
     import commands
@@ -20,7 +19,6 @@ try:
     import ctypes
     from ctypes import *
     import capi
-    from execute import *
     import xdg.Config
 except Exception, e:
     print e
@@ -67,7 +65,7 @@ if not windowManager:
 xdg.Config.setWindowManager( windowManager.upper() )
 
 from easybuttons import iconManager
-#from execute import * COMMENTED DURING MIGRATION
+from execute import *
 
 class MainWindow( object ):
     """This is the main class for the application"""
@@ -739,10 +737,8 @@ class MenuWin( object ):
         self.loadSettings()
         self.updateButton()        
 
-    def showAboutDialog( self, uicomponent, verb ):
+    def showAboutDialog( self, action, userdata = None ):
 
-        Gtk.about_dialog_set_email_hook( lambda dialog, mail: gnomevfs.url_show( "mailto:" + mail ) )
-        Gtk.about_dialog_set_url_hook( lambda dialog, url: gnomevfs.url_show( url ) )
         about = Gtk.AboutDialog()
         about.set_name("mintMenu")
         import commands
@@ -759,7 +755,7 @@ class MenuWin( object ):
         except Exception, detail:
             print detail
         about.set_comments( _("Advanced Gnome Menu") )
-        about.set_authors( ["Clement Lefebvre <clem@linuxmint.com>", "Lars-Peter Clausen <lars@laprican.de>"] )
+      #  about.set_authors( ["Clement Lefebvre <clem@linuxmint.com>", "Lars-Peter Clausen <lars@laprican.de>"] )
         about.set_translator_credits(("translator-credits") )
         #about.set_copyright( _("Based on USP from S.Chanderbally") )
         about.set_logo( GdkPixbuf.Pixbuf.new_from_file("/usr/lib/linuxmint/mintMenu/icon.svg") )

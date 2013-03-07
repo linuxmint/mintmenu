@@ -32,7 +32,7 @@ import matemenu
 
 from user import home
 
-GObject.threads_init()
+Gdk.threads_init()
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -1001,8 +1001,9 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
-            gtk.gtk_menu_popup(hash(mTree), None, None, None, 3, 0)
-            #mTree.popup( None, None, None, event.button, event.time )
+            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, 0, 0)
+            #mTree.popup( None, None, None, None, event.button, event.time )
+            print "sdfdfs"
             return True
             
     def onMenuPopupDeactivate( self, widget):
