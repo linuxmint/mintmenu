@@ -258,9 +258,9 @@ class pluginclass( object ):
             trashMenu.append(emptyTrashMenuItem)
             trashMenu.show_all()
             emptyTrashMenuItem.connect ( "activate", self.emptyTrash, widget )
-            gtk.gtk_menu_popup(trashMenu, None, None, None, None, 3, 0)
+            gtk.gtk_menu_popup(hash(trashMenu), None, None, None, None, 3, 0)
             #trashMenu.popup( None, None, None, event.button, event.time )
-         #   self.mintMenuWin.grab()
+            #self.mintMenuWin.grab()
             return True
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import mateconf
+
 from gi.repository import Gio
 
 class EasyGSettings:

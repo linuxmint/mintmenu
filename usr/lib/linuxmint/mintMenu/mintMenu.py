@@ -201,10 +201,10 @@ class MainWindow( object ):
         self.globalEnableTooltips = mate_settings.get_boolean( "tooltips-enabled" )
 
     def SetupMintMenuBorder( self ):
-        if self.usecustomcolor:
-            self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.custombordercolor ) )
-        else:
-            self.window.modify_bg( Gtk.StateType.NORMAL, self.window.rc_get_style().bg[ Gtk.StateType.SELECTED ] )
+        # if self.usecustomcolor:
+        #     self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.custombordercolor ) )
+        # else:
+        #     self.window.modify_bg( Gtk.StateType.NORMAL, self.window.rc_get_style().bg[ Gtk.StateType.SELECTED ] )
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )        
 
     def SetupMintMenuOpacity( self ):
@@ -384,16 +384,16 @@ class MainWindow( object ):
         #print u"Loading", (time.time() - start), "s"
 
     def SetPaneColors( self, items ):
-        for item in items:
-            if item not in self.panesToColor:
-                self.panesToColor.append( item )
-        if self.usecustomcolor:
-            for item in items:
-                item.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.customcolor ) )
-        else:
-            for item in items:
-                item.modify_bg( Gtk.StateType.NORMAL, self.paneholder.rc_get_style().bg[ Gtk.StateType.NORMAL ] )
-
+        # for item in items:
+        #     if item not in self.panesToColor:
+        #         self.panesToColor.append( item )
+        # if self.usecustomcolor:
+        #     for item in items:
+        #         item.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.customcolor ) )
+        # else:
+        #     for item in items:
+        #         item.modify_bg( Gtk.StateType.NORMAL, self.paneholder.rc_get_style().bg[ Gtk.StateType.NORMAL ] )
+        pass
 
     def SetHeadingStyle( self, items ):
         return
@@ -460,15 +460,16 @@ class MainWindow( object ):
     def grab( self ):
         gdk.gdk_pointer_grab (hash(self.window.window), True, Gdk.EventMask.BUTTON_PRESS_MASK, None, None, 0)
         Gdk.keyboard_grab( self.window.window, False, Gdk.CURRENT_TIME )
-        Gtk.grab_add(self.window)
+     #   Gtk.grab_add(self.window)
 
     def ungrab( self ):
-        Gtk.grab_remove(self.window)
+     #   Gtk.grab_remove(self.window)
         self.window.hide()
         Gdk.pointer_ungrab(Gdk.CURRENT_TIME)
         Gdk.keyboard_ungrab(Gdk.CURRENT_TIME)
 
     def onMap( self, widget, event ):
+        return
         self.grab()
 
     def onShow( self, widget ):

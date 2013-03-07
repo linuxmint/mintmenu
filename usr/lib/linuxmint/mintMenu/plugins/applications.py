@@ -6,7 +6,7 @@ gi.require_version("Gtk", "2.0")
 from gi.repository import Gtk, GObject, Pango, Gdk
 
 import os
-import mateconf
+#import mateconf
 import fnmatch
 import time
 import string
@@ -335,14 +335,15 @@ class pluginclass( object ):
             os.system("/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py > %s/.linuxmint/mintMenu/apt.cache &" % home)            
 
     def get_panel(self):
-        self.panel = None
-        self.panel_position = 0
-        appletidlist = mateconf.client_get_default().get_list("/apps/panel/general/applet_id_list", "string")
-        for applet in appletidlist:
-            bonobo_id = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/applet_iid")
-            if bonobo_id == "OAFIID:MATE_mintMenu":
-                self.panel = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/toplevel_id")
-                self.panel_position = mateconf.client_get_default().get_int("/apps/panel/applets/" + applet + "/position") + 1
+        pass
+        # self.panel = None
+#FIX        # self.panel_position = 0
+        # appletidlist = mateconf.client_get_default().get_list("/apps/panel/general/applet_id_list", "string")
+        # for applet in appletidlist:
+        #     bonobo_id = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/applet_iid")
+        #     if bonobo_id == "OAFIID:MATE_mintMenu":
+        #         self.panel = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/toplevel_id")
+        #         self.panel_position = mateconf.client_get_default().get_int("/apps/panel/applets/" + applet + "/position") + 1
       
     def apturl_install(self, widget, pkg_name):
 		if os.path.exists("/usr/bin/apturl"):
@@ -920,7 +921,7 @@ class pluginclass( object ):
 
                 #mTree.popup( None, None, None, ev.button, ev.time )
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, None, None)
-                self.mintMenuWin.grab()
+            #    self.mintMenuWin.grab()
 
             else:
                 mTree = self.builder.get_object( "favoritesMenuExtra" )
@@ -938,7 +939,7 @@ class pluginclass( object ):
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
                 #mTree.popup( None, None, None, ev.button, ev.time )
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, ev.button, ev.time)
-                self.mintMenuWin.grab()
+           #     self.mintMenuWin.grab()
                 return True
 
     def menuPopup( self, widget, event ):
@@ -1083,14 +1084,13 @@ class pluginclass( object ):
         menu.append(menuItem)
         
         menu.show_all()
-        print "show"
         #menu.popup( None, None, self.pos_func, 3, 0)
-        gtk.gtk_menu_popup(hash(menu), None, None, None, 3, 0)
+        gtk.gtk_menu_popup(hash(menu), None, None, None, None, 3, 0)
         #menu.popup( None, None, None, 3, 0)
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
-        self.mintMenuWin.grab()
+    #    self.mintMenuWin.grab()
         self.focusSearchEntry()
         return True
         
@@ -1177,28 +1177,28 @@ class pluginclass( object ):
         os.system("cp \"%s\" \"%s\"" % (desktopEntry.desktopFile, new_file))
         os.system("chmod a+rx %s" % (new_file))
 
-        # Add to Gnome/GConf
-        object_dir = "/apps/panel/objects/"
-        object_client = mateconf.client_get_default()
+ #FIX       # Add to Gnome/GConf
+        # object_dir = "/apps/panel/objects/"
+        # object_client = mateconf.client_get_default()
 
-        object_client.set_string(object_dir + object_name +"/"+ "menu_path", "applications:/")
-        object_client.set_bool(object_dir + object_name +"/"+ "locked", False)
-        object_client.set_int(object_dir + object_name +"/"+ "position", self.panel_position)
-        object_client.set_string(object_dir + object_name +"/"+ "object_type", "launcher-object")
-        object_client.set_bool(object_dir + object_name +"/"+ "panel_right_stick", False)
-        object_client.set_bool(object_dir + object_name +"/"+ "use_menu_path", False)
-        object_client.set_string(object_dir + object_name +"/"+ "launcher_location", new_file)
-        object_client.set_string(object_dir + object_name +"/"+ "custom_icon", "")
-        object_client.set_string(object_dir + object_name +"/"+ "tooltip", "")
-        object_client.set_string(object_dir + object_name +"/"+ "action_type", "lock")
-        object_client.set_bool(object_dir + object_name +"/"+ "use_custom_icon", False)
-        object_client.set_string(object_dir + object_name +"/"+ "attached_toplevel_id", "")
-        object_client.set_string(object_dir + object_name +"/"+ "bonobo_iid", "")
-        object_client.set_string(object_dir + object_name +"/"+ "toplevel_id", self.panel)
+        # object_client.set_string(object_dir + object_name +"/"+ "menu_path", "applications:/")
+        # object_client.set_bool(object_dir + object_name +"/"+ "locked", False)
+        # object_client.set_int(object_dir + object_name +"/"+ "position", self.panel_position)
+        # object_client.set_string(object_dir + object_name +"/"+ "object_type", "launcher-object")
+        # object_client.set_bool(object_dir + object_name +"/"+ "panel_right_stick", False)
+        # object_client.set_bool(object_dir + object_name +"/"+ "use_menu_path", False)
+        # object_client.set_string(object_dir + object_name +"/"+ "launcher_location", new_file)
+        # object_client.set_string(object_dir + object_name +"/"+ "custom_icon", "")
+        # object_client.set_string(object_dir + object_name +"/"+ "tooltip", "")
+        # object_client.set_string(object_dir + object_name +"/"+ "action_type", "lock")
+        # object_client.set_bool(object_dir + object_name +"/"+ "use_custom_icon", False)
+        # object_client.set_string(object_dir + object_name +"/"+ "attached_toplevel_id", "")
+        # object_client.set_string(object_dir + object_name +"/"+ "bonobo_iid", "")
+        # object_client.set_string(object_dir + object_name +"/"+ "toplevel_id", self.panel)
 
-        launchers_list = object_client.get_list("/apps/panel/general/object_id_list", "string")
-        launchers_list.append(object_name)
-        object_client.set_list("/apps/panel/general/object_id_list", mateconf.VALUE_STRING, launchers_list)
+        # launchers_list = object_client.get_list("/apps/panel/general/object_id_list", "string")
+        # launchers_list.append(object_name)
+        # object_client.set_list("/apps/panel/general/object_id_list", mateconf.VALUE_STRING, launchers_list)
 
     def delete_from_menu(self, widget, desktopEntry):
         try:
