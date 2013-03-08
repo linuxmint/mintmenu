@@ -274,12 +274,12 @@ class ApplicationLauncher( easyButton ):
 
         array = TargetEntry * 2
         targets = array(( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ))
-        gtk.gtk_drag_source_set(hash(self), Gdk.ModifierType.BUTTON1_MASK, targets, Gdk.DragAction.COPY)
+        gtk.gtk_drag_source_set(hash(self), Gdk.ModifierType.BUTTON1_MASK, targets, 2, Gdk.DragAction.COPY)
 
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
             gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(icon) )
-#            del icon
+            del icon
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
         self.connectSelf( "focus-out-event", self.onFocusOut )

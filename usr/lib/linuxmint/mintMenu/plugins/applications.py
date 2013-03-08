@@ -215,7 +215,8 @@ class TargetEntry(Structure):
 
 class pluginclass( object ):
     TARGET_TYPE_TEXT = 80
-    toButton = TargetEntry( "text/uri-list", 0, TARGET_TYPE_TEXT )
+    array2 = TargetEntry * 2
+    toButton = array2( ("text/uri-list", 0, TARGET_TYPE_TEXT), ("text/uri-list", 0, TARGET_TYPE_TEXT) )
     TARGET_TYPE_FAV = 81
     array = TargetEntry * 3
     toFav = array( ( "FAVORITES", Gtk.TargetFlags.SAME_APP, 81 ), ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) )
@@ -278,9 +279,9 @@ class pluginclass( object ):
 
         self.favoritesBox.connect( "drag-data-received", self.ReceiveCallback )
 
-        gtk.gtk_drag_dest_set ( hash(self.favoritesBox), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, Gdk.DragAction.COPY )
+        gtk.gtk_drag_dest_set ( hash(self.favoritesBox), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, 2, Gdk.DragAction.COPY )
         self.showFavoritesButton.connect( "drag-data-received", self.ReceiveCallback )
-        gtk.gtk_drag_dest_set ( hash(self.showFavoritesButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, Gdk.DragAction.COPY )
+        gtk.gtk_drag_dest_set ( hash(self.showFavoritesButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, 2, Gdk.DragAction.COPY )
 
        # self.searchButton.connect( "button_release_event", self.SearchWithButton )
         try:
@@ -1432,9 +1433,9 @@ class pluginclass( object ):
                     self.favorites.append( favButton )
                     self.favoritesPositionOnGrid( favButton )
                     favButton.connect( "drag-data-received", self.onFavButtonDragReorder )
-                    gtk.gtk_drag_dest_set( hash(favButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.fromFav, Gdk.DragAction.COPY )
+                    gtk.gtk_drag_dest_set( hash(favButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.fromFav, 2, Gdk.DragAction.COPY )
                     favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
-                    gtk.gtk_drag_source_set( hash(favButton), Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
+                    gtk.gtk_drag_source_set( hash(favButton), Gdk.ModifierType.BUTTON1_MASK, self.toFav, 3, Gdk.DragAction.COPY )
                     position += 1
 
             self.favoritesSave()
@@ -1482,9 +1483,10 @@ class pluginclass( object ):
             self.favoritesBox.attach( favorite, col, col + 1, row, row + 1, yoptions = 0 )
 
     def favoritesReorder( self, oldposition, newposition ):
+        print oldposition, "old"
+        print newposition, "new"
         if oldposition == newposition:
             return
-
         tmp = self.favorites[ oldposition ]
         if newposition > oldposition:
             if ( self.favorites[ newposition - 1 ].type == "space" or self.favorites[ newposition - 1 ].type == "separator" ) and self.favCols > 1:
@@ -1513,9 +1515,9 @@ class pluginclass( object ):
             self.favoritesPositionOnGrid( favButton )
 
             favButton.connect( "drag-data-received", self.onFavButtonDragReorder )
-            gtk.gtk_drag_dest_set( hash(favButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY )
+            gtk.gtk_drag_dest_set( hash(favButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, 3, Gdk.DragAction.COPY )
             favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
-            gtk.gtk_drag_source_set ( hash(favButton), Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
+            gtk.gtk_drag_source_set ( hash(favButton), Gdk.ModifierType.BUTTON1_MASK, self.toFav, 3, Gdk.DragAction.COPY )
 
             if position >= 0:
                 self.favoritesReorder( favButton.position, position )
@@ -1564,12 +1566,10 @@ class pluginclass( object ):
         return False
 
     def onFavButtonDragReorderGet( self, widget, context, selection, targetType, eventTime ):
-        print "get"
         if targetType == self.TARGET_TYPE_FAV:
-            selection.set( selection.target, 8, str(widget.position) )
+            selection.set( selection.target, 8, str(widget.position))
 
     def onFavButtonDragReorder( self, widget, context, x, y, selection, targetType, time  ):
-        print "reordeR"
         if targetType == self.TARGET_TYPE_FAV:
             self.favoritesReorder( int(selection.data), widget.position )
 
