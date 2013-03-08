@@ -1,100 +1,107 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
 <!--*- mode: xml -*-->
-<interface>
-  <object class="GtkWindow" id="window1">
+<glade-interface>
+  <widget class="GtkWindow" id="window1">
     <property name="title" translatable="yes">window1</property>
     <child>
-      <object class="GtkEventBox" id="eventbox1">
+      <widget class="GtkEventBox" id="eventbox1">
         <property name="visible">True</property>
         <property name="border_width">5</property>
         <child>
-          <object class="GtkVBox" id="vbox1">
+          <widget class="GtkVBox" id="vbox1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkNotebook" id="RecentTabs">
+              <widget class="GtkNotebook" id="RecentTabs">
                 <property name="visible">True</property>
                 <property name="show_tabs">False</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                  <widget class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                     <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                     <child>
-                      <object class="GtkViewport" id="viewport2">
+                      <widget class="GtkViewport" id="viewport2">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkVButtonBox" id="RecentApps">
+                          <widget class="GtkVButtonBox" id="RecentApps">
                             <property name="visible">True</property>
                             <property name="layout_style">GTK_BUTTONBOX_START</property>
                             <child>
                               <placeholder/>
                             </child>
-                          </object>
+                          </widget>
                         </child>
-                      </object>
+                      </widget>
                     </child>
-                  </object>
+                  </widget>
                 </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label2">
+                <child>
+                  <widget class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">Applications</property>
-                  </object>
+                  </widget>
                   <packing>
+                    <property name="type">tab</property>
                     <property name="tab_fill">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow2">
+                  <widget class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                     <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                     <child>
-                      <object class="GtkViewport" id="viewport1">
+                      <widget class="GtkViewport" id="viewport1">
                         <property name="visible">True</property>
                         <property name="shadow_type">GTK_SHADOW_NONE</property>
                         <child>
-                          <object class="GtkVButtonBox" id="RecentBox">
+                          <widget class="GtkVButtonBox" id="RecentBox">
                             <property name="visible">True</property>
                             <property name="layout_style">GTK_BUTTONBOX_START</property>
-                          </object>
+                          </widget>
                         </child>
-                      </object>
+                      </widget>
                     </child>
-                  </object>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label3">
+                <child>
+                  <widget class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">Documents</property>
-                  </object>
+                  </widget>
                   <packing>
+                    <property name="type">tab</property>
                     <property name="position">1</property>
                     <property name="tab_fill">False</property>
                   </packing>
                 </child>
-              </object>
+              </widget>
             </child>
             <child>
-              <object class="GtkButton" id="ClrBtn">
+              <widget class="GtkButton" id="ClrBtn">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">gtk-clear</property>
                 <property name="use_stock">True</property>
-                <signal handler="on_ClrBtn_clicked" name="clicked"/>
-              </object>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_ClrBtn_clicked"/>
+              </widget>
               <packing>
                 <property name="expand">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </object>
+          </widget>
         </child>
-      </object>
+      </widget>
     </child>
-  </object>
-</interface>
+  </widget>
+</glade-interface>

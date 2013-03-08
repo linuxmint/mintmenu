@@ -1,18 +1,16 @@
-import gtk
-import gtk.glade
+import gi
+gi.require_version("Gtk", "2.0")
+
+from gi.repository import Gtk, Pango
 import sys
 import os
 import gobject
 import datetime
-import mateconf
 import fcntl
-import pango
+from easygsettings import EasyGSettings
 from execute import Execute
-from easygconf import *
 from easyfiles import *
 from easybuttons import *
-
-
 
 class pluginclass:
     """This is the main class for the plugin"""
@@ -24,20 +22,18 @@ class pluginclass:
         self.toggleButton = toggleButton
         self.de = de
 
+        self.builder = Gtk.Builder()
         #The Glade file for the plugin
-        self.gladefile = os.path.join( os.path.dirname( __file__ ), "recent.glade" )
-
-        #Read GLADE file
-        self.wTree = gtk.glade.XML( self.gladefile, "window1" )
+        self.builder.add_from_file (os.path.join( os.path.dirname( __file__ ), "recent.glade" ))
 
         #Set 'window' property for the plugin (Must be the root widget)
-        self.window = self.wTree.get_widget( "window1" )
+        self.window = self.builder.get_object( "window1" )
 
         #Set 'heading' property for plugin
         self.heading = _("Recent documents")
 
         #This should be the first item added to the window in glade
-        self.content_holder = self.wTree.get_widget( "eventbox1" )
+        self.content_holder = self.builder.get_object( "eventbox1" )
 
         #Specify plugin width
         self.width = 250
@@ -45,53 +41,50 @@ class pluginclass:
         #Plugin icon
         self.icon = 'mate-folder.png'
 
-        self.gconf_dir = '/apps/mintMenu/plugins/recent'
-        self.client = mateconf.client_get_default()
-        self.client.add_dir( '/apps/mintMenu/plugins/recent', mateconf.CLIENT_PRELOAD_NONE )
-        self.client.notify_add( '/apps/mintMenu/plugins/recent/height', self.RegenPlugin )
-        self.client.notify_add( '/apps/mintMenu/plugins/recent/width', self.RegenPlugin )
-        self.client.notify_add( '/apps/mintMenu/plugins/recent/num_recent_docs_to_show', self.RegenPlugin )
-        self.client.notify_add( '/apps/mintMenu/plugins/recent/recent_font_size', self.RegenPlugin )
+        self.settings = EasyGSettings ("com.linuxmint.mintmenu.plugins.recent")
+
+        self.settings.notifyAdd( 'height', self.RegenPlugin )
+        self.settings.notifyAdd( 'width', self.RegenPlugin )
+        self.settings.notifyAdd( 'num-recent-docs', self.RegenPlugin )
+        self.settings.notifyAdd( 'recent-font-size', self.RegenPlugin )
 
         self.FileList=[]
-        self.RecManagerInstance = gtk.recent_manager_get_default()
-        self.RecManagerInstance.connect("changed",self.DoRecent)
+        self.RecManagerInstance = Gtk.RecentManager.get_default()
+        self.RecManagerInstance.connect("changed", self.DoRecent)
 
 
         self.RegenPlugin()
-        self.wTree.get_widget( "RecentTabs" ).set_current_page(1)
+        self.builder.get_object( "RecentTabs" ).set_current_page(1)
 
         #Connect event handlers
-        dic = { "on_ClrBtn_clicked" : self.clrmenu}
-        self.wTree.signal_autoconnect( dic )
+        self.builder.get_object("ClrBtn").connect("clicked", self.clrmenu)
 
     def wake (self) :
         pass
 
     def RegenPlugin( self, *args, **kargs ):
-        self.GetGconfEntries()
+        self.GetGSettingsEntries()
 
-    def GetGconfEntries( self ):
-        self.gconf = EasyGConf( "/apps/mintMenu/plugins/recent/" )
-        self.recenth = self.gconf.get( 'int', 'height', 385 )
-        self.recentw = self.gconf.get( 'int', 'width', 250 )
-        self.numentries = self.gconf.get( 'int', 'num_recent_docs_to_show', 10 )
-        self.recentfontsize = self.gconf.get( 'int', 'recent_font_size', 9 )
+    def GetGSettingsEntries( self ):
+        self.recenth = self.settings.get( 'int', 'height' )
+        self.recentw = self.settings.get( 'int', 'width' )
+        self.numentries = self.settings.get( 'int', 'num-recent-docs' )
+        self.recentfontsize = self.settings.get( 'int', 'recent-font-size' )
 
         # Hide vertical dotted separator
-        self.hideseparator = self.gconf.get( "bool", "hide_separator", False )
+        self.hideseparator = self.settings.get( "bool", "hide-separator" )
         # Plugin icon
-        self.icon = self.gconf.get( "string", 'icon', "mate-fs-directory" )
+        self.icon = self.settings.get( "string", 'icon' )
         # Allow plugin to be minimized to the left plugin pane
-        self.sticky = self.gconf.get( "bool", "sticky", False )
-        self.minimized = self.gconf.get( "bool", "minimized", False )
+        self.sticky = self.settings.get( "bool", "sticky" )
+        self.minimized = self.settings.get( "bool", "minimized" )
         self.RebuildPlugin()
 
     def SetHidden( self, state ):
         if state == True:
-            self.gconf.set( "bool", "minimized", True )
+            self.settings.set( "bool", "minimized", True )
         else:
-            self.gconf.set( "bool", "minimized", False )
+            self.settings.set( "bool", "minimized", False )
 
 
     def RebuildPlugin(self):
@@ -100,16 +93,16 @@ class pluginclass:
 
 
     def DoRecent( self, *args, **kargs ):
-        for i in self.wTree.get_widget( "RecentBox" ).get_children():
+        for i in self.builder.get_object( "RecentBox" ).get_children():
             i.destroy()
 
-        self.wTree.get_widget( "vbox1" ).set_size_request( self.recentw, self.recenth )
-        if len( self.wTree.get_widget( "RecentBox" ).get_children() ) < self.numentries:
-            n=len( self.wTree.get_widget( "RecentBox" ).get_children() )-1
+        self.builder.get_object( "vbox1" ).set_size_request( self.recentw, self.recenth )
+        if len( self.builder.get_object( "RecentBox" ).get_children() ) < self.numentries:
+            n=len( self.builder.get_object( "RecentBox" ).get_children() )-1
         else:
             n=self.numentries-1
         while n >= 0:
-            self.wTree.get_widget( "RecentBox" ).remove( self.wTree.get_widget( "RecentBox" ).get_children()[n] )
+            self.builder.get_object( "RecentBox" ).remove( self.builder.get_object( "RecentBox" ).get_children()[n] )
             n-=1
 
         self.FileList, self.IconList = self.GetRecent()
@@ -128,27 +121,30 @@ class pluginclass:
     def AddRecentBtn( self, Name, RecentImage ):
         DispName=os.path.basename( Name )
 
-        AButton = gtk.Button( "", "ok", True )
+        AButton = Gtk.Button( "", "ok", True )
         AButton.remove( AButton.get_children()[0] )
         AButton.set_size_request( 200, -1 )
-        AButton.set_relief( gtk.RELIEF_NONE )
+        AButton.set_relief( Gtk.ReliefStyle.NONE )
         AButton.connect( "clicked", self.callback, Name )
 
-        Align1 = gtk.Alignment( 0, 0.5, 0, 0 )
+        Align1 = Gtk.Alignment()
+        Align1.set( 0, 0.5, 0, 0)
         Align1.set_padding( 0, 0, 0, 0 )
-        HBox1 = gtk.HBox( False, 5 )
-        VBox1 = gtk.VBox( False, 2 )
+        HBox1 = Gtk.HBox( False, 5 )
+        VBox1 = Gtk.VBox( False, 2 )
 
         VBox1.show()
 
+        req = Gtk.Requisition()
+        AButton.size_request(req)
 
-        Label1 = gtk.Label( DispName )
-        Label1.set_size_request( AButton.size_request()[0]-20, -1 )
-        Label1.set_ellipsize( pango.ELLIPSIZE_END )
+        Label1 = Gtk.Label( DispName )
+        Label1.set_size_request( req.width-20, -1 )
+        Label1.set_ellipsize( Pango.EllipsizeMode.END )
         Label1.show()
         VBox1.add( Label1 )
 
-        ButtonIcon = gtk.Image()
+        ButtonIcon = Gtk.Image()
         ButtonIcon.set_from_pixbuf(RecentImage)
         HBox1.add( ButtonIcon )
 
@@ -160,18 +156,18 @@ class pluginclass:
         AButton.add( Align1 )
         AButton.show()
 
-        self.wTree.get_widget( "RecentBox" ).pack_start( AButton, False, True, 0 )
+        self.builder.get_object( "RecentBox" ).pack_start( AButton, False, True, 0 )
 
     def callback(self, widget, filename=None):
         self.Win.hide()
 
         x = os.system("gvfs-open \""+filename+"\"")
         if x == 256:
-            dia = gtk.Dialog('File not found!',
+            dia = Gtk.Dialog('File not found!',
                              None,  #the toplevel wgt of your app
-                             gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,  #binary flags or'ed together
+                             Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,  #binary flags or'ed together
                              ("Ok", 77))
-            dia.vbox.pack_start(gtk.Label('The location or file could not be found!'))
+            dia.vbox.pack_start(Gtk.Label('The location or file could not be found!'), False, False, 0)
             dia.vbox.show_all()
             dia.show()
             result = dia.run()
@@ -191,7 +187,7 @@ class pluginclass:
             MaxEntries=len(RecentInfo)
         for items in RecentInfo:
             FileString.append(items.get_uri_display())
-            IconString.append(items.get_icon(gtk.ICON_SIZE_MENU))
+            IconString.append(items.get_icon(Gtk.IconSize.MENU))
             count+=1
             if count >= MaxEntries:
                 break

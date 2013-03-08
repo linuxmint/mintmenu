@@ -405,9 +405,58 @@
       <summary></summary>
       <description></description>
     </key>
-
-
   </schema>
 
+  <schema id="com.linuxmint.mintmenu.plugins.recent" path="/com/linuxmint/mintmenu/plugins/recent/">
+
+    <key type="i" name="width">
+      <default>250</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="height">
+      <default>385</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="num-recent-docs">
+      <default>10</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="recent-font-size">
+      <default>9</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="hide-separator">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="s" name="icon">
+      <default>"mate-fs-directory"</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="sticky">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="b" name="minimized">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+  </schema>
 
 </schemalist>
