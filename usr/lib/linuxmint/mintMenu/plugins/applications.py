@@ -32,7 +32,7 @@ import matemenu
 
 from user import home
 
-Gdk.threads_init()
+GObject.threads_init()
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -187,7 +187,7 @@ class SuggestionButton ( Gtk.Button ):
         self.image.show()
         HBox1.pack_start( self.image, False, False, 5 )
         self.label = Gtk.Label()
-        self.label.set_ellipsize( Pango.EllipsizeMode.END )
+        #self.label.set_ellipsize( Pango.EllipsizeMode.END )
         self.label.set_alignment( 0.0, 1.0 )
         self.label.show()
         labelBox.pack_start( self.label, False, False, 0 )
@@ -648,13 +648,8 @@ class pluginclass( object ):
     def add_apt_filter_results(self, keyword):
         try:   
             # Wait to see if the keyword has changed.. before doing anything
-            time.sleep(0.3)
             current_keyword = keyword
-            Gdk.threads_enter()
-            try:
-                current_keyword = self.searchEntry.get_text()
-            finally:
-                Gdk.threads_leave()
+            current_keyword = self.searchEntry.get_text()
             if keyword != current_keyword:
                 return            
             found_packages = []
@@ -697,34 +692,30 @@ class pluginclass( object ):
                     break
             found_packages.extend(found_in_name)
             found_packages.extend(found_elsewhere)
-            Gdk.threads_enter()                                    
-            try:
-                if keyword == self.searchEntry.get_text() and len(found_packages) > 0:         
-                    last_separator = Gtk.EventBox()
-                    last_separator.add(Gtk.HSeparator())
-                    last_separator.set_size_request(-1, 20)       
-                    last_separator.type = "separator"   
-                    self.mintMenuWin.SetPaneColors( [  last_separator ] )     
-                    last_separator.show_all()
-                    self.applicationsBox.add(last_separator)
-                    self.suggestions.append(last_separator)
-                    for pkg in found_packages:                        
-                        name = pkg.name
-                        for word in keywords: 
-                            if word != "":             
-                                name = name.replace(word, "<b>%s</b>" % word);
-                        suggestionButton = SuggestionButton(gtk.STOCK_ADD, self.iconSize, "")
-                        suggestionButton.connect("clicked", self.apturl_install, pkg.name)
-                        suggestionButton.set_text(_("Install package '%s'") % name)
-                        suggestionButton.set_tooltip_text("%s\n\n%s\n\n%s" % (pkg.name, pkg.summary, pkg.description))
-                        suggestionButton.set_icon_size(self.iconSize)
-                        self.applicationsBox.add(suggestionButton)
-                        self.suggestions.append(suggestionButton)
-                        #if cache != self.current_results:
-                        #    self.current_results.append(pkg)
-            finally:        
-                Gdk.threads_leave()            
-                        
+            if keyword == self.searchEntry.get_text() and len(found_packages) > 0:         
+                last_separator = Gtk.EventBox()
+                last_separator.add(Gtk.HSeparator())
+                last_separator.set_size_request(-1, 20)       
+                last_separator.type = "separator"   
+                self.mintMenuWin.SetPaneColors( [  last_separator ] )     
+                last_separator.show_all()
+                self.applicationsBox.add(last_separator)
+                self.suggestions.append(last_separator)
+                for pkg in found_packages:                        
+                    name = pkg.name
+                    for word in keywords: 
+                        if word != "":             
+                            name = name.replace(word, "<b>%s</b>" % word);
+                    suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
+                    suggestionButton.connect("clicked", self.apturl_install, pkg.name)
+                    suggestionButton.set_text(_("Install package '%s'") % name)
+                    suggestionButton.set_tooltip_text("%s\n\n%s\n\n%s" % (pkg.name, pkg.summary, pkg.description))
+                    suggestionButton.set_icon_size(self.iconSize)
+                    self.applicationsBox.add(suggestionButton)
+                    self.suggestions.append(suggestionButton)
+                    #if cache != self.current_results:
+                    #    self.current_results.append(pkg)
+
             #if len(found_packages) == 0:
             #    gtk.gdk.threads_enter()
             #    try:
@@ -810,13 +801,12 @@ class pluginclass( object ):
                             #if (len(self.current_results) > 0):
                                 #self.add_apt_filter_results_sync(self.current_results, text)
                             #else:
-                            thr = threading.Thread(name="mint-menu-apt-filter", group=None, target=self.add_apt_filter_results, args=([text]), kwargs={})
-                            thr.start()  
+                            GObject.timeout_add (300, self.add_apt_filter_results, text)
                         else:
                             self.current_results = []  
-                            self.add_search_suggestions(text) 
-                            thr = threading.Thread(name="mint-menu-apt-filter", group=None, target=self.add_apt_filter_results, args=([text]), kwargs={})
-                            thr.start()                                    
+                            self.add_search_suggestions(text)
+                            GObject.timeout_add (300, self.add_apt_filter_results, text)
+
                         self.current_suggestion = text
                     else:
                         self.current_suggestion = None
