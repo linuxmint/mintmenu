@@ -12,7 +12,10 @@ import xdg.DesktopEntry
 import xdg.Menu
 from filemonitor import monitor as filemonitor
 import glib
+import ctypes
+from ctypes import *
 
+gtk = CDLL("libgtk-x11-2.0.so.0")
 
 class IconManager(GObject.GObject):
 
@@ -231,6 +234,11 @@ class easyButton( Gtk.Button ):
             #[ iW, iH ] = iconManager.getIconSize( self.iconSize )
             self.buttonImage.set_size_request( self.iconSize, self.iconSize  )
 
+class TargetEntry(Structure):
+     _fields_ = [("target", c_char_p),
+                 ("flags", c_int),
+                 ("info", c_int)]
+
 class ApplicationLauncher( easyButton ):
 
     def __init__( self, desktopFile, iconSize):
@@ -262,13 +270,16 @@ class ApplicationLauncher( easyButton ):
         self.setupLabels()
 
         # Drag and Drop
-        self.connectSelf( "drag_data_get", self.dragDataGet )
-#FIX        self.drag_source_set( Gdk.ModifierType.BUTTON1_MASK  , [ ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) ], Gdk.DragAction.COPY )
+        self.connectSelf( "drag-data-get", self.dragDataGet )
+
+        array = TargetEntry * 2
+        targets = array(( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ))
+        gtk.gtk_drag_source_set(hash(self), Gdk.ModifierType.BUTTON1_MASK, targets, Gdk.DragAction.COPY)
 
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
-#FIX          #  self.drag_source_set_icon_pixbuf( icon )
-            del icon
+            gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(icon) )
+#            del icon
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
         self.connectSelf( "focus-out-event", self.onFocusOut )
@@ -356,6 +367,7 @@ class ApplicationLauncher( easyButton ):
 
 
     def dragDataGet( self, widget, context, selection, targetType, eventTime ):
+        print "drag data get"
         if targetType == 100: # text/plain
             selection.set_text( "'" + self.desktopFile + "'", -1 )
         elif targetType == 101: # text/uri-list
