@@ -208,12 +208,18 @@ class SuggestionButton ( Gtk.Button ):
     def set_icon_size (self, size):        
         self.image.set_from_stock( self.iconName, size )
 
+class TargetEntry(Structure):
+     _fields_ = [("target", c_char_p),
+                 ("flags", c_int),
+                 ("info", c_int)]
+
 class pluginclass( object ):
     TARGET_TYPE_TEXT = 80
-    toButton = [ ( "text/uri-list", 0, TARGET_TYPE_TEXT ) ]
+    toButton = TargetEntry( "text/uri-list", 0, TARGET_TYPE_TEXT )
     TARGET_TYPE_FAV = 81
-    toFav = [ ( "FAVORITES", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_FAV ), ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) ]
-    fromFav = [ ( "FAVORITES", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_FAV ) ]
+    array = TargetEntry * 3
+    toFav = array( ( "FAVORITES", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_FAV ), ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) )
+    fromFav = TargetEntry( "FAVORITES", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_FAV )
 
     @print_timing
     def __init__( self, mintMenuWin, toggleButton, de ):
@@ -270,9 +276,10 @@ class pluginclass( object ):
         self.content_holder.connect( "key-press-event", self.keyPress )
 
         self.favoritesBox.connect( "drag_data_received", self.ReceiveCallback )
-        Gtk.drag_dest_set ( self.favoritesBox, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, Gdk.DragAction.COPY )
+
+        gtk.gtk_drag_dest_set ( hash(self.favoritesBox), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, Gdk.DragAction.COPY )
         self.showFavoritesButton.connect( "drag_data_received", self.ReceiveCallback )
-        Gtk.drag_dest_set ( self.showFavoritesButton, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, Gdk.DragAction.COPY )
+        gtk.gtk_drag_dest_set ( hash(self.showFavoritesButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, Gdk.DragAction.COPY )
 
        # self.searchButton.connect( "button_release_event", self.SearchWithButton )
         try:
@@ -911,8 +918,7 @@ class pluginclass( object ):
                 mTree.append(propsMenuItem)
 
                 mTree.show_all()
-
-                gtk.gtk_menu_popup(hash(mTree), None, None, None, ev.button, ev.time)
+                gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
                 self.mintMenuWin.grab()
 
             else:
@@ -932,7 +938,7 @@ class pluginclass( object ):
                 removeMenuItem.connect( "activate", self.onFavoritesRemove, widget )
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
-                gtk.gtk_menu_popup(hash(mTree), None, None, None, ev.button, ev.time)
+                gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
                 self.mintMenuWin.grab()
 
     def menuPopup( self, widget, event ):
@@ -1421,9 +1427,9 @@ class pluginclass( object ):
                     self.favorites.append( favButton )
                     self.favoritesPositionOnGrid( favButton )
                     favButton.connect( "drag_data_received", self.onFavButtonDragReorder )
-                    Gtk.drag_dest_set( favButton, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.fromFav, Gdk.DragAction.COPY )
+                  #  gtk.gtk_drag_dest_set( hash(favButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.fromFav, Gdk.DragAction.COPY )
                     favButton.connect( "drag_data_get", self.onFavButtonDragReorderGet )
-                    Gtk.drag_source_set( favButton, Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
+                    gtk.gtk_drag_source_set( hash(favButton), Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
                     position += 1
 
             self.favoritesSave()
@@ -1502,9 +1508,9 @@ class pluginclass( object ):
             self.favoritesPositionOnGrid( favButton )
 
             favButton.connect( "drag_data_received", self.onFavButtonDragReorder )
-            Gtk.drag_dest_set( favButton, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY )
+            gtk.gtk_drag_dest_set( hash(favButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY )
             favButton.connect( "drag_data_get", self.onFavButtonDragReorderGet )
-            Gtk.drag_source_set ( favButton, Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
+            gtk.gtk_drag_source_set ( hash(favButton), Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
 
             if position >= 0:
                 self.favoritesReorder( favButton.position, position )
