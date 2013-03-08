@@ -270,9 +270,9 @@ class pluginclass( object ):
         self.content_holder.connect( "key-press-event", self.keyPress )
 
         self.favoritesBox.connect( "drag_data_received", self.ReceiveCallback )
-#FIX     self.favoritesBox.drag_dest_set( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, gtk.gdk.ACTION_COPY )
+        Gtk.drag_dest_set ( self.favoritesBox, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, Gdk.DragAction.COPY )
         self.showFavoritesButton.connect( "drag_data_received", self.ReceiveCallback )
-#FIX     self.showFavoritesButton.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.toButton, gtk.gdk.ACTION_COPY )
+        Gtk.drag_dest_set ( self.showFavoritesButton, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, Gdk.DragAction.COPY )
 
        # self.searchButton.connect( "button_release_event", self.SearchWithButton )
         try:
@@ -1421,9 +1421,9 @@ class pluginclass( object ):
                     self.favorites.append( favButton )
                     self.favoritesPositionOnGrid( favButton )
                     favButton.connect( "drag_data_received", self.onFavButtonDragReorder )
-#FIX                favButton.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.fromFav, gtk.gdk.ACTION_COPY )
+                    Gtk.drag_dest_set( favButton, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.fromFav, Gdk.DragAction.COPY )
                     favButton.connect( "drag_data_get", self.onFavButtonDragReorderGet )
-#FIX      #             favButton.drag_source_set( gtk.gdk.BUTTON1_MASK, self.toFav, gtk.gdk.ACTION_COPY )
+                    Gtk.drag_source_set( favButton, Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
                     position += 1
 
             self.favoritesSave()
@@ -1502,9 +1502,9 @@ class pluginclass( object ):
             self.favoritesPositionOnGrid( favButton )
 
             favButton.connect( "drag_data_received", self.onFavButtonDragReorder )
-#FIX             favButton.drag_dest_set( gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP, self.toFav, gtk.gdk.ACTION_COPY )
+            Gtk.drag_dest_set( favButton, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY )
             favButton.connect( "drag_data_get", self.onFavButtonDragReorderGet )
-#FIX            favButton.drag_source_set( gtk.gdk.BUTTON1_MASK, self.toFav, gtk.gdk.ACTION_COPY )
+            Gtk.drag_source_set ( favButton, Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
 
             if position >= 0:
                 self.favoritesReorder( favButton.position, position )
