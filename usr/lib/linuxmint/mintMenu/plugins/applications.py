@@ -586,7 +586,7 @@ class pluginclass( object ):
     def buildButtonList( self ):         
         if self.buildingButtonList:
             self.stopBuildingButtonList = True
-            gobject.timeout_add( 100, self.buildButtonList )
+            GObject.timeout_add( 100, self.buildButtonList )
             return
 
         self.stopBuildingButtonList = False
@@ -1579,9 +1579,9 @@ class pluginclass( object ):
     def menuChanged( self, x, y ):
         # wait some miliseconds because there a multiple events send at the same time and we don't want to rebuild the menu for each
         if self.menuChangedTimer:
-            Gobject.source_remove( self.menuChangedTimer )
+            GObject.source_remove( self.menuChangedTimer )
 
-        self.menuChangedTimer = Gobject.timeout_add( 100, self.updateBoxes, True )
+        self.menuChangedTimer = GObject.timeout_add( 100, self.updateBoxes, True )
 
     def updateBoxes( self, menu_has_changed ):        
         # FIXME: This is really bad!

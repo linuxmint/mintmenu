@@ -392,7 +392,7 @@ class ApplicationLauncher( easyButton ):
 
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
-            self.drag_source_set_icon_pixbuf( icon )
+            gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(icon) )
             del icon
 
     def startupFileChanged( self, *args ):
