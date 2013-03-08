@@ -218,8 +218,8 @@ class pluginclass( object ):
     toButton = TargetEntry( "text/uri-list", 0, TARGET_TYPE_TEXT )
     TARGET_TYPE_FAV = 81
     array = TargetEntry * 3
-    toFav = array( ( "FAVORITES", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_FAV ), ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) )
-    fromFav = TargetEntry( "FAVORITES", Gtk.TargetFlags.SAME_APP, TARGET_TYPE_FAV )
+    toFav = array( ( "FAVORITES", Gtk.TargetFlags.SAME_APP, 81 ), ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) )
+    fromFav = TargetEntry( "FAVORITES", Gtk.TargetFlags.SAME_APP, 81 )
 
     @print_timing
     def __init__( self, mintMenuWin, toggleButton, de ):
@@ -1336,12 +1336,16 @@ class pluginclass( object ):
         separator = Gtk.HSeparator()
         #separator.add( gtk.HSeparator() )
         separator.set_size_request( -1, 20 )
-        separator.connect( "button_release_event", self.favPopup )
         separator.type = "separator"
 
         self.mintMenuWin.SetPaneColors( [ separator ] )
         separator.show_all()
-        return separator
+        box = Gtk.EventBox()
+        box.type = "separator"
+        box.add(separator)
+        box.connect( "button_release_event", self.favPopup )
+        box.show_all()
+        return box
 
     def favoritesBuildLauncher( self, location ):
         try:
