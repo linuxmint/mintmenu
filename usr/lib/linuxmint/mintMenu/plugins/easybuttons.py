@@ -173,7 +173,7 @@ class easyButton( Gtk.Button ):
 
     def addLabel( self, text, styles = None ):
         label = Gtk.Label()
-        if "<b>" in text:
+        if "<b>" in text or "<span" in text:
             label.set_markup(text) # don't remove our pango
         else:
             label.set_markup(glib.markup_escape_text(text))
@@ -486,15 +486,15 @@ class MenuApplicationLauncher( ApplicationLauncher ):
                 print detail
                 pass
         
-        # if self.showComment and self.appComment != "":
-        #     if self.iconSize <= 2:
-#FIX    #         self.addLabel( appName, [ Pango.AttrScale( Pango.SCALE_SMALL, 0, -1 ) ] )
-        #         self.addLabel( appComment, [ Pango.AttrScale( Pango.SCALE_X_SMALL, 0, -1 ) ] )
-        #     else:
-        #         self.addLabel( appName )
-        #         self.addLabel( appComment, [ Pango.AttrScale( Pango.SCALE_SMALL, 0, -1 ) ] )
-        # else:
-        self.addLabel( appName )
+        if self.showComment and self.appComment != "":
+            if self.iconSize <= 2:
+                self.addLabel( '<span size="small">%s</span>' % appName)
+                self.addLabel( '<span size="x-small">%s</span>' % appComment)
+            else:
+                self.addLabel( appName )
+                self.addLabel( '<span size="small">%s</span>' % appComment)
+        else:
+            self.addLabel( appName )
     
     def execute( self, *args ):        
         self.highlight = False
@@ -520,13 +520,13 @@ class FavApplicationLauncher( ApplicationLauncher ):
     def setupLabels( self ):
         if self.appGenericName:
             if self.swapGeneric:
-                self.addLabel( self.appName, [ Pango.AttrWeight( Pango.Weight.BOLD, 0, -1 ) ] )
+                self.addLabel( '<span weight="bold">%s</span>' % self.appName )
                 self.addLabel( self.appGenericName )
             else:
-                self.addLabel( self.appGenericName, [ Pango.AttrWeight( Pango.Weight.BOLD, 0, -1 ) ] )
+                self.addLabel( '<span weight="bold">%s</span>' % self.appGenericName )
                 self.addLabel( self.appName )
         else:
-            self.addLabel( self.appName, [ Pango.AttrWeight( Pango.Weight.BOLD, 0, -1 ) ] )
+            self.addLabel( '<span weight="bold">%s</span>' % self.appName )
             if self.appComment != "":
                 self.addLabel( self.appComment )
             else:
