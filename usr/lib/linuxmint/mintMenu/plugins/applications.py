@@ -922,7 +922,7 @@ class pluginclass( object ):
                 mTree.show_all()
 
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, ev.button, ev.time)
-            #    self.mintMenuWin.grab()
+                self.mintMenuWin.grab()
 
             else:
                 mTree = Gtk.Menu()
@@ -942,8 +942,7 @@ class pluginclass( object ):
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, ev.button, ev.time)
-           #     self.mintMenuWin.grab()
-                return True
+                self.mintMenuWin.grab()
 
     def menuPopup( self, widget, event ):
         if event.button == 3:
@@ -1008,8 +1007,7 @@ class pluginclass( object ):
             gtk.gtk_menu_popup(hash(mTree), None, None, None, None, 0, 0)
 
     def onMenuPopupDeactivate( self, widget):
-        pass
-        #self.mintMenuWin.grab()
+        self.mintMenuWin.grab()
     
     def searchPopup( self, widget=None, event=None ):    
         menu = Gtk.Menu()
@@ -1090,7 +1088,7 @@ class pluginclass( object ):
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
-    #    self.mintMenuWin.grab()
+        self.mintMenuWin.grab()
         self.focusSearchEntry()
         return True
         

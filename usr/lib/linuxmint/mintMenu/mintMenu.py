@@ -460,16 +460,15 @@ class MainWindow( object ):
     def grab( self ):
         gdk.gdk_pointer_grab (hash(self.window.window), True, Gdk.EventMask.BUTTON_PRESS_MASK, None, None, 0)
         Gdk.keyboard_grab( self.window.window, False, Gdk.CURRENT_TIME )
-     #   Gtk.grab_add(self.window)
+        Gtk.grab_add(self.window)
 
     def ungrab( self ):
-     #   Gtk.grab_remove(self.window)
+        Gtk.grab_remove(self.window)
         self.window.hide()
         Gdk.pointer_ungrab(Gdk.CURRENT_TIME)
         Gdk.keyboard_ungrab(Gdk.CURRENT_TIME)
 
     def onMap( self, widget, event ):
-        return
         self.grab()
 
     def onShow( self, widget ):
@@ -506,11 +505,13 @@ class MainWindow( object ):
         return True
 
     def onGrabBroken( self, widget, event ):
+        return
         if event.grab_broken.grab_window:
             try:
                 theft = event.grab_broken.grab_window.get_user_data()
                 theft.connect( "event", self.onGrabTheftEvent )
-            except:
+            except Exception, detail:
+                print detail
                 self.window.hide( True )
 
     def onGrabTheftEvent( self, widget, event ):
