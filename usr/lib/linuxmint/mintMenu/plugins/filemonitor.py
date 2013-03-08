@@ -2,7 +2,7 @@ import os
 import os.path
 import threading
 import time
-import gobject
+from gi.repository import GObject
 
 try:
     import pyinotify
@@ -42,9 +42,9 @@ if hasInotify:
     #                       print event.path
                 callback = self.callbacks[event.wd]
                 if callback[1]:
-                    gobject.idle_add( callback[0], callback[1] )
+                    GObject.idle_add( callback[0], callback[1] )
                 else:
-                    gobject.idle_add( callback[0] )
+                    GObject.idle_add( callback[0] )
 
 
 else:
