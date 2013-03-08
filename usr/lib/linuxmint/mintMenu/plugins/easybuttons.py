@@ -367,7 +367,6 @@ class ApplicationLauncher( easyButton ):
 
 
     def dragDataGet( self, widget, context, selection, targetType, eventTime ):
-        print "drag data get"
         if targetType == 100: # text/plain
             selection.set_text( "'" + self.desktopFile + "'", -1 )
         elif targetType == 101: # text/uri-list

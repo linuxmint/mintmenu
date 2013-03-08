@@ -319,6 +319,9 @@ class pluginclass( object ):
         self.applicationList = []
         #self.menuFileMonitors = []
 
+        #dirty ugly hack, to get favorites drag origin position
+        self.drag_origin = None
+
         self.rebuildLock = False
         self.activeFilter = (1, "")
 
@@ -1483,8 +1486,6 @@ class pluginclass( object ):
             self.favoritesBox.attach( favorite, col, col + 1, row, row + 1, yoptions = 0 )
 
     def favoritesReorder( self, oldposition, newposition ):
-        print oldposition, "old"
-        print newposition, "new"
         if oldposition == newposition:
             return
         tmp = self.favorites[ oldposition ]
@@ -1567,11 +1568,13 @@ class pluginclass( object ):
 
     def onFavButtonDragReorderGet( self, widget, context, selection, targetType, eventTime ):
         if targetType == self.TARGET_TYPE_FAV:
+            self.drag_origin = widget.position
             selection.set( selection.target, 8, str(widget.position))
 
     def onFavButtonDragReorder( self, widget, context, x, y, selection, targetType, time  ):
         if targetType == self.TARGET_TYPE_FAV:
-            self.favoritesReorder( int(selection.data), widget.position )
+            #self.favoritesReorder( int(selection.data), widget.position )
+            self.favoritesReorder( self.drag_origin, widget.position )
 
     def menuChanged( self, x, y ):
         # wait some miliseconds because there a multiple events send at the same time and we don't want to rebuild the menu for each
