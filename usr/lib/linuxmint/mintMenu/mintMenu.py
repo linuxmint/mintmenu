@@ -20,21 +20,13 @@ try:
     from ctypes import *
     import capi
     import xdg.Config
+    import keybinding
 except Exception, e:
     print e
     sys.exit( 1 )
 
 gtk = CDLL("libgtk-x11-2.0.so.0")
 gdk = CDLL("libgdk-x11-2.0.so.0")
-
-global mbindkey
-# Load the key binding lib (developped by deskbar-applet, copied into mintMenu so we don't end up with an unnecessary dependency)
-try:
-    from deskbar.core.keybinder import tomboy_keybinder_bind as bind_key
-except Exception, cause:
-    print "*********** Keybind Driver Load Failure **************"
-    print "Error Report : ", str(cause)
-    pass
 
 # Rename the process
 architecture = commands.getoutput("uname -a")
@@ -695,15 +687,17 @@ class MenuWin( object ):
         self.sizeButton()
 
     def bind_hot_key (self):
-        pass
-        # try:
-        #     # Binding menu to hotkey
-        #     print "Binding to Hot Key: " + self.hotkeyText
-        #     bind_key( self.hotkeyText, self.onBindingPress )
-        # except Exception, cause:
-        #     print "** WARNING ** - Menu Hotkey Binding Error"
-        #     print "Error Report :\n", str(cause)
-        #     pass
+        try:
+            self.binder = keybinding.GlobalKeyBinding()
+            self.binder.grab( self.hotkeyText )
+            self.binder.connect("activate", self.onBindingPress)
+            # Binding menu to hotkey
+            print "Binding to Hot Key: " + self.hotkeyText
+            
+        except Exception, cause:
+            print "** WARNING ** - Menu Hotkey Binding Error"
+            print "Error Report :\n", str(cause)
+            pass
 
     def sizeButton( self ):
         if self.hideIcon:

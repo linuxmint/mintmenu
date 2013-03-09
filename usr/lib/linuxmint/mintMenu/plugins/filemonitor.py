@@ -114,9 +114,9 @@ else:
             for monitored in self.monitoredFiles:
                 if monitored.hasChanged():
                     if monitored.args:
-                        gobject.idle_add( monitored.callback, monitored.args )
+                        GObject.idle_add( monitored.callback, monitored.args )
                     else:
-                        gobject.idle_add( monitored.callback )
+                        GObject.idle_add( monitored.callback )
 
 
 monitor = FileMonitor()
