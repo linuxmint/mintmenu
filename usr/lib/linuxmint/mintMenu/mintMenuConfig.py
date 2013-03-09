@@ -293,6 +293,8 @@ class mintMenuConfig( object ):
                     selected_theme = iter
         self.builder.get_object("themesCombo").set_active_iter(selected_theme)
         self.builder.get_object("themesCombo").connect("changed", self.set_theme)
+
+        self.toggleUseCustomColors(self.useCustomColors)
         self.mainWindow.present()
         self.getBackgroundColor()
 
@@ -300,7 +302,7 @@ class mintMenuConfig( object ):
         model = widget.get_model()
         iter = widget.get_active_iter()
         theme_name = model.get_value(iter, 1)
-        self.settings.set_string("theme-name", theme_name)
+        self.settings.set( "string", "theme-name", theme_name)
 
     def getPluginsToggle(self):
         array = self.settings.get ("list-string", "plugins-list")
