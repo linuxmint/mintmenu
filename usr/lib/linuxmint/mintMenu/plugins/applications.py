@@ -349,8 +349,8 @@ class pluginclass( object ):
             os.system("/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py > %s/.linuxmint/mintMenu/apt.cache &" % home)            
 
     def get_panel(self):
-        self.panel = None
-        self.panel_position = 0
+        self.panel = "top"
+        self.panel_position = -1
         panelsettings = Gio.Settings.new("org.mate.panel")
         applet_list = panelsettings.get_strv("object-id-list")
         for applet in applet_list:
@@ -358,7 +358,7 @@ class pluginclass( object ):
             keys = object_schema.list_keys()
             if "applet-iid" in keys:
                 iid = object_schema.get_string("applet-iid")
-                if iid is not None and iid.find("MintMenuApplet") > 0:
+                if iid is not None and iid.find("MintMenu") != -1:
                     self.panel = object_schema.get_string("toplevel-id")
                     self.panel_position = object_schema.get_int("position") + 1
 
@@ -1171,38 +1171,25 @@ class pluginclass( object ):
             print detail
 
     def add_to_panel(self, widget, desktopEntry):
-        import random
-        object_name = "mintmenu_"+''.join([random.choice('abcdefghijklmnopqrstuvwxyz0123456789') for x in xrange(8)])
-        new_directory = home + "/.mate2/panel2.d/default/launchers/"
-        os.system("mkdir -p " + new_directory)
-        new_file = new_directory + object_name
+        i = 0
+        panel_schema = Gio.Settings.new("org.mate.panel")
+        applet_list = panel_schema.get_strv("object-id-list")
 
-        # Copy the desktop file to the panels directory
-        os.system("cp \"%s\" \"%s\"" % (desktopEntry.desktopFile, new_file))
-        os.system("chmod a+rx %s" % (new_file))
+        while True:
+            test_obj = "object_%d" % (i)
+            if test_obj in applet_list:
+                i += 1
+            else:
+                break
 
- #FIX       # Add to Gnome/GConf
-        # object_dir = "/apps/panel/objects/"
-        # object_client = mateconf.client_get_default()
-
-        # object_client.set_string(object_dir + object_name +"/"+ "menu_path", "applications:/")
-        # object_client.set_bool(object_dir + object_name +"/"+ "locked", False)
-        # object_client.set_int(object_dir + object_name +"/"+ "position", self.panel_position)
-        # object_client.set_string(object_dir + object_name +"/"+ "object_type", "launcher-object")
-        # object_client.set_bool(object_dir + object_name +"/"+ "panel_right_stick", False)
-        # object_client.set_bool(object_dir + object_name +"/"+ "use_menu_path", False)
-        # object_client.set_string(object_dir + object_name +"/"+ "launcher_location", new_file)
-        # object_client.set_string(object_dir + object_name +"/"+ "custom_icon", "")
-        # object_client.set_string(object_dir + object_name +"/"+ "tooltip", "")
-        # object_client.set_string(object_dir + object_name +"/"+ "action_type", "lock")
-        # object_client.set_bool(object_dir + object_name +"/"+ "use_custom_icon", False)
-        # object_client.set_string(object_dir + object_name +"/"+ "attached_toplevel_id", "")
-        # object_client.set_string(object_dir + object_name +"/"+ "bonobo_iid", "")
-        # object_client.set_string(object_dir + object_name +"/"+ "toplevel_id", self.panel)
-
-        # launchers_list = object_client.get_list("/apps/panel/general/object_id_list", "string")
-        # launchers_list.append(object_name)
-        # object_client.set_list("/apps/panel/general/object_id_list", mateconf.VALUE_STRING, launchers_list)
+        path = "/org/mate/panel/objects/%s/" % (test_obj)
+        new_schema = Gio.Settings.new_with_path("org.mate.panel.object", path)
+        new_schema.set_string("launcher-location", desktopEntry.desktopFile)
+        new_schema.set_string("object-type", "launcher")
+        new_schema.set_string("toplevel-id", self.panel)
+        new_schema.set_int("position", self.panel_position)
+        applet_list.append(test_obj)
+        panel_schema.set_strv("object-id-list", applet_list)
 
     def delete_from_menu(self, widget, desktopEntry):
         try:

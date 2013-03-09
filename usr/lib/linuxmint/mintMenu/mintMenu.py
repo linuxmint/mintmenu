@@ -118,18 +118,18 @@ class MainWindow( object ):
 
         self.PopulatePlugins();
 
-        self.settings.connect( "changed::plugins_list", self.RegenPlugins )
+        self.settings.connect( "changed::plugins-list", self.RegenPlugins )
                 
-        self.settings.connect( "changed::start_with_favorites", self.toggleStartWithFavorites )
+        self.settings.connect( "changed::start-with-favorites", self.toggleStartWithFavorites )
         globalsettings = Gio.Settings.new("org.mate.panel")
         globalsettings.connect( "changed::tooltips-enabled", self.toggleTooltipsEnabled )
-        self.settings.connect( "changed::tooltips_enabled", self.toggleTooltipsEnabled )
+        self.settings.connect( "changed::tooltips-enabled", self.toggleTooltipsEnabled )
 
-        self.settings.connect( "changed::use_custom_color", self.toggleUseCustomColor )
-        self.settings.connect( "changed::custom_border_color", self.toggleCustomBorderColor )
-        self.settings.connect( "changed::custom_heading_color", self.toggleCustomHeadingColor )
-        self.settings.connect( "changed::custom_color", self.toggleCustomBackgroundColor )
-        self.settings.connect( "changed::border_width", self.toggleBorderWidth )
+        self.settings.connect( "changed::use-custom-color", self.toggleUseCustomColor )
+        self.settings.connect( "changed::custom-border-color", self.toggleCustomBorderColor )
+        self.settings.connect( "changed::custom-heading-color", self.toggleCustomHeadingColor )
+        self.settings.connect( "changed::custom-color", self.toggleCustomBackgroundColor )
+        self.settings.connect( "changed::border-width", self.toggleBorderWidth )
         self.settings.connect( "changed::opacity", self.toggleOpacity )
 
     def on_window1_destroy (self, widget, data=None):
