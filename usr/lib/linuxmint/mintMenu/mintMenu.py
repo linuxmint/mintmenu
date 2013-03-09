@@ -383,7 +383,6 @@ class MainWindow( object ):
         #print u"Loading", (time.time() - start), "s"
 
     def SetPaneColors( self, items ):
-        print "SET PANE COLORS"
         for item in items:
             if item not in self.panesToColor:
                 self.panesToColor.append( item )
@@ -852,7 +851,7 @@ class MenuWin( object ):
         action_group.add_action(action)
         action_group.set_translation_domain ("mintmenu")
 
-        xml = os.path.join( os.path.join( os.path.dirname( __file__ )), "menu.xml" )
+        xml = os.path.join( os.path.join( os.path.dirname( __file__ )), "popup.xml" )
         self.applet.setup_menu_from_file(xml, action_group)
 
 def applet_factory( applet, iid, data ):
