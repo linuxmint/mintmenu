@@ -520,12 +520,12 @@ class MenuWin( object ):
         self.applet = applet        
         self.settings = Gio.Settings.new("com.linuxmint.mintmenu")
                
-        self.settings.connect( "changed::applet_text", self.reloadSettings )
-        self.settings.connect( "changed::theme_name", self.changeTheme )
-        self.settings.connect( "changed::hot_key", self.reloadSettings )
-        self.settings.connect( "changed::applet_icon", self.reloadSettings )
+        self.settings.connect( "changed::applet-text", self.reloadSettings )
+        self.settings.connect( "changed::theme-name", self.changeTheme )
+        self.settings.connect( "changed::hot-key", self.reloadSettings )
+        self.settings.connect( "changed::applet-icon", self.reloadSettings )
         self.settings.connect( "changed::hide-applet-icon", self.reloadSettings )
-        self.settings.connect( "changed::applet_icon_size", self.reloadSettings )
+        self.settings.connect( "changed::applet-icon-size", self.reloadSettings )
         self.loadSettings()
 
         mate_settings = Gio.Settings.new("org.mate.interface")
