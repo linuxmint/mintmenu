@@ -3,7 +3,7 @@
 import gi
 gi.require_version("Gtk", "2.0")
 
-from gi.repository import Gtk, GObject, Pango, Gdk
+from gi.repository import Gtk, GObject, Pango, Gdk, Gio
 
 import os
 #import mateconf
@@ -24,6 +24,7 @@ from easygsettings import EasyGSettings
 from easyfiles import *
 
 gtk = CDLL("libgtk-x11-2.0.so.0")
+
 
 from filemonitor import monitor as filemonitor
 
@@ -348,16 +349,19 @@ class pluginclass( object ):
             os.system("/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py > %s/.linuxmint/mintMenu/apt.cache &" % home)            
 
     def get_panel(self):
-        pass
-        # self.panel = None
-#FIX        # self.panel_position = 0
-        # appletidlist = mateconf.client_get_default().get_list("/apps/panel/general/applet_id_list", "string")
-        # for applet in appletidlist:
-        #     bonobo_id = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/applet_iid")
-        #     if bonobo_id == "OAFIID:MATE_mintMenu":
-        #         self.panel = mateconf.client_get_default().get_string("/apps/panel/applets/" + applet + "/toplevel_id")
-        #         self.panel_position = mateconf.client_get_default().get_int("/apps/panel/applets/" + applet + "/position") + 1
-      
+        self.panel = None
+        self.panel_position = 0
+        panelsettings = Gio.Settings.new("org.mate.panel")
+        applet_list = panelsettings.get_strv("object-id-list")
+        for applet in applet_list:
+            object_schema = Gio.Settings.new_with_path("org.mate.panel.object", "/org/mate/panel/objects/%s/" % (applet))
+            keys = object_schema.list_keys()
+            if "applet-iid" in keys:
+                iid = object_schema.get_string("applet-iid")
+                if iid is not None and iid.find("MintMenuApplet") > 0:
+                    self.panel = object_schema.get_string("toplevel-id")
+                    self.panel_position = object_schema.get_int("position") + 1
+
     def apturl_install(self, widget, pkg_name):
 		if os.path.exists("/usr/bin/apturl"):
 			os.system("/usr/bin/apturl apt://%s &" % pkg_name)
