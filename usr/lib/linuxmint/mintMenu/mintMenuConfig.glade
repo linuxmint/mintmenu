@@ -270,12 +270,12 @@
     <property name="type_hint">dialog</property>
     <property name="action">select-folder</property>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox2">
+      <object class="GtkVBox" id="dialog-vbox20">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area2">
+          <object class="GtkHButtonBox" id="dialog-action_area20">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
@@ -358,7 +358,7 @@
                     <property name="top_padding">10</property>
                     <property name="left_padding">10</property>
                     <child>
-                      <object class="GtkTable" id="table1">
+                      <object class="GtkTable" id="table20">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="n_rows">4</property>
@@ -700,7 +700,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="label2">
+                                  <object class="GtkLabel" id="label25">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">px</property>
@@ -737,7 +737,7 @@
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label1">
+              <object class="GtkLabel" id="label40">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1594,7 +1594,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="top_padding">9</property>
                                 <child>
-                                  <object class="GtkHBox" id="hbox1">
+                                  <object class="GtkHBox" id="hbox25">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <child>

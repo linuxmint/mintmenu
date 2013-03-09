@@ -97,104 +97,111 @@
       <summary></summary>
       <description></description>
     </key>
-    
-    <key type="b" name="places-sticky">
+  </schema>
+
+
+  <schema id="com.linuxmint.mintmenu.plugins.places" path="/com/linuxmint/mintmenu/plugins/places/">
+    <key type="b" name="sticky">
       <default>false</default>
       <summary></summary>
       <description></description>
     </key>
     
-    <key type="b" name="places-minimized">
+    <key type="b" name="minimized">
       <default>false</default>
       <summary></summary>
       <description></description>
     </key>
     
-    <key type="b" name="places-allow-scrollbar">
+    <key type="b" name="allow-scrollbar">
       <default>false</default>
       <summary></summary>
       <description></description>
     </key>
     
-    <key type="b" name="places-show-gtk-bookmarks">
+    <key type="b" name="show-gtk-bookmarks">
       <default>false</default>
       <summary></summary>
       <description></description>
     </key>
     
-    <key type="b" name="places-hide-separator">
+    <key type="b" name="hide-separator">
       <default>false</default>
       <summary></summary>
       <description></description>
     </key>
 
-    <key type="i" name="places-height">
+    <key type="i" name="height">
       <default>180</default>
       <summary></summary>
       <description></description>
     </key>
         
-    <key type="i" name="places-width">
+    <key type="i" name="width">
       <default>200</default>
       <summary></summary>
       <description></description>
     </key>
     
-    <key type="i" name="places-icon-size">
+    <key type="i" name="icon-size">
       <default>16</default>
       <summary></summary>
       <description></description>
     </key>
     
-    <key type="b" name="places-show-computer">
+    <key type="b" name="show-computer">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
         
-    <key type="b" name="places-show-home-folder">
+    <key type="b" name="show-home-folder">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
     
-    <key type="b" name="places-show-network">
+    <key type="b" name="show-network">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
     
-    <key type="b" name="places-show-desktop">
+    <key type="b" name="show-desktop">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
     
-    <key type="b" name="places-show-trash">
+    <key type="b" name="show-trash">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
    
-     <key type="as" name="places-custom-paths">
+     <key type="as" name="custom-paths">
       <default>[]</default>
       <summary></summary>
       <description></description>
     </key>
     
-     <key type="as" name="places-custom-names">
+     <key type="as" name="custom-names">
       <default>[]</default>
       <summary></summary>
       <description></description>
     </key>
     
-    <key type="s" name="places-icon">
+    <key type="s" name="icon">
       <default>"mate-fs-directory.png"</default>
       <summary></summary>
       <description></description>
     </key>
-  
   </schema>
+
+
+
+
+
 
 
   <schema id="com.linuxmint.mintmenu.plugins.applications" path="/com/linuxmint/mintmenu/plugins/applications/">

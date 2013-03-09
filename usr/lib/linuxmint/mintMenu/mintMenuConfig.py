@@ -5,7 +5,7 @@ import sys
 import gi
 gi.require_version("Gtk", "2.0")
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 
 try:
@@ -198,32 +198,32 @@ class mintMenuConfig( object ):
 
         self.useCustomColors.connect( "toggled", self.toggleUseCustomColors )
 
-        self.bindGconfValueToWidget( self.settings, "bool", "start_with_favorites", self.startWithFavorites, "toggled", self.startWithFavorites.set_active, self.startWithFavorites.get_active )
-        self.bindGconfValueToWidget( self.settingsApplications, "bool", "show_application_comments", self.showAppComments, "toggled", self.showAppComments.set_active, self.showAppComments.get_active )
-        self.bindGconfValueToWidget( self.settingsApplications, "bool", "use_apt", self.useAPT, "toggled", self.useAPT.set_active, self.useAPT.get_active )
-        self.bindGconfValueToWidget( self.settingsApplications, "bool", "show_category_icons", self.showCategoryIcons, "toggled", self.showCategoryIcons.set_active, self.showCategoryIcons.get_active )
-        self.bindGconfValueToWidget( self.settingsApplications, "bool", "categories_mouse_over", self.hover, "toggled", self.hover.set_active, self.hover.get_active )
-        self.bindGconfValueToWidget( self.settingsApplications, "bool", "swap_generic_name", self.swapGeneric, "toggled", self.swapGeneric.set_active, self.swapGeneric.get_active )
+        self.bindGSettingsValueToWidget( self.settings, "bool", "start-with-favorites", self.startWithFavorites, "toggled", self.startWithFavorites.set_active, self.startWithFavorites.get_active )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "bool", "show-application-comments", self.showAppComments, "toggled", self.showAppComments.set_active, self.showAppComments.get_active )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "bool", "use-apt", self.useAPT, "toggled", self.useAPT.set_active, self.useAPT.get_active )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "bool", "show-category-icons", self.showCategoryIcons, "toggled", self.showCategoryIcons.set_active, self.showCategoryIcons.get_active )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "bool", "categories-mouse-over", self.hover, "toggled", self.hover.set_active, self.hover.get_active )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "bool", "swap-generic-name", self.swapGeneric, "toggled", self.swapGeneric.set_active, self.swapGeneric.get_active )
 
-        self.bindGconfValueToWidget( self.settingsApplications, "int", "category_hover_delay", self.hoverDelay, "value-changed", self.hoverDelay.set_value, self.hoverDelay.get_value )
-        self.bindGconfValueToWidget( self.settingsApplications, "int", "icon_size", self.iconSize, "value-changed", self.iconSize.set_value, self.iconSize.get_value )
-        self.bindGconfValueToWidget( self.settingsApplications, "int", "favicon_size", self.favIconSize, "value-changed", self.favIconSize.set_value, self.favIconSize.get_value )
-        self.bindGconfValueToWidget( self.settingsApplications, "int", "fav_cols", self.favCols, "value-changed", self.favCols.set_value, self.favCols.get_value )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "int", "category-hover-delay", self.hoverDelay, "value-changed", self.hoverDelay.set_value, self.hoverDelay.get_value )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "int", "icon-size", self.iconSize, "value-changed", self.iconSize.set_value, self.iconSize.get_value )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "int", "favicon-size", self.favIconSize, "value-changed", self.favIconSize.set_value, self.favIconSize.get_value )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "int", "fav-cols", self.favCols, "value-changed", self.favCols.set_value, self.favCols.get_value )
 
-        self.bindGconfValueToWidget( self.settingsPlaces, "int", "icon_size", self.placesIconSize, "value-changed", self.placesIconSize.set_value, self.placesIconSize.get_value )
-        self.bindGconfValueToWidget( self.settingsSystem, "int", "icon_size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value )
+        self.bindGSettingsValueToWidget( self.settingsPlaces, "int", "icon-size", self.placesIconSize, "value-changed", self.placesIconSize.set_value, self.placesIconSize.get_value )
+        self.bindGSettingsValueToWidget( self.settingsSystem, "int", "icon-size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value )
 
-        self.bindGconfValueToWidget( self.settings, "int", "border_width", self.borderWidth, "value-changed", self.borderWidth.set_value, self.borderWidth.get_value_as_int )
-        self.bindGconfValueToWidget( self.settings, "int", "opacity", self.opacity, "value-changed", self.opacity.set_value, self.opacity.get_value_as_int )
-        self.bindGconfValueToWidget( self.settings, "bool", "use_custom_color", self.useCustomColors, "toggled", self.useCustomColors.set_active, self.useCustomColors.get_active )
-        self.bindGconfValueToWidget( self.settings, "color", "custom_color", self.backgroundColor, "color-set", self.backgroundColor.set_color, self.getBackgroundColor )
-        self.bindGconfValueToWidget( self.settings, "color", "custom_heading_color", self.headingColor, "color-set", self.headingColor.set_color, self.getHeadingColor )
-        self.bindGconfValueToWidget( self.settings, "color", "custom_border_color", self.borderColor, "color-set", self.borderColor.set_color, self.getBorderColor )
-        self.bindGconfValueToWidget( self.settings, "bool", "hide_applet_icon", self.showButtonIcon, "toggled", self.setShowButtonIcon, self.getShowButtonIcon )
-        self.bindGconfValueToWidget( self.settings, "string", "applet_text", self.buttonText, "changed", self.buttonText.set_text, self.buttonText.get_text )
-        self.bindGconfValueToWidget( self.settings, "string", "hot_key", self.hotkeyText, "changed", self.hotkeyText.set_text, self.hotkeyText.get_text )
-        self.bindGconfValueToWidget( self.settings, "string", "applet_icon", self.buttonIconChooser, "file-set", self.setButtonIcon, self.buttonIconChooser.get_filename )
-        self.bindGconfValueToWidget( self.settingsApplications, "string", "search_command", self.searchCommand, "changed", self.searchCommand.set_text, self.searchCommand.get_text )
+        self.bindGSettingsValueToWidget( self.settings, "int", "border-width", self.borderWidth, "value-changed", self.borderWidth.set_value, self.borderWidth.get_value_as_int )
+        self.bindGSettingsValueToWidget( self.settings, "int", "opacity", self.opacity, "value-changed", self.opacity.set_value, self.opacity.get_value_as_int )
+        self.bindGSettingsValueToWidget( self.settings, "bool", "use-custom-color", self.useCustomColors, "toggled", self.useCustomColors.set_active, self.useCustomColors.get_active )
+        self.bindGSettingsValueToWidget( self.settings, "color", "custom-color", self.backgroundColor, "color-set", self.backgroundColor.set_color, self.getBackgroundColor )
+        self.bindGSettingsValueToWidget( self.settings, "color", "custom-heading-color", self.headingColor, "color-set", self.headingColor.set_color, self.getHeadingColor )
+        self.bindGSettingsValueToWidget( self.settings, "color", "custom-border-color", self.borderColor, "color-set", self.borderColor.set_color, self.getBorderColor )
+        self.bindGSettingsValueToWidget( self.settings, "bool", "hide-applet-icon", self.showButtonIcon, "toggled", self.setShowButtonIcon, self.getShowButtonIcon )
+        self.bindGSettingsValueToWidget( self.settings, "string", "applet-text", self.buttonText, "changed", self.buttonText.set_text, self.buttonText.get_text )
+        self.bindGSettingsValueToWidget( self.settings, "string", "hot-key", self.hotkeyText, "changed", self.hotkeyText.set_text, self.hotkeyText.get_text )
+        self.bindGSettingsValueToWidget( self.settings, "string", "applet-icon", self.buttonIconChooser, "file-set", self.setButtonIcon, self.buttonIconChooser.get_filename )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "string", "search-command", self.searchCommand, "changed", self.searchCommand.set_text, self.searchCommand.get_text )
 
         self.getPluginsToggle()
         self.showRecentPlugin.connect("toggled", self.setPluginsLayout )
@@ -232,30 +232,30 @@ class mintMenuConfig( object ):
         self.showPlacesPlugin.connect("toggled", self.setPluginsLayout )
 
 
-        self.bindGconfValueToWidget( self.settingsPlaces, "bool", "show_computer", self.computertoggle, "toggled", self.computertoggle.set_active, self.computertoggle.get_active )
-        self.bindGconfValueToWidget( self.settingsPlaces, "bool", "show_home_folder", self.homefoldertoggle, "toggled", self.homefoldertoggle.set_active, self.homefoldertoggle.get_active )
-        self.bindGconfValueToWidget( self.settingsPlaces, "bool", "show_network", self.networktoggle, "toggled", self.networktoggle.set_active, self.networktoggle.get_active )
-        self.bindGconfValueToWidget( self.settingsPlaces, "bool", "show_desktop", self.desktoptoggle, "toggled", self.desktoptoggle.set_active, self.desktoptoggle.get_active )
-        self.bindGconfValueToWidget( self.settingsPlaces, "bool", "show_trash", self.trashtoggle, "toggled", self.trashtoggle.set_active, self.trashtoggle.get_active )
-        self.bindGconfValueToWidget( self.settingsPlaces, "int", "height", self.placesHeightButton, "value-changed", self.placesHeightButton.set_value, self.placesHeightButton.get_value_as_int )
-        self.bindGconfValueToWidget( self.settingsPlaces, "bool", "allowScrollbar", self.allowPlacesScrollbarToggle, "toggled", self.allowPlacesScrollbarToggle.set_active, self.allowPlacesScrollbarToggle.get_active )
-        self.bindGconfValueToWidget( self.settingsPlaces, "bool", "show_gtk_bookmarks", self.showgtkbookmarksToggle, "toggled", self.showgtkbookmarksToggle.set_active, self.showgtkbookmarksToggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsPlaces, "bool", "show-computer", self.computertoggle, "toggled", self.computertoggle.set_active, self.computertoggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsPlaces, "bool", "show-home-folder", self.homefoldertoggle, "toggled", self.homefoldertoggle.set_active, self.homefoldertoggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsPlaces, "bool", "show-network", self.networktoggle, "toggled", self.networktoggle.set_active, self.networktoggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsPlaces, "bool", "show-desktop", self.desktoptoggle, "toggled", self.desktoptoggle.set_active, self.desktoptoggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsPlaces, "bool", "show-trash", self.trashtoggle, "toggled", self.trashtoggle.set_active, self.trashtoggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsPlaces, "int", "height", self.placesHeightButton, "value-changed", self.placesHeightButton.set_value, self.placesHeightButton.get_value_as_int )
+        self.bindGSettingsValueToWidget( self.settingsPlaces, "bool", "allow-scrollbar", self.allowPlacesScrollbarToggle, "toggled", self.allowPlacesScrollbarToggle.set_active, self.allowPlacesScrollbarToggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsPlaces, "bool", "show-gtk-bookmarks", self.showgtkbookmarksToggle, "toggled", self.showgtkbookmarksToggle.set_active, self.showgtkbookmarksToggle.get_active )
 
-        self.bindGconfValueToWidget( self.settingsSystem, "bool", "show_software_manager", self.softwareManagerToggle, "toggled", self.softwareManagerToggle.set_active, self.softwareManagerToggle.get_active )
-        self.bindGconfValueToWidget( self.settingsSystem, "bool", "show_package_manager", self.packageManagerToggle, "toggled", self.packageManagerToggle.set_active, self.packageManagerToggle.get_active )
-        self.bindGconfValueToWidget( self.settingsSystem, "bool", "show_control_center", self.controlCenterToggle, "toggled", self.controlCenterToggle.set_active, self.controlCenterToggle.get_active )
-        self.bindGconfValueToWidget( self.settingsSystem, "bool", "show_terminal", self.terminalToggle, "toggled", self.terminalToggle.set_active, self.terminalToggle.get_active )
-        self.bindGconfValueToWidget( self.settingsSystem, "bool", "show_lock_screen", self.lockToggle, "toggled", self.lockToggle.set_active, self.lockToggle.get_active )
-        self.bindGconfValueToWidget( self.settingsSystem, "bool", "show_logout", self.logoutToggle, "toggled", self.logoutToggle.set_active, self.logoutToggle.get_active )
-        self.bindGconfValueToWidget( self.settingsSystem, "bool", "show_quit", self.quitToggle, "toggled", self.quitToggle.set_active, self.quitToggle.get_active )
-        self.bindGconfValueToWidget( self.settingsSystem, "int", "height", self.systemHeightButton, "value-changed", self.systemHeightButton.set_value, self.systemHeightButton.get_value_as_int )
-        self.bindGconfValueToWidget( self.settingsSystem, "bool", "allowScrollbar", self.allowSystemScrollbarToggle, "toggled", self.allowSystemScrollbarToggle.set_active, self.allowSystemScrollbarToggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-software-manager", self.softwareManagerToggle, "toggled", self.softwareManagerToggle.set_active, self.softwareManagerToggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-package-manager", self.packageManagerToggle, "toggled", self.packageManagerToggle.set_active, self.packageManagerToggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-control-center", self.controlCenterToggle, "toggled", self.controlCenterToggle.set_active, self.controlCenterToggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-terminal", self.terminalToggle, "toggled", self.terminalToggle.set_active, self.terminalToggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-lock-screen", self.lockToggle, "toggled", self.lockToggle.set_active, self.lockToggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-logout", self.logoutToggle, "toggled", self.logoutToggle.set_active, self.logoutToggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "show-quit", self.quitToggle, "toggled", self.quitToggle.set_active, self.quitToggle.get_active )
+        self.bindGSettingsValueToWidget( self.settingsSystem, "int", "height", self.systemHeightButton, "value-changed", self.systemHeightButton.set_value, self.systemHeightButton.get_value_as_int )
+        self.bindGSettingsValueToWidget( self.settingsSystem, "bool", "allow-scrollbar", self.allowSystemScrollbarToggle, "toggled", self.allowSystemScrollbarToggle.set_active, self.allowSystemScrollbarToggle.get_active )
 
-        self.customplacepaths = self.settingsPlaces.get( "list-string", "custom_paths", [ ] )
-        self.customplacenames = self.settingsPlaces.get( "list-string", "custom_names", [ ] )
+        self.customplacepaths = self.settingsPlaces.get( "list-string", "custom-paths" )
+        self.customplacenames = self.settingsPlaces.get( "list-string", "custom-names" )
 
-        self.customplacestreemodel = gtk.ListStore( str, str)
-        self.cell = gtk.CellRendererText()
+        self.customplacestreemodel = Gtk.ListStore( str, str)
+        self.cell = Gtk.CellRendererText()
 
         for count in range( len(self.customplacepaths) ):
             self.customplacestreemodel.append( [ self.customplacenames[count], self.customplacepaths[count] ] )
@@ -264,8 +264,8 @@ class mintMenuConfig( object ):
         self.customplacestreemodel.connect("row-deleted", self.updatePlacesGconf)
         self.customplacestreemodel.connect("rows-reordered", self.updatePlacesGconf)
         self.customplacestree.set_model( self.customplacestreemodel )
-        self.namescolumn = gtk.TreeViewColumn( _("Name"), self.cell, text = 0 )
-        self.placescolumn = gtk.TreeViewColumn( _("Path"), self.cell, text = 1 )
+        self.namescolumn = Gtk.TreeViewColumn( _("Name"), self.cell, text = 0 )
+        self.placescolumn = Gtk.TreeViewColumn( _("Path"), self.cell, text = 1 )
         self.customplacestree.append_column( self.namescolumn )
         self.customplacestree.append_column( self.placescolumn )
         self.builder.get_object("newButton").connect("clicked", self.newPlace)
@@ -278,7 +278,7 @@ class mintMenuConfig( object ):
         theme_name = commands.getoutput("mateconftool-2 --get /apps/mintMenu/theme_name").strip()
         themes = commands.getoutput("find /usr/share/themes -name gtkrc")
         themes = themes.split("\n")
-        model = gtk.ListStore(str, str)
+        model = Gtk.ListStore(str, str)
         self.builder.get_object("themesCombo").set_model(model)
         selected_theme = model.append([_("Desktop theme"), "default"])
         for theme in themes:
@@ -385,13 +385,19 @@ class mintMenuConfig( object ):
         self.headingColorLabel.set_sensitive(  widget.get_active() )
 
     def getBackgroundColor( self ):
-        return self.gdkColorToString( self.backgroundColor.get_color() )
+        color = Gdk.Color(0,0,0)
+        self.backgroundColor.get_color(color)
+        return self.gdkColorToString( color )
 
     def getBorderColor( self ):
-        return self.gdkColorToString( self.borderColor.get_color() )
+        color = Gdk.Color(0,0,0)
+        self.borderColor.get_color(color)
+        return self.gdkColorToString( color )
 
     def getHeadingColor( self ):
-        return self.gdkColorToString( self.headingColor.get_color() )
+        color = Gdk.Color(0,0,0)
+        self.headingColor.get_color(color)
+        return self.gdkColorToString( color )
 
     def gdkColorToString( self, gdkColor ):
         return "#%.2X%.2X%.2X" % ( gdkColor.red / 256, gdkColor.green / 256, gdkColor.blue / 256 )
