@@ -322,7 +322,6 @@ class MainWindow( object ):
                     heading.show()
                     VBox1.pack_start( heading, False, False, 0 )                    
                 VBox1.show()
-                #MyPlugin.container = VBox1
                 #Add plugin to Plugin Box under heading button
                 MyPlugin.content_holder.reparent( VBox1 )
 
