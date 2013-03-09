@@ -243,7 +243,7 @@ class pluginclass( object ):
                 currentbutton = easyButton( "folder", self.iconsize, [name], -1, -1 )
                 currentbutton.connect( "clicked", self.launch_gtk_bookmark, path )
                 currentbutton.show()
-                self.placesBtnHolder.pack_start( currentbutton, False, False )
+                self.placesBtnHolder.pack_start( currentbutton, False, False, 0)
                 
     def launch_gtk_bookmark (self, widget, path):
         self.mintMenuWin.hide()
