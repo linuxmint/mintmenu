@@ -339,6 +339,8 @@ class pluginclass( object ):
         self.refresh_apt_cache()        
         self.suggestions = []
         self.current_suggestion = None
+        self.panel = "top"
+        self.panel_position = -1
 
         self.builder.get_object("searchButton").connect( "button-release-event", self.searchPopup )        
 
@@ -348,8 +350,6 @@ class pluginclass( object ):
             os.system("/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py > %s/.linuxmint/mintMenu/apt.cache &" % home)            
 
     def get_panel(self):
-        self.panel = "top"
-        self.panel_position = -1
         panelsettings = Gio.Settings.new("org.mate.panel")
         applet_list = panelsettings.get_strv("object-id-list")
         for applet in applet_list:
