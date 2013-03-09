@@ -121,7 +121,8 @@ class MainWindow( object ):
         self.settings.connect( "changed::plugins_list", self.RegenPlugins )
                 
         self.settings.connect( "changed::start_with_favorites", self.toggleStartWithFavorites )
-        self.settings.connect( "changed::/apps/panel/global/tooltips_enabled", self.toggleTooltipsEnabled )
+        globalsettings = Gio.Settings.new("org.mate.panel")
+        globalsettings.connect( "changed::tooltips-enabled", self.toggleTooltipsEnabled )
         self.settings.connect( "changed::tooltips_enabled", self.toggleTooltipsEnabled )
 
         self.settings.connect( "changed::use_custom_color", self.toggleUseCustomColor )
@@ -141,47 +142,45 @@ class MainWindow( object ):
             if hasattr( plugin, "destroy" ):
                 plugin.wake()
 
-    def toggleTooltipsEnabled( self, client, connection_id, entry, args ):
-        if entry.get_key() == "/apps/panel/global/tooltips_enabled":
-            self.globalEnableTooltips = entry.get_value().get_bool()
+    def toggleTooltipsEnabled( self, settings, key, args = None):
+        if key == "tooltips-enabled":
+            self.globalEnableTooltips = settings.get_boolean(key)
         else:
-            self.enableTooltips = entry.get_value().get_bool()
+            self.enableTooltips = settings.get_boolean(key)
 
         if self.globalEnableTooltips and self.enableTooltips:
             self.tooltips.enable()
         else:
             self.tooltips.disable()
 
-    def toggleStartWithFavorites( self, client, connection_id, entry, args ):
-        self.startWithFavorites = entry.get_value().get_bool()    
+    def toggleStartWithFavorites( self, settings, key, args = None ):
+        self.startWithFavorites = settings.get_boolean(key)
 
-    def toggleBorderWidth( self, client, connection_id, entry, args ):
-        self.borderwidth = entry.get_value().get_int()
+    def toggleBorderWidth( self, settings, key,  args = None ):
+        self.borderwidth = settings.get_int(key)
         self.SetupMintMenuBorder()
 
-    def toggleOpacity( self, client, connection_id, entry, args ):
-        self.opacity = entry.get_value().get_int()
+    def toggleOpacity( self, settings, key, args = None ):
+        self.opacity = settings.get_int(key)
         self.SetupMintMenuOpacity()
 
-    def toggleUseCustomColor( self, client, connection_id, entry, args ):
-        self.usecustomcolor = entry.get_value().get_bool()
+    def toggleUseCustomColor( self, settings, key, args = None ):
+        self.usecustomcolor = settings.get_boolean(key)
         self.SetupMintMenuBorder()
         self.SetPaneColors( self.panesToColor )
         self.SetHeadingStyle( self.headingsToColor )
 
-
-    def toggleCustomBorderColor( self, client, connection_id, entry, args ):
-        self.custombordercolor = entry.get_value().get_string()
+    def toggleCustomBorderColor( self, settings, key, args = None ):
+        self.custombordercolor = settings.get_string(key)
         self.SetupMintMenuBorder()
 
-    def toggleCustomBackgroundColor( self, client, connection_id, entry, args ):
-        self.customcolor = entry.get_value().get_string()
+    def toggleCustomBackgroundColor( self, settings, key, args = None):
+        self.customcolor = settings.get_string(key)
         self.SetPaneColors( self.panesToColor )
 
-    def toggleCustomHeadingColor( self, client, connection_id, entry, args ):
-        self.customheadingcolor = entry.get_value().get_string()
+    def toggleCustomHeadingColor( self, settings, key, args = None ):
+        self.customheadingcolor = settings.get_string(key)
         self.SetHeadingStyle( self.headingsToColor )
-
 
     def getSetGconfEntries( self ):        
         self.dottedfile          = os.path.join( self.path, "dotted.png")
@@ -201,8 +200,8 @@ class MainWindow( object ):
         self.globalEnableTooltips = mate_settings.get_boolean( "tooltips-enabled" )
 
     def SetupMintMenuBorder( self ):
-        # if self.usecustomcolor:
-        #     self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.custombordercolor ) )
+        if self.usecustomcolor:
+            self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.custombordercolor ) )
         # else:
         #     self.window.modify_bg( Gtk.StateType.NORMAL, self.window.rc_get_style().bg[ Gtk.StateType.SELECTED ] )
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )        
@@ -384,39 +383,35 @@ class MainWindow( object ):
         #print u"Loading", (time.time() - start), "s"
 
     def SetPaneColors( self, items ):
-        # for item in items:
-        #     if item not in self.panesToColor:
-        #         self.panesToColor.append( item )
-        # if self.usecustomcolor:
-        #     for item in items:
-        #         item.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.customcolor ) )
+        print "SET PANE COLORS"
+        for item in items:
+            if item not in self.panesToColor:
+                self.panesToColor.append( item )
+        if self.usecustomcolor:
+            for item in items:
+                item.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.customcolor ) )
         # else:
         #     for item in items:
         #         item.modify_bg( Gtk.StateType.NORMAL, self.paneholder.rc_get_style().bg[ Gtk.StateType.NORMAL ] )
-        pass
 
     def SetHeadingStyle( self, items ):
-        return
         for item in items:
             if item not in self.headingsToColor:
                 self.headingsToColor.append( item )
 
-        HeadingStyle = Pango.AttrList()
-        attr = Pango.AttrSize( 12000, 0, -1 )
-        HeadingStyle.insert( attr )
-
         if self.usecustomcolor:
-            headingcolor = Gdk.color_parse( self.customheadingcolor )
-            attr = Pango.AttrForeground( headingcolor.red, headingcolor.green, headingcolor.blue, 0, -1 )
-            HeadingStyle.insert( attr )
-#               else:
-#                       headingcolor = self.window.rc_get_style().bg[ Gtk.StateType.SELECTED ]
-
-        attr = Pango.AttrWeight( Pango.Weight.BOLD, 0, -1 )
-        HeadingStyle.insert( attr )
+            color = self.customheadingcolor
+        else:
+            color = None
 
         for item in items:
-            item.set_attributes( HeadingStyle )
+            item.set_use_markup(True)
+            text = item.get_text()
+            if color == None:
+                markup = '<span size="12000" weight="bold">%s</span>' % (text)
+            else:
+                markup = '<span size="12000" weight="bold" color="%s">%s</span>' % (color, text)
+            item.set_markup( markup )
 
     def setTooltip( self, widget, tip, tipPrivate = None ):
         self.tooltips.set_tip( widget, tip, tipPrivate )
