@@ -33,8 +33,6 @@ import matemenu
 
 from user import home
 
-GObject.threads_init()
-
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 

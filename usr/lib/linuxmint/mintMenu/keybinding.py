@@ -35,15 +35,9 @@ import capi
 
 gdk = CDLL("libgdk-x11-2.0.so.0")
 
-class GlobalKeyBinding(GObject.GObject, threading.Thread):
-    __gsignals__ = {
-        'activate':(GObject.SIGNAL_RUN_LAST, None,()),
-        }
+class GlobalKeyBinding():
 
     def __init__(self):
-        GObject.GObject.__init__(self)
-        threading.Thread.__init__(self)
-        self.setDaemon(True)
 
         self.keymap = capi.get_widget (gdk.gdk_keymap_get_default())
         self.display = Display()
@@ -62,9 +56,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
                 self.known_modifiers_mask |= modifier
 
     def grab(self, key):
-        Gdk.threads_enter()
         accelerator = key
-        Gdk.threads_leave()
         keyval, modifiers = Gtk.accelerator_parse(accelerator)
         print keyval, modifiers
         # if not accelerator or (not keyval and not modifiers):
@@ -73,16 +65,17 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         #     print "what"
         #     return
         count = c_int()
-        keys = KeymapKey * 10
+        array = (KeymapKey * 10)()
+        keys = cast(array, POINTER(KeymapKey))
         self.keycode = gdk.gdk_keymap_get_entries_for_keyval(hash(self.keymap), keyval, byref(keys), byref(count))
         #self.keycode= self.keymap.get_entries_for_keyval(keyval)[0].keycode
-        print keys
+        print keys[0].keycode
         self.modifiers = int(modifiers)
 
         catch = error.CatchError(error.BadAccess)
         for ignored_mask in self.ignored_masks:
             mod = modifiers | ignored_mask
-            result = self.root.grab_key(self.keycode, mod, True, X.GrabModeAsync, X.GrabModeSync, onerror=catch)
+            result = self.root.grab_key(keys[0].keycode, mod, True, X.GrabModeAsync, X.GrabModeSync, onerror=catch)
         self.display.sync()
         if catch.get_error():
             return False
@@ -97,15 +90,17 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
 
     def idle(self):
         print "caught"
-        Gdk.threads_enter()
         self.emit("activate")
-        Gdk.threads_leave()
         return False
+
+    def activate(self):
+        GObject.idle_add(self.run)
 
     def run(self):
         self.running = True
         wait_for_release = False
         while self.running:
+            print "running"
             event = self.display.next_event()
             self.current_event_time = event.time
             if event.detail == self.keycode and event.type == X.KeyPress and not wait_for_release:
@@ -118,10 +113,11 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
             elif event.detail == self.keycode and wait_for_release:
                 if event.type == X.KeyRelease:
                     wait_for_release = False
-                    GLib.idle_add(self.idle)
+                    GObject.idle_add(self.idle)
                 self.display.allow_events(X.AsyncKeyboard, event.time)
             else:
                 self.display.allow_events(X.ReplayKeyboard, event.time)
+
 
     def stop(self):
         self.running = False
@@ -132,6 +128,3 @@ class KeymapKey(Structure):
      _fields_ = [("keycode", c_uint),
                  ("group", c_int),
                  ("level", c_int)]
-
-class KeymapKeyMany(Structure):
-    _fields_ = [("keymap", KeymapKey*10)]

@@ -3,7 +3,7 @@
 import gi
 gi.require_version("Gtk", "2.0")
  
-from gi.repository import Gtk, GdkPixbuf, Gdk
+from gi.repository import Gtk, GdkPixbuf, Gdk, GObject
 from gi.repository import MatePanelApplet
 from gi.repository import Gio
 
@@ -24,6 +24,12 @@ try:
 except Exception, e:
     print e
     sys.exit( 1 )
+
+from keybinding import GlobalKeyBinding
+
+GObject.threads_init()
+
+keybinder = GlobalKeyBinding()
 
 gtk = CDLL("libgtk-x11-2.0.so.0")
 gdk = CDLL("libgdk-x11-2.0.so.0")
@@ -123,6 +129,7 @@ class MainWindow( object ):
         self.settings.connect( "changed::custom-color", self.toggleCustomBackgroundColor )
         self.settings.connect( "changed::border-width", self.toggleBorderWidth )
         self.settings.connect( "changed::opacity", self.toggleOpacity )
+
 
     def on_window1_destroy (self, widget, data=None):
         Gtk.main_quit()
@@ -370,7 +377,6 @@ class MainWindow( object ):
         self.paneholder.pack_start( ImageBox, False, False, 0 )
         self.paneholder.pack_start( PluginPane, False, False, 0 )
         self.tooltips.disable()
-
         #print u"Loading", (time.time() - start), "s"
 
     def SetPaneColors( self, items ):
@@ -544,6 +550,7 @@ class MenuWin( object ):
         self.bind_hot_key()
 
     def onBindingPress(self):
+        print "press"
         try:
             if self.mainwin.window.flags() & Gtk.VISIBLE:
                 self.mainwin.window.hide()
@@ -687,10 +694,10 @@ class MenuWin( object ):
         self.sizeButton()
 
     def bind_hot_key (self):
+        return
         try:
-            self.binder = keybinding.GlobalKeyBinding()
-            self.binder.grab( self.hotkeyText )
-            self.binder.connect("activate", self.onBindingPress)
+            keybinder.grab( self.hotkeyText )
+            keybinder.connect("activate", self.onBindingPress)
             # Binding menu to hotkey
             print "Binding to Hot Key: " + self.hotkeyText
             
