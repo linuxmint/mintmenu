@@ -339,8 +339,7 @@ class pluginclass( object ):
         self.refresh_apt_cache()        
         self.suggestions = []
         self.current_suggestion = None
-        self.get_panel()
-        
+
         self.builder.get_object("searchButton").connect( "button-release-event", self.searchPopup )        
 
     def refresh_apt_cache(self):
@@ -1171,6 +1170,7 @@ class pluginclass( object ):
             print detail
 
     def add_to_panel(self, widget, desktopEntry):
+        self.get_panel()
         i = 0
         panel_schema = Gio.Settings.new("org.mate.panel")
         applet_list = panel_schema.get_strv("object-id-list")
