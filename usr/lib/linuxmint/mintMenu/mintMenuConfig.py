@@ -260,9 +260,9 @@ class mintMenuConfig( object ):
         for count in range( len(self.customplacepaths) ):
             self.customplacestreemodel.append( [ self.customplacenames[count], self.customplacepaths[count] ] )
 
-        self.customplacestreemodel.connect("row-changed", self.updatePlacesGconf)
-        self.customplacestreemodel.connect("row-deleted", self.updatePlacesGconf)
-        self.customplacestreemodel.connect("rows-reordered", self.updatePlacesGconf)
+        self.customplacestreemodel.connect("row-changed", self.updatePlacesGSettings)
+        self.customplacestreemodel.connect("row-deleted", self.updatePlacesGSettings)
+        self.customplacestreemodel.connect("rows-reordered", self.updatePlacesGSettings)
         self.customplacestree.set_model( self.customplacestreemodel )
         self.namescolumn = Gtk.TreeViewColumn( _("Name"), self.cell, text = 0 )
         self.placescolumn = Gtk.TreeViewColumn( _("Path"), self.cell, text = 1 )
@@ -275,7 +275,7 @@ class mintMenuConfig( object ):
         self.builder.get_object("removeButton").connect("clicked", self.removePlace)
 
         #Detect themes and show theme here
-        theme_name = commands.getoutput("mateconftool-2 --get /apps/mintMenu/theme_name").strip()
+        theme_name = self.settings.get ("string", "theme-name")
         themes = commands.getoutput("find /usr/share/themes -name gtkrc")
         themes = themes.split("\n")
         model = Gtk.ListStore(str, str)
@@ -300,25 +300,26 @@ class mintMenuConfig( object ):
         model = widget.get_model()
         iter = widget.get_active_iter()
         theme_name = model.get_value(iter, 1)
-        os.system("mateconftool-2 --type string --set /apps/mintMenu/theme_name \"%s\"" % theme_name)
+        self.settings.set_string("theme-name", theme_name)
 
     def getPluginsToggle(self):
-        if (commands.getoutput("mateconftool-2 --get /apps/mintMenu/plugins_list | grep recent | wc -l") == "0"):
-            self.showRecentPlugin.set_active(False)
-        else:
+        array = self.settings.get ("list-string", "plugins-list")
+        if "recent" in array:
             self.showRecentPlugin.set_active(True)
-        if (commands.getoutput("mateconftool-2 --get /apps/mintMenu/plugins_list | grep applications | wc -l") == "0"):
-            self.showApplicationsPlugin.set_active(False)
         else:
+            self.showRecentPlugin.set_active(False)
+        if "applications" in array:
             self.showApplicationsPlugin.set_active(True)
-        if (commands.getoutput("mateconftool-2 --get /apps/mintMenu/plugins_list | grep system_management | wc -l") == "0"):
-            self.showSystemPlugin.set_active(False)
         else:
+            self.showApplicationsPlugin.set_active(False)
+        if "system_management" in array:
             self.showSystemPlugin.set_active(True)
-        if (commands.getoutput("mateconftool-2 --get /apps/mintMenu/plugins_list | grep places | wc -l") == "0"):
-            self.showPlacesPlugin.set_active(False)
         else:
+            self.showSystemPlugin.set_active(False)
+        if "places" in array:
             self.showPlacesPlugin.set_active(True)
+        else:
+            self.showPlacesPlugin.set_active(False)
 
     def setPluginsLayout (self, widget):
         visiblePlugins = []
@@ -334,12 +335,7 @@ class mintMenuConfig( object ):
             if self.showApplicationsPlugin.get_active() or self.showPlacesPlugin.get_active() or self.showSystemPlugin.get_active():
                 visiblePlugins.append("newpane")
             visiblePlugins.append("recent")
-        layout = ""
-        for plugin in visiblePlugins:
-            layout = layout + plugin + ","
-        if len(layout) > 0 and layout[-1] == ",":
-            layout = layout[0:-1]
-        os.system("mateconftool-2 --type list --list-type string --set /apps/mintMenu/plugins_list [%s]" % layout)
+        self.settings.set ("list-string", "plugins-list", visiblePlugins)
 
     def setShowButtonIcon( self, value ):
         self.showButtonIcon.set_active(not value )
@@ -528,7 +524,7 @@ class mintMenuConfig( object ):
         else:
             self.systemHeightButton.set_sensitive(False)
 
-    def updatePlacesGconf(self, treemodel, path, iter = None, new_order = None):
+    def updatePlacesGSettings(self, treemodel, path, iter = None, new_order = None):
 # Do only if not partway though an append operation; Append = insert+change+change and each creates a signal
         if ((iter == None) or (self.customplacestreemodel.get_value(iter, 1) != None)):
             treeiter = self.customplacestreemodel.get_iter_first()

@@ -198,12 +198,6 @@
     </key>
   </schema>
 
-
-
-
-
-
-
   <schema id="com.linuxmint.mintmenu.plugins.applications" path="/com/linuxmint/mintmenu/plugins/applications/">
 
     <key type="b" name="categories-mouse-over">

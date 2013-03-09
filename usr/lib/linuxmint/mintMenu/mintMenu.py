@@ -106,7 +106,7 @@ class MainWindow( object ):
         plugindir = os.path.join( os.path.expanduser( "~" ), ".linuxmint/mintMenu/plugins" )
         sys.path.append( plugindir )
                       
-        self.getSetGconfEntries()
+        self.getSetGSettingEntries()
         self.SetupMintMenuBorder()
         self.SetupMintMenuOpacity()
 
@@ -182,7 +182,7 @@ class MainWindow( object ):
         self.customheadingcolor = settings.get_string(key)
         self.SetHeadingStyle( self.headingsToColor )
 
-    def getSetGconfEntries( self ):        
+    def getSetGSettingEntries( self ):        
         self.dottedfile          = os.path.join( self.path, "dotted.png")
 
         self.pluginlist           = self.settings.get_strv( "plugins-list" )
@@ -437,7 +437,7 @@ class MainWindow( object ):
 
         gc.collect()
 
-        self.getSetGconfEntries()
+        self.getSetGSettingEntries()
         self.PopulatePlugins()
 
         #print NAME+u" reloaded"

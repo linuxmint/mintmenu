@@ -10,6 +10,7 @@ import ctypes
 from ctypes import *
 
 from easybuttons import *
+from easygsettings import EasyGSettings
 from execute import Execute
 from user import home
 from urllib import unquote
@@ -49,20 +50,20 @@ class pluginclass( object ):
         self.itemstocolor = [ builder.get_object( "viewport2" ) ]
 
         # Settings        
-        self.settings = Gio.Settings.new("com.linuxmint.mintmenu.plugins.places")  
+        self.settings = EasyGSettings("com.linuxmint.mintmenu.plugins.places")
 
-        self.settings.connect( "changed::icon-size", self.RegenPlugin )
-        self.settings.connect( "changed::show-computer", self.RegenPlugin )
-        self.settings.connect( "changed::show-desktop", self.RegenPlugin )
-        self.settings.connect( "changed::show-home_folder", self.RegenPlugin )
-        self.settings.connect( "changed::show-network", self.RegenPlugin )
-        self.settings.connect( "changed::show-trash", self.RegenPlugin )
-        self.settings.connect( "changed::custom-names", self.RegenPlugin )
-        self.settings.connect( "changed::custom-paths", self.RegenPlugin )
-        self.settings.connect( "changed::allow-scrollbar", self.RegenPlugin )
-        self.settings.connect( "changed::show-gtk-bookmarks", self.RegenPlugin )
-        self.settings.connect( "changed::height", self.changePluginSize )
-        self.settings.connect( "changed::width", self.changePluginSize )        
+        self.settings.notifyAdd( "icon-size", self.RegenPlugin )
+        self.settings.notifyAdd( "show-computer", self.RegenPlugin )
+        self.settings.notifyAdd( "show-desktop", self.RegenPlugin )
+        self.settings.notifyAdd( "show-home_folder", self.RegenPlugin )
+        self.settings.notifyAdd( "show-network", self.RegenPlugin )
+        self.settings.notifyAdd( "show-trash", self.RegenPlugin )
+        self.settings.notifyAdd( "custom-names", self.RegenPlugin )
+        self.settings.notifyAdd( "custom-paths", self.RegenPlugin )
+        self.settings.notifyAdd( "allow-scrollbar", self.RegenPlugin )
+        self.settings.notifyAdd( "show-gtk-bookmarks", self.RegenPlugin )
+        self.settings.notifyAdd( "height", self.changePluginSize )
+        self.settings.notifyAdd( "width", self.changePluginSize )        
 
         self.loadSettings()
 
@@ -73,17 +74,17 @@ class pluginclass( object ):
             self.refreshTrash()
 
     def destroy( self ):
-        self.settings.disconnect_all()
+        self.settings.notifyRemoveAll()
 
-    def changePluginSize( self, client, connection_id, entry, args ):
-        self.allowScrollbar = self.settings.get_boolean( "allow-scrollbar" )
-        self.width = self.settings.get_int( "width" )               
+    def changePluginSize( self, settings, key, args = None):
+        self.allowScrollbar = self.settings.get( "bool", "allow-scrollbar" )
+        self.width = self.settings.get( "int", "width" )               
         if (self.allowScrollbar == False):
             self.height = -1
             self.scrolledWindow.set_policy( Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER )
         else:
             self.scrolledWindow.set_policy( Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC )
-            self.height = self.settings.get_int( "height" )
+            self.height = self.settings.get( "int", "height" )
         self.content_holder.set_size_request( self.width, self.height )
 
     def RegenPlugin( self, *args, **kargs ):
@@ -94,39 +95,39 @@ class pluginclass( object ):
         self.do_gtk_bookmarks()
 
     def loadSettings( self ):
-        self.width = self.settings.get_int( "width" )
-        self.allowScrollbar = self.settings.get_boolean( "allow-scrollbar" )
-        self.showGTKBookmarks = self.settings.get_boolean( "show-gtk-bookmarks" )
+        self.width = self.settings.get( "int", "width" )
+        self.allowScrollbar = self.settings.get( "bool", "allow-scrollbar" )
+        self.showGTKBookmarks = self.settings.get( "bool", "show-gtk-bookmarks" )
         self.scrolledWindow.set_policy( Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC )
-        self.height = self.settings.get_int( "height" )
+        self.height = self.settings.get( "int", "height" )
         self.content_holder.set_size_request( self.width, self.height )
         if (self.allowScrollbar == False):
             self.height = -1
             self.scrolledWindow.set_policy( Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER )
         self.content_holder.set_size_request( self.width, self.height )        
-        self.iconsize = self.settings.get_int( "icon-size" )
+        self.iconsize = self.settings.get( "int", "icon-size" )
 
         # Check default items
 
-        self.showcomputer = self.settings.get_boolean( "show-computer" )
-        self.showhomefolder = self.settings.get_boolean( "show-home-folder" )
-        self.shownetwork = self.settings.get_boolean( "show-network" )
-        self.showdesktop = self.settings.get_boolean( "show-desktop" )
-        self.showtrash = self.settings.get_boolean( "show-trash" )
+        self.showcomputer = self.settings.get( "bool", "show-computer" )
+        self.showhomefolder = self.settings.get( "bool", "show-home-folder" )
+        self.shownetwork = self.settings.get( "bool", "show-network" )
+        self.showdesktop = self.settings.get( "bool", "show-desktop" )
+        self.showtrash = self.settings.get( "bool", "show-trash" )
 
         # Get paths for custom items
-        self.custompaths = self.settings.get_strv( "custom-paths" )
+        self.custompaths = self.settings.get( "list-string", "custom-paths" )
 
         # Get names for custom items
-        self.customnames = self.settings.get_strv( "custom-names" )
+        self.customnames = self.settings.get( "list-string", "custom-names" )
 
         # Hide vertical dotted separator
-        self.hideseparator = self.settings.get_boolean( "hide-separator" )
+        self.hideseparator = self.settings.get( "bool", "hide-separator" )
         # Plugin icon
-        self.icon = self.settings.get_string( "icon" )
+        self.icon = self.settings.get( "string", "icon" )
         # Allow plugin to be minimized to the left plugin pane
-        self.sticky = self.settings.get_boolean( "sticky")
-        self.minimized = self.settings.get_boolean( "minimized")
+        self.sticky = self.settings.get( "bool", "sticky")
+        self.minimized = self.settings.get( "bool", "minimized")
         
     def ClearAll(self):
         for child in self.placesBtnHolder.get_children():
