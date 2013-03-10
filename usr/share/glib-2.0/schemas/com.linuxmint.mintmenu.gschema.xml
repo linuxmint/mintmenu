@@ -63,7 +63,7 @@
     </key>
     
     <key type="s" name="hot-key">
-      <default>"ControlSuper_L"</default>
+      <default>"Super_L"</default>
       <summary></summary>
       <description></description>
     </key>
