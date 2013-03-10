@@ -3,7 +3,7 @@
 import gi
 gi.require_version("Gtk", "2.0")
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GObject
 
 try:
     import sys
@@ -20,7 +20,7 @@ except Exception, detail:
 
 from subprocess import Popen, PIPE
 
-Gdk.threads_init()
+GObject.threads_init()
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -31,12 +31,6 @@ class RemoveExecuter(threading.Thread):
         threading.Thread.__init__(self)
         self.window_id = window_id
         self.package = package
-    
-    def execute(self, command):
-        #print "Executing: " + command
-        os.system(command)
-        ret = commands.getoutput("echo $?")
-        return ret
 
     def run(self):  
         removePackages = string.split(self.package)
@@ -57,7 +51,7 @@ class RemoveExecuter(threading.Thread):
         f.close()
         Gtk.main_quit()
         sys.exit(0)
-        
+
 class mintRemoveWindow:
 
     def __init__(self, desktopFile):
