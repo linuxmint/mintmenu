@@ -310,8 +310,8 @@ class ApplicationLauncher( easyButton ):
             self.startupFilePath = os.path.join( os.path.expanduser("~"), ".config", "autostart", basename )
             if self.startupMonitorId:
                 filemonitor.removeMonitor( self.startupMonitorId  )
-            self.startupMonitorId = filemonitor.addMonitor( self.startupFilePath, self.startupFileChanged )
-            #self.inStartup = os.path.exists( self.startupFilePath )
+            if os.path.exists (self.startupFilePath):
+                self.startupMonitorId = filemonitor.addMonitor( self.startupFilePath, self.startupFileChanged )
 
         except Exception, e:
             print e
