@@ -35,9 +35,15 @@ import capi
 
 gdk = CDLL("libgdk-x11-2.0.so.0")
 
-class GlobalKeyBinding():
+class GlobalKeyBinding(GObject.GObject, threading.Thread):
+    __gsignals__ = {
+        'activate': (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
 
     def __init__(self):
+        GObject.GObject.__init__ (self)
+        threading.Thread.__init__ (self)
+        self.setDaemon (True)
 
         self.keymap = capi.get_widget (gdk.gdk_keymap_get_default())
         self.display = Display()
@@ -58,24 +64,21 @@ class GlobalKeyBinding():
     def grab(self, key):
         accelerator = key
         keyval, modifiers = Gtk.accelerator_parse(accelerator)
-        print keyval, modifiers
-        # if not accelerator or (not keyval and not modifiers):
-        #     self.keycode = None
-        #     self.modifiers = None
-        #     print "what"
-        #     return
+        if not accelerator or (not keyval and not modifiers):
+            self.keycode = None
+            self.modifiers = None
+            return False
         count = c_int()
         array = (KeymapKey * 10)()
         keys = cast(array, POINTER(KeymapKey))
-        self.keycode = gdk.gdk_keymap_get_entries_for_keyval(hash(self.keymap), keyval, byref(keys), byref(count))
-        #self.keycode= self.keymap.get_entries_for_keyval(keyval)[0].keycode
-        print keys[0].keycode
+        gdk.gdk_keymap_get_entries_for_keyval(hash(self.keymap), keyval, byref(keys), byref(count))
+        self.keycode =  keys[0].keycode
         self.modifiers = int(modifiers)
 
         catch = error.CatchError(error.BadAccess)
         for ignored_mask in self.ignored_masks:
             mod = modifiers | ignored_mask
-            result = self.root.grab_key(keys[0].keycode, mod, True, X.GrabModeAsync, X.GrabModeSync, onerror=catch)
+            result = self.root.grab_key(self.keycode, mod, True, X.GrabModeAsync, X.GrabModeSync, onerror=catch)
         self.display.sync()
         if catch.get_error():
             return False
@@ -89,7 +92,6 @@ class GlobalKeyBinding():
         return [x for x in xrange(mask+1) if not (x & ~mask)]
 
     def idle(self):
-        print "caught"
         self.emit("activate")
         return False
 
@@ -100,7 +102,6 @@ class GlobalKeyBinding():
         self.running = True
         wait_for_release = False
         while self.running:
-            print "running"
             event = self.display.next_event()
             self.current_event_time = event.time
             if event.detail == self.keycode and event.type == X.KeyPress and not wait_for_release:
@@ -113,11 +114,10 @@ class GlobalKeyBinding():
             elif event.detail == self.keycode and wait_for_release:
                 if event.type == X.KeyRelease:
                     wait_for_release = False
-                    GObject.idle_add(self.idle)
+                    GLib.idle_add(self.idle)
                 self.display.allow_events(X.AsyncKeyboard, event.time)
             else:
                 self.display.allow_events(X.ReplayKeyboard, event.time)
-
 
     def stop(self):
         self.running = False

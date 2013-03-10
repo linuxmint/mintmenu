@@ -25,11 +25,7 @@ except Exception, e:
     print e
     sys.exit( 1 )
 
-from keybinding import GlobalKeyBinding
-
 GObject.threads_init()
-
-keybinder = GlobalKeyBinding()
 
 gtk = CDLL("libgtk-x11-2.0.so.0")
 gdk = CDLL("libgdk-x11-2.0.so.0")
@@ -549,10 +545,9 @@ class MenuWin( object ):
 
         self.bind_hot_key()
 
-    def onBindingPress(self):
-        print "press"
+    def onBindingPress(self, binder):
         try:
-            if self.mainwin.window.flags() & Gtk.VISIBLE:
+            if self.mainwin.window.get_visible():
                 self.mainwin.window.hide()
                 self.mainwin.toggle.set_active(False)
             else:
@@ -694,10 +689,11 @@ class MenuWin( object ):
         self.sizeButton()
 
     def bind_hot_key (self):
-        return
         try:
-            keybinder.grab( self.hotkeyText )
-            keybinder.connect("activate", self.onBindingPress)
+            self.keybinder = keybinding.GlobalKeyBinding()
+            self.keybinder.grab( self.hotkeyText )
+            self.keybinder.connect("activate", self.onBindingPress)
+            self.keybinder.start()
             # Binding menu to hotkey
             print "Binding to Hot Key: " + self.hotkeyText
             
