@@ -492,17 +492,19 @@ class MainWindow( object ):
         return True
 
     def onGrabBroken( self, widget, event ):
-        return
         if event.grab_broken.grab_window:
             try:
-                theft = event.grab_broken.grab_window.get_user_data()
+                win = event.grab_broken.grab_window
+                data = c_void_p()
+                gdk.gdk_window_get_user_data(hash(win), byref(data))
+                theft = capi.get_widget(ctypes.cast(data, POINTER(capi._PyGObject_Functions)))
                 theft.connect( "event", self.onGrabTheftEvent )
             except Exception, detail:
                 print detail
-                self.window.hide( True )
+                self.window.hide()
 
     def onGrabTheftEvent( self, widget, event ):
-        if event.type == Gdk.UNMAP or event.type == Gdk.SELECTION_CLEAR:
+        if event.type == Gdk.EventType.UNMAP or event.type == Gdk.EventType.SELECTION_CLEAR:
             self.grab()
 
     def hide(self, forceHide = False):        
