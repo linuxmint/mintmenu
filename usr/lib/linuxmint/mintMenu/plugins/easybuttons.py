@@ -37,7 +37,7 @@ class IconManager(GObject.GObject):
         # This takes to much time and there are only a very few applications that use icons from different themes
         #self.themes = map(  createTheme, [ d for d in os.listdir( "/usr/share/icons" ) if os.path.isdir( os.path.join( "/usr/share/icons", d ) ) ] )
 
-        defaultTheme = Gtk.IconTheme()
+        defaultTheme = Gtk.IconTheme.get_default()
         defaultKdeTheme = createTheme( "kde.default" )
 
         # Themes with the same content as the default them aren't needed
