@@ -577,12 +577,11 @@ class pluginclass( object ):
         self.buildButtonList()
 
     def focusSearchEntry( self ):
-        # grab_focus() does select all text, as this is an unwanted behaviour we restore the old selection
-        sel = self.searchEntry.get_selection_bounds()
-        if len(sel) == 0: # no selection
-            sel = ( self.searchEntry.get_position(), self.searchEntry.get_position() )
+        # grab_focus() does select all text,
+        # restoring the original selection is somehow broken, so just select the end
+        # of the existing text, that's the most likely candidate anyhow
         self.searchEntry.grab_focus()
-        self.searchEntry.select_region( sel[0], sel[1] )
+        gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
 
     def buildButtonList( self ):         
         if self.buildingButtonList:
