@@ -96,7 +96,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         return False
 
     def activate(self):
-        GObject.idle_add(self.run)
+        GLib.idle_add(self.run)
 
     def run(self):
         self.running = True

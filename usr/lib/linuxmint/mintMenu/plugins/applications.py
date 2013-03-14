@@ -3,7 +3,7 @@
 import gi
 gi.require_version("Gtk", "2.0")
 
-from gi.repository import Gtk, GObject, Pango, Gdk, Gio
+from gi.repository import Gtk, Pango, Gdk, Gio, GLib
 
 import os
 #import mateconf
@@ -586,7 +586,7 @@ class pluginclass( object ):
     def buildButtonList( self ):         
         if self.buildingButtonList:
             self.stopBuildingButtonList = True
-            GObject.timeout_add( 100, self.buildButtonList )
+            GLib.timeout_add( 100, self.buildButtonList )
             return
 
         self.stopBuildingButtonList = False
@@ -600,12 +600,12 @@ class pluginclass( object ):
     def StartFilter( self, widget, category ):
         # if there is a timer for a different category running stop it
         if self.filterTimer:
-            GObject.source_remove( self.filterTimer )
-        self.filterTimer = GObject.timeout_add( self.categoryhoverdelay, self.Filter, widget, category )
+            GLib.source_remove( self.filterTimer )
+        self.filterTimer = GLib.timeout_add( self.categoryhoverdelay, self.Filter, widget, category )
 
     def StopFilter( self, widget ):
         if self.filterTimer:
-            GObject.source_remove( self.filterTimer )
+            GLib.source_remove( self.filterTimer )
             self.filterTimer = None
 
     def add_search_suggestions(self, text):
@@ -813,11 +813,11 @@ class pluginclass( object ):
                             #if (len(self.current_results) > 0):
                                 #self.add_apt_filter_results_sync(self.current_results, text)
                             #else:
-                            GObject.timeout_add (300, self.add_apt_filter_results, text)
+                            GLib.timeout_add (300, self.add_apt_filter_results, text)
                         else:
                             self.current_results = []  
                             self.add_search_suggestions(text)
-                            GObject.timeout_add (300, self.add_apt_filter_results, text)
+                            GLib.timeout_add (300, self.add_apt_filter_results, text)
 
                         self.current_suggestion = text
                     else:
@@ -1567,9 +1567,9 @@ class pluginclass( object ):
     def menuChanged( self, x, y ):
         # wait some miliseconds because there a multiple events send at the same time and we don't want to rebuild the menu for each
         if self.menuChangedTimer:
-            GObject.source_remove( self.menuChangedTimer )
+            GLib.source_remove( self.menuChangedTimer )
 
-        self.menuChangedTimer = GObject.timeout_add( 100, self.updateBoxes, True )
+        self.menuChangedTimer = GLib.timeout_add( 100, self.updateBoxes, True )
 
     def updateBoxes( self, menu_has_changed ):        
         # FIXME: This is really bad!

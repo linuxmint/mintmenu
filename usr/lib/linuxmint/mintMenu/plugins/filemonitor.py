@@ -2,7 +2,7 @@ import os
 import os.path
 import threading
 import time
-from gi.repository import GObject
+from gi.repository import GLib
 
 try:
     import pyinotify
@@ -42,9 +42,9 @@ if hasInotify:
     #                       print event.path
                 callback = self.callbacks[event.wd]
                 if callback[1]:
-                    GObject.idle_add( callback[0], callback[1] )
+                    GLib.idle_add( callback[0], callback[1] )
                 else:
-                    GObject.idle_add( callback[0] )
+                    GLib.idle_add( callback[0] )
 
 
 else:
@@ -114,9 +114,9 @@ else:
             for monitored in self.monitoredFiles:
                 if monitored.hasChanged():
                     if monitored.args:
-                        GObject.idle_add( monitored.callback, monitored.args )
+                        GLib.idle_add( monitored.callback, monitored.args )
                     else:
-                        GObject.idle_add( monitored.callback )
+                        GLib.idle_add( monitored.callback )
 
 
 monitor = FileMonitor()
