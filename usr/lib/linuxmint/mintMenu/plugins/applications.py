@@ -628,6 +628,7 @@ class pluginclass( object ):
                 
         separator = Gtk.EventBox()
         separator.add(Gtk.HSeparator())
+        separator.set_visible_window(False)
         separator.set_size_request(-1, 20)       
         separator.type = "separator"        
         self.mintMenuWin.SetPaneColors( [ separator ] )
@@ -707,6 +708,7 @@ class pluginclass( object ):
             if keyword == self.searchEntry.get_text() and len(found_packages) > 0:         
                 last_separator = Gtk.EventBox()
                 last_separator.add(Gtk.HSeparator())
+                last_separator.set_visible_window(False)
                 last_separator.set_size_request(-1, 20)       
                 last_separator.type = "separator"   
                 self.mintMenuWin.SetPaneColors( [  last_separator ] )     
@@ -759,6 +761,7 @@ class pluginclass( object ):
             if len(found_packages) > 0:         
                     last_separator = Gtk.EventBox()
                     last_separator.add(Gtk.HSeparator())
+                    last_separator.set_visible_window(False)
                     last_separator.set_size_request(-1, 20)       
                     last_separator.type = "separator"   
                     self.mintMenuWin.SetPaneColors( [  last_separator ] )     
@@ -1317,6 +1320,7 @@ class pluginclass( object ):
     def favoritesBuildSpace( self ):
         space = Gtk.EventBox()
         space.set_size_request( -1, 20 )
+        space.set_visible_window(False)
         space.connect( "button_release_event", self.favPopup )
         space.type = "space"
 
@@ -1327,7 +1331,6 @@ class pluginclass( object ):
 
     def favoritesBuildSeparator( self ):
         separator = Gtk.HSeparator()
-        #separator.add( gtk.HSeparator() )
         separator.set_size_request( -1, 20 )
         separator.type = "separator"
 
@@ -1336,6 +1339,7 @@ class pluginclass( object ):
         box = Gtk.EventBox()
         box.type = "separator"
         box.add(separator)
+        box.set_visible_window(False)
         box.connect( "button_release_event", self.favPopup )
         box.show_all()
         return box
