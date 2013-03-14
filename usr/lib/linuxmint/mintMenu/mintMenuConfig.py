@@ -350,13 +350,12 @@ class mintMenuConfig( object ):
         return not self.showButtonIcon.get_active()
 
     def bindGSettingsValueToWidget( self, settings, setting_type, key, widget, changeEvent, setter, getter ):
-        widget.connect( changeEvent, lambda *args: self.callGetter( settings, setting_type, key, getter ) )
-
         settings.notifyAdd( key, self.callSetter, args = [ setting_type, setter ] )
         if setting_type == "color":
             setter( Gdk.color_parse( settings.get( setting_type, key ) ) )
         else:
             setter( settings.get( setting_type, key ) )
+        widget.connect( changeEvent, lambda *args: self.callGetter( settings, setting_type, key, getter ) )
 
     def callSetter( self, settings, key, args ):
         if args[0] == "bool":
