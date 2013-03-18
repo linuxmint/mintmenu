@@ -11,7 +11,6 @@ from execute import *
 import xdg.DesktopEntry
 import xdg.Menu
 from filemonitor import monitor as filemonitor
-import glib
 import ctypes
 from ctypes import *
 
@@ -179,7 +178,7 @@ class easyButton( Gtk.Button ):
         if "<b>" in text or "<span" in text:
             label.set_markup(text) # don't remove our pango
         else:
-            label.set_markup(glib.markup_escape_text(text))
+            label.set_text(text)
 
         if styles:
             labelStyle = Pango.AttrList()
