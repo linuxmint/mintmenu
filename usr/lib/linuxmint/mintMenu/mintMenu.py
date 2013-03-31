@@ -64,10 +64,10 @@ from execute import *
 class MainWindow( object ):
     """This is the main class for the application"""
 
-    def __init__( self, toggleButton, settings ):
+    def __init__( self, toggleButton, settings, keybinder ):
 		
         self.settings = settings
-
+        self.keybinder = keybinder
         self.path = PATH
         sys.path.append( os.path.join( self.path, "plugins") )
 
@@ -125,7 +125,6 @@ class MainWindow( object ):
         self.settings.connect( "changed::custom-color", self.toggleCustomBackgroundColor )
         self.settings.connect( "changed::border-width", self.toggleBorderWidth )
         self.settings.connect( "changed::opacity", self.toggleOpacity )
-
 
     def on_window1_destroy (self, widget, data=None):
         Gtk.main_quit()
@@ -471,8 +470,9 @@ class MainWindow( object ):
                 plugin.onHideMenu()
 
     def onKeyPress( self, widget, event ):
-        if event.keyval == Gdk.KEY_Escape or event.keyval == Gdk.KEY_Super_L:
+        if event.keyval == Gdk.KEY_Escape or self.keybinder.is_hotkey(event.keyval, event.get_state()):
             self.hide()
+            return True
         return False
 
     def onButtonPress( self, widget, event ):
@@ -514,13 +514,14 @@ class MenuWin( object ):
     def __init__( self, applet, iid ):
         self.applet = applet        
         self.settings = Gio.Settings.new("com.linuxmint.mintmenu")
-               
+        self.keybinder = keybinding.GlobalKeyBinding()
         self.settings.connect( "changed::applet-text", self.reloadSettings )
         self.settings.connect( "changed::theme-name", self.changeTheme )
         self.settings.connect( "changed::hot-key", self.reloadSettings )
         self.settings.connect( "changed::applet-icon", self.reloadSettings )
         self.settings.connect( "changed::hide-applet-icon", self.reloadSettings )
         self.settings.connect( "changed::applet-icon-size", self.reloadSettings )
+        self.settings.connect( "changed::hot-key", self.hotkeyChanged )
         self.loadSettings()
 
         mate_settings = Gio.Settings.new("org.mate.interface")
@@ -534,7 +535,7 @@ class MenuWin( object ):
         self.applet.connect( "change-background", self.changeBackground )
         self.applet.connect("enter-notify-event", self.enter_notify)
         self.applet.connect("leave-notify-event", self.leave_notify)
-        self.mainwin = MainWindow( self.button_box, self.settings )
+        self.mainwin = MainWindow( self.button_box, self.settings, self.keybinder )
         self.mainwin.window.connect( "map-event", lambda *args: self.applet.set_state( Gtk.StateType.SELECTED ) )
         self.mainwin.window.connect( "unmap-event", lambda *args: self.applet.set_state( Gtk.StateType.NORMAL ) )
         self.mainwin.window.connect( "size-allocate", lambda *args: self.positionMenu() )
@@ -692,7 +693,6 @@ class MenuWin( object ):
 
     def bind_hot_key (self):
         try:
-            self.keybinder = keybinding.GlobalKeyBinding()
             self.keybinder.grab( self.hotkeyText )
             self.keybinder.connect("activate", self.onBindingPress)
             self.keybinder.start()
@@ -703,6 +703,11 @@ class MenuWin( object ):
             print "** WARNING ** - Menu Hotkey Binding Error"
             print "Error Report :\n", str(cause)
             pass
+
+    def hotkeyChanged (self, schema, key):
+        self.keybinder.ungrab()
+        self.hotkeyText =  self.settings.get_string( "hot-key" )
+        self.keybinder.grab(self.hotkeyText)
 
     def sizeButton( self ):
         if self.hideIcon:

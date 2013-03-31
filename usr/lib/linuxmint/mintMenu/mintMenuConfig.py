@@ -6,6 +6,7 @@ import gi
 gi.require_version("Gtk", "2.0")
 
 from gi.repository import Gtk, Gdk
+import keybinding
 
 
 try:
@@ -114,8 +115,6 @@ class mintMenuConfig( object ):
         self.newPlaceDialogTitle = (_("New Place"))
         self.folderChooserDialogTitle = (_("Select a folder"))
 
-        self.builder.get_object("hotkey_label").set_text(_("Keyboard shortcut:"))
-
         self.startWithFavorites = self.builder.get_object( "startWithFavorites" )
         self.showAppComments = self.builder.get_object( "showAppComments" )
         self.useAPT = self.builder.get_object( "use_apt" )
@@ -143,7 +142,9 @@ class mintMenuConfig( object ):
         self.headingColorLabel = self.builder.get_object( "headingColorLabel" )
         self.showButtonIcon = self.builder.get_object( "showButtonIcon" )
         self.buttonText = self.builder.get_object( "buttonText" )
-        self.hotkeyText = self.builder.get_object( "hotkeyText" )
+        self.hotkeyWidget = keybinding.KeybindingWidget(_("Keyboard shortcut:"))
+        table = self.builder.get_object( "main_table" )
+        table.attach(self.hotkeyWidget, 0, 2, 2, 3, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
         self.buttonIcon = self.builder.get_object( "buttonIcon" )
         self.buttonIconChooser = self.builder.get_object( "button_icon_chooser" )
         self.image_filter = Gtk.FileFilter()
@@ -221,7 +222,7 @@ class mintMenuConfig( object ):
         self.bindGSettingsValueToWidget( self.settings, "color", "custom-border-color", self.borderColor, "color-set", self.borderColor.set_color, self.getBorderColor )
         self.bindGSettingsValueToWidget( self.settings, "bool", "hide-applet-icon", self.showButtonIcon, "toggled", self.setShowButtonIcon, self.getShowButtonIcon )
         self.bindGSettingsValueToWidget( self.settings, "string", "applet-text", self.buttonText, "changed", self.buttonText.set_text, self.buttonText.get_text )
-        self.bindGSettingsValueToWidget( self.settings, "string", "hot-key", self.hotkeyText, "changed", self.hotkeyText.set_text, self.hotkeyText.get_text )
+        self.bindGSettingsValueToWidget( self.settings, "string", "hot-key", self.hotkeyWidget, "accel-edited", self.hotkeyWidget.set_val, self.hotkeyWidget.get_val )
         self.bindGSettingsValueToWidget( self.settings, "string", "applet-icon", self.buttonIconChooser, "file-set", self.setButtonIcon, self.buttonIconChooser.get_filename )
         self.bindGSettingsValueToWidget( self.settingsApplications, "string", "search-command", self.searchCommand, "changed", self.searchCommand.set_text, self.searchCommand.get_text )
 
