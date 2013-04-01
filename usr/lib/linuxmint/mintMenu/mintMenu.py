@@ -693,7 +693,8 @@ class MenuWin( object ):
 
     def bind_hot_key (self):
         try:
-            self.keybinder.grab( self.hotkeyText )
+            if self.hotkeyText != "":
+                self.keybinder.grab( self.hotkeyText )
             self.keybinder.connect("activate", self.onBindingPress)
             self.keybinder.start()
             # Binding menu to hotkey
@@ -707,7 +708,8 @@ class MenuWin( object ):
     def hotkeyChanged (self, schema, key):
         self.keybinder.ungrab()
         self.hotkeyText =  self.settings.get_string( "hot-key" )
-        self.keybinder.grab(self.hotkeyText)
+        if self.hotkeyText != "":
+            self.keybinder.grab(self.hotkeyText)
 
     def sizeButton( self ):
         if self.hideIcon:

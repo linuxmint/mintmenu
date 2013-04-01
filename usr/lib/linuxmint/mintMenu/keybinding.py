@@ -163,16 +163,16 @@ class KeybindingWidget(Gtk.HBox):
     __gsignals__ = {
         'accel-edited': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
-    def __init__(self, desc, mainwindow):
+    def __init__(self, desc):
         super(KeybindingWidget, self).__init__()
         self.desc = desc
-        self.win = mainwindow
         self.label = Gtk.Label(desc)
         if self.desc != "":
             self.pack_start(self.label, False, False, 0)
         self.button = Gtk.Button()
         self.button.set_tooltip_text(_("Click to set a new accelerator key for opening and closing the menu.  ") +
-                                     _("Press Escape or click again to cancel the operation"))
+                                     _("Press Escape or click again to cancel the operation.  ") +
+                                     _("Press Backspace to clear the existing keybinding."))
         self.button.connect("clicked", self.clicked)
         self.button.set_size_request(200, -1)
         self.pack_start(self.button, False, False, 4)
@@ -183,29 +183,39 @@ class KeybindingWidget(Gtk.HBox):
 
     def clicked(self, widget):
         if not self.teaching:
+            Gdk.keyboard_grab(self.get_window(), False, Gdk.CURRENT_TIME)
+
             self.button.set_label(_("Pick an accelerator"))
-            self.event_id = self.win.connect( "key-release-event", self.on_key_release )
+            self.event_id = self.connect( "key-release-event", self.on_key_release )
             self.teaching = True
         else:
             if self.event_id:
-                self.win.disconnect(self.event_id)
-            self.button.set_label(self.value)
+                self.disconnect(self.event_id)
+            self.ungrab()
+            self.set_button_text()
             self.teaching = False
 
-
     def on_key_release(self, widget, event):
-        self.win.disconnect(self.event_id)
+        self.disconnect(self.event_id)
+        self.ungrab()
         self.event_id = None
         if event.keyval == Gdk.KEY_Escape:
-            self.button.set_label(self.value)            
+            self.set_button_text()
+            self.teaching = False
+            return True
+        if event.keyval == Gdk.KEY_BackSpace:
+            self.teaching = False
+            self.value = ""
+            self.set_button_text()
+            self.emit("accel-edited")
             return True
         gtk.gtk_accelerator_name.restype = c_char_p
         accel_string = gtk.gtk_accelerator_name(event.keyval, event.state)
         accel_string = self.sanitize(accel_string)
         self.value = accel_string
-        self.emit("accel-edited")
-        self.button.set_label(self.value)
+        self.set_button_text()
         self.teaching = False
+        self.emit("accel-edited")
         return True
 
     def sanitize(self, string):
@@ -221,4 +231,13 @@ class KeybindingWidget(Gtk.HBox):
 
     def set_val(self, value):
         self.value = value
-        self.button.set_label(value)
+        self.set_button_text()
+
+    def ungrab(self):
+        Gdk.keyboard_ungrab(Gdk.CURRENT_TIME)
+
+    def set_button_text(self):
+        if self.value == "":
+            self.button.set_label(_("<not set>"))
+        else:
+            self.button.set_label(self.value)
