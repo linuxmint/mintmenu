@@ -172,20 +172,30 @@ class KeybindingWidget(Gtk.HBox):
             self.pack_start(self.label, False, False, 0)
         self.button = Gtk.Button()
         self.button.set_tooltip_text(_("Click to set a new accelerator key for opening and closing the menu.  ") +
-                                     _("Press Escape to cancel the operation"))
-        self.button.connect("clicked", self.focus_grabbed)
+                                     _("Press Escape or click again to cancel the operation"))
+        self.button.connect("clicked", self.clicked)
         self.button.set_size_request(200, -1)
         self.pack_start(self.button, False, False, 4)
 
         self.show_all()
         self.event_id = None
+        self.teaching = False
 
-    def focus_grabbed(self, widget):
-        self.button.set_label(_("Pick an accelerator"))
-        self.event_id = self.win.connect( "key-release-event", self.on_key_release )        
+    def clicked(self, widget):
+        if not self.teaching:
+            self.button.set_label(_("Pick an accelerator"))
+            self.event_id = self.win.connect( "key-release-event", self.on_key_release )
+            self.teaching = True
+        else:
+            if self.event_id:
+                self.win.disconnect(self.event_id)
+            self.button.set_label(self.value)
+            self.teaching = False
+
 
     def on_key_release(self, widget, event):
         self.win.disconnect(self.event_id)
+        self.event_id = None
         if event.keyval == Gdk.KEY_Escape:
             self.button.set_label(self.value)            
             return True
@@ -195,6 +205,7 @@ class KeybindingWidget(Gtk.HBox):
         self.value = accel_string
         self.emit("accel-edited")
         self.button.set_label(self.value)
+        self.teaching = False
         return True
 
     def sanitize(self, string):
