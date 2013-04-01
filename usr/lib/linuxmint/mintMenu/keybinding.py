@@ -36,6 +36,15 @@ import capi
 gdk = CDLL("libgdk-x11-2.0.so.0")
 gtk = CDLL("libgtk-x11-2.0.so.0")
 
+SPECIAL_MODS = (["Super_L",    "<Super>"],
+                ["Super_R",    "<Super>"],
+                ["Alt_L",      "<Alt>"],
+                ["Alt_R",      "<Alt>"],
+                ["Control_L",  "<Primary>"],
+                ["Control_R",  "<Primary>"],
+                ["Shift_L",    "<Shift>"],
+                ["Shift_R",    "<Shift>"])
+
 class GlobalKeyBinding(GObject.GObject, threading.Thread):
     __gsignals__ = {
         'activate': (GObject.SignalFlags.RUN_LAST, None, ()),
@@ -57,6 +66,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
     def is_hotkey(self, key, modifier):
         keymatch = False
         modmatch = False
+        modifier = modifier & ~Gdk.ModifierType.SUPER_MASK
         modint = int(modifier)
         if self.get_keycode(key) == self.keycode:
             keymatch = True
@@ -72,7 +82,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
                          Gdk.ModifierType.SUPER_MASK, Gdk.ModifierType.HYPER_MASK)
         self.known_modifiers_mask = 0
         for modifier in gdk_modifiers:
-            if "Mod" not in Gtk.accelerator_name(0, modifier):
+            if "Mod" not in Gtk.accelerator_name(0, modifier) or "Mod4" in Gtk.accelerator_name(0, modifier):
                 self.known_modifiers_mask |= modifier
 
     def get_keycode(self, keyval):
@@ -84,6 +94,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
 
     def grab(self, key):
         accelerator = key
+        accelerator = accelerator.replace("<Super>", "<Mod4>")
         keyval, modifiers = Gtk.accelerator_parse(accelerator)
         if not accelerator or (not keyval and not modifiers):
             self.keycode = None
@@ -152,82 +163,51 @@ class KeybindingWidget(Gtk.HBox):
     __gsignals__ = {
         'accel-edited': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
-    def __init__(self, desc):
+    def __init__(self, desc, mainwindow):
         super(KeybindingWidget, self).__init__()
         self.desc = desc
+        self.win = mainwindow
         self.label = Gtk.Label(desc)
-        self.model = Gtk.ListStore(str, object)
-        self.tree = Gtk.TreeView.new()
-        self.tree.set_headers_visible(False)
-        self.cell = Gtk.CellRendererAccel()
-        self.cell.set_alignment(.5, .5)
-        self.change_id = self.cell.connect('accel-edited', self.on_my_value_changed)
-        self.cell.set_property('editable', True)
-        self.cell.set_property('accel-mode', Gtk.CellRendererAccelMode.OTHER)
-        col = Gtk.TreeViewColumn("col", self.cell, text=0)
-        col.set_min_width(200)
-        col.set_alignment(.5)
-        self.tree.append_column(col)
-        self.value = ""
-        self.tree.set_model(self.model)
-        self.model.append((self.value, self))
         if self.desc != "":
             self.pack_start(self.label, False, False, 0)
-        shadow = Gtk.Frame()
-        shadow.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
-        shadow.add(self.tree)
-        self.pack_start(shadow, False, False, 2)
-
-        self.combomodel = Gtk.ListStore(str, str)
-
-        customs = (["Select a single modifier...", "x"],
-                   ["Left Super",    "Super_L"      ],
-                   ["Right Super",   "Super_R"      ],
-                   ["Left Control",  "Control_L"    ],
-                   ["Right Control", "Control_R"    ],
-                   ["Left Alt",      "Alt_L"        ],
-                   ["Right Alt",     "Alt_R"        ])
-
-        first = None
-        for option in customs:
-            iter = self.combomodel.insert_before(None, None)
-            self.combomodel.set_value(iter, 0, option[0])
-            self.combomodel.set_value(iter, 1, option[1])
-            if first is None:
-                first = iter
-
-        self.combo = Gtk.ComboBox.new_with_model(self.combomodel)   
-        renderer_text = Gtk.CellRendererText()
-        self.combo.pack_start(renderer_text, True)
-        self.combo.add_attribute(renderer_text, "text", 0)
-
-        self.combo.set_active_iter(first)
-        self.combo.connect('changed', self.on_combo_changed)
-
-        self.pack_start(self.combo, False, False, 0)
+        self.button = Gtk.Button()
+        self.button.set_tooltip_text(_("Click to set a new accelerator key for opening and closing the menu.  ") +
+                                     _("Press Escape to cancel the operation"))
+        self.button.connect("clicked", self.focus_grabbed)
+        self.button.set_size_request(200, -1)
+        self.pack_start(self.button, False, False, 4)
 
         self.show_all()
+        self.event_id = None
 
-    def on_combo_changed(self, widget):
-        tree_iter = widget.get_active_iter()
-        if tree_iter != None:
-            value = self.combomodel[tree_iter][1]
-            self.set_val(value)
-            self.emit("accel-edited")
+    def focus_grabbed(self, widget):
+        self.button.set_label(_("Pick an accelerator"))
+        self.event_id = self.win.connect( "key-release-event", self.on_key_release )        
 
-    def on_my_value_changed(self, cell, path, keyval, mask, keycode):
+    def on_key_release(self, widget, event):
+        self.win.disconnect(self.event_id)
+        if event.keyval == Gdk.KEY_Escape:
+            self.button.set_label(self.value)            
+            return True
         gtk.gtk_accelerator_name.restype = c_char_p
-        accel_string = gtk.gtk_accelerator_name(keyval, mask)
-        accel_string = accel_string.replace("<Mod2>", "")
+        accel_string = gtk.gtk_accelerator_name(event.keyval, event.state)
+        accel_string = self.sanitize(accel_string)
         self.value = accel_string
         self.emit("accel-edited")
+        self.button.set_label(self.value)
+        return True
+
+    def sanitize(self, string):
+        accel_string = string.replace("<Mod2>", "")
+        accel_string = accel_string.replace("<Mod4>", "")
+        for single, mod in SPECIAL_MODS:
+            if single in accel_string and mod in accel_string:
+                accel_string = accel_string.replace(mod, "")
+        return accel_string
 
     def get_val(self):
         return self.value
 
     def set_val(self, value):
-        self.cell.handler_block(self.change_id)
         self.value = value
-        self.model.clear()
-        self.model.append((self.value, self))
-        self.cell.handler_unblock(self.change_id)
+        self.button.set_label(value)

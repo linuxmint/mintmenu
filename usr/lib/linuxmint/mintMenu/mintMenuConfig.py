@@ -142,7 +142,7 @@ class mintMenuConfig( object ):
         self.headingColorLabel = self.builder.get_object( "headingColorLabel" )
         self.showButtonIcon = self.builder.get_object( "showButtonIcon" )
         self.buttonText = self.builder.get_object( "buttonText" )
-        self.hotkeyWidget = keybinding.KeybindingWidget(_("Keyboard shortcut:"))
+        self.hotkeyWidget = keybinding.KeybindingWidget(_("Keyboard shortcut:"), self.mainWindow)
         table = self.builder.get_object( "main_table" )
         table.attach(self.hotkeyWidget, 0, 2, 2, 3, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
         self.buttonIcon = self.builder.get_object( "buttonIcon" )
