@@ -313,6 +313,12 @@
       <summary></summary>
       <description></description>
     </key>
+
+    <key type="b" name="remember-filter">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
   </schema>
 
   <schema id="com.linuxmint.mintmenu.plugins.system_management" path="/com/linuxmint/mintmenu/plugins/system_management/">

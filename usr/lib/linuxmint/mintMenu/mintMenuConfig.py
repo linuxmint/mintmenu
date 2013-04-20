@@ -54,6 +54,7 @@ class mintMenuConfig( object ):
         self.builder.get_object("showAppComments").set_label(_("Show application comments"))
         self.builder.get_object("showCategoryIcons").set_label(_("Show category icons"))
         self.builder.get_object("hover").set_label(_("Hover"))
+        self.builder.get_object("remember_filter").set_label(_("Remember the last category or search"))
         self.builder.get_object("use_apt").set_label(_("Search for packages to install"))
         self.builder.get_object("swapGeneric").set_label(_("Swap name and generic name"))
 
@@ -126,6 +127,7 @@ class mintMenuConfig( object ):
         self.swapGeneric = self.builder.get_object("swapGeneric")
         self.hover = self.builder.get_object( "hover" )
         self.hoverDelay = self.builder.get_object( "hoverDelay" )
+        self.rememberFilter = self.builder.get_object( "remember_filter" )
         self.iconSize = self.builder.get_object( "iconSize" )
         self.favIconSize = self.builder.get_object( "favIconSize" )
         self.placesIconSize = self.builder.get_object( "placesIconSize" )
@@ -210,6 +212,7 @@ class mintMenuConfig( object ):
         self.bindGSettingsValueToWidget( self.settingsApplications, "int", "icon-size", self.iconSize, "value-changed", self.iconSize.set_value, self.iconSize.get_value )
         self.bindGSettingsValueToWidget( self.settingsApplications, "int", "favicon-size", self.favIconSize, "value-changed", self.favIconSize.set_value, self.favIconSize.get_value )
         self.bindGSettingsValueToWidget( self.settingsApplications, "int", "fav-cols", self.favCols, "value-changed", self.favCols.set_value, self.favCols.get_value )
+        self.bindGSettingsValueToWidget( self.settingsApplications, "bool", "remember-filter", self.rememberFilter, "toggled", self.rememberFilter.set_active, self.rememberFilter.get_active)
 
         self.bindGSettingsValueToWidget( self.settingsPlaces, "int", "icon-size", self.placesIconSize, "value-changed", self.placesIconSize.set_value, self.placesIconSize.get_value )
         self.bindGSettingsValueToWidget( self.settingsSystem, "int", "icon-size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value )

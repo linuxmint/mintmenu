@@ -297,6 +297,7 @@ class pluginclass( object ):
             self.settings.notifyAdd( "show-application-comments", self.changeShowApplicationComments )
             self.settings.notifyAdd( "use-apt", self.switchAPTUsage)
             self.settings.notifyAdd( "fav-cols", self.changeFavCols )
+            self.settings.notifyAdd( "remember-filter", self.changeRememberFilter)
 
             self.settings.bindGSettingsEntryToVar( "int", "category-hover-delay", self, "categoryhoverdelay" )
             self.settings.bindGSettingsEntryToVar( "bool", "do-not-filter", self, "donotfilterapps" )
@@ -322,7 +323,7 @@ class pluginclass( object ):
         self.drag_origin = None
 
         self.rebuildLock = False
-        self.activeFilter = (1, "")
+        self.activeFilter = (1, "", self.searchEntry)
 
         self.adminMenu = None
 
@@ -443,6 +444,9 @@ class pluginclass( object ):
         self.useAPT = settings.get_boolean(key)
         self.refresh_apt_cache()
 
+    def changeRememberFilter( self, settings, key, args):
+        self.rememberFilter = settings.get_boolean(key)
+
     def changeShowApplicationComments( self, settings, key, args ):
         self.showapplicationcomments = settings.get_boolean(key)
         for child in self.applicationsBox:
@@ -502,6 +506,7 @@ class pluginclass( object ):
         self.categoryhoverdelay = self.settings.get( "int", "category-hover-delay")
         self.showapplicationcomments = self.settings.get( "bool", "show-application-comments")
         self.useAPT = self.settings.get( "bool", "use-apt")
+        self.rememberFilter = self.settings.get( "bool", "remember-filter")
 
         self.lastActiveTab =  self.settings.get( "int", "last-active-tab")
         self.defaultTab = self.settings.get( "int", "default-tab")
@@ -553,6 +558,10 @@ class pluginclass( object ):
             self.changeTab( 1 )
 
         self.searchEntry.select_region( 0, -1 )
+        if self.rememberFilter:
+            self.Filter(self.activeFilter[2], self.activeFilter[1])
+        else:
+            self.Filter(self.searchEntry, "")
 
     def onHideMenu( self ):
         self.settings.set( "int", "last-active-tab", self.lastActiveTab )
@@ -565,7 +574,6 @@ class pluginclass( object ):
             notebook.set_current_page( 1 )
 
         self.lastActiveTab = tabNum
-
         self.focusSearchEntry()
 
     def Todos( self ):
@@ -581,7 +589,10 @@ class pluginclass( object ):
         # restoring the original selection is somehow broken, so just select the end
         # of the existing text, that's the most likely candidate anyhow
         self.searchEntry.grab_focus()
-        gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
+        if self.rememberFilter:
+            gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
+        else:
+            self.searchEntry.set_text("")
 
     def buildButtonList( self ):         
         if self.buildingButtonList:
@@ -800,7 +811,8 @@ class pluginclass( object ):
             if self.donotfilterapps:
                 widget.set_text( "" )    
             else:
-                self.changeTab( 1 )
+                if self.lastActiveTab != 1:
+                    self.changeTab( 1 )
                 text = widget.get_text()
                 showns = False # Are any app shown?
                 for i in self.applicationsBox.get_children():
@@ -835,10 +847,10 @@ class pluginclass( object ):
 
                 allButton = self.categoriesBox.get_children()[0];
                 allButton.set_relief( Gtk.ReliefStyle.HALF )
-                self.activeFilter = (0, text)
+                self.activeFilter = (0, text, widget)
         else:
             #print "CATFILTER"
-            self.activeFilter = (1, category)
+            self.activeFilter = (1, category, widget)
             if category == "":
                 listedDesktopFiles = []
                 for i in self.applicationsBox.get_children():
