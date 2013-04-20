@@ -843,6 +843,7 @@ class pluginclass( object ):
                     self.current_results = []
 
                 for i in self.categoriesBox.get_children():
+                    i.released()
                     i.set_relief( Gtk.ReliefStyle.NONE )
 
                 allButton = self.categoriesBox.get_children()[0];
@@ -864,6 +865,7 @@ class pluginclass( object ):
                     i.filterCategory( category )
 
             for i in self.categoriesBox.get_children():
+                i.released()
                 i.set_relief( Gtk.ReliefStyle.NONE )
             widget.set_relief( Gtk.ReliefStyle.HALF )
             widget.grab_focus()
