@@ -1,3 +1,9 @@
+mintmenu (5.4.2) olivia; urgency=low
+
+  * 5.4.2
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 25 Apr 2013 20:37:19 +0100
+
 mintmenu (5.4.1) olivia; urgency=low
 
   * Multiple fixes post MATE 1.6 migration
