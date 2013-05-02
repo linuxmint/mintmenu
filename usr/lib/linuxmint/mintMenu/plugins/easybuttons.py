@@ -289,9 +289,9 @@ class ApplicationLauncher( easyButton ):
 
     def loadDesktopEntry( self, desktopItem ):
         try:
-            self.appName = desktopItem.getName()
-            self.appGenericName = desktopItem.getGenericName()
-            self.appComment = desktopItem.getComment()
+            self.appName = strip_accents(desktopItem.getName())
+            self.appGenericName = strip_accents(desktopItem.getGenericName())
+            self.appComment = strip_accents(desktopItem.getComment())
             self.appExec = desktopItem.getExec()
             self.appIconName = desktopItem.getIcon()
             self.appCategories = desktopItem.getCategories()
