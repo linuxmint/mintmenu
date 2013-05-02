@@ -3,5 +3,5 @@
 sudo rm -rf /usr/lib/linuxmint/mintMenu
 sudo cp -R usr /
 sudo glib-compile-schemas /usr/share/glib-2.0/schemas
-mintmenu
 
+python /usr/lib/linuxmint/mintMenu/mintMenu.py

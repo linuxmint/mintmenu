@@ -292,7 +292,7 @@ class ApplicationLauncher( easyButton ):
             self.appName = self.strip_accents(desktopItem.getName())
             self.appGenericName = self.strip_accents(desktopItem.getGenericName())
             self.appComment = self.strip_accents(desktopItem.getComment())
-            self.appExec = desktopItem.getExec()
+            self.appExec = self.strip_accents(desktopItem.getExec())
             self.appIconName = desktopItem.getIcon()
             self.appCategories = desktopItem.getCategories()
             self.appGnomeDocPath = desktopItem.get( "X-MATE-DocPath" ) or ""
@@ -338,10 +338,10 @@ class ApplicationLauncher( easyButton ):
             
     def filterText( self, text ):
         keywords = text.lower().split()
-        appName = self.strip_accents(self.appName.lower())
-        appGenericName = self.strip_accents(self.appGenericName.lower())
-        appComment = self.strip_accents(self.appComment.lower())
-        appExec = self.strip_accents(self.appExec.lower())
+        appName = self.appName.lower()
+        appGenericName = self.appGenericName.lower()
+        appComment = self.appComment.lower()
+        appExec = self.appExec.lower()
         for keyword in keywords:
             keyw = self.strip_accents(keyword)
             if keyw != "" and appName.find( keyw ) == -1 and appGenericName.find( keyw ) == -1 and appComment.find( keyw ) == -1 and appExec.find( keyw ) == -1:
@@ -353,8 +353,11 @@ class ApplicationLauncher( easyButton ):
 
     def strip_accents(self, string):
         import unicodedata
-        return unicodedata.normalize('NFKD', unicode(string)).encode('UTF8', 'ignore')
-
+        try:
+            value = unicodedata.normalize('NFKD', unicode(string)).encode('UTF8', 'ignore') 
+        except:
+            value = string
+        return value
 
     def getTooltip( self ):
         tooltip = self.appName
