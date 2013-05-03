@@ -712,8 +712,7 @@ class pluginclass( object ):
                         num_pkg_found+=1
                     else:
                         print "Invalid status code: " + status
-                if num_pkg_found >= 3:
-                    break
+                
             found_packages.extend(found_in_name)
             found_packages.extend(found_elsewhere)
             if keyword == self.searchEntry.get_text() and len(found_packages) > 0:         
@@ -726,6 +725,9 @@ class pluginclass( object ):
                 last_separator.show_all()
                 self.applicationsBox.add(last_separator)
                 self.suggestions.append(last_separator)
+                #Reduce the number of results to 10 max... it takes a HUGE amount of time to add the GTK box in the menu otherwise..
+                if len(found_packages) > 10:
+                    found_packages = found_packages[:10]
                 for pkg in found_packages:                        
                     name = pkg.name
                     for word in keywords: 
