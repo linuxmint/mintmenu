@@ -451,10 +451,10 @@ class ApplicationLauncher( easyButton ):
                 for child in self.labelBox:
                     child.destroy()
 
-                self.iconName = self.appIconName
+                #self.iconName = self.appIconName
 
                 self.setupLabels()
-                self.iconChanged()
+                #self.iconChanged()
                 exists = True
                 break
 
