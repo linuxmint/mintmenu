@@ -208,7 +208,9 @@ class easyButton( Gtk.Button ):
 
     # IconTheme changed, setup new button icons
     def themeChanged( self, theme ):
-        self.iconChanged()
+        #self.iconChanged()
+        # Do nothing, this crashes mintmenu with a segfault..
+        pass
 
     def iconChanged( self ):
         icon = self.getIcon( self.iconSize )
