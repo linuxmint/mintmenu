@@ -442,7 +442,7 @@ class ApplicationLauncher( easyButton ):
         base = os.path.basename( self.desktopFile )
         for dir in self.appDirs:
             if os.path.exists( os.path.join( dir, base ) ):
-                print os.path.join( dir, base ), self.desktopFile
+                # print os.path.join( dir, base ), self.desktopFile
                 self.loadDesktopEntry( xdg.DesktopEntry.DesktopEntry( os.path.join( dir, base ) ) )
                 for child in self.labelBox:
                     child.destroy()
