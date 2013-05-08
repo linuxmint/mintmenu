@@ -257,10 +257,15 @@ class ApplicationLauncher( easyButton ):
         gtk.gtk_drag_source_set(hash(self), Gdk.ModifierType.BUTTON1_MASK, targets, 2, Gdk.DragAction.COPY)
 
         icon = self.getIcon( Gtk.IconSize.DND )
-        if icon and icon.get_storage_type() == Gtk.ImageType.PIXBUF:
-            pb = icon.get_pixbuf()
-            gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(pb) )
-            del icon
+        if icon:
+            if icon.get_storage_type() == Gtk.ImageType.PIXBUF:
+                pb = icon.get_pixbuf()
+                gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(pb) )
+                del icon
+            else:
+                if self.iconName:
+                    c = c_char_p(self.iconName)
+                    gtk.gtk_drag_source_set_icon_name( hash(self), c)
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
         self.connectSelf( "focus-out-event", self.onFocusOut )
@@ -375,10 +380,15 @@ class ApplicationLauncher( easyButton ):
         easyButton.iconChanged( self )
 
         icon = self.getIcon( Gtk.IconSize.DND )
-        if icon and icon.get_storage_type() == Gtk.ImageType.PIXBUF:
-            pb = icon.get_pixbuf()
-            gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(pb) )
-            del icon
+        if icon:
+            if icon.get_storage_type() == Gtk.ImageType.PIXBUF:
+                pb = icon.get_pixbuf()
+                gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(pb) )
+                del icon
+            else:
+                if self.iconName:
+                    c = c_char_p(self.iconName)
+                    gtk.gtk_drag_source_set_icon_name( hash(self), c)
 
     def startupFileChanged( self, *args ):
         self.inStartup = os.path.exists( self.startupFilePath )
