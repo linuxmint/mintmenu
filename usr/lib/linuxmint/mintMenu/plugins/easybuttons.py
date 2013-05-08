@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from gi.repository import Gtk, GdkPixbuf, Gdk
+from gi.repository import Gtk, GdkPixbuf, Gdk, GLib
 from gi.repository import Pango
 #import matedesktop
 from gi.repository import GObject
@@ -244,7 +244,7 @@ class ApplicationLauncher( easyButton ):
 
         base = os.path.basename( self.desktopFile )
         for dir in self.appDirs:
-            self.desktopEntryMonitors.append( filemonitor.addMonitor( os.path.join(dir, base) , self.onDesktopEntryFileChanged ) )
+            self.desktopEntryMonitors.append( filemonitor.addMonitor( os.path.join(dir, base) , self.desktopEntryFileChangedCallback ) )
 
         easyButton.__init__( self, self.appIconName, iconSize )
         self.setupLabels()
@@ -434,6 +434,9 @@ class ApplicationLauncher( easyButton ):
         for id in self.desktopEntryMonitors:
             filemonitor.removeMonitor( id )
 
+    def desktopEntryFileChangedCallback (self):
+        GLib.timeout_add(200, self.onDesktopEntryFileChanged)
+
     def onDesktopEntryFileChanged( self ):
         exists = False
         base = os.path.basename( self.desktopFile )
@@ -454,6 +457,7 @@ class ApplicationLauncher( easyButton ):
         if not exists:
             # FIXME: What to do in this case?
             self.destroy()
+        return False
 
 class MenuApplicationLauncher( ApplicationLauncher ):
 
