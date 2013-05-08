@@ -256,10 +256,11 @@ class ApplicationLauncher( easyButton ):
         targets = array(( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ))
         gtk.gtk_drag_source_set(hash(self), Gdk.ModifierType.BUTTON1_MASK, targets, 2, Gdk.DragAction.COPY)
 
-        # icon = self.getIcon( Gtk.IconSize.DND )
-        # if icon:
-        #     gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(icon) )
-        #     del icon
+        icon = self.getIcon( Gtk.IconSize.DND )
+        if icon and icon.get_storage_type() == Gtk.ImageType.PIXBUF:
+            pb = icon.get_pixbuf()
+            gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(pb) )
+            del icon
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
         self.connectSelf( "focus-out-event", self.onFocusOut )
@@ -373,10 +374,11 @@ class ApplicationLauncher( easyButton ):
     def iconChanged( self ):
         easyButton.iconChanged( self )
 
-        # icon = self.getIcon( Gtk.IconSize.DND )
-        # if icon:
-        #     gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(icon) )
-        #     del icon
+        icon = self.getIcon( Gtk.IconSize.DND )
+        if icon and icon.get_storage_type() == Gtk.ImageType.PIXBUF:
+            pb = icon.get_pixbuf()
+            gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(pb) )
+            del icon
 
     def startupFileChanged( self, *args ):
         self.inStartup = os.path.exists( self.startupFilePath )
