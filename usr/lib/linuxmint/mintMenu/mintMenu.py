@@ -542,9 +542,8 @@ class MenuWin( object ):
 
         self.mainwin.window.set_name("mintmenu") # Name used in Gtk RC files
 
-        icon = iconManager.getIcon( self.mainwin.icon, 1 )
-        if icon:
-            Gtk.Window.set_default_icon( icon )
+        if self.mainwin.icon:
+            Gtk.Window.set_default_icon_name( self.mainwin.icon )
 
         self.bind_hot_key()
 

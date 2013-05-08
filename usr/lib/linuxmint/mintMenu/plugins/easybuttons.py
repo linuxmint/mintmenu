@@ -56,52 +56,32 @@ class IconManager(GObject.GObject):
             return None
 
         try:
+            iconFileName = ""
+            canSetByName = True
             #[ iconWidth, iconHeight ] = self.getIconSize( iconSize )
             if iconSize <= 0:
                 return None
 
-            if iconName in self.cache and iconSize in self.cache[iconName]:
-                iconFileName = self.cache[iconName][iconSize]
             elif os.path.isabs( iconName ):
                 iconFileName = iconName
+                canSetByName = False
             else:
                 if iconName[-4:] in [".png", ".xpm", ".svg", ".gif"]:
                     realIconName = iconName[:-4]
                 else:
                     realIconName = iconName
-                tmp = None
-                for theme in self.themes:
-                    if theme.has_icon( realIconName ):
-                        tmp = theme.lookup_icon( realIconName, iconSize, 0 )
-                        if tmp:
-                            break
 
-                if tmp:
-                    iconFileName = tmp.get_filename()
-                else:
-                    iconFileName = ""
-
-            if iconFileName and os.path.exists( iconFileName ):
-                icon = GdkPixbuf.Pixbuf.new_from_file_at_size( iconFileName, iconSize, iconSize )
+            if iconFileName and not canSetByName and os.path.exists( iconFileName ):
+                pb = GdkPixbuf.Pixbuf.new_from_file_at_size( iconFileName, iconSize, iconSize )
+                image = Gtk.Image.new_from_pixbuf(pb)
+            elif canSetByName:
+                image = Gtk.Image()
+                image.set_from_icon_name(realIconName, Gtk.IconSize.DND)
+                image.set_pixel_size(iconSize)
             else:
-                icon = None
+                image = None
 
-
-            # if the actual icon size is to far from the desired size resize it
-            if icon and (( icon.get_width() - iconSize ) > 5 or ( icon.get_height() - iconSize ) > 5):
-                if icon.get_width() > icon.get_height():
-                    newIcon = icon.scale_simple( iconSize, icon.get_height() * iconSize / icon.get_width(), GdkPixbuf.InterpType.BILINEAR )
-                else:
-                    newIcon = icon.scale_simple( icon.get_width() * iconSize / icon.get_height(), iconSize, GdkPixbuf.InterpType.BILINEAR )
-                del icon
-                icon = newIcon
-
-            if iconName in self.cache:
-                self.cache[iconName][iconSize] = iconFileName
-            else:
-                self.cache[iconName] = { iconSize : iconFileName }
-
-            return icon
+            return image
         except Exception, e:
             print "Exception " + e.__class__.__name__ + ": " + e.message
             return None
@@ -132,13 +112,14 @@ class easyButton( Gtk.Button ):
         self.buttonImage = Gtk.Image()
         icon = self.getIcon( self.iconSize )
         if icon:
-            self.buttonImage.set_from_pixbuf( icon )
-            del icon
+            self.buttonImage = icon
         else:
             #[ iW, iH ] = iconManager.getIconSize( self.iconSize )
             self.buttonImage.set_size_request( self.iconSize, self.iconSize  )
-        self.buttonImage.show()
-        HBox1.pack_start( self.buttonImage, False, False, 5 )        
+        self.image_box = Gtk.HBox()
+        self.image_box.pack_start(self.buttonImage, False, False, 5)
+        self.image_box.show_all()
+        HBox1.pack_start( self.image_box, False, False, 0 )
 
         if labels:
             for label in labels:
@@ -208,17 +189,15 @@ class easyButton( Gtk.Button ):
 
     # IconTheme changed, setup new button icons
     def themeChanged( self, theme ):
-        #self.iconChanged()
-        # Do nothing, this crashes mintmenu with a segfault..
-        pass
+        self.iconChanged()
 
     def iconChanged( self ):
         icon = self.getIcon( self.iconSize )
-        self.buttonImage.clear()
+        self.buttonImage.destroy()
         if icon:
-            self.buttonImage.set_from_pixbuf( icon )
-            self.buttonImage.set_size_request( -1, -1 )
-            del icon
+            self.buttonImage = icon
+            self.image_box.pack_start(self.buttonImage, False, False, 5)
+            self.image_box.show_all()
         else:
             #[iW, iH ] = iconManager.getIconSize( self.iconSize )
             self.buttonImage.set_size_request( self.iconSize, self.iconSize  )
@@ -226,11 +205,11 @@ class easyButton( Gtk.Button ):
     def setIconSize( self, size ):
         self.iconSize = size
         icon = self.getIcon( self.iconSize )
-        self.buttonImage.clear()
+        self.buttonImage.destroy()
         if icon:
-            self.buttonImage.set_from_pixbuf( icon )
-            self.buttonImage.set_size_request( -1, -1 )
-            del icon
+            self.buttonImage = icon
+            self.image_box.pack_start(self.buttonImage, False, False, 5)
+            self.image_box.show_all()
         elif self.iconSize:
             #[ iW, iH ] = iconManager.getIconSize( self.iconSize )
             self.buttonImage.set_size_request( self.iconSize, self.iconSize  )
@@ -277,10 +256,10 @@ class ApplicationLauncher( easyButton ):
         targets = array(( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ))
         gtk.gtk_drag_source_set(hash(self), Gdk.ModifierType.BUTTON1_MASK, targets, 2, Gdk.DragAction.COPY)
 
-        icon = self.getIcon( Gtk.IconSize.DND )
-        if icon:
-            gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(icon) )
-            del icon
+        # icon = self.getIcon( Gtk.IconSize.DND )
+        # if icon:
+        #     gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(icon) )
+        #     del icon
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
         self.connectSelf( "focus-out-event", self.onFocusOut )
@@ -394,10 +373,10 @@ class ApplicationLauncher( easyButton ):
     def iconChanged( self ):
         easyButton.iconChanged( self )
 
-        icon = self.getIcon( Gtk.IconSize.DND )
-        if icon:
-            gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(icon) )
-            del icon
+        # icon = self.getIcon( Gtk.IconSize.DND )
+        # if icon:
+        #     gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(icon) )
+        #     del icon
 
     def startupFileChanged( self, *args ):
         self.inStartup = os.path.exists( self.startupFilePath )
@@ -453,10 +432,10 @@ class ApplicationLauncher( easyButton ):
                 for child in self.labelBox:
                     child.destroy()
 
-                #self.iconName = self.appIconName
+                self.iconName = self.appIconName
 
                 self.setupLabels()
-                #self.iconChanged()
+                self.iconChanged()
                 exists = True
                 break
 
