@@ -51,7 +51,7 @@ class IconManager(GObject.GObject):
             theme.connect("changed", self.themeChanged )
 
 
-    def getIcon( self, iconName, iconSize ):
+    def getIcon( self, iconName, iconSize ):        
         if not iconName:
             return None
 
@@ -71,13 +71,22 @@ class IconManager(GObject.GObject):
                 else:
                     realIconName = iconName
 
-            if iconFileName and not canSetByName and os.path.exists( iconFileName ):
+            if iconFileName and not canSetByName and os.path.exists( iconFileName ):                
                 pb = GdkPixbuf.Pixbuf.new_from_file_at_size( iconFileName, iconSize, iconSize )
                 image = Gtk.Image.new_from_pixbuf(pb)
-            elif canSetByName:
+            elif canSetByName:                
                 image = Gtk.Image()
-                image.set_from_icon_name(realIconName, Gtk.IconSize.DND)
-                image.set_pixel_size(iconSize)
+                icon_found = False
+                for theme in self.themes:
+                    if theme.has_icon( realIconName ):
+                        icon_found = True
+                        break
+
+                if icon_found:
+                    image.set_from_icon_name(realIconName, Gtk.IconSize.DND)
+                    image.set_pixel_size(iconSize)
+                else:
+                    image = None
             else:
                 image = None
 
@@ -178,7 +187,7 @@ class easyButton( Gtk.Button ):
             return None
 
         icon = iconManager.getIcon( self.iconName, iconSize )
-        if not icon:
+        if icon is None:           
             icon = iconManager.getIcon( "application-default-icon", iconSize )
 
         return icon
