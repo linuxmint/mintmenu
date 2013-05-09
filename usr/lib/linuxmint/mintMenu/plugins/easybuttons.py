@@ -51,7 +51,8 @@ class IconManager(GObject.GObject):
             theme.connect("changed", self.themeChanged )
 
 
-    def getIcon( self, iconName, iconSize ):        
+    def getIcon( self, iconName, iconSize ):
+        
         if not iconName:
             return None
 
@@ -72,8 +73,19 @@ class IconManager(GObject.GObject):
                     realIconName = iconName
 
             if iconFileName and not canSetByName and os.path.exists( iconFileName ):                
-                pb = GdkPixbuf.Pixbuf.new_from_file_at_size( iconFileName, iconSize, iconSize )
-                image = Gtk.Image.new_from_pixbuf(pb)
+                icon = GdkPixbuf.Pixbuf.new_from_file_at_size( iconFileName, iconSize, iconSize )
+                                             
+                # if the actual icon size is to far from the desired size resize it
+                if icon and (( icon.get_width() - iconSize ) > 5 or ( icon.get_height() - iconSize ) > 5):
+                    if icon.get_width() > icon.get_height():
+                        newIcon = icon.scale_simple( iconSize, icon.get_height() * iconSize / icon.get_width(), GdkPixbuf.InterpType.BILINEAR )
+                    else:
+                        newIcon = icon.scale_simple( icon.get_width() * iconSize / icon.get_height(), iconSize, GdkPixbuf.InterpType.BILINEAR )
+                    del icon
+                    icon = newIcon
+
+                image = Gtk.Image.new_from_pixbuf(icon)
+
             elif canSetByName:                
                 image = Gtk.Image()
                 icon_found = False
