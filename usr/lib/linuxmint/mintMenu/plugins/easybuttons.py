@@ -285,7 +285,7 @@ class ApplicationLauncher( easyButton ):
                 del icon
             else:
                 if self.iconName:
-                    c = c_char_p(self.iconName)
+                    c = c_char_p(self.iconName.encode('ascii', 'ignore'))
                     gtk.gtk_drag_source_set_icon_name( hash(self), c)
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
@@ -408,7 +408,7 @@ class ApplicationLauncher( easyButton ):
                 del icon
             else:
                 if self.iconName:
-                    c = c_char_p(self.iconName)
+                    c = c_char_p(self.iconName.encode('ascii', 'ignore'))
                     gtk.gtk_drag_source_set_icon_name( hash(self), c)
 
     def startupFileChanged( self, *args ):
