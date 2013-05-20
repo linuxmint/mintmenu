@@ -225,7 +225,9 @@ class pluginclass( object ):
 
     def do_gtk_bookmarks( self ):
         if self.showGTKBookmarks:
-            bookmarks = {}            
+            if not os.path.exists(os.path.expanduser('~/.gtk-bookmarks')):
+                return
+            bookmarks = {}
             with open(os.path.expanduser('~/.gtk-bookmarks'), 'r') as f:
                 for line in f:
                     #line = line.replace('file://', '')
