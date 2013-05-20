@@ -225,20 +225,23 @@ class pluginclass( object ):
 
     def do_gtk_bookmarks( self ):
         if self.showGTKBookmarks:
-            bookmarks = {}            
+            bookmarks = []
             with open(os.path.expanduser('~/.gtk-bookmarks'), 'r') as f:
                 for line in f:
                     #line = line.replace('file://', '')
                     line = line.rstrip()
-                    parts = line.split(' ')
+                    if not line:
+                        continue
+                    parts = line.split(' ', 1)
 
                     if len(parts) == 2:
-                        bookmarks[parts[1]] = parts[0]
+                        path, name = parts
                     elif len(parts) == 1:
-                        junk = os.path.split(parts[0])
-                        bookmarks[junk[len(junk) - 1]] = parts[0]
-                        
-            for name, path in bookmarks.iteritems():                          
+                        path = parts[0]
+                        name = os.path.basename(os.path.normpath(path))
+                    bookmarks.append((name, path))
+
+            for name, path in bookmarks:
                 name = unquote(name)
                 currentbutton = easyButton( "folder", self.iconsize, [name], -1, -1 )
                 currentbutton.connect( "clicked", self.launch_gtk_bookmark, path )
