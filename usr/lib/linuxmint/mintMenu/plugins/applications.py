@@ -560,8 +560,6 @@ class pluginclass( object ):
         self.searchEntry.select_region( 0, -1 )
         if self.rememberFilter:
             self.Filter(self.activeFilter[2], self.activeFilter[1])
-        else:
-            self.Filter(self.searchEntry, "")
 
     def onHideMenu( self ):
         self.settings.set( "int", "last-active-tab", self.lastActiveTab )
