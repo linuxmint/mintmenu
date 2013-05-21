@@ -817,11 +817,19 @@ class pluginclass( object ):
                     self.changeTab( 1 )
                 text = widget.get_text()
                 showns = False # Are any app shown?
+                shownList = []
                 for i in self.applicationsBox.get_children():
                     shown = i.filterText( text )
                     if (shown):
-                        showns = True
-                
+                        dupe = False
+                        for item in shownList:
+                            if i.desktopFile == item.desktopFile:
+                                dupe = True
+                        if dupe:
+                            i.hide()
+                        else:
+                            shownList.append(i)
+                            showns = True
                 if (not showns and os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg")):
                     if len(text) >= 3:
                         if self.current_suggestion is not None and self.current_suggestion in text:
