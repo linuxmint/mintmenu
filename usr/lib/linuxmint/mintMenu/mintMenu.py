@@ -78,7 +78,7 @@ class MainWindow( object ):
         self.toggle = toggleButton
         # Load UI file and extract widgets   
         builder = Gtk.Builder()
-        builder.add_from_file(os.path.join( self.path, "mintMenu.ui" ))
+        builder.add_from_file(os.path.join( self.path, "mintMenu.glade" ))
         self.window     = builder.get_object( "mainWindow" )
         self.paneholder = builder.get_object( "paneholder" )
         self.border     = builder.get_object( "border" )
