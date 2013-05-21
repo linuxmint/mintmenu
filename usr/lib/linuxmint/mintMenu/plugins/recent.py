@@ -53,7 +53,7 @@ class pluginclass:
 
         self.FileList=[]
         self.RecManagerInstance = Gtk.RecentManager.get_default()
-        self.RecManagerInstance.connect("changed", self.DoRecent)
+        self.recentManagerId = self.RecManagerInstance.connect("changed", self.DoRecent)
 
         self.RegenPlugin()
         self.builder.get_object( "RecentTabs" ).set_current_page(1)
@@ -63,6 +63,16 @@ class pluginclass:
 
     def wake (self) :
         pass
+
+    def destroy( self ):
+        self.recentBox.destroy()
+        self.recentVBox.destroy()
+        self.builder.get_object( "RecentTabs" ).destroy()
+        self.builder.get_object("ClrBtn").destroy()
+        self.content_holder.destroy()
+        self.settings.notifyRemoveAll()
+        if self.recentManagerId:
+            self.RecManagerInstance.disconnect(self.recentManagerId)
 
     def RegenPlugin( self, *args, **kargs ):
         self.GetGSettingsEntries()
