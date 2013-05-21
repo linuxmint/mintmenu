@@ -132,21 +132,24 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         wait_for_release = False
         while self.running:
             event = self.display.next_event()
-            self.current_event_time = event.time
-            if event.detail == self.keycode and event.type == X.KeyPress and not wait_for_release:
-                modifiers = event.state & self.known_modifiers_mask
-                if modifiers == self.modifiers:
-                    wait_for_release = True
+            try:
+                self.current_event_time = event.time
+                if event.detail == self.keycode and event.type == X.KeyPress and not wait_for_release:
+                    modifiers = event.state & self.known_modifiers_mask
+                    if modifiers == self.modifiers:
+                        wait_for_release = True
+                        self.display.allow_events(X.AsyncKeyboard, event.time)
+                    else:
+                        self.display.allow_events(X.ReplayKeyboard, event.time)
+                elif event.detail == self.keycode and wait_for_release:
+                    if event.type == X.KeyRelease:
+                        wait_for_release = False
+                        GLib.idle_add(self.idle)
                     self.display.allow_events(X.AsyncKeyboard, event.time)
                 else:
                     self.display.allow_events(X.ReplayKeyboard, event.time)
-            elif event.detail == self.keycode and wait_for_release:
-                if event.type == X.KeyRelease:
-                    wait_for_release = False
-                    GLib.idle_add(self.idle)
-                self.display.allow_events(X.AsyncKeyboard, event.time)
-            else:
-                self.display.allow_events(X.ReplayKeyboard, event.time)
+            except AttributeError:
+                continue
 
     def stop(self):
         self.running = False
