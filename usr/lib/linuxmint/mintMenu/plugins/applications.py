@@ -558,7 +558,7 @@ class pluginclass( object ):
             self.changeTab( 1 )
 
         self.searchEntry.select_region( 0, -1 )
-        if self.rememberFilter:
+        if self.rememberFilter and self.searchEntry.get_text().strip() != "":
             self.Filter(self.activeFilter[2], self.activeFilter[1])
 
     def onHideMenu( self ):
