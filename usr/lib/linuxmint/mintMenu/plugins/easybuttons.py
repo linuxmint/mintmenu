@@ -84,9 +84,9 @@ class IconManager(GObject.GObject):
 
             if iconFileName and needTempFile and os.path.exists( iconFileName ):
                 tmpIconName = iconFileName.replace("/", "-")
-                shutil.copyfile(iconFileName, os.path.join(self.iconDir, tmpIconName))
                 realIconName = tmpIconName[:-4]
-                if not self.defaultTheme.has_icon( realIconName ):
+                if not os.path.exists(os.path.join(self.iconDir, tmpIconName)):
+                    shutil.copyfile(iconFileName, os.path.join(self.iconDir, tmpIconName))
                     self.defaultTheme.append_search_path(self.iconDir)
 
             image = Gtk.Image()
