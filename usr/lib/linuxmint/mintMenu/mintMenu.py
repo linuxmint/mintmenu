@@ -133,7 +133,7 @@ class MainWindow( object ):
     def wakePlugins( self ):
         # Call each plugin and let them know we're showing up
         for plugin in self.plugins.values():
-            if hasattr( plugin, "destroy" ):
+            if hasattr( plugin, "wake" ):
                 plugin.wake()
 
     def toggleTooltipsEnabled( self, settings, key, args = None):

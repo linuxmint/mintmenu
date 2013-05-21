@@ -35,6 +35,9 @@ class pluginclass:
         #This should be the first item added to the window in glade
         self.content_holder = self.builder.get_object( "eventbox1" )
 
+        self.recentBox = self.builder.get_object("RecentBox")
+        self.recentVBox = self.builder.get_object( "vbox1" )
+
         #Specify plugin width
         self.width = 250
 
@@ -51,7 +54,6 @@ class pluginclass:
         self.FileList=[]
         self.RecManagerInstance = Gtk.RecentManager.get_default()
         self.RecManagerInstance.connect("changed", self.DoRecent)
-
 
         self.RegenPlugin()
         self.builder.get_object( "RecentTabs" ).set_current_page(1)
@@ -93,16 +95,16 @@ class pluginclass:
 
 
     def DoRecent( self, *args, **kargs ):
-        for i in self.builder.get_object( "RecentBox" ).get_children():
+        for i in self.recentBox.get_children():
             i.destroy()
 
-        self.builder.get_object( "vbox1" ).set_size_request( self.recentw, self.recenth )
-        if len( self.builder.get_object( "RecentBox" ).get_children() ) < self.numentries:
-            n=len( self.builder.get_object( "RecentBox" ).get_children() )-1
+        self.recentVBox.set_size_request( self.recentw, self.recenth )
+        if len( self.recentBox.get_children() ) < self.numentries:
+            n=len( self.recentBox.get_children() )-1
         else:
             n=self.numentries-1
         while n >= 0:
-            self.builder.get_object( "RecentBox" ).remove( self.builder.get_object( "RecentBox" ).get_children()[n] )
+            self.recentBox.remove( self.recentBox.get_children()[n] )
             n-=1
 
         self.FileList, self.IconList = self.GetRecent()
@@ -156,7 +158,7 @@ class pluginclass:
         AButton.add( Align1 )
         AButton.show()
 
-        self.builder.get_object( "RecentBox" ).pack_start( AButton, False, True, 0 )
+        self.recentBox.pack_start( AButton, False, True, 0 )
 
     def callback(self, widget, filename=None):
         self.Win.hide()
