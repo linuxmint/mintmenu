@@ -354,15 +354,13 @@ class ApplicationLauncher( easyButton ):
         return True
 
     def strip_accents(self, string):        
+        value = string
         if isinstance(string, unicode):
-            return string
-        else:        
-            import unicodedata
             try:
-                value = unicodedata.normalize('NFKD', unicode(string)).encode('UTF8', 'ignore') 
+                value = string.encode('UTF8', 'ignore') 
             except:
-                value = string
-            return value
+                pass
+        return value    
 
     def getTooltip( self ):
         tooltip = self.appName
