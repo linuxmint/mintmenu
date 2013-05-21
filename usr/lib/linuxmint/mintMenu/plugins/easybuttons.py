@@ -36,15 +36,24 @@ class IconManager(GObject.GObject):
         # This takes to much time and there are only a very few applications that use icons from different themes
         #self.themes = map(  createTheme, [ d for d in os.listdir( "/usr/share/icons" ) if os.path.isdir( os.path.join( "/usr/share/icons", d ) ) ] )
 
-        defaultTheme = Gtk.IconTheme.get_default()
+        self.defaultTheme = Gtk.IconTheme.get_default()
         defaultKdeTheme = createTheme( "kde.default" )
+
+        # Setup and clean up the temp icon dir
+        configDir = GLib.get_user_config_dir()
+        self.iconDir = os.path.join(configDir, "mintmenu")
+        if not os.path.exists(self.iconDir):
+            os.makedirs(self.iconDir)
+        contents = os.listdir(self.iconDir)
+        for fn in contents:
+            os.remove(os.path.join(self.iconDir, fn))
+
+        self.defaultTheme.append_search_path(self.iconDir)
 
         # Themes with the same content as the default them aren't needed
         #self.themes = [ theme for theme in self.themes if  theme.list_icons() != defaultTheme.list_icons() ]
 
-        self.themes = [ defaultTheme, defaultKdeTheme ]
-
-        self.cache = {}
+        self.themes = [ self.defaultTheme, defaultKdeTheme ]
 
         # Listen for changes in the themes
         for theme in self.themes:
@@ -58,47 +67,38 @@ class IconManager(GObject.GObject):
 
         try:
             iconFileName = ""
-            canSetByName = True
+            realIconName = ""
+            needTempFile = False
             #[ iconWidth, iconHeight ] = self.getIconSize( iconSize )
             if iconSize <= 0:
                 return None
 
             elif os.path.isabs( iconName ):
                 iconFileName = iconName
-                canSetByName = False
+                needTempFile = True
             else:
                 if iconName[-4:] in [".png", ".xpm", ".svg", ".gif"]:
                     realIconName = iconName[:-4]
                 else:
                     realIconName = iconName
 
-            if iconFileName and not canSetByName and os.path.exists( iconFileName ):                
-                icon = GdkPixbuf.Pixbuf.new_from_file_at_size( iconFileName, iconSize, iconSize )
-                                             
-                # if the actual icon size is to far from the desired size resize it
-                if icon and (( icon.get_width() - iconSize ) > 5 or ( icon.get_height() - iconSize ) > 5):
-                    if icon.get_width() > icon.get_height():
-                        newIcon = icon.scale_simple( iconSize, icon.get_height() * iconSize / icon.get_width(), GdkPixbuf.InterpType.BILINEAR )
-                    else:
-                        newIcon = icon.scale_simple( icon.get_width() * iconSize / icon.get_height(), iconSize, GdkPixbuf.InterpType.BILINEAR )
-                    del icon
-                    icon = newIcon
+            if iconFileName and needTempFile and os.path.exists( iconFileName ):
+                tmpIconName = iconFileName.replace("/", "-")
+                shutil.copyfile(iconFileName, os.path.join(self.iconDir, tmpIconName))
+                realIconName = tmpIconName[:-4]
+                if not self.defaultTheme.has_icon( realIconName ):
+                    self.defaultTheme.append_search_path(self.iconDir)
 
-                image = Gtk.Image.new_from_pixbuf(icon)
+            image = Gtk.Image()
+            icon_found = False
+            for theme in self.themes:
+                if theme.has_icon( realIconName ):
+                    icon_found = True
+                    break
 
-            elif canSetByName:                
-                image = Gtk.Image()
-                icon_found = False
-                for theme in self.themes:
-                    if theme.has_icon( realIconName ):
-                        icon_found = True
-                        break
-
-                if icon_found:
-                    image.set_from_icon_name(realIconName, Gtk.IconSize.DND)
-                    image.set_pixel_size(iconSize)
-                else:
-                    image = None
+            if icon_found:
+                image.set_from_icon_name(realIconName, Gtk.IconSize.DND)
+                image.set_pixel_size(iconSize)
             else:
                 image = None
 
@@ -108,7 +108,6 @@ class IconManager(GObject.GObject):
             return None
 
     def themeChanged( self, theme ):
-        self.cache = { }
         self.emit( "changed" )
 
 GObject.type_register(IconManager)
@@ -279,14 +278,9 @@ class ApplicationLauncher( easyButton ):
 
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
-            if icon.get_storage_type() == Gtk.ImageType.PIXBUF:
-                pb = icon.get_pixbuf()
-                gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(pb) )
-                del icon
-            else:
-                if self.iconName:
-                    c = c_char_p(self.iconName.encode('ascii', 'ignore'))
-                    gtk.gtk_drag_source_set_icon_name( hash(self), c)
+            iconName, s = icon.get_icon_name()
+            c = c_char_p(iconName.encode('ascii', 'ignore'))
+            gtk.gtk_drag_source_set_icon_name( hash(self), c)
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
         self.connectSelf( "focus-out-event", self.onFocusOut )
@@ -402,14 +396,9 @@ class ApplicationLauncher( easyButton ):
 
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
-            if icon.get_storage_type() == Gtk.ImageType.PIXBUF:
-                pb = icon.get_pixbuf()
-                gtk.gtk_drag_source_set_icon_pixbuf( hash(self), hash(pb) )
-                del icon
-            else:
-                if self.iconName:
-                    c = c_char_p(self.iconName.encode('ascii', 'ignore'))
-                    gtk.gtk_drag_source_set_icon_name( hash(self), c)
+            iconName, size = icon.get_icon_name()
+            c = c_char_p(iconName.encode('ascii', 'ignore'))
+            gtk.gtk_drag_source_set_icon_name( hash(self), c)
 
     def startupFileChanged( self, *args ):
         self.inStartup = os.path.exists( self.startupFilePath )
