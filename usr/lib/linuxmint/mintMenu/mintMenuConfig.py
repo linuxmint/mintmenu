@@ -24,7 +24,6 @@ sys.path.append( os.path.join( PATH , "plugins") )
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 
-from easybuttons import iconManager
 from easygsettings import EasyGSettings
 
 class mintMenuConfig( object ):

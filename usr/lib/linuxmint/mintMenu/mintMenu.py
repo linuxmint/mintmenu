@@ -58,7 +58,6 @@ if not windowManager:
     windowManager = "MATE"
 xdg.Config.setWindowManager( windowManager.upper() )
 
-from easybuttons import iconManager
 from execute import *
 
 class MainWindow( object ):
