@@ -263,9 +263,10 @@ class mintMenuConfig( object ):
         for count in range( len(self.customplacepaths) ):
             self.customplacestreemodel.append( [ self.customplacenames[count], self.customplacepaths[count] ] )
 
-        self.customplacestreemodel.connect("row-changed", self.updatePlacesGSettings)
+        self.customplacestreemodel.connect("row-inserted", self.updatePlacesGSettings)
         self.customplacestreemodel.connect("row-deleted", self.updatePlacesGSettings)
         self.customplacestreemodel.connect("rows-reordered", self.updatePlacesGSettings)
+        self.customplacestreemodel.connect("row-changed", self.updatePlacesGSettings)
         self.customplacestree.set_model( self.customplacestreemodel )
         self.namescolumn = Gtk.TreeViewColumn( _("Name"), self.cell, text = 0 )
         self.placescolumn = Gtk.TreeViewColumn( _("Path"), self.cell, text = 1 )
@@ -538,8 +539,8 @@ class mintMenuConfig( object ):
                 customplacenames = customplacenames + [ self.customplacestreemodel.get_value(treeiter, 0 ) ]
                 customplacepaths = customplacepaths + [ self.customplacestreemodel.get_value(treeiter, 1 ) ]
                 treeiter = self.customplacestreemodel.iter_next(treeiter)
-            self.settingsPlaces.set( "list-string", "custom_paths", customplacepaths)
-            self.settingsPlaces.set( "list-string", "custom_names", customplacenames)
+            self.settingsPlaces.set( "list-string", "custom-paths", customplacepaths)
+            self.settingsPlaces.set( "list-string", "custom-names", customplacenames)
 
 
 window = mintMenuConfig()
