@@ -59,7 +59,6 @@ class pluginclass( object ):
         self.settings.notifyAdd( "show-network", self.RegenPlugin )
         self.settings.notifyAdd( "show-trash", self.RegenPlugin )
         self.settings.notifyAdd( "custom-names", self.RegenPlugin )
-        self.settings.notifyAdd( "custom-paths", self.RegenPlugin )
         self.settings.notifyAdd( "allow-scrollbar", self.RegenPlugin )
         self.settings.notifyAdd( "show-gtk-bookmarks", self.RegenPlugin )
         self.settings.notifyAdd( "height", self.changePluginSize )
