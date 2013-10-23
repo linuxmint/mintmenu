@@ -811,8 +811,10 @@ class pluginclass( object ):
             if self.donotfilterapps:
                 widget.set_text( "" )    
             else:
+                text = widget.get_text()
                 if self.lastActiveTab != 1:
                     self.changeTab( 1 )
+                    widget.set_text( text ) 
                 text = widget.get_text()
                 showns = False # Are any app shown?
                 shownList = []
