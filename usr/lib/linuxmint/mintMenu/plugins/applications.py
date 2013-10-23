@@ -1119,7 +1119,8 @@ class pluginclass( object ):
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
-        self.mintMenuWin.grab()
+        #self.mintMenuWin.grab()
+        mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
         self.focusSearchEntry()
         return True
         
