@@ -1120,7 +1120,7 @@ class pluginclass( object ):
         #menu.reposition()
         #menu.reposition()
         #self.mintMenuWin.grab()
-        mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
+        menu.connect( 'deactivate', self.onMenuPopupDeactivate)
         self.focusSearchEntry()
         return True
         
