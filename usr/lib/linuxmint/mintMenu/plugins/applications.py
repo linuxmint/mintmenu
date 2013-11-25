@@ -1631,8 +1631,7 @@ class pluginclass( object ):
                         break
                 if not found:
                     addedCategories.append(item)
-
-            key = 0
+            
             for item in self.categoryList:
                 found = False
                 for item2 in newCategoryList:
@@ -1640,47 +1639,60 @@ class pluginclass( object ):
                         found = True
                         break
                 if not found:
-                    removedCategories.append( key )
-                else:
-                    key += 1
+                    removedCategories.append( item )
 
         if self.showcategoryicons == True:
             categoryIconSize = self.iconSize
         else:
             categoryIconSize = 0
-
-        for key in removedCategories:
-            self.categoryList[key]["button"].destroy()
-            del self.categoryList[key]
+        
+        for item in removedCategories:
+            try:
+                button = item["button"]            
+                self.categoryList.remove(item)
+                button.destroy()
+                del item
+            except Exception, e:
+                print e
 
         if addedCategories:
             sortedCategoryList = []
             for item in self.categoryList:
-                self.categoriesBox.remove( item["button"] )
-                sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
+                try:
+                    self.categoriesBox.remove( item["button"] )
+                    sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
+                except Exception, e:
+                    print e
 
             # Create new category buttons and add the to the list
             for item in addedCategories:
-                item["button"] = CategoryButton( item["icon"], categoryIconSize, [ item["name"] ], item["filter"] )
-                self.mintMenuWin.setTooltip( item["button"], item["tooltip"] )
+                try:
+                    item["button"] = CategoryButton( item["icon"], categoryIconSize, [ item["name"] ], item["filter"] )
+                    self.mintMenuWin.setTooltip( item["button"], item["tooltip"] )
 
-                if self.categories_mouse_over:
-                    startId = item["button"].connect( "enter", self.StartFilter, item["filter"] )
-                    stopId = item["button"].connect( "leave", self.StopFilter )
-                    item["button"].mouseOverHandlerIds = ( startId, stopId )
-                else:
-                    item["button"].mouseOverHandlerIds = None
+                    if self.categories_mouse_over:
+                        startId = item["button"].connect( "enter", self.StartFilter, item["filter"] )
+                        stopId = item["button"].connect( "leave", self.StopFilter )
+                        item["button"].mouseOverHandlerIds = ( startId, stopId )
+                    else:
+                        item["button"].mouseOverHandlerIds = None
 
-                item["button"].connect( "clicked", self.Filter, item["filter"] )
-                item["button"].connect( "focus-in-event", self.categoryBtnFocus, item["filter"] )
-                item["button"].show()
+                    item["button"].connect( "clicked", self.Filter, item["filter"] )
+                    item["button"].connect( "focus-in-event", self.categoryBtnFocus, item["filter"] )
+                    item["button"].show()
 
-                self.categoryList.append( item )
-                sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
+                    self.categoryList.append( item )
+                    sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
+                except Exception, e:
+                    print e
+
             sortedCategoryList.sort()
 
             for item in sortedCategoryList:
-                self.categoriesBox.pack_start( item[1], False, False, 0 )
+                try:
+                    self.categoriesBox.pack_start( item[1], False, False, 0 )
+                except Exception, e:
+                    print e
 
 
         # Find added and removed applications add update the application list

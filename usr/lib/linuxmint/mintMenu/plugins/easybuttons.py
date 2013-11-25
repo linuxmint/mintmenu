@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-from gi.repository import Gtk, GdkPixbuf, Gdk, GLib
+from gi.repository import Gtk, Gdk, GLib
 from gi.repository import Pango
-#import matedesktop
 from gi.repository import GObject
 import os.path
 import shutil
