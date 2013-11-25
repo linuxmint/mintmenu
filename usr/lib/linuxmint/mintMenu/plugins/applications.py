@@ -811,8 +811,10 @@ class pluginclass( object ):
             if self.donotfilterapps:
                 widget.set_text( "" )    
             else:
+                text = widget.get_text()
                 if self.lastActiveTab != 1:
                     self.changeTab( 1 )
+                    widget.set_text( text ) 
                 text = widget.get_text()
                 showns = False # Are any app shown?
                 shownList = []
@@ -949,7 +951,8 @@ class pluginclass( object ):
 
                 mTree.show_all()
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
-                self.mintMenuWin.grab()
+                #self.mintMenuWin.grab()
+                mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
 
             else:
                 mTree = Gtk.Menu()
@@ -969,7 +972,8 @@ class pluginclass( object ):
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
-                self.mintMenuWin.grab()
+                #self.mintMenuWin.grab()
+                mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
 
     def menuPopup( self, widget, event ):
         if event.button == 3:
@@ -1115,7 +1119,8 @@ class pluginclass( object ):
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
-        self.mintMenuWin.grab()
+        #self.mintMenuWin.grab()
+        menu.connect( 'deactivate', self.onMenuPopupDeactivate)
         self.focusSearchEntry()
         return True
         
