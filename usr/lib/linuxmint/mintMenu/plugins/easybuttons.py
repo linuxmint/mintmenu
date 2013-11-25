@@ -299,6 +299,7 @@ class ApplicationLauncher( easyButton ):
             self.appCategories = desktopItem.getCategories()
             self.appGnomeDocPath = desktopItem.get( "X-MATE-DocPath" ) or ""
             self.useTerminal = desktopItem.getTerminal()
+            self.appPath = desktopItem.getPath()
 
             if not self.appGnomeDocPath:
                 self.appKdeDocPath      = desktopItem.getDocPath() or ""
@@ -384,9 +385,9 @@ class ApplicationLauncher( easyButton ):
         if self.appExec:
             if self.useTerminal:
                 cmd = "x-terminal-emulator -e \"" + self.appExec + "\""
-                Execute(cmd)
+                Execute(cmd, self.appPath)
             else:
-                Execute(self.appExec)
+                Execute(self.appExec, self.appPath)
 
     def uninstall (self, *args ):
         Execute("gksu /usr/lib/linuxmint/mintMenu/mintRemove.py " + self.desktopFile)
