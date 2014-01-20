@@ -24,9 +24,13 @@ def Execute( cmd , commandCwd=None):
 	if isinstance( cmd, str ) or isinstance( cmd, unicode):
 		if (cmd.find("/home/") >= 0) or (cmd.find("su-to-root") >= 0) or (cmd.find("\"") >= 0):
 			print "running manually..."
-			os.chdir(cwd)
-			os.system(cmd + " &")
-			return True		
+			try:
+				os.chdir(cwd)
+				os.system(cmd + " &")
+				return True
+			except Exception, detail:
+				print detail
+				return False
 		cmd = cmd.split()
 	cmd = RemoveArgs(cmd)
 	
