@@ -384,6 +384,8 @@ class ApplicationLauncher( easyButton ):
         if self.appExec:
             if self.useTerminal:
                 cmd = "x-terminal-emulator -e \"" + self.appExec + "\""
+                if os.path.exists("/usr/bin/mate-terminal"):
+                    cmd = "mate-terminal -e \"" + self.appExec + "\""
                 Execute(cmd, self.appPath)
             else:
                 Execute(self.appExec, self.appPath)
