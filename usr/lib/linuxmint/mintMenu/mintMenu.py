@@ -530,8 +530,7 @@ class MenuWin( object ):
 
         self.applet.set_flags( MatePanelApplet.AppletFlags.EXPAND_MINOR )
         self.applet.connect( "button-press-event", self.showMenu )
-        self.applet.connect( "change-orient", self.changeOrientation )
-        self.applet.connect( "change-background", self.changeBackground )
+        self.applet.connect( "change-orient", self.changeOrientation )        
         self.applet.connect("enter-notify-event", self.enter_notify)
         self.applet.connect("leave-notify-event", self.leave_notify)
         self.mainwin = MainWindow( self.button_box, self.settings, self.keybinder )
@@ -606,6 +605,7 @@ class MenuWin( object ):
         self.sizeButton()
 
         self.applet.add( self.button_box )
+        self.applet.set_background_widget( self.applet )
 
 
     def loadSettings( self, *args, **kargs ):
@@ -614,23 +614,7 @@ class MenuWin( object ):
         self.theme_name =  self.settings.get_string( "theme-name" )
         self.hotkeyText =  self.settings.get_string( "hot-key" )
         self.buttonIcon =  self.settings.get_string( "applet-icon" )
-        self.iconSize = self.settings.get_int( "applet-icon-size" )
-
-    def changeBackground( self, applet, type, color, pixmap ):
-        
-        self.applyTheme()
-        
-        # get reset style
-        self.applet.set_style(None)
-        rc_style = Gtk.RcStyle()
-        self.applet.modify_style(rc_style)
-
-        if MatePanelApplet.AppletBackgroundType.COLOR_BACKGROUND == type:
-            applet.modify_bg( Gtk.StateType.NORMAL, color )
-        elif MatePanelApplet.AppletBackgroundType.PIXMAP_BACKGROUND == type:
-            style = applet.style
-            style.bg_pixmap[ Gtk.StateType.NORMAL ] = pixmap
-            applet.set_style( style )
+        self.iconSize = self.settings.get_int( "applet-icon-size" )    
             
     def changeTheme(self, *args):        
         self.reloadSettings()
