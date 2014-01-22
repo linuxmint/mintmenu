@@ -880,6 +880,10 @@ class pluginclass( object ):
             widget.set_relief( Gtk.ReliefStyle.HALF )
    
         self.applicationsScrolledWindow.get_vadjustment().set_value( 0 )
+
+    def FilterAndClear( self, widget, category = None ):
+        self.searchEntry.set_text( "" )
+        self.Filter( widget, category )
         
     # Forward all text to the search box
     def keyPress( self, widget, event ):
@@ -1673,7 +1677,7 @@ class pluginclass( object ):
                     else:
                         item["button"].mouseOverHandlerIds = None
 
-                    item["button"].connect( "clicked", self.Filter, item["filter"] )
+                    item["button"].connect( "clicked", self.FilterAndClear, item["filter"] )
                     item["button"].connect( "focus-in-event", self.categoryBtnFocus, item["filter"] )
                     item["button"].show()
 
