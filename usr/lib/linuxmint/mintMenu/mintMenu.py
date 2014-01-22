@@ -101,7 +101,6 @@ class MainWindow( object ):
                       
         self.getSetGSettingEntries()
         self.SetupMintMenuBorder()
-        self.SetupMintMenuOpacity()
 
         self.tooltips = Gtk.Tooltips()
         if self.globalEnableTooltips and self.enableTooltips:
@@ -124,6 +123,8 @@ class MainWindow( object ):
         self.settings.connect( "changed::custom-color", self.toggleCustomBackgroundColor )
         self.settings.connect( "changed::border-width", self.toggleBorderWidth )
         self.settings.connect( "changed::opacity", self.toggleOpacity )
+        
+        self.firstTime = True;
 
     def on_window1_destroy (self, widget, data=None):
         Gtk.main_quit()
@@ -436,6 +437,11 @@ class MainWindow( object ):
 
     def show( self ):
         self.window.present()
+        
+        # Hack for opacity not showing on first composited draw
+        if self.firstTime:
+            self.firstTime = False
+            self.SetupMintMenuOpacity()
 
         if ( "applications" in self.plugins ) and ( hasattr( self.plugins["applications"], "focusSearchEntry" ) ):
             if (self.startWithFavorites):
