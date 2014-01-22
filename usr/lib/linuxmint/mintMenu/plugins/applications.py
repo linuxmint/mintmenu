@@ -571,8 +571,9 @@ class pluginclass( object ):
         elif tabNum == 1:
             notebook.set_current_page( 1 )
 
-        self.lastActiveTab = tabNum
         self.focusSearchEntry()
+        self.lastActiveTab = tabNum
+
 
     def Todos( self ):
 
@@ -639,7 +640,7 @@ class pluginclass( object ):
         separator.add(Gtk.HSeparator())
         separator.set_visible_window(False)
         separator.set_size_request(-1, 20)       
-        separator.type = "separator"        
+        separator.type = "separator"
         separator.show_all()
         self.applicationsBox.add(separator)
         self.suggestions.append(separator)        
@@ -717,7 +718,7 @@ class pluginclass( object ):
                 last_separator.add(Gtk.HSeparator())
                 last_separator.set_visible_window(False)
                 last_separator.set_size_request(-1, 20)       
-                last_separator.type = "separator"       
+                last_separator.type = "separator"
                 last_separator.show_all()
                 self.applicationsBox.add(last_separator)
                 self.suggestions.append(last_separator)
@@ -772,7 +773,7 @@ class pluginclass( object ):
                     last_separator.add(Gtk.HSeparator())
                     last_separator.set_visible_window(False)
                     last_separator.set_size_request(-1, 20)       
-                    last_separator.type = "separator"        
+                    last_separator.type = "separator"
                     last_separator.show_all()
                     self.applicationsBox.add(last_separator)
                     self.suggestions.append(last_separator)
