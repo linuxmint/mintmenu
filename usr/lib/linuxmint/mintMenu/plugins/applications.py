@@ -253,7 +253,7 @@ class pluginclass( object ):
         self.builder.get_object("label7").set_text(_("All applications"))
         self.builder.get_object("label2").set_text(_("Applications"))                
         
-        self.mintMenuWin.SetHeadingStyle( [self.builder.get_object("label6"),self.builder.get_object("label2")] )
+        self.headingstocolor = [self.builder.get_object("label6"),self.builder.get_object("label2")]
 
         self.numApps = 0
         # These properties are NECESSARY to maintain consistency
