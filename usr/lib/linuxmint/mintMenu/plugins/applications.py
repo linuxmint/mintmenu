@@ -1114,14 +1114,14 @@ class pluginclass( object ):
         
         menu.show_all()
 
-        gtk.gtk_menu_popup(hash(menu), None, None, None, None, 3, 0)
+        gtk.gtk_menu_popup(hash(menu), None, None, None, None, event.button, event.time)
 
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
         #self.mintMenuWin.grab()
         menu.connect( 'deactivate', self.onMenuPopupDeactivate)
-        self.focusSearchEntry()
+        #self.focusSearchEntry()
         return True
         
     def pos_func(self, menu=None):
