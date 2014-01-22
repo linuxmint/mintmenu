@@ -592,20 +592,19 @@ class MenuWin( object ):
             self.button_box = Gtk.HBox()
             self.button_box.pack_start( self.button_icon, False, False, 0 )
             self.button_box.pack_start( self.systemlabel, False, False, 0 )
-
             self.button_icon.set_padding( 5, 0 )
         # if we have a vertical panel
         elif self.applet.get_orient() == MatePanelApplet.AppletOrient.LEFT:
             self.button_box = Gtk.VBox()
             self.systemlabel.set_angle( 270 )
-            self.button_box.pack_start( self.systemlabel , True, True, 0)
-            self.button_box.pack_start( self.button_icon , True, True, 0)
-            self.button_icon.set_padding( 5, 0 )
+            self.button_box.pack_start( self.button_icon , False, False, 0)
+            self.button_box.pack_start( self.systemlabel , False, False, 0)
+            self.button_icon.set_padding( 0, 5 )
         elif self.applet.get_orient() == MatePanelApplet.AppletOrient.RIGHT:
             self.button_box = Gtk.VBox()
             self.systemlabel.set_angle( 90 )
-            self.button_box.pack_start( self.button_icon , True, True, 0)
-            self.button_box.pack_start( self.systemlabel , True, True, 0)
+            self.button_box.pack_start( self.systemlabel , False, False, 0)
+            self.button_box.pack_start( self.button_icon , False, False, 0)
             self.button_icon.set_padding( 0, 5 )
 
         self.button_box.set_homogeneous( False )
@@ -650,12 +649,12 @@ class MenuWin( object ):
         elif self.applet.get_orient() == MatePanelApplet.AppletOrient.LEFT:
             tmpbox = Gtk.VBox()
             self.systemlabel.set_angle( 270 )
-            self.button_box.reorder_child( self.button_icon, 1 )
+            self.button_box.reorder_child( self.button_icon, 0 )
             self.button_icon.set_padding( 0, 5 )
         elif self.applet.get_orient() == MatePanelApplet.AppletOrient.RIGHT:
             tmpbox = Gtk.VBox()
             self.systemlabel.set_angle( 90 )
-            self.button_box.reorder_child( self.button_icon, 0 )
+            self.button_box.reorder_child( self.button_icon, 1 )
             self.button_icon.set_padding( 0, 5 )
 
         tmpbox.set_homogeneous( False )
@@ -713,8 +712,7 @@ class MenuWin( object ):
         self.systemlabel.size_request(sl_req)
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
            if self.hideIcon:
-               self.systemlabel.size_request(sl_req)
-               self.applet.set_size_request( sl_req.width + 2, -1 )
+               self.applet.set_size_request( sl_req.width + 2, bi_req.height )
            else:
                self.applet.set_size_request( sl_req.width + bi_req.width + 5, bi_req.height )
         else:
