@@ -878,9 +878,6 @@ class pluginclass( object ):
                 i.released()
                 i.set_relief( Gtk.ReliefStyle.NONE )
             widget.set_relief( Gtk.ReliefStyle.HALF )
-            widget.grab_focus()
-
-            self.searchEntry.set_text( "" )
    
         self.applicationsScrolledWindow.get_vadjustment().set_value( 0 )
         
@@ -1121,7 +1118,6 @@ class pluginclass( object ):
         #menu.reposition()
         #self.mintMenuWin.grab()
         menu.connect( 'deactivate', self.onMenuPopupDeactivate)
-        #self.focusSearchEntry()
         return True
         
     def pos_func(self, menu=None):
