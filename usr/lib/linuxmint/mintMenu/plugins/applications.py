@@ -576,12 +576,22 @@ class pluginclass( object ):
 
 
     def Todos( self ):
-
+        self.searchEntry.connect( "popup-menu", self.blockOnPopup )
+        self.searchEntry.connect( "button-press-event", self.blockOnRightPress )
         self.searchEntry.connect( "changed", self.Filter )
         self.searchEntry.connect( "activate", self.Search )
         self.showAllAppsButton.connect( "clicked", lambda widget: self.changeTab( 1 ) )
         self.showFavoritesButton.connect( "clicked", lambda widget: self.changeTab( 0 ) )
         self.buildButtonList()
+        
+    def blockOnPopup( self, *args ):
+        self.mintMenuWin.stopHiding()
+        return False
+        
+    def blockOnRightPress( self, widget, event ):
+        if event.button == 3:
+            self.mintMenuWin.stopHiding()
+        return False
 
     def focusSearchEntry( self ):
         # grab_focus() does select all text,
@@ -951,10 +961,8 @@ class pluginclass( object ):
                 mTree.append(propsMenuItem)
 
                 mTree.show_all()
+                self.mintMenuWin.stopHiding()
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
-                #self.mintMenuWin.grab()
-                mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
-
             else:
                 mTree = Gtk.Menu()
                 mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
@@ -972,9 +980,8 @@ class pluginclass( object ):
                 removeMenuItem.connect( "activate", self.onFavoritesRemove, widget )
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
+                self.mintMenuWin.stopHiding()
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
-                #self.mintMenuWin.grab()
-                mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
 
     def menuPopup( self, widget, event ):
         if event.button == 3:
@@ -1035,11 +1042,8 @@ class pluginclass( object ):
                 startupMenuItem.set_active( False )
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
-            mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
+            self.mintMenuWin.stopHiding()
             gtk.gtk_menu_popup(hash(mTree), None, None, None, None, event.button, event.time)
-
-    def onMenuPopupDeactivate( self, widget):
-        self.mintMenuWin.grab()
     
     def searchPopup( self, widget=None, event=None ):    
         menu = Gtk.Menu()
@@ -1114,14 +1118,13 @@ class pluginclass( object ):
         menu.append(menuItem)
         
         menu.show_all()
-
+        
+        self.mintMenuWin.stopHiding()
         gtk.gtk_menu_popup(hash(menu), None, None, None, None, event.button, event.time)
 
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
-        #self.mintMenuWin.grab()
-        menu.connect( 'deactivate', self.onMenuPopupDeactivate)
         return True
         
     def pos_func(self, menu=None):
