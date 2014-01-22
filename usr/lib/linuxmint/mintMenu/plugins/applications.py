@@ -571,8 +571,9 @@ class pluginclass( object ):
         elif tabNum == 1:
             notebook.set_current_page( 1 )
 
-        self.lastActiveTab = tabNum
         self.focusSearchEntry()
+        self.lastActiveTab = tabNum
+
 
     def Todos( self ):
 
