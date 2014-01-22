@@ -574,7 +574,7 @@ class MenuWin( object ):
     def do_image(self, image_file, saturate):
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(image_file)
         if saturate:
-            GdkPixbuf.Pixbuf.saturate_and_pixelate(pixbuf, pixbuf, 1.5, False)
+            pixbuf.saturate_and_pixelate(pixbuf, 50.0, False)
         self.button_icon.set_from_pixbuf(pixbuf)
 
     def createPanelButton( self ):
