@@ -878,11 +878,12 @@ class pluginclass( object ):
                 i.released()
                 i.set_relief( Gtk.ReliefStyle.NONE )
             widget.set_relief( Gtk.ReliefStyle.HALF )
-            widget.grab_focus()
-
-            self.searchEntry.set_text( "" )
    
         self.applicationsScrolledWindow.get_vadjustment().set_value( 0 )
+
+    def FilterAndClear( self, widget, category = None ):
+        self.searchEntry.set_text( "" )
+        self.Filter( widget, category )
         
     # Forward all text to the search box
     def keyPress( self, widget, event ):
@@ -1121,7 +1122,6 @@ class pluginclass( object ):
         #menu.reposition()
         #self.mintMenuWin.grab()
         menu.connect( 'deactivate', self.onMenuPopupDeactivate)
-        self.focusSearchEntry()
         return True
         
     def pos_func(self, menu=None):
@@ -1677,7 +1677,7 @@ class pluginclass( object ):
                     else:
                         item["button"].mouseOverHandlerIds = None
 
-                    item["button"].connect( "clicked", self.Filter, item["filter"] )
+                    item["button"].connect( "clicked", self.FilterAndClear, item["filter"] )
                     item["button"].connect( "focus-in-event", self.categoryBtnFocus, item["filter"] )
                     item["button"].show()
 
