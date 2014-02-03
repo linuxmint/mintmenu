@@ -98,9 +98,21 @@ class MainWindow( object ):
 
         plugindir = os.path.join( os.path.expanduser( "~" ), ".linuxmint/mintMenu/plugins" )
         sys.path.append( plugindir )
-                      
+
+        self.panelSettings = Gio.Settings.new("org.mate.panel")
+        self.panelSettings.connect( "changed::tooltips-enabled", self.toggleTooltipsEnabled )
+
+        self.settings.connect( "changed::plugins-list", self.RegenPlugins )
+        self.settings.connect( "changed::start-with-favorites", self.toggleStartWithFavorites )
+        self.settings.connect( "changed::tooltips-enabled", self.toggleTooltipsEnabled )
+        self.settings.connect( "changed::use-custom-color", self.toggleUseCustomColor )
+        self.settings.connect( "changed::custom-border-color", self.toggleCustomBorderColor )
+        self.settings.connect( "changed::custom-heading-color", self.toggleCustomHeadingColor )
+        self.settings.connect( "changed::custom-color", self.toggleCustomBackgroundColor )
+        self.settings.connect( "changed::border-width", self.toggleBorderWidth )
+        self.settings.connect( "changed::opacity", self.toggleOpacity )
+
         self.getSetGSettingEntries()
-        self.SetupMintMenuBorder()
         self.SetupMintMenuOpacity()
 
         self.tooltips = Gtk.Tooltips()
@@ -108,22 +120,9 @@ class MainWindow( object ):
             self.tooltips.enable()
         else:
             self.tooltips.disable()
-
+            
         self.PopulatePlugins();
-
-        self.settings.connect( "changed::plugins-list", self.RegenPlugins )
-                
-        self.settings.connect( "changed::start-with-favorites", self.toggleStartWithFavorites )
-        globalsettings = Gio.Settings.new("org.mate.panel")
-        globalsettings.connect( "changed::tooltips-enabled", self.toggleTooltipsEnabled )
-        self.settings.connect( "changed::tooltips-enabled", self.toggleTooltipsEnabled )
-
-        self.settings.connect( "changed::use-custom-color", self.toggleUseCustomColor )
-        self.settings.connect( "changed::custom-border-color", self.toggleCustomBorderColor )
-        self.settings.connect( "changed::custom-heading-color", self.toggleCustomHeadingColor )
-        self.settings.connect( "changed::custom-color", self.toggleCustomBackgroundColor )
-        self.settings.connect( "changed::border-width", self.toggleBorderWidth )
-        self.settings.connect( "changed::opacity", self.toggleOpacity )
+        self.loadTheme()
 
     def on_window1_destroy (self, widget, data=None):
         Gtk.main_quit()
@@ -159,9 +158,7 @@ class MainWindow( object ):
 
     def toggleUseCustomColor( self, settings, key, args = None ):
         self.usecustomcolor = settings.get_boolean(key)
-        self.SetupMintMenuBorder()
-        self.SetPaneColors( self.panesToColor )
-        self.SetHeadingStyle( self.headingsToColor )
+        self.loadTheme()
 
     def toggleCustomBorderColor( self, settings, key, args = None ):
         self.custombordercolor = settings.get_string(key)
@@ -189,14 +186,13 @@ class MainWindow( object ):
         self.enableTooltips       = self.settings.get_boolean( "tooltips-enabled" )        
         self.startWithFavorites   = self.settings.get_boolean( "start-with-favorites" )
         
-        mate_settings = Gio.Settings.new("org.mate.panel")
-        self.globalEnableTooltips = mate_settings.get_boolean( "tooltips-enabled" )
+        self.globalEnableTooltips = self.panelSettings.get_boolean( "tooltips-enabled" )
 
-    def SetupMintMenuBorder( self ):
+    def SetupMintMenuBorder( self, defaultStyle = None ):
         if self.usecustomcolor:
             self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.custombordercolor ) )
-        # else:
-        #     self.window.modify_bg( Gtk.StateType.NORMAL, self.window.rc_get_style().bg[ Gtk.StateType.SELECTED ] )
+        elif defaultStyle is not None:
+            self.window.modify_bg( Gtk.StateType.NORMAL, defaultStyle.lookup_color('bg_color')[1] )
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )        
 
     def SetupMintMenuOpacity( self ):
@@ -227,10 +223,9 @@ class MainWindow( object ):
         PluginPane.show()
         PaneLadder = Gtk.VBox( False, 0 )
         PluginPane.add( PaneLadder )
-        self.SetPaneColors( [ PluginPane ] )
         ImageBox = Gtk.EventBox()
-        self.SetPaneColors( [ ImageBox ] )
         ImageBox.show()
+        self.panesToColor.extend( [ PluginPane, ImageBox ] )
 
         seperatorImage = GdkPixbuf.Pixbuf.new_from_file( self.dottedfile )
 
@@ -284,9 +279,7 @@ class MainWindow( object ):
                     print u"Unable to load " + plugin + " plugin :-("
 
 
-                self.SetPaneColors( [MyPlugin.content_holder] )
-
-
+                self.panesToColor.append( MyPlugin.content_holder )
                 MyPlugin.content_holder.show()
 
                 VBox1 = Gtk.VBox( False, 0 )
@@ -295,14 +288,14 @@ class MainWindow( object ):
                     Align1 = Gtk.Alignment.new( 0, 0, 0, 0 )
                     Align1.set_padding( 10, 5, 10, 0 )
                     Align1.add( Label1 )
-                    self.SetHeadingStyle( [Label1] )
+                    self.headingsToColor.append( Label1 )
                     Align1.show()
                     Label1.show()
 
                     if not hasattr( MyPlugin, 'sticky' ) or MyPlugin.sticky == True:
                         heading = Gtk.EventBox()
                         Align1.set_padding( 0, 0, 10, 0 )
-                        self.SetPaneColors( [heading] )
+                        heading.set_visible_window( False )
                         heading.set_size_request( MyPlugin.width, 30 )
                     else:
                         heading = Gtk.HBox()
@@ -331,7 +324,9 @@ class MainWindow( object ):
                     if hasattr( MyPlugin, 'height' ):
                         MyPlugin.content_holder.set_size_request( -1, MyPlugin.height )
                     if hasattr( MyPlugin, 'itemstocolor' ):
-                        self.SetPaneColors( MyPlugin.itemstocolor )                   
+                        self.panesToColor.extend( MyPlugin.itemstocolor )
+                    if hasattr( MyPlugin, 'headingstocolor' ):
+                        self.headingsToColor.extend( MyPlugin.headingstocolor )
                 except:
                     # create traceback
                     info = sys.exc_info()
@@ -349,9 +344,8 @@ class MainWindow( object ):
                 PluginPane = Gtk.EventBox()
                 PaneLadder = Gtk.VBox( False, 0 )
                 PluginPane.add( PaneLadder )
-                self.SetPaneColors( [PluginPane] )
                 ImageBox = Gtk.EventBox()
-                self.SetPaneColors( [ImageBox] )
+                self.panesToColor.extend( [ PluginPane, ImageBox ] )
                 ImageBox.show()
                 PluginPane.show_all()
 
@@ -373,22 +367,30 @@ class MainWindow( object ):
         self.tooltips.disable()
         #print u"Loading", (time.time() - start), "s"
 
-    def SetPaneColors( self, items ):
-        for item in items:
-            if item not in self.panesToColor:
-                self.panesToColor.append( item )
+    # A little hacky but works
+    def getDefaultStyle( self ):
+        widget = Gtk.EventBox()
+        widget.show()
+        return Gtk.rc_get_style(widget)
+        
+    def loadTheme( self ):
+        defaultStyle = self.getDefaultStyle()
+        self.SetPaneColors( self.panesToColor, defaultStyle )
+        self.SetupMintMenuBorder( defaultStyle )
+        self.SetHeadingStyle( self.headingsToColor )
+        
+    def SetPaneColors( self, items, defaultStyle = None ):
         if self.usecustomcolor:
             for item in items:
                 item.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.customcolor ) )
-        # else:
-        #     for item in items:
-        #         item.modify_bg( Gtk.StateType.NORMAL, self.paneholder.rc_get_style().bg[ Gtk.StateType.NORMAL ] )
+                # TODO: Changing background color isn't working for pixmaps! The following does not work:
+                item.get_style().bg_pixmap[Gtk.StateType.NORMAL] = None
+        elif defaultStyle is not None:
+            for item in items:
+                item.modify_bg( Gtk.StateType.NORMAL, defaultStyle.lookup_color('bg_color')[1] )
+                item.get_style().bg_pixmap[Gtk.StateType.NORMAL] = defaultStyle.bg_pixmap[Gtk.StateType.NORMAL]
 
     def SetHeadingStyle( self, items ):
-        for item in items:
-            if item not in self.headingsToColor:
-                self.headingsToColor.append( item )
-
         if self.usecustomcolor:
             color = self.customheadingcolor
         else:
@@ -430,6 +432,7 @@ class MainWindow( object ):
 
         self.getSetGSettingEntries()
         self.PopulatePlugins()
+        self.loadTheme()
 
         #print NAME+u" reloaded"
 
@@ -523,8 +526,8 @@ class MenuWin( object ):
         self.settings.connect( "changed::hot-key", self.hotkeyChanged )
         self.loadSettings()
 
-        mate_settings = Gio.Settings.new("org.mate.interface")
-        mate_settings.connect( "changed::gtk-theme", self.changeTheme )
+        self.mate_settings = Gio.Settings.new("org.mate.interface")
+        self.mate_settings.connect( "changed::gtk-theme", self.changeTheme )
 
         self.createPanelButton()
 
@@ -619,12 +622,11 @@ class MenuWin( object ):
     def changeTheme(self, *args):        
         self.reloadSettings()
         self.applyTheme()
-        self.mainwin.RegenPlugins()
+        self.mainwin.loadTheme()
     
     def applyTheme(self):
         style_settings = Gtk.Settings.get_default()
-        mate_settings = Gio.Settings.new("org.mate.interface")
-        desktop_theme = mate_settings.get_string('gtk-theme')
+        desktop_theme = self.mate_settings.get_string('gtk-theme')
         if self.theme_name == "default":
             style_settings.set_property("gtk-theme-name", desktop_theme)        
         else:
