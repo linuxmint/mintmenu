@@ -253,7 +253,7 @@ class pluginclass( object ):
         self.builder.get_object("label7").set_text(_("All applications"))
         self.builder.get_object("label2").set_text(_("Applications"))                
         
-        self.mintMenuWin.SetHeadingStyle( [self.builder.get_object("label6"),self.builder.get_object("label2")] )
+        self.headingstocolor = [self.builder.get_object("label6"),self.builder.get_object("label2")]
 
         self.numApps = 0
         # These properties are NECESSARY to maintain consistency
@@ -268,7 +268,7 @@ class pluginclass( object ):
         self.content_holder =self.builder.get_object( "Applications" )
 
         # Items to get custom colors
-        self.itemstocolor = [self.builder.get_object( "viewport1" ),self.builder.get_object( "viewport2" ),self.builder.get_object( "viewport3" ),self.builder.get_object( "notebook2" ) ]
+        self.itemstocolor = [self.builder.get_object( "viewport1" ),self.builder.get_object( "viewport2" ),self.builder.get_object( "viewport3" ) ]
 
         # Unset all timers
         self.filterTimer = None
@@ -341,7 +341,7 @@ class pluginclass( object ):
         self.panel = "top"
         self.panel_position = -1
 
-        self.builder.get_object("searchButton").connect( "button-release-event", self.searchPopup )        
+        self.builder.get_object("searchButton").connect( "button-press-event", self.searchPopup )
 
     def refresh_apt_cache(self):
         if self.useAPT:
@@ -571,16 +571,27 @@ class pluginclass( object ):
         elif tabNum == 1:
             notebook.set_current_page( 1 )
 
-        self.lastActiveTab = tabNum
         self.focusSearchEntry()
+        self.lastActiveTab = tabNum
+
 
     def Todos( self ):
-
+        self.searchEntry.connect( "popup-menu", self.blockOnPopup )
+        self.searchEntry.connect( "button-press-event", self.blockOnRightPress )
         self.searchEntry.connect( "changed", self.Filter )
         self.searchEntry.connect( "activate", self.Search )
         self.showAllAppsButton.connect( "clicked", lambda widget: self.changeTab( 1 ) )
         self.showFavoritesButton.connect( "clicked", lambda widget: self.changeTab( 0 ) )
         self.buildButtonList()
+        
+    def blockOnPopup( self, *args ):
+        self.mintMenuWin.stopHiding()
+        return False
+        
+    def blockOnRightPress( self, widget, event ):
+        if event.button == 3:
+            self.mintMenuWin.stopHiding()
+        return False
 
     def focusSearchEntry( self ):
         # grab_focus() does select all text,
@@ -639,8 +650,7 @@ class pluginclass( object ):
         separator.add(Gtk.HSeparator())
         separator.set_visible_window(False)
         separator.set_size_request(-1, 20)       
-        separator.type = "separator"        
-        self.mintMenuWin.SetPaneColors( [ separator ] )
+        separator.type = "separator"
         separator.show_all()
         self.applicationsBox.add(separator)
         self.suggestions.append(separator)        
@@ -718,8 +728,7 @@ class pluginclass( object ):
                 last_separator.add(Gtk.HSeparator())
                 last_separator.set_visible_window(False)
                 last_separator.set_size_request(-1, 20)       
-                last_separator.type = "separator"   
-                self.mintMenuWin.SetPaneColors( [  last_separator ] )     
+                last_separator.type = "separator"
                 last_separator.show_all()
                 self.applicationsBox.add(last_separator)
                 self.suggestions.append(last_separator)
@@ -774,8 +783,7 @@ class pluginclass( object ):
                     last_separator.add(Gtk.HSeparator())
                     last_separator.set_visible_window(False)
                     last_separator.set_size_request(-1, 20)       
-                    last_separator.type = "separator"   
-                    self.mintMenuWin.SetPaneColors( [  last_separator ] )     
+                    last_separator.type = "separator"
                     last_separator.show_all()
                     self.applicationsBox.add(last_separator)
                     self.suggestions.append(last_separator)
@@ -878,15 +886,18 @@ class pluginclass( object ):
                 i.released()
                 i.set_relief( Gtk.ReliefStyle.NONE )
             widget.set_relief( Gtk.ReliefStyle.HALF )
-            widget.grab_focus()
-
-            self.searchEntry.set_text( "" )
    
         self.applicationsScrolledWindow.get_vadjustment().set_value( 0 )
+
+    def FilterAndClear( self, widget, category = None ):
+        self.searchEntry.set_text( "" )
+        self.Filter( widget, category )
         
     # Forward all text to the search box
     def keyPress( self, widget, event ):
         if event.string.strip() != "" or event.keyval == Gdk.KEY_BackSpace:
+            self.searchEntry.grab_focus()
+            gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
             self.searchEntry.event( event )
             return True
 
@@ -950,10 +961,8 @@ class pluginclass( object ):
                 mTree.append(propsMenuItem)
 
                 mTree.show_all()
+                self.mintMenuWin.stopHiding()
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
-                #self.mintMenuWin.grab()
-                mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
-
             else:
                 mTree = Gtk.Menu()
                 mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
@@ -971,9 +980,8 @@ class pluginclass( object ):
                 removeMenuItem.connect( "activate", self.onFavoritesRemove, widget )
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
+                self.mintMenuWin.stopHiding()
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
-                #self.mintMenuWin.grab()
-                mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
 
     def menuPopup( self, widget, event ):
         if event.button == 3:
@@ -1034,11 +1042,8 @@ class pluginclass( object ):
                 startupMenuItem.set_active( False )
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
-            mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
-            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, 0, 0)
-
-    def onMenuPopupDeactivate( self, widget):
-        self.mintMenuWin.grab()
+            self.mintMenuWin.stopHiding()
+            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, event.button, event.time)
     
     def searchPopup( self, widget=None, event=None ):    
         menu = Gtk.Menu()
@@ -1113,15 +1118,13 @@ class pluginclass( object ):
         menu.append(menuItem)
         
         menu.show_all()
-
-        gtk.gtk_menu_popup(hash(menu), None, None, None, None, 3, 0)
+        
+        self.mintMenuWin.stopHiding()
+        gtk.gtk_menu_popup(hash(menu), None, None, None, None, event.button, event.time)
 
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
-        #self.mintMenuWin.grab()
-        menu.connect( 'deactivate', self.onMenuPopupDeactivate)
-        self.focusSearchEntry()
         return True
         
     def pos_func(self, menu=None):
@@ -1348,10 +1351,9 @@ class pluginclass( object ):
         space = Gtk.EventBox()
         space.set_size_request( -1, 20 )
         space.set_visible_window(False)
-        space.connect( "button_release_event", self.favPopup )
+        space.connect( "button-press-event", self.favPopup )
         space.type = "space"
 
-        self.mintMenuWin.SetPaneColors( [ space ] )
         space.show()
 
         return space
@@ -1361,13 +1363,12 @@ class pluginclass( object ):
         separator.set_size_request( -1, 20 )
         separator.type = "separator"
 
-        self.mintMenuWin.SetPaneColors( [ separator ] )
         separator.show_all()
         box = Gtk.EventBox()
         box.type = "separator"
         box.add(separator)
         box.set_visible_window(False)
-        box.connect( "button_release_event", self.favPopup )
+        box.connect( "button-press-event", self.favPopup )
         box.show_all()
         return box
 
@@ -1405,7 +1406,7 @@ class pluginclass( object ):
             if favButton.appExec:
                 favButton.show()
                 favButton.connect( "popup-menu", self.favPopup )
-                favButton.connect( "button_release_event", self.favPopup )
+                favButton.connect( "button-press-event", self.favPopup )
                 favButton.connect( "focus-in-event", self.scrollItemIntoView )
                 favButton.connect( "clicked", lambda w: self.mintMenuWin.hide() )
 
@@ -1677,7 +1678,7 @@ class pluginclass( object ):
                     else:
                         item["button"].mouseOverHandlerIds = None
 
-                    item["button"].connect( "clicked", self.Filter, item["filter"] )
+                    item["button"].connect( "clicked", self.FilterAndClear, item["filter"] )
                     item["button"].connect( "focus-in-event", self.categoryBtnFocus, item["filter"] )
                     item["button"].show()
 

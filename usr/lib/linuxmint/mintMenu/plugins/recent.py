@@ -4,7 +4,6 @@ gi.require_version("Gtk", "2.0")
 from gi.repository import Gtk, Pango
 import sys
 import os
-import gobject
 import datetime
 import fcntl
 from easygsettings import EasyGSettings
