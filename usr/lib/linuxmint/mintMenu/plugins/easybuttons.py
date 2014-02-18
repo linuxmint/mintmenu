@@ -278,7 +278,7 @@ class ApplicationLauncher( easyButton ):
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
             iconName, s = icon.get_icon_name()
-            c = c_char_p(iconName.encode('ascii', 'ignore'))
+            c = c_char_p(iconName.decode('utf-8', 'ignore').encode('ascii', 'ignore'))
             gtk.gtk_drag_source_set_icon_name( hash(self), c)
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
