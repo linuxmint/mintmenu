@@ -341,7 +341,7 @@ class pluginclass( object ):
         self.panel = "top"
         self.panel_position = -1
 
-        self.builder.get_object("searchButton").connect( "button-release-event", self.searchPopup )        
+        self.builder.get_object("searchButton").connect( "button-press-event", self.searchPopup )
 
     def refresh_apt_cache(self):
         if self.useAPT:
@@ -1035,7 +1035,7 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
-            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, 0, 0)
+            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, event.button, event.time)
 
     def onMenuPopupDeactivate( self, widget):
         self.mintMenuWin.grab()
@@ -1114,14 +1114,14 @@ class pluginclass( object ):
         
         menu.show_all()
 
-        gtk.gtk_menu_popup(hash(menu), None, None, None, None, 3, 0)
+        gtk.gtk_menu_popup(hash(menu), None, None, None, None, event.button, event.time)
 
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
         #self.mintMenuWin.grab()
         menu.connect( 'deactivate', self.onMenuPopupDeactivate)
-        self.focusSearchEntry()
+        #self.focusSearchEntry()
         return True
         
     def pos_func(self, menu=None):
@@ -1348,7 +1348,7 @@ class pluginclass( object ):
         space = Gtk.EventBox()
         space.set_size_request( -1, 20 )
         space.set_visible_window(False)
-        space.connect( "button_release_event", self.favPopup )
+        space.connect( "button-press-event", self.favPopup )
         space.type = "space"
 
         self.mintMenuWin.SetPaneColors( [ space ] )
@@ -1367,7 +1367,7 @@ class pluginclass( object ):
         box.type = "separator"
         box.add(separator)
         box.set_visible_window(False)
-        box.connect( "button_release_event", self.favPopup )
+        box.connect( "button-press-event", self.favPopup )
         box.show_all()
         return box
 
@@ -1405,7 +1405,7 @@ class pluginclass( object ):
             if favButton.appExec:
                 favButton.show()
                 favButton.connect( "popup-menu", self.favPopup )
-                favButton.connect( "button_release_event", self.favPopup )
+                favButton.connect( "button-press-event", self.favPopup )
                 favButton.connect( "focus-in-event", self.scrollItemIntoView )
                 favButton.connect( "clicked", lambda w: self.mintMenuWin.hide() )
 
