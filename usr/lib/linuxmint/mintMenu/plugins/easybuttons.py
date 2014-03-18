@@ -283,7 +283,6 @@ class ApplicationLauncher( easyButton ):
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
         self.connectSelf( "focus-out-event", self.onFocusOut )
-        self.connectSelf( "enter-notify-event", self.onEnterNotify )
         self.connectSelf( "clicked", self.execute )
 
 
@@ -331,9 +330,6 @@ class ApplicationLauncher( easyButton ):
 
     def onFocusOut( self, widget, event ):
         self.set_relief( Gtk.ReliefStyle.NONE )
-
-    def onEnterNotify( self, widget, event ):
-        self.grab_focus()
 
     def setupLabels( self ):
         self.addLabel( self.appName )
