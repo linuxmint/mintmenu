@@ -571,8 +571,9 @@ class pluginclass( object ):
         elif tabNum == 1:
             notebook.set_current_page( 1 )
 
-        self.lastActiveTab = tabNum
         self.focusSearchEntry()
+        self.lastActiveTab = tabNum
+
 
     def Todos( self ):
 
@@ -887,6 +888,8 @@ class pluginclass( object ):
     # Forward all text to the search box
     def keyPress( self, widget, event ):
         if event.string.strip() != "" or event.keyval == Gdk.KEY_BackSpace:
+            self.searchEntry.grab_focus()
+            gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
             self.searchEntry.event( event )
             return True
 
