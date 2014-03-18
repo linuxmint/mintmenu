@@ -21,6 +21,7 @@ try:
     import capi
     import xdg.Config
     import keybinding
+    import pointerMonitor
 except Exception, e:
     print e
     sys.exit( 1 )
@@ -87,12 +88,9 @@ class MainWindow( object ):
         self.panesToColor = [ ]
         self.headingsToColor = [ ]
 
-        self.window.connect( "map-event", self.onMap )
-        self.window.connect( "show", self.onShow )
-        self.window.connect( "unmap-event", self.onUnmap )
-        self.window.connect( "button-press-event", self.onButtonPress )
         self.window.connect( "key-press-event", self.onKeyPress )
-        self.window.connect( "grab-broken-event", self.onGrabBroken )
+        self.window.connect( "focus-in-event", self.onFocusIn )
+        self.loseFocusId = self.window.connect( "focus-out-event", self.onFocusOut )
 
         self.window.stick()
 
@@ -434,6 +432,11 @@ class MainWindow( object ):
 
         #print NAME+u" reloaded"
 
+    def onKeyPress( self, widget, event ):
+        if event.keyval == Gdk.KEY_Escape:
+            self.hide()
+            return True
+        return False
 
     def show( self ):
         self.window.present()
@@ -443,77 +446,46 @@ class MainWindow( object ):
             self.firstTime = False
             self.SetupMintMenuOpacity()
 
+        self.window.window.focus( Gdk.CURRENT_TIME )
+            
+        for plugin in self.plugins.values():
+            if hasattr( plugin, "onShowMenu" ):
+                plugin.onShowMenu()
+
         if ( "applications" in self.plugins ) and ( hasattr( self.plugins["applications"], "focusSearchEntry" ) ):
             if (self.startWithFavorites):
                 self.plugins["applications"].changeTab(0)
             self.plugins["applications"].focusSearchEntry()
 
-    def grab( self ):
-        gdk.gdk_pointer_grab (hash(self.window.window), True, Gdk.EventMask.BUTTON_PRESS_MASK, None, None, Gdk.CURRENT_TIME)
-        Gdk.keyboard_grab( self.window.window, False, Gdk.CURRENT_TIME )
-        Gtk.grab_add(self.window)
-
-    def ungrab( self ):
-        Gtk.grab_remove(self.window)
-        self.window.hide()
-        Gdk.pointer_ungrab(Gdk.CURRENT_TIME)
-        Gdk.keyboard_ungrab(Gdk.CURRENT_TIME)
-
-    def onMap( self, widget, event ):
-        self.grab()
-
-    def onShow( self, widget ):
-        for plugin in self.plugins.values():
-            if hasattr( plugin, "onShowMenu" ):
-                plugin.onShowMenu()
-
-    def onUnmap( self, widget, event ):
-        self.ungrab()
-
+    def hide( self, forceHide = False ):
         for plugin in self.plugins.values():
             if hasattr( plugin, "onHideMenu" ):
                 plugin.onHideMenu()
-
-    def onKeyPress( self, widget, event ):
-        if event.keyval == Gdk.KEY_Escape or self.keybinder.is_hotkey(event.keyval, event.get_state()):
-            self.hide()
-            return True
-        return False
-
-    def onButtonPress( self, widget, event ):
-        # Check if the pointer is within the menu, else hide the menu
-        winatptr = Gdk.window_at_pointer()
-        if winatptr:
-            win = winatptr[0]
-            while win:
-                if win == self.window.window:
-                    break
-                win = capi.get_widget(gdk.gdk_window_get_parent (hash(win)))
-            if not win:
-                self.hide( True )
-        else:
-            self.hide( True )
-
-        return True
-
-    def onGrabBroken( self, widget, event ):
-        if event.grab_broken.grab_window:
-            try:
-                win = event.grab_broken.grab_window
-                data = c_void_p()
-                gdk.gdk_window_get_user_data(hash(win), byref(data))
-                theft = capi.get_widget(ctypes.cast(data, POINTER(capi._PyGObject_Functions)))
-                theft.connect( "event", self.onGrabTheftEvent )
-            except Exception, detail:
-                print detail
-                self.window.hide()
-
-    def onGrabTheftEvent( self, widget, event ):
-        if event.type == Gdk.EventType.UNMAP or event.type == Gdk.EventType.SELECTION_CLEAR:
-            self.grab()
-
-    def hide(self, forceHide = False):        
+                
         self.window.hide()
+        
+    def onFocusIn( self, *args ):
+        def dummy( *args ): pass
+            
+        signalId = GObject.signal_lookup( "focus-out-event", self.window )
+        while True:
+            result = GObject.signal_handler_find( self.window, 
+                GObject.SignalMatchType.ID | GObject.SignalMatchType.UNBLOCKED, 
+                signalId, 0, None, dummy, dummy )
+            if result == 0:
+                self.window.handler_unblock( self.loseFocusId )
+            else:
+                break
+                
+        return False  
+        
+    def onFocusOut( self, *args):            
+        if self.window.get_visible():
+            self.hide()
+        return False
+        
+    def stopHiding( self ):
+        self.window.handler_block( self.loseFocusId )
 
 class MenuWin( object ):
     def __init__( self, applet, iid ):
@@ -540,8 +512,9 @@ class MenuWin( object ):
         self.applet.connect("enter-notify-event", self.enter_notify)
         self.applet.connect("leave-notify-event", self.leave_notify)
         self.mainwin = MainWindow( self.button_box, self.settings, self.keybinder )
-        self.mainwin.window.connect( "map-event", lambda *args: self.applet.set_state( Gtk.StateType.SELECTED ) )
-        self.mainwin.window.connect( "unmap-event", lambda *args: self.applet.set_state( Gtk.StateType.NORMAL ) )
+        self.mainwin.window.connect( "map-event", self.onWindowMap )
+        self.mainwin.window.connect( "unmap-event", self.onWindowUnmap )
+        self.mainwin.window.connect( "realize", self.onRealize )
         self.mainwin.window.connect( "size-allocate", lambda *args: self.positionMenu() )
 
         self.mainwin.window.set_name("mintmenu") # Name used in Gtk RC files
@@ -550,23 +523,46 @@ class MenuWin( object ):
             Gtk.Window.set_default_icon_name( self.mainwin.icon )
 
         self.bind_hot_key()
+        self.applet.set_can_focus(False)
+
+        self.pointerMonitor = pointerMonitor.PointerMonitor()
+        self.pointerMonitor.connect("activate", self.onPointerOutside)
+        
+    def onWindowMap( self, *args ):
+        self.applet.set_state( Gtk.StateType.SELECTED )
+        self.keybinder.set_focus_window( self.mainwin.window.window )
+        self.pointerMonitor.grabPointer()
+        return False
+        
+    def onWindowUnmap( self, *args ):
+        self.applet.set_state( Gtk.StateType.NORMAL )
+        self.keybinder.set_focus_window()
+        self.pointerMonitor.ungrabPointer()
+        return False
+        
+    def onRealize( self, *args):
+        self.pointerMonitor.addWindowToMonitor( self.mainwin.window.window )
+        self.pointerMonitor.addWindowToMonitor( self.applet.window )
+        self.pointerMonitor.start()
+        return False
+     
+    def onPointerOutside(self, *args):
+        self.mainwin.hide()
+        return True
 
     def onBindingPress(self, binder):
-        try:
-            if self.mainwin.window.get_visible():
-                self.mainwin.window.hide()
-                self.mainwin.toggle.set_active(False)
-            else:
-                MenuWin.showMenu(self,self.mainwin.toggle)
-                self.mainwin.window.show()
-                #self.mainwin.wTree.get_widget( 'PluginTabs' ).set_curremenu_editor = SetGconf( self.client, "string", "/apps/usp/menu_editor", "mozo" )
-        except Exception, cause:
-            print cause
+        self.toggleMenu()
+        return True
 
     def enter_notify(self, applet, event):
         self.do_image(self.buttonIcon, True)
 
     def leave_notify(self, applet, event):
+		# Hack for mate-panel-test-applets focus issue (this can be commented)
+        if event.state & Gdk.ModifierType.BUTTON1_MASK and applet.state & Gtk.StateType.SELECTED:
+            if event.x >= 0 and event.y >= 0 and event.x < applet.window.get_width() and event.y < applet.window.get_height():
+                self.mainwin.stopHiding()
+                
         self.do_image(self.buttonIcon, False)
 
     def do_image(self, image_file, saturate):
@@ -693,10 +689,8 @@ class MenuWin( object ):
             pass
 
     def hotkeyChanged (self, schema, key):
-        self.keybinder.ungrab()
         self.hotkeyText =  self.settings.get_string( "hot-key" )
-        if self.hotkeyText != "":
-            self.keybinder.grab(self.hotkeyText)
+        self.keybinder.rebind(self.hotkeyText)
 
     def sizeButton( self ):
         if self.hideIcon:

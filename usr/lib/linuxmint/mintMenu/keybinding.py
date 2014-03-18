@@ -58,10 +58,11 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         self.keymap = capi.get_widget (gdk.gdk_keymap_get_default())
         self.display = Display()
         self.screen = self.display.screen()
-        self.root = self.screen.root
+        self.window = self.screen.root
         self.ignored_masks = self.get_mask_combinations(X.LockMask | X.Mod2Mask | X.Mod5Mask)
         self.map_modifiers()
         self.raw_keyval = None
+        self.keytext = ""
 
     def is_hotkey(self, key, modifier):
         keymatch = False
@@ -101,21 +102,39 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
             self.modifiers = None
             return False
 
+        self.keytext = key
         self.keycode = self.get_keycode(keyval)
         self.modifiers = int(modifiers)
 
         catch = error.CatchError(error.BadAccess)
         for ignored_mask in self.ignored_masks:
             mod = modifiers | ignored_mask
-            result = self.root.grab_key(self.keycode, mod, True, X.GrabModeAsync, X.GrabModeSync, onerror=catch)
-        self.display.sync()
+            result = self.window.grab_key(self.keycode, mod, True, X.GrabModeAsync, X.GrabModeSync, onerror=catch)
+        self.display.flush()
+        # sync has been blocking. Don't know why.
+        #self.display.sync()
         if catch.get_error():
             return False
         return True
 
     def ungrab(self):
         if self.keycode:
-            self.root.ungrab_key(self.keycode, X.AnyModifier, self.root)
+            self.window.ungrab_key(self.keycode, X.AnyModifier, self.window)
+            
+    def rebind(self, key):
+        self.ungrab()
+        if key != "":
+            self.grab(key)
+        else:
+            self.keytext = ""
+    
+    def set_focus_window(self, window = None):
+        self.ungrab()
+        if window is None:
+            self.window = self.screen.root
+        else:
+            self.window = self.display.create_resource_object("window", gdk.gdk_x11_drawable_get_xid(hash(window)))
+        self.grab(self.keytext)
 
     def get_mask_combinations(self, mask):
         return [x for x in xrange(mask+1) if not (x & ~mask)]
