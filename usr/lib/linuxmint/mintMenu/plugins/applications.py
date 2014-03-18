@@ -1045,13 +1045,8 @@ class pluginclass( object ):
                 startupMenuItem.set_active( False )
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
-<<<<<<< HEAD
-            mTree.connect( 'deactivate', self.onMenuPopupDeactivate)
-            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, event.button, event.time)
-=======
             self.mintMenuWin.stopHiding()
-            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, 0, 0)
->>>>>>> b14e2e04503d8451b679e3f1f9e43b6a9758047f
+            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, event.button, event.time)
 
     
     def searchPopup( self, widget=None, event=None ):    
@@ -1127,24 +1122,15 @@ class pluginclass( object ):
         menu.append(menuItem)
         
         menu.show_all()
-<<<<<<< HEAD
 
-        gtk.gtk_menu_popup(hash(menu), None, None, None, None, event.button, event.time)
-=======
         self.mintMenuWin.stopHiding()
-        gtk.gtk_menu_popup(hash(menu), None, None, None, None, 3, 0)
->>>>>>> b14e2e04503d8451b679e3f1f9e43b6a9758047f
+        gtk.gtk_menu_popup(hash(menu), None, None, None, None, event.button, event.time)
 
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
         #menu.reposition()
         #self.mintMenuWin.grab()
-<<<<<<< HEAD
-        menu.connect( 'deactivate', self.onMenuPopupDeactivate)
-
-=======
         self.focusSearchEntry()
->>>>>>> b14e2e04503d8451b679e3f1f9e43b6a9758047f
         return True
         
     def pos_func(self, menu=None):
