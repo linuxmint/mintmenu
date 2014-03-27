@@ -176,7 +176,6 @@ class mintMenuConfig( object ):
         self.softwareManagerToggle = self.builder.get_object( "softwaremanagercheckbutton" )
         self.packageManagerToggle = self.builder.get_object( "packagemanagercheckbutton" )
         self.controlCenterToggle = self.builder.get_object( "controlcentercheckbutton" )
-        self.packageManagerToggle = self.builder.get_object( "packagemanagercheckbutton" )
         self.terminalToggle = self.builder.get_object( "terminalcheckbutton" )
         self.lockToggle = self.builder.get_object( "lockcheckbutton" )
         self.logoutToggle = self.builder.get_object( "logoutcheckbutton" )
