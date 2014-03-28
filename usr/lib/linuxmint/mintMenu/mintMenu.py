@@ -9,7 +9,6 @@ from gi.repository import Gio
 
 try:
     import sys
-    from gi.repository import Pango
     import os
     import commands
     import gettext
@@ -18,7 +17,6 @@ try:
     import gc
     import ctypes
     from ctypes import *
-    import capi
     import xdg.Config
     import keybinding
     import pointerMonitor
@@ -28,14 +26,12 @@ except Exception, e:
 
 GObject.threads_init()
 
-gtk = CDLL("libgtk-x11-2.0.so.0")
 gdk = CDLL("libgdk-x11-2.0.so.0")
 
 # Rename the process
 architecture = commands.getoutput("uname -a")
 if (architecture.find("x86_64") >= 0):
-    import ctypes
-    libc = ctypes.CDLL('libc.so.6')
+    libc = CDLL('libc.so.6')
     libc.prctl(15, 'mintmenu', 0, 0, 0)
 else:
     import dl

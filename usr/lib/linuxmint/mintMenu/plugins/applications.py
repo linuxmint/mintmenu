@@ -6,8 +6,6 @@ gi.require_version("Gtk", "2.0")
 from gi.repository import Gtk, Pango, Gdk, Gio, GLib
 
 import os
-#import mateconf
-import fnmatch
 import time
 import string
 import gettext
@@ -16,7 +14,6 @@ import commands
 import subprocess
 import filecmp
 import ctypes
-import capi
 from ctypes import *
 from easybuttons import *
 from execute import Execute
