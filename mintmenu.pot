@@ -30,7 +30,7 @@ msgid "Couldn't initialize plugin"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenu.py:758
-msgid "Advanced Gnome Menu"
+msgid "Advanced MATE Menu"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/mintMenu.py:845
