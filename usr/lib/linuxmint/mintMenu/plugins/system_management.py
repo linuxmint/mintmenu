@@ -48,14 +48,14 @@ class pluginclass( object ):
         # Gconf stuff
         self.settings = EasyGSettings( "com.linuxmint.mintmenu.plugins.system_management" )
 
-        self.settings.notifyAdd( "icon_size", self.RegenPlugin )
-        self.settings.notifyAdd( "show_control_center", self.RegenPlugin )
-        self.settings.notifyAdd( "show_lock_screen", self.RegenPlugin )
-        self.settings.notifyAdd( "show_logout", self.RegenPlugin )
-        self.settings.notifyAdd( "show_package_manager", self.RegenPlugin )
-        self.settings.notifyAdd( "show_software_manager", self.RegenPlugin )
-        self.settings.notifyAdd( "show_terminal", self.RegenPlugin )
-        self.settings.notifyAdd( "show_quit", self.RegenPlugin )
+        self.settings.notifyAdd( "icon-size", self.RegenPlugin )
+        self.settings.notifyAdd( "show-control-center", self.RegenPlugin )
+        self.settings.notifyAdd( "show-lock-screen", self.RegenPlugin )
+        self.settings.notifyAdd( "show-logout", self.RegenPlugin )
+        self.settings.notifyAdd( "show-package-manager", self.RegenPlugin )
+        self.settings.notifyAdd( "show-software-manager", self.RegenPlugin )
+        self.settings.notifyAdd( "show-terminal", self.RegenPlugin )
+        self.settings.notifyAdd( "show-quit", self.RegenPlugin )
         self.settings.notifyAdd( "allow-scrollbar", self.RegenPlugin )
         self.settings.notifyAdd( "height", self.changePluginSize )
         self.settings.notifyAdd( "width", self.changePluginSize )
@@ -86,7 +86,7 @@ class pluginclass( object ):
         self.content_holder.set_size_request( self.width, self.height )
 
 
-    def RegenPlugin( self, settings, key, args ):
+    def RegenPlugin( self, *args, **kargs ):
         self.GetGSettingsEntries()
         self.ClearAll()
         self.do_standard_items()
