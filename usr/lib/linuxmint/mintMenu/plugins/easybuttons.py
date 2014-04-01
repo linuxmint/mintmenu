@@ -295,11 +295,11 @@ class ApplicationLauncher( easyButton ):
             self.appExec = self.strip_accents(desktopItem.getExec())
             self.appIconName = desktopItem.getIcon()
             self.appCategories = desktopItem.getCategories()
-            self.appGnomeDocPath = desktopItem.get( "X-MATE-DocPath" ) or ""
+            self.appMateDocPath = desktopItem.get( "X-MATE-DocPath" ) or ""
             self.useTerminal = desktopItem.getTerminal()
             self.appPath = desktopItem.getPath()
 
-            if not self.appGnomeDocPath:
+            if not self.appMateDocPath:
                 self.appKdeDocPath      = desktopItem.getDocPath() or ""
 
             self.appName            = self.appName.strip()
@@ -409,7 +409,7 @@ class ApplicationLauncher( easyButton ):
 
         shutil.copyfile( self.desktopFile, self.startupFilePath )
 
-        # Remove %u, etc. from Exec entry, because gnome will not replace them when it starts the app
+        # Remove %u, etc. from Exec entry, because MATE will not replace them when it starts the app
         item = matedesktop.item_new_from_uri( self.startupFilePath, matedesktop.LOAD_ONLY_IF_EXISTS )
         if item:
             r = re.compile("%[A-Za-z]");

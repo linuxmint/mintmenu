@@ -735,7 +735,7 @@ class MenuWin( object ):
             about.set_license(gpl)
         except Exception, detail:
             print detail
-        about.set_comments( _("Advanced Gnome Menu") )
+        about.set_comments( _("Advanced MATE Menu") )
       #  about.set_authors( ["Clement Lefebvre <clem@linuxmint.com>", "Lars-Peter Clausen <lars@laprican.de>"] )
         about.set_translator_credits(("translator-credits") )
         #about.set_copyright( _("Based on USP from S.Chanderbally") )
