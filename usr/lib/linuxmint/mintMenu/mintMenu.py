@@ -91,6 +91,7 @@ class MainWindow( object ):
         self.window.connect( "key-press-event", self.onKeyPress )
         self.window.connect( "focus-in-event", self.onFocusIn )
         self.loseFocusId = self.window.connect( "focus-out-event", self.onFocusOut )
+        self.loseFocusBlocked = False
 
         self.window.stick()
 
@@ -465,18 +466,10 @@ class MainWindow( object ):
         self.window.hide()
         
     def onFocusIn( self, *args ):
-        def dummy( *args ): pass
-            
-        signalId = GObject.signal_lookup( "focus-out-event", self.window )
-        while True:
-            result = GObject.signal_handler_find( self.window, 
-                GObject.SignalMatchType.ID | GObject.SignalMatchType.UNBLOCKED, 
-                signalId, 0, None, dummy, dummy )
-            if result == 0:
-                self.window.handler_unblock( self.loseFocusId )
-            else:
-                break
-                
+        if self.loseFocusBlocked:
+            self.window.handler_unblock( self.loseFocusId )
+            self.loseFocusBlocked = False
+
         return False  
         
     def onFocusOut( self, *args):            
@@ -485,7 +478,9 @@ class MainWindow( object ):
         return False
         
     def stopHiding( self ):
-        self.window.handler_block( self.loseFocusId )
+        if not self.loseFocusBlocked:
+            self.window.handler_block( self.loseFocusId )
+            self.loseFocusBlocked = True
 
 class MenuWin( object ):
     def __init__( self, applet, iid ):
