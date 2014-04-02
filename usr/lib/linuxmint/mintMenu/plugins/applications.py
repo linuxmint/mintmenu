@@ -250,7 +250,7 @@ class pluginclass( object ):
         self.builder.get_object("label7").set_text(_("All applications"))
         self.builder.get_object("label2").set_text(_("Applications"))                
         
-        self.mintMenuWin.SetHeadingStyle( [self.builder.get_object("label6"),self.builder.get_object("label2")] )
+        self.headingstocolor = [self.builder.get_object("label6"),self.builder.get_object("label2")]
 
         self.numApps = 0
         # These properties are NECESSARY to maintain consistency
@@ -265,7 +265,7 @@ class pluginclass( object ):
         self.content_holder =self.builder.get_object( "Applications" )
 
         # Items to get custom colors
-        self.itemstocolor = [self.builder.get_object( "viewport1" ),self.builder.get_object( "viewport2" ),self.builder.get_object( "viewport3" ),self.builder.get_object( "notebook2" ) ]
+        self.itemstocolor = [self.builder.get_object( "viewport1" ),self.builder.get_object( "viewport2" ),self.builder.get_object( "viewport3" ) ]
 
         # Unset all timers
         self.filterTimer = None
@@ -648,7 +648,6 @@ class pluginclass( object ):
         separator.set_visible_window(False)
         separator.set_size_request(-1, 20)       
         separator.type = "separator"        
-        self.mintMenuWin.SetPaneColors( [ separator ] )
         separator.show_all()
         self.applicationsBox.add(separator)
         self.suggestions.append(separator)        
@@ -726,8 +725,7 @@ class pluginclass( object ):
                 last_separator.add(Gtk.HSeparator())
                 last_separator.set_visible_window(False)
                 last_separator.set_size_request(-1, 20)       
-                last_separator.type = "separator"   
-                self.mintMenuWin.SetPaneColors( [  last_separator ] )     
+                last_separator.type = "separator"       
                 last_separator.show_all()
                 self.applicationsBox.add(last_separator)
                 self.suggestions.append(last_separator)
@@ -782,8 +780,7 @@ class pluginclass( object ):
                     last_separator.add(Gtk.HSeparator())
                     last_separator.set_visible_window(False)
                     last_separator.set_size_request(-1, 20)       
-                    last_separator.type = "separator"   
-                    self.mintMenuWin.SetPaneColors( [  last_separator ] )     
+                    last_separator.type = "separator"        
                     last_separator.show_all()
                     self.applicationsBox.add(last_separator)
                     self.suggestions.append(last_separator)
@@ -1357,7 +1354,6 @@ class pluginclass( object ):
         space.connect( "button-press-event", self.favPopup )
         space.type = "space"
 
-        self.mintMenuWin.SetPaneColors( [ space ] )
         space.show()
 
         return space
@@ -1367,7 +1363,6 @@ class pluginclass( object ):
         separator.set_size_request( -1, 20 )
         separator.type = "separator"
 
-        self.mintMenuWin.SetPaneColors( [ separator ] )
         separator.show_all()
         box = Gtk.EventBox()
         box.type = "separator"
