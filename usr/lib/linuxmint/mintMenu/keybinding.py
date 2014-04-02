@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # -*- coding: utf-8; -*-
-# Copyright (C) 2013  Özcan Esen <ozcanesen@gmail.com>
+# Copyright (C) 2013  Ozcan Esen <ozcanesen@gmail.com>
 # Copyright (C) 2008  Luca Bruno <lethalman88@gmail.com>
 #
 # This a slightly modified version of the globalkeybinding.py file which is part of FreeSpeak.
