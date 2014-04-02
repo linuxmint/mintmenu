@@ -263,8 +263,8 @@ class pluginclass( object ):
             trashMenu.append(emptyTrashMenuItem)
             trashMenu.show_all()
             emptyTrashMenuItem.connect ( "activate", self.emptyTrash, widget )
+            self.mintMenuWin.stopHiding()
             gtk.gtk_menu_popup(hash(trashMenu), None, None, None, None, 3, 0)
-            self.mintMenuWin.grab()
 
     def emptyTrash( self, menu, widget):
         os.system("rm -rf " + home + "/.local/share/Trash/info/*")
