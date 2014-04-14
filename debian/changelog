@@ -1,3 +1,9 @@
+mintmenu (5.5.3) qiana; urgency=medium
+
+  * 5.5.3
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 14 Apr 2014 13:31:07 +0100
+
 mintmenu (5.5.2) debian; urgency=low
 
   * 5.5.2
