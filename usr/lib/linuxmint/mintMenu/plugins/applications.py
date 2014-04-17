@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 import gi
 gi.require_version("Gtk", "2.0")
