@@ -25,20 +25,11 @@ class PointerMonitor(GObject.GObject, threading.Thread):
         self.display = Display()
         self.root = self.display.screen().root
         self.windows = []
-        self.topWindows = []
         
     # Receives GDK windows
     def addWindowToMonitor(self, window):
         xWindow = self.display.create_resource_object("window", gdk.gdk_x11_drawable_get_xid(hash(window)))
         self.windows.append(xWindow)
-        self.topWindows.append(self.getToplevelParent(xWindow))
-        
-    def getToplevelParent(self, window):
-        parent = window.query_tree().parent
-        if parent == self.root:
-            return window
-        else:
-            return self.getToplevelParent(parent)
             
     def grabPointer(self):
         self.root.grab_button(X.AnyButton, X.AnyModifier, True, X.ButtonPressMask, X.GrabModeSync, X.GrabModeAsync, 0, 0)
@@ -62,15 +53,11 @@ class PointerMonitor(GObject.GObject, threading.Thread):
             try:
                 if event.type == X.ButtonPress:
                     # Check if pointer is inside monitored windows
-                    for w, topW  in zip(self.windows, self.topWindows):
-                        if event.child == topW:
-                            if topW == w:
-                                break
-                            else:
-                                p = w.query_pointer()
-                                g = w.get_geometry()
-                                if p.win_x >= 0 and p.win_y >= 0 and p.win_x <= g.width and p.win_y <= g.height:
-                                    break
+                    for w in self.windows:
+                        p = w.query_pointer()
+                        g = w.get_geometry()
+                        if p.win_x >= 0 and p.win_y >= 0 and p.win_x <= g.width and p.win_y <= g.height:
+                            break
                     else:
                         # Is outside, so activate
                         GLib.idle_add(self.idle)
