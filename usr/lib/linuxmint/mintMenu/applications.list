@@ -12,7 +12,7 @@ location:/usr/share/applications/gnome-terminal.desktop
 location:/usr/share/applications/mate-volume-control.desktop
 location:/usr/share/applications/xfce4-mixer.desktop
 separator
-location:/usr/share/applications/display-properties.desktop
+location:/usr/share/applications/mate-display-properties.desktop
 location:/usr/share/applications/xfce-display-settings.desktop
 location:/usr/share/applications/mate-system-monitor.desktop
 location:/usr/share/applications/xfce4-taskmanager.desktop
