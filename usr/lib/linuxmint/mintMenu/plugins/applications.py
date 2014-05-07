@@ -561,14 +561,14 @@ class pluginclass( object ):
     def onHideMenu( self ):
         self.settings.set( "int", "last-active-tab", self.lastActiveTab )
 
-    def changeTab( self, tabNum ):
+    def changeTab( self, tabNum, clear = True ):
         notebook = self.builder.get_object( "notebook2" )
         if tabNum == 0:
             notebook.set_current_page( 0 )
         elif tabNum == 1:
             notebook.set_current_page( 1 )
 
-        self.focusSearchEntry()
+        self.focusSearchEntry(clear)
         self.lastActiveTab = tabNum
 
 
@@ -818,8 +818,7 @@ class pluginclass( object ):
             else:
                 text = widget.get_text()
                 if self.lastActiveTab != 1:
-                    self.changeTab( 1 )
-                    widget.set_text( text ) 
+                    self.changeTab( 1, clear = False )
                 text = widget.get_text()
                 showns = False # Are any app shown?
                 shownList = []
