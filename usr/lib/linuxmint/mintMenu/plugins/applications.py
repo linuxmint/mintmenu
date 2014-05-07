@@ -590,12 +590,12 @@ class pluginclass( object ):
             self.mintMenuWin.stopHiding()
         return False
 
-    def focusSearchEntry( self ):
+    def focusSearchEntry( self, clear = True ):
         # grab_focus() does select all text,
         # restoring the original selection is somehow broken, so just select the end
         # of the existing text, that's the most likely candidate anyhow
         self.searchEntry.grab_focus()
-        if self.rememberFilter:
+        if self.rememberFilter or not clear:
             gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
         else:
             self.searchEntry.set_text("")
@@ -1124,7 +1124,7 @@ class pluginclass( object ):
         #menu.reposition()
         #menu.reposition()
         #self.mintMenuWin.grab()
-        self.focusSearchEntry()
+        self.focusSearchEntry(clear = False)
         return True
         
     def pos_func(self, menu=None):
