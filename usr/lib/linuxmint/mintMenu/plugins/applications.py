@@ -561,14 +561,14 @@ class pluginclass( object ):
     def onHideMenu( self ):
         self.settings.set( "int", "last-active-tab", self.lastActiveTab )
 
-    def changeTab( self, tabNum ):
+    def changeTab( self, tabNum, clear = True ):
         notebook = self.builder.get_object( "notebook2" )
         if tabNum == 0:
             notebook.set_current_page( 0 )
         elif tabNum == 1:
             notebook.set_current_page( 1 )
 
-        self.focusSearchEntry()
+        self.focusSearchEntry(clear)
         self.lastActiveTab = tabNum
 
 
@@ -590,12 +590,12 @@ class pluginclass( object ):
             self.mintMenuWin.stopHiding()
         return False
 
-    def focusSearchEntry( self ):
+    def focusSearchEntry( self, clear = True ):
         # grab_focus() does select all text,
         # restoring the original selection is somehow broken, so just select the end
         # of the existing text, that's the most likely candidate anyhow
         self.searchEntry.grab_focus()
-        if self.rememberFilter:
+        if self.rememberFilter or not clear:
             gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
         else:
             self.searchEntry.set_text("")
@@ -818,8 +818,7 @@ class pluginclass( object ):
             else:
                 text = widget.get_text()
                 if self.lastActiveTab != 1:
-                    self.changeTab( 1 )
-                    widget.set_text( text ) 
+                    self.changeTab( 1, clear = False )
                 text = widget.get_text()
                 showns = False # Are any app shown?
                 shownList = []
@@ -1124,7 +1123,7 @@ class pluginclass( object ):
         #menu.reposition()
         #menu.reposition()
         #self.mintMenuWin.grab()
-        self.focusSearchEntry()
+        self.focusSearchEntry(clear = False)
         return True
         
     def pos_func(self, menu=None):
