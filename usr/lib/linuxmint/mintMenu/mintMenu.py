@@ -506,8 +506,6 @@ class MenuWin( object ):
         self.mainwin = MainWindow( self.button_box, self.settings, self.keybinder )
         self.mainwin.window.connect( "map-event", self.onWindowMap )
         self.mainwin.window.connect( "unmap-event", self.onWindowUnmap )
-        self.mainwin.window.connect( "enter-notify-event", self.onWindowEnter )
-        self.mainwin.window.connect( "leave-notify-event", self.onWindowLeave )
         self.mainwin.window.connect( "realize", self.onRealize )
         self.mainwin.window.connect( "size-allocate", lambda *args: self.positionMenu() )
 
@@ -534,14 +532,6 @@ class MenuWin( object ):
         self.applet.set_state( Gtk.StateType.NORMAL )
         self.keybinder.set_focus_window()
         self.pointerMonitor.ungrabPointer()
-        return False
-        
-    def onWindowEnter(self, applet, event):
-        self.pointerMonitor.ungrabPointer()
-        return False
-
-    def onWindowLeave(self, applet, event):
-        self.pointerMonitor.grabPointer()
         return False
         
     def onRealize( self, *args):
