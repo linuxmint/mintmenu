@@ -833,6 +833,10 @@ class pluginclass( object ):
                             i.hide()
                         else:
                             shownList.append(i)
+                            #if this is the first matching item
+                            #focus it
+                            if(not showns):
+                                i.grab_focus()
                             showns = True
                 if (not showns and os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg")):
                     if len(text) >= 3:
@@ -891,6 +895,7 @@ class pluginclass( object ):
         
     # Forward all text to the search box
     def keyPress( self, widget, event ):
+
         if event.string.strip() != "" or event.keyval == Gdk.KEY_BackSpace:
             self.searchEntry.grab_focus()
             gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
@@ -1323,8 +1328,15 @@ class pluginclass( object ):
                 self.favoritesAdd( self.favoritesBuildLauncher( uri ) )
 
     def Search( self, widget ):
+
         text = self.searchEntry.get_text().strip()
         if text != "":            
+            for app_button in self.applicationsBox.get_children():
+                if( isinstance(app_button, ApplicationLauncher) and app_button.filterText( text ) ):
+                    app_button.execute()
+                    self.mintMenuWin.hide()
+                    return
+
             self.mintMenuWin.hide()
             fullstring = self.searchtool.replace( "%s", text )
             os.system(fullstring + " &")          
