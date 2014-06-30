@@ -906,6 +906,11 @@ class pluginclass( object ):
             self.searchEntry.event( event )
             return True
 
+
+        if event.keyval == Gdk.KEY_space:
+            self.searchEntry.event( event )
+            return True
+
         if event.keyval == Gdk.KEY_Down and self.searchEntry.is_focus():
             self.applicationsBox.get_children()[0].grab_focus()
 
