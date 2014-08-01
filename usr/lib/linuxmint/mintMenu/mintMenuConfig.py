@@ -58,7 +58,7 @@ class mintMenuConfig( object ):
         self.builder.get_object("swapGeneric").set_label(_("Swap name and generic name"))
 
         self.builder.get_object("label11").set_text(_("Border width:"))
-        self.builder.get_object("label2").set_text(_("pixels"))
+        self.builder.get_object("label25").set_text(_("pixels"))
 
         self.builder.get_object("label8").set_text(_("Opacity:"))
         self.builder.get_object("label9").set_text("%")
