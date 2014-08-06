@@ -40,7 +40,7 @@ class mintMenuConfig( object ):
 
         #i18n
         self.mainWindow.set_title(_("Menu preferences"))
-        self.mainWindow.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+        self.mainWindow.set_icon_from_file("/usr/share/linuxmint/mintMenu/icon.svg")
 
         self.builder.get_object("startWithFavorites").set_label(_("Always start with favorites pane"))
         self.builder.get_object("showButtonIcon").set_label(_("Show button icon"))
@@ -184,7 +184,7 @@ class mintMenuConfig( object ):
         self.systemHeightButton = self.builder.get_object( "systemHeightSpinButton" )
         if (self.allowSystemScrollbarToggle.get_active() == False): self.systemHeightButton.set_sensitive(False)
         self.allowSystemScrollbarToggle.connect("toggled", self.toggleSystemHeightEnabled )
-        if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
+        if os.path.exists("/usr/share/linuxmint/mintInstall/icon.svg"):
             self.builder.get_object( "softwaremanagercheckbutton" ).show()
         else:
             self.builder.get_object( "softwaremanagercheckbutton" ).hide()
@@ -427,7 +427,7 @@ class mintMenuConfig( object ):
         newPlaceDialog = self.builder.get_object( "editPlaceDialog" )
         folderChooserDialog = self.builder.get_object( "fileChooserDialog" )
         newPlaceDialog.set_transient_for(self.mainWindow)
-        newPlaceDialog.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+        newPlaceDialog.set_icon_from_file("/usr/share/linuxmint/mintMenu/icon.svg")
         newPlaceDialog.set_title(self.newPlaceDialogTitle)
         folderChooserDialog.set_title(self.folderChooserDialogTitle)
         newPlaceDialog.set_default_response(Gtk.ResponseType.OK)
@@ -458,7 +458,7 @@ class mintMenuConfig( object ):
         editPlaceDialog = self.builder.get_object( "editPlaceDialog" )
         folderChooserDialog = self.builder.get_object( "fileChooserDialog" )
         editPlaceDialog.set_transient_for(self.mainWindow)
-        editPlaceDialog.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+        editPlaceDialog.set_icon_from_file("/usr/share/linuxmint/mintMenu/icon.svg")
         editPlaceDialog.set_title(self.editPlaceDialogTitle)
         folderChooserDialog.set_title(self.folderChooserDialogTitle)
         editPlaceDialog.set_default_response(Gtk.ResponseType.OK)

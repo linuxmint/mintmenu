@@ -69,7 +69,7 @@ class MainWindow( object ):
 
         self.detect_desktop_environment()
 
-        self.icon = "/usr/lib/linuxmint/mintMenu/visualisation-logo.png"
+        self.icon = "/usr/share/linuxmint/mintMenu/visualisation-logo.png"
 
         self.toggle = toggleButton
         # Load UI file and extract widgets   
@@ -716,7 +716,7 @@ class MenuWin( object ):
         about = Gtk.AboutDialog()
         about.set_name("mintMenu")
         import commands
-        version = commands.getoutput("/usr/lib/linuxmint/common/version.py mintmenu")
+        version = commands.getoutput("/usr/share/linuxmint/common/version.py mintmenu")
         about.set_version(version)
         try:
             h = open('/usr/share/common-licenses/GPL','r')
@@ -732,7 +732,7 @@ class MenuWin( object ):
       #  about.set_authors( ["Clement Lefebvre <clem@linuxmint.com>", "Lars-Peter Clausen <lars@laprican.de>"] )
         about.set_translator_credits(("translator-credits") )
         #about.set_copyright( _("Based on USP from S.Chanderbally") )
-        about.set_logo( GdkPixbuf.Pixbuf.new_from_file("/usr/lib/linuxmint/mintMenu/icon.svg") )
+        about.set_logo( GdkPixbuf.Pixbuf.new_from_file("/usr/share/linuxmint/mintMenu/icon.svg") )
         about.connect( "response", lambda dialog, r: dialog.destroy() )
         about.show()
 

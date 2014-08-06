@@ -1,3 +1,3 @@
 [D-BUS Service]
 Name=org.mate.panel.applet.MintMenuAppletFactory
-Exec=/usr/lib/linuxmint/mintMenu/mintMenu.py
+Exec=/usr/share/linuxmint/mintMenu/mintMenu.py
