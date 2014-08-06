@@ -1,13 +1,13 @@
 [Applet Factory]
 Id=MintMenuAppletFactory
 InProcess=false
-Location=/usr/lib/linuxmint/mintMenu/mintMenu.py
+Location=/usr/share/linuxmint/mintMenu/mintMenu.py
 Name=MintMenu Applet Factory
 Description=Advanced Menu
  
 [MintMenuApplet]
 Name=mintMenu
 Description=Advanced Menu
-Icon=/usr/lib/linuxmint/mintMenu/mint-logo.svg
+Icon=/usr/share/linuxmint/mintMenu/mint-logo.svg
 MateComponentId=OAFIID:MATE_MintMenuApplet;
 
