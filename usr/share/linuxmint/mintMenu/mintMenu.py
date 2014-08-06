@@ -716,7 +716,7 @@ class MenuWin( object ):
         about = Gtk.AboutDialog()
         about.set_name("mintMenu")
         import commands
-        version = commands.getoutput("/usr/lib/linuxmint/common/version.py mintmenu")
+        version = commands.getoutput("/usr/share/linuxmint/common/version.py mintmenu")
         about.set_version(version)
         try:
             h = open('/usr/share/common-licenses/GPL','r')
