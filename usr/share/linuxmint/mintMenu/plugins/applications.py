@@ -834,7 +834,7 @@ class pluginclass( object ):
                         else:
                             shownList.append(i)
                             showns = True
-                if (not showns and os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg")):
+                if (not showns and os.path.exists("/usr/share/linuxmint/mintInstall/icon.svg")):
                     if len(text) >= 3:
                         if self.current_suggestion is not None and self.current_suggestion in text:
                             # We're restricting our search... 
@@ -1184,7 +1184,7 @@ class pluginclass( object ):
         try:
             # Determine where the Desktop folder is (could be localized)
             import sys, commands
-            sys.path.append('/usr/lib/linuxmint/common')
+            sys.path.append('/usr/share/linuxmint/common')
             from configobj import ConfigObj
             config = ConfigObj(home + "/.config/user-dirs.dirs")
             desktopDir = home + "/Desktop"
