@@ -8,6 +8,6 @@ Description=Advanced Menu
 [MintMenuApplet]
 Name=mintMenu
 Description=Advanced Menu
-Icon=/usr/lib/linuxmint/mintMenu/mint-logo.svg
+Icon=/usr/share/linuxmint/mintMenu/mint-logo.svg
 MateComponentId=OAFIID:MATE_MintMenuApplet;
 

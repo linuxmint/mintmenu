@@ -69,7 +69,7 @@
     </key>
     
     <key type="s" name="applet-icon">
-      <default>"/usr/lib/linuxmint/mintMenu/visualisation-logo.png"</default>
+      <default>"/usr/share/linuxmint/mintMenu/visualisation-logo.png"</default>
       <summary></summary>
       <description></description>
     </key>
