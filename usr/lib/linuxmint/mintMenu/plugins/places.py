@@ -252,9 +252,9 @@ class pluginclass( object ):
     def launch_gtk_bookmark (self, widget, path):
         self.mintMenuWin.hide()
         if self.de == "mate":
-            os.system("caja %s &" % path)        
+            os.system("caja \"" + path + "\"")
         else:
-            os.system("xdg-open %s &" % path)        
+            os.system("xdg-open \"" + path + "\"")
 
     def trashPopup( self, widget, event ):
         if event.button == 3:
