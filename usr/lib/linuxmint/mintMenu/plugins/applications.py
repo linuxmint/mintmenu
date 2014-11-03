@@ -1419,7 +1419,6 @@ class pluginclass( object ):
 
     def buildFavorites( self ):
         try:
-            from user import home
             if (not os.path.exists(home + "/.linuxmint/mintMenu/applications.list")):
                 os.system("mkdir -p " + home + "/.linuxmint/mintMenu/applications")
                 os.system("cp /usr/lib/linuxmint/mintMenu/applications.list " + home + "/.linuxmint/mintMenu/applications.list")
