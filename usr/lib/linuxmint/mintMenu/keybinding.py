@@ -178,10 +178,9 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         self.display.close()
 
 class KeymapKey(Structure):
-     _fields_ = [("keycode", c_uint),
-                 ("group", c_int),
-                 ("level", c_int)]
-
+    _fields_ = [("keycode", c_uint),
+                ("group", c_int),
+                ("level", c_int)]
 
 class KeybindingWidget(Gtk.HBox):
     __gsignals__ = {

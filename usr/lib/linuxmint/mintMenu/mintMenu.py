@@ -697,15 +697,15 @@ class MenuWin( object ):
         self.button_icon.size_request(bi_req)
         self.systemlabel.size_request(sl_req)
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
-           if self.hideIcon:
-               self.applet.set_size_request( sl_req.width + 2, bi_req.height )
-           else:
-               self.applet.set_size_request( sl_req.width + bi_req.width + 5, bi_req.height )
+            if self.hideIcon:
+                self.applet.set_size_request( sl_req.width + 2, bi_req.height )
+            else:
+                self.applet.set_size_request( sl_req.width + bi_req.width + 5, bi_req.height )
         else:
-           if self.hideIcon:
-               self.applet.set_size_request( bi_req.width, sl_req.height + 2 )
-           else:
-               self.applet.set_size_request( bi_req.width, sl_req.height + bi_req.height + 5 )
+            if self.hideIcon:
+                self.applet.set_size_request( bi_req.width, sl_req.height + 2 )
+            else:
+                self.applet.set_size_request( bi_req.width, sl_req.height + bi_req.height + 5 )
 
     def reloadSettings( self, *args ):
         self.loadSettings()
