@@ -472,7 +472,11 @@ class pluginclass( object ):
         
         # save old config - this is necessary because the app will notified when it sets the default values and you don't want the to reload itself several times
         oldcategories_mouse_over = self.categories_mouse_over
-        oldtotalrecent = self.totalrecent
+        oldiconsize = self.iconSize
+        oldfaviconsize = self.faviconsize
+        oldswapgeneric = self.swapgeneric
+        oldshowcategoryicons = self.showcategoryicons
+        oldcategoryhoverdelay = self.categoryhoverdelay
         oldsticky = self.sticky
         oldminimized = self.minimized
         oldicon = self.icon
@@ -482,7 +486,7 @@ class pluginclass( object ):
         self.GetGSettingsEntries()
 
         # if the config hasn't changed return
-        if oldcategories_mouse_over == self.categories_mouse_over and oldiconsize == self.iconSize and oldfaviconsize == self.faviconsize and oldtotalrecent == self.totalrecent and oldswapgeneric == self.swapgeneric and oldshowcategoryicons == self.showcategoryicons and oldcategoryhoverdelay == self.categoryhoverdelay and oldsticky == self.sticky and oldminimized == self.minimized and oldicon == self.icon and oldhideseparator == self.hideseparator and oldshowapplicationcomments == self.showapplicationcomments:
+        if oldcategories_mouse_over == self.categories_mouse_over and oldiconsize == self.iconSize and oldfaviconsize == self.faviconsize and oldswapgeneric == self.swapgeneric and oldshowcategoryicons == self.showcategoryicons and oldcategoryhoverdelay == self.categoryhoverdelay and oldsticky == self.sticky and oldminimized == self.minimized and oldicon == self.icon and oldhideseparator == self.hideseparator and oldshowapplicationcomments == self.showapplicationcomments:
             return
 
         self.Todos()
