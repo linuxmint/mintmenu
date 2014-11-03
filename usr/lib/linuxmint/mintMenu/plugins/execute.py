@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import os
-import subprocess
 
 def RemoveArgs(Execline):
 	NewExecline = []
@@ -40,7 +39,6 @@ def Execute( cmd , commandCwd=None):
 		os.chdir( cwd )
 		string = ' '.join(cmd)
 		string = string + " &"
-		#subprocess.Popen( cmd ) // use os.system instead of popen so children don't end up in zombie waiting for us to wait() for them
 		os.system(string)		
 		return True
 	except Exception, detail:
