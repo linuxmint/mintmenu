@@ -176,7 +176,7 @@ class easyButton( Gtk.Button ):
     def addLabel( self, text, styles = None ):
         label = Gtk.Label()
         if "<b>" in text or "<span" in text:
-            label.set_markup(text) # don't remove our pango
+            label.set_markup(text.replace('&', '&amp;')) # don't remove our pango
         else:
             label.set_text(text)
 
