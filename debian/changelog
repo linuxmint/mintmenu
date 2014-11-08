@@ -1,3 +1,9 @@
+mintmenu (5.6.0) rebecca; urgency=medium
+
+  * Fixed bookmarks with quotes not opening properly
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sat, 08 Nov 2014 17:55:32 +0100
+
 mintmenu (5.5.9) rebecca; urgency=medium
 
   * Use /usr/bin/python always
