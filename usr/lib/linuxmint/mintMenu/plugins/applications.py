@@ -1754,9 +1754,16 @@ class pluginclass( object ):
                     item["button"].destroy()
 
 
-            sortedApplicationList.sort()            
+            sortedApplicationList.sort()
+            launcherNames = [] # Keep track of launcher names so we don't add them twice in the list..
             for item in sortedApplicationList:
-                self.applicationsBox.pack_start( item[1], False, False, 0 )
+                launcherName = item[0]
+                button = item[1]
+                self.applicationsBox.pack_start( button, False, False, 0 )
+                if launcherName in launcherNames:
+                    button.hide()
+                else:
+                    launcherNames.append(launcherName)
                       
         self.rebuildLock = False        
 
