@@ -110,7 +110,7 @@ def get_user_item_path():
     return item_dir
 
 def get_system_item_paths():
-    item_dir = None
+    item_dirs = None
 
     if os.environ.has_key('XDG_DATA_DIRS'):
         item_dirs = os.environ['XDG_DATA_DIRS'].split(":")
