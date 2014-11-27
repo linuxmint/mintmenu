@@ -1,4 +1,4 @@
 #!/bin/bash
 
-xgettext --language=Python --keyword=_ --output=mintmenu.pot usr/lib/linuxmint/mintMenu/mintMenu.py usr/lib/linuxmint/mintMenu/mintRemove.py usr/lib/linuxmint/mintMenu/mintMenuConfig.py usr/lib/linuxmint/mintMenu/keybinding.py usr/lib/linuxmint/mintMenu/plugins/recent.py usr/lib/linuxmint/mintMenu/plugins/applications.py usr/lib/linuxmint/mintMenu/plugins/system_management.py usr/lib/linuxmint/mintMenu/plugins/places.py
+xgettext --language=Python --keyword=_ --output=mintmenu.pot usr/lib/linuxmint/mintMenu/mintMenu.py usr/lib/linuxmint/mintMenu/mintMenuConfig.py usr/lib/linuxmint/mintMenu/keybinding.py usr/lib/linuxmint/mintMenu/plugins/recent.py usr/lib/linuxmint/mintMenu/plugins/applications.py usr/lib/linuxmint/mintMenu/plugins/system_management.py usr/lib/linuxmint/mintMenu/plugins/places.py
 
