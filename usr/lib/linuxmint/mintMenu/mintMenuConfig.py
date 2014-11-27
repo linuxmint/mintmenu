@@ -69,7 +69,8 @@ class mintMenuConfig( object ):
 
         self.builder.get_object("colorsLabel").set_text(_("Theme"))
         self.builder.get_object("favLabel").set_text(_("Favorites"))
-        self.builder.get_object("label3").set_text(_("Main button"))
+        self.builder.get_object("mainbuttonLabel").set_text(_("Main button"))
+        self.builder.get_object("pluginsLabel").set_text(_("Plugins"))
 
         self.builder.get_object("backgroundColorLabel").set_text(_("Background:"))
         self.builder.get_object("headingColorLabel").set_text(_("Headings:"))
