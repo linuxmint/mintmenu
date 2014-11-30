@@ -3,7 +3,12 @@
 import sys, os
 
 if len(sys.argv) > 1:
-    if (sys.argv[1] in ["clean", "clear", "reset", "--clean", "--clear", "--reset"]):
+    if (sys.argv[1] in ["help", "h", "-?", "--help", "-h", "?"]):
+        print "mintMenu - the advanced MATE menu\n"
+        print "options:"
+        print "  [--]help,  [-]h                    Display this help."
+        print "  [--]clean, [--]clear, [--]reset    Restore settings to default.\n"
+    elif (sys.argv[1] in ["clean", "clear", "reset", "--clean", "--clear", "--reset"]):
         os.system("gsettings reset-recursively com.linuxmint.mintmenu")
         os.system("gsettings reset-recursively com.linuxmint.mintmenu.plugins.places")
         os.system("gsettings reset-recursively com.linuxmint.mintmenu.plugins.applications")
