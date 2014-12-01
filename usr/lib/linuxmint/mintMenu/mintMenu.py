@@ -455,7 +455,7 @@ class MainWindow( object ):
                 self.plugins["applications"].changeTab(0)
             self.plugins["applications"].focusSearchEntry()
 
-    def hide( self, forceHide = False ):
+    def hide( self ):
         for plugin in self.plugins.values():
             if hasattr( plugin, "onHideMenu" ):
                 plugin.onHideMenu()
@@ -752,11 +752,11 @@ class MenuWin( object ):
             self.create_menu()
         # allow middle click and drag
         elif event.button == 2:
-            self.mainwin.hide( True )
+            self.mainwin.hide()
 
     def toggleMenu( self ):
         if self.applet.state & Gtk.StateType.SELECTED:
-            self.mainwin.hide( True )
+            self.mainwin.hide()
         else:
             self.positionMenu()
             self.mainwin.show()
