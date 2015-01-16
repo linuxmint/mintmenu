@@ -1179,24 +1179,8 @@ class pluginclass( object ):
         os.system("xdg-open \"http://community.linuxmint.com/index.php/software/search/0/" + text + "\" &")     
         self.mintMenuWin.hide()
         
-
     def add_to_desktop(self, widget, desktopEntry):
-        try:
-            # Determine where the Desktop folder is (could be localized)
-            import sys, commands
-            sys.path.append('/usr/lib/linuxmint/common')
-            from configobj import ConfigObj
-            config = ConfigObj(home + "/.config/user-dirs.dirs")
-            desktopDir = home + "/Desktop"
-            tmpdesktopDir = config['XDG_DESKTOP_DIR']
-            tmpdesktopDir = commands.getoutput("echo " + tmpdesktopDir)
-            if os.path.exists(tmpdesktopDir):
-                desktopDir = tmpdesktopDir
-            # Copy the desktop file to the desktop
-            os.system("cp \"%s\" \"%s/\"" % (desktopEntry.desktopFile, desktopDir))
-            os.system("chmod a+rx %s/*.desktop" % (desktopDir))
-        except Exception, detail:
-            print detail
+        os.system("xdg-desktop-icon install --novendor %s" % desktopEntry.desktopFile)
 
     def add_to_panel(self, widget, desktopEntry):
         self.get_panel()

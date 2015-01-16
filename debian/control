@@ -13,7 +13,7 @@ Depends:
  python (>= 2.4), python (<< 3),
  python-gtk2, python-glade2,
  mint-common,
- python-mate-menu, python-xdg,
+ python-mate-menu, python-xdg, xdg-utils,
  libmatepanelapplet, libmatedesktop,
  mate-menus,
  gvfs-bin,
