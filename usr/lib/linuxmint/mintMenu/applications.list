@@ -3,7 +3,7 @@ location:/usr/share/applications/thunderbird.desktop
 location:/usr/share/applications/pidgin.desktop
 location:/usr/share/applications/banshee.desktop
 separator
-location:/usr/share/applications/mate-calc.desktop
+location:/usr/share/applications/gnome-calculator.desktop
 location:/usr/share/applications/gcalctool.desktop
 location:/usr/share/applications/pluma.desktop
 location:/usr/share/applications/gedit.desktop
