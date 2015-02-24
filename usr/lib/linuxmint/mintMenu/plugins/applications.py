@@ -205,9 +205,9 @@ class SuggestionButton ( Gtk.Button ):
         self.image.set_from_stock( self.iconName, size )
 
 class TargetEntry(Structure):
-     _fields_ = [("target", c_char_p),
-                 ("flags", c_int),
-                 ("info", c_int)]
+    _fields_ = [("target", c_char_p),
+                ("flags", c_int),
+                ("info", c_int)]
 
 class pluginclass( object ):
     TARGET_TYPE_TEXT = 80
@@ -472,7 +472,11 @@ class pluginclass( object ):
         
         # save old config - this is necessary because the app will notified when it sets the default values and you don't want the to reload itself several times
         oldcategories_mouse_over = self.categories_mouse_over
-        oldtotalrecent = self.totalrecent
+        oldiconsize = self.iconSize
+        oldfaviconsize = self.faviconsize
+        oldswapgeneric = self.swapgeneric
+        oldshowcategoryicons = self.showcategoryicons
+        oldcategoryhoverdelay = self.categoryhoverdelay
         oldsticky = self.sticky
         oldminimized = self.minimized
         oldicon = self.icon
@@ -482,7 +486,7 @@ class pluginclass( object ):
         self.GetGSettingsEntries()
 
         # if the config hasn't changed return
-        if oldcategories_mouse_over == self.categories_mouse_over and oldiconsize == self.iconSize and oldfaviconsize == self.faviconsize and oldtotalrecent == self.totalrecent and oldswapgeneric == self.swapgeneric and oldshowcategoryicons == self.showcategoryicons and oldcategoryhoverdelay == self.categoryhoverdelay and oldsticky == self.sticky and oldminimized == self.minimized and oldicon == self.icon and oldhideseparator == self.hideseparator and oldshowapplicationcomments == self.showapplicationcomments:
+        if oldcategories_mouse_over == self.categories_mouse_over and oldiconsize == self.iconSize and oldfaviconsize == self.faviconsize and oldswapgeneric == self.swapgeneric and oldshowcategoryicons == self.showcategoryicons and oldcategoryhoverdelay == self.categoryhoverdelay and oldsticky == self.sticky and oldminimized == self.minimized and oldicon == self.icon and oldhideseparator == self.hideseparator and oldshowapplicationcomments == self.showapplicationcomments:
             return
 
         self.Todos()
@@ -776,14 +780,14 @@ class pluginclass( object ):
                         found_packages.append(pkg)                     
                                                            
             if len(found_packages) > 0:         
-                    last_separator = Gtk.EventBox()
-                    last_separator.add(Gtk.HSeparator())
-                    last_separator.set_visible_window(False)
-                    last_separator.set_size_request(-1, 20)       
-                    last_separator.type = "separator"        
-                    last_separator.show_all()
-                    self.applicationsBox.add(last_separator)
-                    self.suggestions.append(last_separator)
+                last_separator = Gtk.EventBox()
+                last_separator.add(Gtk.HSeparator())
+                last_separator.set_visible_window(False)
+                last_separator.set_size_request(-1, 20)
+                last_separator.type = "separator"
+                last_separator.show_all()
+                self.applicationsBox.add(last_separator)
+                self.suggestions.append(last_separator)
             
             for pkg in found_packages:
                 name = pkg.name
@@ -1403,7 +1407,6 @@ class pluginclass( object ):
 
     def buildFavorites( self ):
         try:
-            from user import home
             if (not os.path.exists(home + "/.linuxmint/mintMenu/applications.list")):
                 os.system("mkdir -p " + home + "/.linuxmint/mintMenu/applications")
                 os.system("cp /usr/lib/linuxmint/mintMenu/applications.list " + home + "/.linuxmint/mintMenu/applications.list")
