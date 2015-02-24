@@ -1,3 +1,28 @@
+mintmenu (5.6.1) betsy; urgency=medium
+
+  [ monsta ]
+  * removed unused stuff
+  * mintMenuConfig: make Plugins tab title translatable
+  * makepot: removed obsolete mintRemove reference
+  * updated potfile
+  * removed unused and confusing argument
+  * properly create a desktop shortcut from a menu entry
+  * fixed wrong indentation
+  * no need to import the same thing twice
+  * fixed saving old config in RegenPlugin
+  * fixed wrong indentation again
+
+  [ darealshinji ]
+  * add a help command line option
+  * install a manpage
+  * override image-file-in-usr-lib warnings
+
+  [ Clement Lefebvre ]
+  * Don't pass env variable value through bash echo
+  * Favorites: replaces obsolete mate-calc with gnome-calculator
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 24 Feb 2015 14:45:24 +0100
+
 mintmenu (5.6.0) rebecca; urgency=medium
 
   * Fixed bookmarks with quotes not opening properly
