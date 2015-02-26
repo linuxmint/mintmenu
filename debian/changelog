@@ -1,3 +1,9 @@
+mintmenu (5.6.2) betsy; urgency=medium
+
+  * Added gnome-system-monitor to list of favorites
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 26 Feb 2015 19:35:24 +0100
+
 mintmenu (5.6.1) betsy; urgency=medium
 
   [ monsta ]
