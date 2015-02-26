@@ -15,4 +15,5 @@ separator
 location:/usr/share/applications/mate-display-properties.desktop
 location:/usr/share/applications/xfce-display-settings.desktop
 location:/usr/share/applications/mate-system-monitor.desktop
+location:/usr/share/applications/gnome-system-monitor.desktop
 location:/usr/share/applications/xfce4-taskmanager.desktop
