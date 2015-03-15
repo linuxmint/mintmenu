@@ -285,7 +285,7 @@ class mintMenuConfig( object ):
         model = Gtk.ListStore(str, str)
         self.builder.get_object("themesCombo").set_model(model)
         selected_theme = model.append([_("Desktop theme"), "default"])
-        for theme in themes:
+        for theme in sorted(themes):
             if theme.startswith("/usr/share/themes") and theme.endswith("/gtk-2.0/gtkrc"):
                 theme = theme.replace("/usr/share/themes/", "")
                 theme = theme.replace("gtk-2.0", "")
