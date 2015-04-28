@@ -115,7 +115,7 @@ def get_system_item_paths():
     if os.environ.has_key('XDG_DATA_DIRS'):
         item_dirs = os.environ['XDG_DATA_DIRS'].split(":")
     else:
-        item_dirs = [os.path.join('usr', 'share')]
+        item_dirs = [os.path.join(os.environ['HOME'], '.local', 'share')]
 
     return item_dirs
 
