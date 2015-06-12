@@ -9,7 +9,7 @@
     </key>
     
     <key type="b" name="use-custom-color">
-      <default>false</default>
+      <default>true</default>
       <summary></summary>
       <description></description>
     </key>
@@ -69,7 +69,7 @@
     </key>
     
     <key type="s" name="applet-icon">
-      <default>"/usr/lib/linuxmint/mintMenu/visualisation-logo.png"</default>
+      <default>"/usr/lib/linuxmint/mintMenu/mintMenu.png"</default>
       <summary></summary>
       <description></description>
     </key>
@@ -81,19 +81,19 @@
     </key>
         
     <key type="s" name="custom-color">
-      <default>"#EEEEEE"</default>
+      <default>"#DEDEDE"</default>
       <summary></summary>
       <description></description>
     </key>
     
     <key type="s" name="custom-heading-color">
-      <default>"#001155"</default>
+      <default>"#3C3C3C"</default>
       <summary></summary>
       <description></description>
     </key>
     
     <key type="s" name="custom-border-color">
-      <default>"#001155"</default>
+      <default>"#DEDEDE"</default>
       <summary></summary>
       <description></description>
     </key>
