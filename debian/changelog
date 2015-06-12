@@ -1,3 +1,13 @@
+mintmenu (5.6.3) rafaela; urgency=medium
+
+  [ James Lu ]
+  * Sort available themes in Menu preferences->Theme
+
+  [ Clement Lefebvre ]
+  * Changed default settings to make mintMenu a little better looking
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 12 Jun 2015 16:39:01 +0200
+
 mintmenu (5.6.2) betsy; urgency=medium
 
   * Added gnome-system-monitor to list of favorites
