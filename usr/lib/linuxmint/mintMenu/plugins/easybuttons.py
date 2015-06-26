@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 from gi.repository import Gtk, Gdk, GLib
 from gi.repository import Pango
