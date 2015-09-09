@@ -773,6 +773,7 @@ class MenuWin( object ):
         x = c_int()
         y = c_int()
         # Get the dimensions/position of the widgetToAlignWith
+        gdk.gdk_window_get_origin.argtypes = [c_void_p, c_void_p, c_void_p]
         gdk.gdk_window_get_origin(hash(self.applet.window), byref(x), byref(y))
         entryX = x.value
         entryY = y.value

@@ -273,12 +273,14 @@ class ApplicationLauncher( easyButton ):
 
         array = TargetEntry * 2
         targets = array(( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ))
+        gtk.gtk_drag_source_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
         gtk.gtk_drag_source_set(hash(self), Gdk.ModifierType.BUTTON1_MASK, targets, 2, Gdk.DragAction.COPY)
 
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
             iconName, s = icon.get_icon_name()
             c = c_char_p(iconName.decode('utf-8', 'ignore').encode('ascii', 'ignore'))
+            gtk.gtk_drag_source_set_icon_name.argtypes = [c_void_p, c_char_p]
             gtk.gtk_drag_source_set_icon_name( hash(self), c)
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
@@ -397,6 +399,7 @@ class ApplicationLauncher( easyButton ):
         if icon:
             iconName, size = icon.get_icon_name()
             c = c_char_p(iconName.encode('ascii', 'ignore'))
+            gtk.gtk_drag_source_set_icon_name.argtypes = [c_void_p, c_char_p]
             gtk.gtk_drag_source_set_icon_name( hash(self), c)
 
     def startupFileChanged( self, *args ):
