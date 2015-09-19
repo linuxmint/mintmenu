@@ -181,7 +181,7 @@ class pluginclass( object ):
                 from configobj import ConfigObj
                 config = ConfigObj(home + "/.config/user-dirs.dirs")
                 tmpdesktopDir = config['XDG_DESKTOP_DIR']
-                if os.path.exists(tmpdesktopDir):
+                if os.path.exists(os.path.expandvars(tmpdesktopDir)):
                     desktopDir = tmpdesktopDir
             except Exception, detail:
                 print detail
