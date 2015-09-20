@@ -110,13 +110,10 @@ def get_user_item_path():
     return item_dir
 
 def get_system_item_paths():
-    item_dirs = None
-
+    item_dirs = []
     if os.environ.has_key('XDG_DATA_DIRS'):
         item_dirs = os.environ['XDG_DATA_DIRS'].split(":")
-    else:
-        item_dirs = [os.path.join('usr', 'share')]
-
+    item_dirs.append(os.path.join('/usr', 'share'))
     return item_dirs
 
 def rel_path(target, base=os.curdir):
@@ -1228,12 +1225,10 @@ class pluginclass( object ):
     def onPropsApp( self, menu, widget ):
 
         newFileFlag = False
-
         sysPaths = get_system_item_paths()
 
         for path in sysPaths:
-
-            path += "applications"
+            path = os.path.join(path, "applications")
 
             relPath = os.path.relpath(widget.desktopFile, path)
 
