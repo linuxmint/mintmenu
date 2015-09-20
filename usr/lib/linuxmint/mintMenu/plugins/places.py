@@ -263,6 +263,7 @@ class pluginclass( object ):
             trashMenu.show_all()
             emptyTrashMenuItem.connect ( "activate", self.emptyTrash, widget )
             self.mintMenuWin.stopHiding()
+            gtk.gtk_menu_popup.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_uint, c_uint]
             gtk.gtk_menu_popup(hash(trashMenu), None, None, None, None, 3, 0)
 
     def emptyTrash( self, menu, widget):

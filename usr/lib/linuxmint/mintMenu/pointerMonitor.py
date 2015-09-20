@@ -28,6 +28,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
         
     # Receives GDK windows
     def addWindowToMonitor(self, window):
+        gdk.gdk_x11_drawable_get_xid.argtypes = [c_void_p]
         xWindow = self.display.create_resource_object("window", gdk.gdk_x11_drawable_get_xid(hash(window)))
         self.windows.append(xWindow)
             

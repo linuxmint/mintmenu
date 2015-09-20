@@ -275,6 +275,7 @@ class pluginclass( object ):
 
         self.favoritesBox.connect( "drag-data-received", self.ReceiveCallback )
 
+        gtk.gtk_drag_dest_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
         gtk.gtk_drag_dest_set ( hash(self.favoritesBox), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, 2, Gdk.DragAction.COPY )
         self.showFavoritesButton.connect( "drag-data-received", self.ReceiveCallback )
         gtk.gtk_drag_dest_set ( hash(self.showFavoritesButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, 2, Gdk.DragAction.COPY )
@@ -600,6 +601,7 @@ class pluginclass( object ):
         # of the existing text, that's the most likely candidate anyhow
         self.searchEntry.grab_focus()
         if self.rememberFilter or not clear:
+            gtk.gtk_editable_set_position.argtypes = [c_void_p, c_int]
             gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
         else:
             self.searchEntry.set_text("")
@@ -897,6 +899,7 @@ class pluginclass( object ):
     def keyPress( self, widget, event ):
         if event.string.strip() != "" or event.keyval == Gdk.KEY_BackSpace:
             self.searchEntry.grab_focus()
+            gtk.gtk_editable_set_position.argtypes = [c_void_p, c_int]
             gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
             self.searchEntry.event( event )
             return True
@@ -962,6 +965,7 @@ class pluginclass( object ):
 
                 mTree.show_all()
                 self.mintMenuWin.stopHiding()
+                gtk.gtk_menu_popup.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_uint, c_uint]
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
             else:
                 mTree = Gtk.Menu()
@@ -981,6 +985,7 @@ class pluginclass( object ):
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
                 self.mintMenuWin.stopHiding()
+                gtk.gtk_menu_popup.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_uint, c_uint]
                 gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
 
     def menuPopup( self, widget, event ):
@@ -1043,6 +1048,7 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             self.mintMenuWin.stopHiding()
+            gtk.gtk_menu_popup.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_uint, c_uint]
             gtk.gtk_menu_popup(hash(mTree), None, None, None, None, event.button, event.time)
 
     
@@ -1121,6 +1127,7 @@ class pluginclass( object ):
         menu.show_all()
 
         self.mintMenuWin.stopHiding()
+        gtk.gtk_menu_popup.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_uint, c_uint]
         gtk.gtk_menu_popup(hash(menu), None, None, None, None, event.button, event.time)
 
         #menu.attach_to_widget(self.searchButton, None)
@@ -1442,8 +1449,10 @@ class pluginclass( object ):
                     self.favorites.append( favButton )
                     self.favoritesPositionOnGrid( favButton )
                     favButton.connect( "drag-data-received", self.onFavButtonDragReorder )
+                    gtk.gtk_drag_dest_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
                     gtk.gtk_drag_dest_set( hash(favButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.fromFav, 2, Gdk.DragAction.COPY )
                     favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
+                    gtk.gtk_drag_source_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
                     gtk.gtk_drag_source_set( hash(favButton), Gdk.ModifierType.BUTTON1_MASK, self.toFav, 3, Gdk.DragAction.COPY )
                     position += 1
 
@@ -1522,8 +1531,10 @@ class pluginclass( object ):
             self.favoritesPositionOnGrid( favButton )
 
             favButton.connect( "drag-data-received", self.onFavButtonDragReorder )
+            gtk.gtk_drag_dest_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
             gtk.gtk_drag_dest_set( hash(favButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, 3, Gdk.DragAction.COPY )
             favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
+            gtk.gtk_drag_source_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
             gtk.gtk_drag_source_set ( hash(favButton), Gdk.ModifierType.BUTTON1_MASK, self.toFav, 3, Gdk.DragAction.COPY )
 
             if position >= 0:

@@ -57,6 +57,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         threading.Thread.__init__ (self)
         self.setDaemon (True)
 
+        gdk.gdk_keymap_get_default.restype = c_void_p
         self.keymap = capi.get_widget (gdk.gdk_keymap_get_default())
         self.display = Display()
         self.screen = self.display.screen()
@@ -92,6 +93,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         count = c_int()
         array = (KeymapKey * 10)()
         keys = cast(array, POINTER(KeymapKey))
+        gdk.gdk_keymap_get_entries_for_keyval.argtypes = [c_void_p, c_uint, c_void_p, c_void_p]
         gdk.gdk_keymap_get_entries_for_keyval(hash(self.keymap), keyval, byref(keys), byref(count))
         return keys[0].keycode
 
@@ -135,6 +137,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         if window is None:
             self.window = self.screen.root
         else:
+            gdk.gdk_x11_drawable_get_xid.argtypes = [c_void_p]
             self.window = self.display.create_resource_object("window", gdk.gdk_x11_drawable_get_xid(hash(window)))
         self.grab(self.keytext)
 
