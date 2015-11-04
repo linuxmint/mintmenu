@@ -569,7 +569,7 @@ class MenuWin( object ):
 
     def createPanelButton( self ):
         self.button_icon = Gtk.Image.new_from_file( self.buttonIcon )
-        self.systemlabel = Gtk.Label(label= self.buttonText )
+        self.systemlabel = Gtk.Label(label= "%s " % self.buttonText )
         if os.path.exists("/etc/linuxmint/info"):
             import commands
             tooltip = commands.getoutput("cat /etc/linuxmint/info | grep DESCRIPTION")
@@ -597,6 +597,7 @@ class MenuWin( object ):
             self.button_box.pack_start( self.button_icon , False, False, 0)
             self.button_icon.set_padding( 0, 5 )
 
+        
         self.button_box.set_homogeneous( False )
         self.button_box.show_all()
         self.sizeButton()

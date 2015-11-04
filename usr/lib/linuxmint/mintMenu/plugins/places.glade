@@ -1,10 +1,11 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 2.16 -->
+  <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkWindow" id="mainWindow">
     <property name="can_focus">False</property>
-    <signal handler="on_window1_destroy" name="destroy" swapped="no"/>
+    <property name="border_width">3</property>
+    <signal name="destroy" handler="on_window1_destroy" swapped="no"/>
     <child>
       <object class="GtkEventBox" id="Places">
         <property name="visible">True</property>
@@ -13,11 +14,12 @@
           <object class="GtkScrolledWindow" id="scrolledwindow2">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="border_width">3</property>
             <property name="hscrollbar_policy">automatic</property>
             <property name="vscrollbar_policy">automatic</property>
-            <signal handler="on_scrolledwindow_drag_drop" name="drag_drop" swapped="no"/>
-            <signal handler="on_scrolledwindow_drag_data_received" name="drag_data_received" swapped="no"/>
-            <signal handler="on_scrolledwindow_drag_motion" name="drag_motion" swapped="no"/>
+            <signal name="drag-drop" handler="on_scrolledwindow_drag_drop" swapped="no"/>
+            <signal name="drag-data-received" handler="on_scrolledwindow_drag_data_received" swapped="no"/>
+            <signal name="drag-motion" handler="on_scrolledwindow_drag_motion" swapped="no"/>
             <child>
               <object class="GtkViewport" id="viewport2">
                 <property name="visible">True</property>
