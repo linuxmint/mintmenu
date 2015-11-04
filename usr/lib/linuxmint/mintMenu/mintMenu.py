@@ -76,6 +76,8 @@ class MainWindow( object ):
         builder = Gtk.Builder()
         builder.add_from_file(os.path.join( self.path, "mintMenu.glade" ))
         self.window     = builder.get_object( "mainWindow" )
+        self.window.realize()
+        self.window.window.set_decorations(Gdk.WMDecoration.BORDER)
         self.paneholder = builder.get_object( "paneholder" )
         self.border     = builder.get_object( "border" )
         
@@ -525,13 +527,13 @@ class MenuWin( object ):
     def onWindowMap( self, *args ):
         self.applet.set_state( Gtk.StateType.SELECTED )
         self.keybinder.set_focus_window( self.mainwin.window.window )
-        self.pointerMonitor.grabPointer()
+        #self.pointerMonitor.grabPointer()
         return False
         
     def onWindowUnmap( self, *args ):
         self.applet.set_state( Gtk.StateType.NORMAL )
         self.keybinder.set_focus_window()
-        self.pointerMonitor.ungrabPointer()
+        #self.pointerMonitor.ungrabPointer()
         return False
         
     def onRealize( self, *args):
