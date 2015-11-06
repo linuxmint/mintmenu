@@ -1,3 +1,21 @@
+mintmenu (5.6.5) rosa; urgency=medium
+
+  [ James Lu ]
+  * Coerse shebangs to #!/usr/bin/python2
+
+  [ Maxime-J ]
+  * Localized Desktop folder fix
+
+  [ Chromatic Dragon ]
+  * Changes to support 64-bit pointers passing the C-python interface. This fixes recent problems encountered on systems using python2 compiled with the PIE option set.
+
+  [ Clement Lefebvre ]
+  * Little improvements in system dir detection
+  * Add a frame around the menu
+  * Fine-tuned border widths and padding
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 06 Nov 2015 16:32:31 +0000
+
 mintmenu (5.6.4) rafaela; urgency=medium
 
   * Fixed ubiquity not launching from mintmenu
