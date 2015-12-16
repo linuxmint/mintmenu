@@ -78,6 +78,7 @@ class MainWindow( object ):
         self.window     = builder.get_object( "mainWindow" )
         self.window.realize()
         self.window.window.set_decorations(Gdk.WMDecoration.BORDER)
+        self.window.set_title("")
         self.paneholder = builder.get_object( "paneholder" )
         self.border     = builder.get_object( "border" )
         
