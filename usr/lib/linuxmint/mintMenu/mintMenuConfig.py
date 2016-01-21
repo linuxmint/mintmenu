@@ -185,7 +185,7 @@ class mintMenuConfig( object ):
         self.systemHeightButton = self.builder.get_object( "systemHeightSpinButton" )
         if (self.allowSystemScrollbarToggle.get_active() == False): self.systemHeightButton.set_sensitive(False)
         self.allowSystemScrollbarToggle.connect("toggled", self.toggleSystemHeightEnabled )
-        if os.path.exists("/usr/lib/linuxmint/mintInstall/icon.svg"):
+        if os.path.exists("/usr/bin/mintinstall"):
             self.builder.get_object( "softwaremanagercheckbutton" ).show()
         else:
             self.builder.get_object( "softwaremanagercheckbutton" ).hide()
