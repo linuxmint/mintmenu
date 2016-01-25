@@ -386,18 +386,27 @@ class mintMenuConfig( object ):
         self.headingColorLabel.set_sensitive(  widget.get_active() )
 
     def getBackgroundColor( self ):
-        color = Gdk.Color(0,0,0)
-        self.backgroundColor.get_color(color)
+        try:
+            color = self.backgroundColor.get_color()
+        except:
+            color = Gdk.Color(0, 0, 0)
+            self.backgroundColor.get_color(color)
         return self.gdkColorToString( color )
 
     def getBorderColor( self ):
-        color = Gdk.Color(0,0,0)
-        self.borderColor.get_color(color)
+        try:
+            color = self.borderColor.get_color()
+        except:
+            color = Gdk.Color(0, 0, 0)
+            self.borderColor.get_color(color)
         return self.gdkColorToString( color )
 
     def getHeadingColor( self ):
-        color = Gdk.Color(0,0,0)
-        self.headingColor.get_color(color)
+        try:
+            color = self.headingColor.get_color()
+        except:
+            color = Gdk.Color(0, 0, 0)
+            self.headingColor.get_color(color)
         return self.gdkColorToString( color )
 
     def gdkColorToString( self, gdkColor ):
