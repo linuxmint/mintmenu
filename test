@@ -1,5 +1,4 @@
 #!/bin/bash
-umask 002
 
 sudo rm -rf /usr/lib/linuxmint/mintMenu
 sudo cp -R usr /
