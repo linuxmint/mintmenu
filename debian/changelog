@@ -1,3 +1,18 @@
+mintmenu (5.6.7) sarah; urgency=medium
+
+  [ Clement Lefebvre ]
+  * Don't refer to /usr/lib/linuxmint/mintInstall/icon.svg
+  * Fixed applet icon missing in Add-New-Applet dialog
+
+  [ Sorokin Alexei ]
+  * Fix crash on Gtk 2.24.29+
+
+  [ Benjamin L. Campbell ]
+  * applications plugin: Launch first application matching search on ENTER keypress.
+  * Fix space behavior.
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 21 Apr 2016 17:21:47 +0100
+
 mintmenu (5.6.6) rosa; urgency=medium
 
   * Remove window titlebar (some metacity themes insist on showing a titlebar..)
