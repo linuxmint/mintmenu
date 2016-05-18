@@ -5,8 +5,7 @@ location:/usr/share/applications/banshee.desktop
 separator
 location:/usr/share/applications/gnome-calculator.desktop
 location:/usr/share/applications/gcalctool.desktop
-location:/usr/share/applications/pluma.desktop
-location:/usr/share/applications/gedit.desktop
+location:/usr/share/applications/xed.desktop
 location:/usr/share/applications/mate-terminal.desktop
 location:/usr/share/applications/gnome-terminal.desktop
 location:/usr/share/applications/mate-volume-control.desktop
