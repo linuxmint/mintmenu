@@ -1,3 +1,9 @@
+mintmenu (5.6.8) sarah; urgency=medium
+
+  * Favorites: Replace gedit/pluma with xed
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 18 May 2016 10:26:09 +0100
+
 mintmenu (5.6.7) sarah; urgency=medium
 
   [ Clement Lefebvre ]
