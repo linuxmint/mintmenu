@@ -22,10 +22,6 @@ from easyfiles import *
 
 gtk = CDLL("libgtk-x11-2.0.so.0")
 
-
-from filemonitor import monitor as filemonitor
-
-#import xdg.Menu
 import matemenu
 
 from user import home
@@ -47,53 +43,6 @@ def print_timing(func):
         print '%s took %0.3f ms' % (func.func_name, (t2-t1)*1000.0)
         return res
     return wrapper
-
-# Evil patching
-#def xdgParsePatched(filename=None):
-#       # conver to absolute path
-#       if filename and not os.path.isabs(filename):
-#               filename = xdg.Menu.__getFileName(filename)
-#
-#       # use default if no filename given
-#       if not filename:
-#               filename = xdg.Menu.__getFileName("applications.menu")
-#
-#       if not filename:
-#               raise xdg.Menu.ParsingError(_("File not found"), "/etc/xdg/menus/applications.menu")
-#
-#       # check if it is a .menu file
-#       if not os.path.splitext(filename)[1] == ".menu":
-#               raise xdg.Menu.ParsingError(_("Not a .menu file"), filename)
-#
-#       # create xml parser
-#       try:
-#               doc = xdg.Menu.xml.dom.minidom.parse(filename)
-#       except xdg.Menu.xml.parsers.expat.ExpatError:
-#               raise xdg.Menu.ParsingError(_("Not a valid .menu file"), filename)
-#
-#       # parse menufile
-#       xdg.Menu.tmp["Root"] = ""
-#       xdg.Menu.tmp["mergeFiles"] = []
-#       xdg.Menu.tmp["DirectoryDirs"] = []
-#       xdg.Menu.tmp["cache"] = xdg.Menu.MenuEntryCache()
-#
-#       xdg.Menu.__parse(doc, filename, xdg.Menu.tmp["Root"])
-#       xdg.Menu.__parsemove(xdg.Menu.tmp["Root"])
-#       xdg.Menu.__postparse(xdg.Menu.tmp["Root"])
-#
-#       xdg.Menu.tmp["Root"].Doc = doc
-#       xdg.Menu.tmp["Root"].Filename = filename
-#
-#       # generate the menu
-#       xdg.Menu.__genmenuNotOnlyAllocated(xdg.Menu.tmp["Root"])
-#       xdg.Menu.__genmenuOnlyAllocated(xdg.Menu.tmp["Root"])
-#
-#       # and finally sort
-#       xdg.Menu.sort(xdg.Menu.tmp["Root"])
-#       xdg.Menu.tmp["Root"].Files = xdg.Menu.tmp["mergeFiles"] + [ xdg.Menu.tmp["Root"].Filename ]
-#       return xdg.Menu.tmp["Root"]
-#
-#xdg.Menu.parse = xdgParsePatched
 
 # Helper function for retrieving the user's location for storing new or modified menu items
 def get_user_item_path():
@@ -312,7 +261,6 @@ class pluginclass( object ):
 
         self.categoryList = []
         self.applicationList = []
-        #self.menuFileMonitors = []
 
         #dirty ugly hack, to get favorites drag origin position
         self.drag_origin = None
@@ -325,10 +273,6 @@ class pluginclass( object ):
         for mainitems in [ "mate-applications.menu", "mate-settings.menu" ]:
             mymenu = Menu( mainitems )
             mymenu.tree.add_monitor( self.menuChanged, None )
-            #for f in mymenu.directory.Files:
-            #       self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
-            #for f in mymenu.directory.AppDirs:
-            #       self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
 
         self.refresh_apt_cache()
         self.suggestions = []
@@ -379,9 +323,6 @@ class pluginclass( object ):
         self.favoritesBox.destroy()
 
         self.settings.notifyRemoveAll()
-
-        #for mId in self.menuFileMonitors:
-        #    filemonitor.removeMonitor( mId )
 
     def changePluginSize( self, settings, key, args ):
         if key == "width":
@@ -1606,13 +1547,15 @@ class pluginclass( object ):
             self.favoritesReorder( self.drag_origin, widget.position )
 
     def menuChanged( self, x, y ):
-        # wait some miliseconds because there a multiple events send at the same time and we don't want to rebuild the menu for each
+        print ("menuChanged")
+        # wait 1s, to avoid building the menu multiple times concurrently
         if self.menuChangedTimer:
             GLib.source_remove( self.menuChangedTimer )
 
-        self.menuChangedTimer = GLib.timeout_add( 100, self.updateBoxes, True )
+        self.menuChangedTimer = GLib.timeout_add( 1000, self.updateBoxes, True )
 
     def updateBoxes( self, menu_has_changed ):
+        print ("updateBoxes")
         # FIXME: This is really bad!
         if self.rebuildLock:
             return
@@ -1621,159 +1564,163 @@ class pluginclass( object ):
 
         self.menuChangedTimer = None
 
-        self.loadMenuFiles()
+        try:
 
-        # Find added and removed categories than update the category list
-        newCategoryList = self.buildCategoryList()
-        addedCategories = []
-        removedCategories = []
+            self.loadMenuFiles()
 
-        # TODO: optimize this!!!
-        if not self.categoryList:
-            addedCategories = newCategoryList
-        else:
-            for item in newCategoryList:
-                found = False
-                for item2 in self.categoryList:
-                    pass
-                    if item["name"] == item2["name"] and item["icon"] == item2["icon"] and item["tooltip"] == item2["tooltip"] and item["index"] == item2["index"]:
-                        found = True
-                        break
-                if not found:
-                    addedCategories.append(item)
+            # Find added and removed categories than update the category list
+            newCategoryList = self.buildCategoryList()
+            addedCategories = []
+            removedCategories = []
 
-            for item in self.categoryList:
-                found = False
-                for item2 in newCategoryList:
-                    if item["name"] == item2["name"] and item["icon"] == item2["icon"] and item["tooltip"] == item2["tooltip"] and item["index"] == item2["index"]:
-                        found = True
-                        break
-                if not found:
-                    removedCategories.append( item )
+            # TODO: optimize this!!!
+            if not self.categoryList:
+                addedCategories = newCategoryList
+            else:
+                for item in newCategoryList:
+                    found = False
+                    for item2 in self.categoryList:
+                        pass
+                        if item["name"] == item2["name"] and item["icon"] == item2["icon"] and item["tooltip"] == item2["tooltip"] and item["index"] == item2["index"]:
+                            found = True
+                            break
+                    if not found:
+                        addedCategories.append(item)
 
-        if self.showcategoryicons == True:
-            categoryIconSize = self.iconSize
-        else:
-            categoryIconSize = 0
+                for item in self.categoryList:
+                    found = False
+                    for item2 in newCategoryList:
+                        if item["name"] == item2["name"] and item["icon"] == item2["icon"] and item["tooltip"] == item2["tooltip"] and item["index"] == item2["index"]:
+                            found = True
+                            break
+                    if not found:
+                        removedCategories.append( item )
 
-        for item in removedCategories:
-            try:
-                button = item["button"]
-                self.categoryList.remove(item)
-                button.destroy()
-                del item
-            except Exception, e:
-                print e
+            if self.showcategoryicons == True:
+                categoryIconSize = self.iconSize
+            else:
+                categoryIconSize = 0
 
-        if addedCategories:
-            sortedCategoryList = []
-            for item in self.categoryList:
+            for item in removedCategories:
                 try:
-                    self.categoriesBox.remove( item["button"] )
-                    sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
+                    button = item["button"]
+                    self.categoryList.remove(item)
+                    button.destroy()
+                    del item
                 except Exception, e:
                     print e
 
-            # Create new category buttons and add the to the list
-            for item in addedCategories:
-                try:
-                    item["button"] = CategoryButton( item["icon"], categoryIconSize, [ item["name"] ], item["filter"] )
-                    self.mintMenuWin.setTooltip( item["button"], item["tooltip"] )
+            if addedCategories:
+                sortedCategoryList = []
+                for item in self.categoryList:
+                    try:
+                        self.categoriesBox.remove( item["button"] )
+                        sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
+                    except Exception, e:
+                        print e
 
-                    if self.categories_mouse_over:
-                        startId = item["button"].connect( "enter", self.StartFilter, item["filter"] )
-                        stopId = item["button"].connect( "leave", self.StopFilter )
-                        item["button"].mouseOverHandlerIds = ( startId, stopId )
+                # Create new category buttons and add the to the list
+                for item in addedCategories:
+                    try:
+                        item["button"] = CategoryButton( item["icon"], categoryIconSize, [ item["name"] ], item["filter"] )
+                        self.mintMenuWin.setTooltip( item["button"], item["tooltip"] )
+
+                        if self.categories_mouse_over:
+                            startId = item["button"].connect( "enter", self.StartFilter, item["filter"] )
+                            stopId = item["button"].connect( "leave", self.StopFilter )
+                            item["button"].mouseOverHandlerIds = ( startId, stopId )
+                        else:
+                            item["button"].mouseOverHandlerIds = None
+
+                        item["button"].connect( "clicked", self.FilterAndClear, item["filter"] )
+                        item["button"].connect( "focus-in-event", self.categoryBtnFocus, item["filter"] )
+                        item["button"].show()
+
+                        self.categoryList.append( item )
+                        sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
+                    except Exception, e:
+                        print e
+
+                sortedCategoryList.sort()
+
+                for item in sortedCategoryList:
+                    try:
+                        self.categoriesBox.pack_start( item[1], False, False, 0 )
+                    except Exception, e:
+                        print e
+
+
+            # Find added and removed applications add update the application list
+            newApplicationList = self.buildApplicationList()
+            addedApplications = []
+            removedApplications = []
+
+            # TODO: optimize this!!!
+            if not self.applicationList:
+                addedApplications = newApplicationList
+            else:
+                for item in newApplicationList:
+                    found = False
+                    for item2 in self.applicationList:
+                        if item["entry"].get_desktop_file_path() == item2["entry"].get_desktop_file_path():
+                            found = True
+                            break
+                    if not found:
+                        addedApplications.append(item)
+
+                key = 0
+                for item in self.applicationList:
+                    found = False
+                    for item2 in newApplicationList:
+                        if item["entry"].get_desktop_file_path() == item2["entry"].get_desktop_file_path():
+                            found = True
+                            break
+                    if not found:
+                        removedApplications.append(key)
                     else:
-                        item["button"].mouseOverHandlerIds = None
+                        # don't increment the key if this item is going to be removed
+                        # because when it is removed the index of all later items is
+                        # going to be decreased
+                        key += 1
 
-                    item["button"].connect( "clicked", self.FilterAndClear, item["filter"] )
-                    item["button"].connect( "focus-in-event", self.categoryBtnFocus, item["filter"] )
-                    item["button"].show()
-
-                    self.categoryList.append( item )
-                    sortedCategoryList.append( ( str(item["index"]) + item["name"], item["button"] ) )
-                except Exception, e:
-                    print e
-
-            sortedCategoryList.sort()
-
-            for item in sortedCategoryList:
-                try:
-                    self.categoriesBox.pack_start( item[1], False, False, 0 )
-                except Exception, e:
-                    print e
-
-
-        # Find added and removed applications add update the application list
-        newApplicationList = self.buildApplicationList()
-        addedApplications = []
-        removedApplications = []
-
-        # TODO: optimize this!!!
-        if not self.applicationList:
-            addedApplications = newApplicationList
-        else:
-            for item in newApplicationList:
-                found = False
-                for item2 in self.applicationList:
-                    if item["entry"].get_desktop_file_path() == item2["entry"].get_desktop_file_path():
-                        found = True
-                        break
-                if not found:
-                    addedApplications.append(item)
-
-            key = 0
-            for item in self.applicationList:
-                found = False
-                for item2 in newApplicationList:
-                    if item["entry"].get_desktop_file_path() == item2["entry"].get_desktop_file_path():
-                        found = True
-                        break
-                if not found:
-                    removedApplications.append(key)
-                else:
-                    # don't increment the key if this item is going to be removed
-                    # because when it is removed the index of all later items is
-                    # going to be decreased
-                    key += 1
-
-        for key in removedApplications:
-            self.applicationList[key]["button"].destroy()
-            del self.applicationList[key]
-        if addedApplications:
-            sortedApplicationList = []
-            for item in self.applicationList:
-                self.applicationsBox.remove( item["button"] )
-                sortedApplicationList.append( ( item["button"].appName, item["button"] ) )
-            for item in addedApplications:
-                item["button"] = MenuApplicationLauncher( item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments, highlight=(True and menu_has_changed) )
-                if item["button"].appExec:
-                    self.mintMenuWin.setTooltip( item["button"], item["button"].getTooltip() )
-                    item["button"].connect( "button-press-event", self.menuPopup )
-                    item["button"].connect( "focus-in-event", self.scrollItemIntoView )
-                    item["button"].connect( "clicked", lambda w: self.mintMenuWin.hide() )
-                    if self.activeFilter[0] == 0:
-                        item["button"].filterText( self.activeFilter[1] )
+            for key in removedApplications:
+                self.applicationList[key]["button"].destroy()
+                del self.applicationList[key]
+            if addedApplications:
+                sortedApplicationList = []
+                for item in self.applicationList:
+                    self.applicationsBox.remove( item["button"] )
+                    sortedApplicationList.append( ( item["button"].appName, item["button"] ) )
+                for item in addedApplications:
+                    item["button"] = MenuApplicationLauncher( item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments, highlight=(True and menu_has_changed) )
+                    if item["button"].appExec:
+                        self.mintMenuWin.setTooltip( item["button"], item["button"].getTooltip() )
+                        item["button"].connect( "button-press-event", self.menuPopup )
+                        item["button"].connect( "focus-in-event", self.scrollItemIntoView )
+                        item["button"].connect( "clicked", lambda w: self.mintMenuWin.hide() )
+                        if self.activeFilter[0] == 0:
+                            item["button"].filterText( self.activeFilter[1] )
+                        else:
+                            item["button"].filterCategory( self.activeFilter[1] )
+                        item["button"].desktop_file_path = item["entry"].get_desktop_file_path()
+                        sortedApplicationList.append( ( item["button"].appName.upper(), item["button"] ) )
+                        self.applicationList.append( item )
                     else:
-                        item["button"].filterCategory( self.activeFilter[1] )
-                    item["button"].desktop_file_path = item["entry"].get_desktop_file_path()
-                    sortedApplicationList.append( ( item["button"].appName.upper(), item["button"] ) )
-                    self.applicationList.append( item )
-                else:
-                    item["button"].destroy()
+                        item["button"].destroy()
 
 
-            sortedApplicationList.sort()
-            launcherNames = [] # Keep track of launcher names so we don't add them twice in the list..
-            for item in sortedApplicationList:
-                launcherName = item[0]
-                button = item[1]
-                self.applicationsBox.pack_start( button, False, False, 0 )
-                if launcherName in launcherNames:
-                    button.hide()
-                else:
-                    launcherNames.append(launcherName)
+                sortedApplicationList.sort()
+                launcherNames = [] # Keep track of launcher names so we don't add them twice in the list..
+                for item in sortedApplicationList:
+                    launcherName = item[0]
+                    button = item[1]
+                    self.applicationsBox.pack_start( button, False, False, 0 )
+                    if launcherName in launcherNames:
+                        button.hide()
+                    else:
+                        launcherNames.append(launcherName)
+        except Exception, e:
+            print e
 
         self.rebuildLock = False
 
