@@ -17,7 +17,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
     __gsignals__ = {
         'activate': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
-       
+
     def __init__(self):
         GObject.GObject.__init__ (self)
         threading.Thread.__init__ (self)
@@ -25,17 +25,17 @@ class PointerMonitor(GObject.GObject, threading.Thread):
         self.display = Display()
         self.root = self.display.screen().root
         self.windows = []
-        
+
     # Receives GDK windows
     def addWindowToMonitor(self, window):
         gdk.gdk_x11_drawable_get_xid.argtypes = [c_void_p]
         xWindow = self.display.create_resource_object("window", gdk.gdk_x11_drawable_get_xid(hash(window)))
         self.windows.append(xWindow)
-            
+
     def grabPointer(self):
         self.root.grab_button(X.AnyButton, X.AnyModifier, True, X.ButtonPressMask, X.GrabModeSync, X.GrabModeAsync, 0, 0)
         self.display.flush()
-        
+
     def ungrabPointer(self):
         self.root.ungrab_button(X.AnyButton, X.AnyModifier)
         self.display.flush()
@@ -46,7 +46,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
 
     def activate(self):
         GLib.idle_add(self.run)
-                    
+
     def run(self):
         self.running = True
         while self.running:
@@ -63,7 +63,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
                         # Is outside, so activate
                         GLib.idle_add(self.idle)
                     self.display.allow_events(X.ReplayPointer, event.time)
-                else:        
+                else:
                     self.display.allow_events(X.ReplayPointer, X.CurrentTime)
             except Exception as e:
                 print "Unexpected error: " + str(e)
@@ -72,4 +72,4 @@ class PointerMonitor(GObject.GObject, threading.Thread):
         self.running = False
         self.root.ungrab_button(X.AnyButton, X.AnyModifier)
         self.display.close()
-        
+

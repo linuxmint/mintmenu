@@ -2,7 +2,7 @@
 
 import gi
 gi.require_version("Gtk", "2.0")
- 
+
 from gi.repository import Gtk, GdkPixbuf, Gdk, GObject
 from gi.repository import MatePanelApplet
 from gi.repository import Gio
@@ -61,7 +61,7 @@ class MainWindow( object ):
     """This is the main class for the application"""
 
     def __init__( self, toggleButton, settings, keybinder ):
-		
+
         self.settings = settings
         self.keybinder = keybinder
         self.path = PATH
@@ -72,7 +72,7 @@ class MainWindow( object ):
         self.icon = "/usr/lib/linuxmint/mintMenu/visualisation-logo.png"
 
         self.toggle = toggleButton
-        # Load UI file and extract widgets   
+        # Load UI file and extract widgets
         builder = Gtk.Builder()
         builder.add_from_file(os.path.join( self.path, "mintMenu.glade" ))
         self.window     = builder.get_object( "mainWindow" )
@@ -81,7 +81,7 @@ class MainWindow( object ):
         self.window.set_title("")
         self.paneholder = builder.get_object( "paneholder" )
         self.border     = builder.get_object( "border" )
-        
+
         builder.connect_signals(self)
 
         self.panesToColor = [ ]
@@ -109,7 +109,7 @@ class MainWindow( object ):
         self.settings.connect( "changed::custom-color", self.toggleCustomBackgroundColor )
         self.settings.connect( "changed::border-width", self.toggleBorderWidth )
         self.settings.connect( "changed::opacity", self.toggleOpacity )
-        
+
         self.getSetGSettingEntries()
 
         self.tooltips = Gtk.Tooltips()
@@ -117,7 +117,7 @@ class MainWindow( object ):
             self.tooltips.enable()
         else:
             self.tooltips.disable()
-            
+
         self.PopulatePlugins();
         self.firstTime = True;
 
@@ -169,7 +169,7 @@ class MainWindow( object ):
         self.customheadingcolor = settings.get_string(key)
         self.SetHeadingStyle( self.headingsToColor )
 
-    def getSetGSettingEntries( self ):        
+    def getSetGSettingEntries( self ):
         self.dottedfile          = os.path.join( self.path, "dotted.png")
 
         self.pluginlist           = self.settings.get_strv( "plugins-list" )
@@ -179,10 +179,10 @@ class MainWindow( object ):
         self.custombordercolor    = self.settings.get_string( "custom-border-color" )
         self.borderwidth          = self.settings.get_int( "border-width" )
         self.opacity              = self.settings.get_int( "opacity" )
-        self.offset               = self.settings.get_int( "offset" )        
-        self.enableTooltips       = self.settings.get_boolean( "tooltips-enabled" )        
+        self.offset               = self.settings.get_int( "offset" )
+        self.enableTooltips       = self.settings.get_boolean( "tooltips-enabled" )
         self.startWithFavorites   = self.settings.get_boolean( "start-with-favorites" )
-        
+
         self.globalEnableTooltips = self.panelSettings.get_boolean( "tooltips-enabled" )
 
     def SetupMintMenuBorder( self, defaultStyle = None ):
@@ -190,14 +190,14 @@ class MainWindow( object ):
             self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( self.custombordercolor ) )
         elif defaultStyle is not None:
             self.window.modify_bg( Gtk.StateType.NORMAL, defaultStyle.lookup_color('bg_color')[1] )
-        self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )        
+        self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )
 
     def SetupMintMenuOpacity( self ):
         print "Opacity is: " + str(self.opacity)
         opacity = float(self.opacity) / float(100)
         print "Setting opacity to: " + str(opacity)
         self.window.set_opacity(opacity)
-        
+
     def detect_desktop_environment (self):
         self.de = "mate"
         try:
@@ -228,7 +228,7 @@ class MainWindow( object ):
 
         self.plugins = {}
 
-        for plugin in self.pluginlist:            
+        for plugin in self.pluginlist:
             if plugin in self.plugins:
                 print u"Duplicate plugin in list: ", plugin
                 continue
@@ -280,7 +280,7 @@ class MainWindow( object ):
                 MyPlugin.content_holder.show()
 
                 VBox1 = Gtk.VBox( False, 0 )
-                if MyPlugin.heading != "":                    
+                if MyPlugin.heading != "":
                     Label1 = Gtk.Label(label= MyPlugin.heading )
                     Align1 = Gtk.Alignment.new( 0, 0, 0, 0 )
                     Align1.set_padding( 10, 5, 10, 0 )
@@ -303,7 +303,7 @@ class MainWindow( object ):
 
                     heading.add( Align1 )
                     heading.show()
-                    VBox1.pack_start( heading, False, False, 0 )                    
+                    VBox1.pack_start( heading, False, False, 0 )
                 VBox1.show()
                 #Add plugin to Plugin Box under heading button
                 MyPlugin.content_holder.reparent( VBox1 )
@@ -351,7 +351,7 @@ class MainWindow( object ):
                     Image1.set_from_pixbuf( seperatorImage )
                     Image1.show()
                     #ImageBox.add( Image1 )
-                    
+
                     Align1 = Gtk.Alignment.new(0, 0, 0, 0)
                     Align1.set_padding( 0, 0, 6, 6 )
                     Align1.add(Image1)
@@ -369,13 +369,13 @@ class MainWindow( object ):
         widget = Gtk.EventBox()
         widget.show()
         return Gtk.rc_get_style(widget)
-        
+
     def loadTheme( self ):
         defaultStyle = self.getDefaultStyle()
         self.SetPaneColors( self.panesToColor, defaultStyle )
         self.SetupMintMenuBorder( defaultStyle )
         self.SetHeadingStyle( self.headingsToColor )
-        
+
     def SetPaneColors( self, items, defaultStyle = None ):
         if self.usecustomcolor:
             for item in items:
@@ -419,7 +419,7 @@ class MainWindow( object ):
             del plugin
         except:
             pass
-    
+
         try:
             del self.plugins
         except:
@@ -441,14 +441,14 @@ class MainWindow( object ):
 
     def show( self ):
         self.window.present()
-        
+
         # Hack for opacity not showing on first composited draw
         if self.firstTime:
             self.firstTime = False
             self.SetupMintMenuOpacity()
 
         self.window.window.focus( Gdk.CURRENT_TIME )
-            
+
         for plugin in self.plugins.values():
             if hasattr( plugin, "onShowMenu" ):
                 plugin.onShowMenu()
@@ -462,21 +462,21 @@ class MainWindow( object ):
         for plugin in self.plugins.values():
             if hasattr( plugin, "onHideMenu" ):
                 plugin.onHideMenu()
-                
+
         self.window.hide()
-        
+
     def onFocusIn( self, *args ):
         if self.loseFocusBlocked:
             self.window.handler_unblock( self.loseFocusId )
             self.loseFocusBlocked = False
 
-        return False  
-        
-    def onFocusOut( self, *args):            
+        return False
+
+    def onFocusOut( self, *args):
         if self.window.get_visible():
             self.hide()
         return False
-        
+
     def stopHiding( self ):
         if not self.loseFocusBlocked:
             self.window.handler_block( self.loseFocusId )
@@ -484,7 +484,7 @@ class MainWindow( object ):
 
 class MenuWin( object ):
     def __init__( self, applet, iid ):
-        self.applet = applet        
+        self.applet = applet
         self.settings = Gio.Settings.new("com.linuxmint.mintmenu")
         self.keybinder = keybinding.GlobalKeyBinding()
         self.settings.connect( "changed::applet-text", self.reloadSettings )
@@ -503,7 +503,7 @@ class MenuWin( object ):
 
         self.applet.set_flags( MatePanelApplet.AppletFlags.EXPAND_MINOR )
         self.applet.connect( "button-press-event", self.showMenu )
-        self.applet.connect( "change-orient", self.changeOrientation )        
+        self.applet.connect( "change-orient", self.changeOrientation )
         self.applet.connect("enter-notify-event", self.enter_notify)
         self.applet.connect("leave-notify-event", self.leave_notify)
         self.mainwin = MainWindow( self.button_box, self.settings, self.keybinder )
@@ -524,25 +524,25 @@ class MenuWin( object ):
 
         self.pointerMonitor = pointerMonitor.PointerMonitor()
         self.pointerMonitor.connect("activate", self.onPointerOutside)
-        
+
     def onWindowMap( self, *args ):
         self.applet.set_state( Gtk.StateType.SELECTED )
         self.keybinder.set_focus_window( self.mainwin.window.window )
         #self.pointerMonitor.grabPointer()
         return False
-        
+
     def onWindowUnmap( self, *args ):
         self.applet.set_state( Gtk.StateType.NORMAL )
         self.keybinder.set_focus_window()
         #self.pointerMonitor.ungrabPointer()
         return False
-        
+
     def onRealize( self, *args):
         self.pointerMonitor.addWindowToMonitor( self.mainwin.window.window )
         self.pointerMonitor.addWindowToMonitor( self.applet.window )
         self.pointerMonitor.start()
         return False
-     
+
     def onPointerOutside(self, *args):
         self.mainwin.hide()
         return True
@@ -555,11 +555,11 @@ class MenuWin( object ):
         self.do_image(self.buttonIcon, True)
 
     def leave_notify(self, applet, event):
-		# Hack for mate-panel-test-applets focus issue (this can be commented)
+        # Hack for mate-panel-test-applets focus issue (this can be commented)
         if event.state & Gdk.ModifierType.BUTTON1_MASK and applet.state & Gtk.StateType.SELECTED:
             if event.x >= 0 and event.y >= 0 and event.x < applet.window.get_width() and event.y < applet.window.get_height():
                 self.mainwin.stopHiding()
-                
+
         self.do_image(self.buttonIcon, False)
 
     def do_image(self, image_file, saturate):
@@ -598,7 +598,7 @@ class MenuWin( object ):
             self.button_box.pack_start( self.button_icon , False, False, 0)
             self.button_icon.set_padding( 0, 5 )
 
-        
+
         self.button_box.set_homogeneous( False )
         self.button_box.show_all()
         self.sizeButton()
@@ -613,23 +613,23 @@ class MenuWin( object ):
         self.theme_name =  self.settings.get_string( "theme-name" )
         self.hotkeyText =  self.settings.get_string( "hot-key" )
         self.buttonIcon =  self.settings.get_string( "applet-icon" )
-        self.iconSize = self.settings.get_int( "applet-icon-size" )    
-            
-    def changeTheme(self, *args):        
+        self.iconSize = self.settings.get_int( "applet-icon-size" )
+
+    def changeTheme(self, *args):
         self.reloadSettings()
         self.applyTheme()
         self.mainwin.loadTheme()
-    
+
     def applyTheme(self):
         style_settings = Gtk.Settings.get_default()
         desktop_theme = self.mate_settings.get_string('gtk-theme')
         if self.theme_name == "default":
-            style_settings.set_property("gtk-theme-name", desktop_theme)        
+            style_settings.set_property("gtk-theme-name", desktop_theme)
         else:
             try:
                 style_settings.set_property("gtk-theme-name", self.theme_name)
             except:
-                style_settings.set_property("gtk-theme-name", desktop_theme)            
+                style_settings.set_property("gtk-theme-name", desktop_theme)
 
     def changeOrientation( self, *args, **kargs ):
 
@@ -679,7 +679,7 @@ class MenuWin( object ):
             self.keybinder.start()
             # Binding menu to hotkey
             print "Binding to Hot Key: " + self.hotkeyText
-            
+
         except Exception, cause:
             print "** WARNING ** - Menu Hotkey Binding Error"
             print "Error Report :\n", str(cause)
@@ -713,7 +713,7 @@ class MenuWin( object ):
 
     def reloadSettings( self, *args ):
         self.loadSettings()
-        self.updateButton()        
+        self.updateButton()
 
     def showAboutDialog( self, action, userdata = None ):
 
@@ -849,4 +849,4 @@ def quit_all(widget):
 MatePanelApplet.Applet.factory_main("MintMenuAppletFactory", True,
                                     MatePanelApplet.Applet.__gtype__,
                                     applet_factory, None)
-                                    
+

@@ -3,7 +3,7 @@
 import apt, sys
 
 try:
-    cache = apt.Cache()    
+    cache = apt.Cache()
     for pkg in cache:
         if not pkg.is_installed:
             name = pkg.name

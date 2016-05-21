@@ -166,8 +166,8 @@ class Menu:
 
 class SuggestionButton ( Gtk.Button ):
 
-    def __init__( self, iconName, iconSize, label ):                
-        Gtk.Button.__init__( self )                    
+    def __init__( self, iconName, iconSize, label ):
+        Gtk.Button.__init__( self )
         self.iconName = iconName
         self.set_relief( Gtk.ReliefStyle.NONE )
         self.set_size_request( -1, -1 )
@@ -191,14 +191,14 @@ class SuggestionButton ( Gtk.Button ):
         Align1.show()
         self.add( Align1 )
         self.show()
-        
+
     def set_image(self, path):
         self.image.set_from_file(path)
-                        		            
+
     def set_text( self, text):
         self.label.set_markup(text)
 
-    def set_icon_size (self, size):        
+    def set_icon_size (self, size):
         self.image.set_from_stock( self.iconName, size )
 
 class TargetEntry(Structure):
@@ -224,7 +224,7 @@ class pluginclass( object ):
 
         self.toggleButton = toggleButton
         self.de = de
-        
+
         self.builder = Gtk.Builder()
         # The Glade file for the plugin
         self.builder.add_from_file (os.path.join( os.path.dirname( __file__ ), "applications.glade" ))
@@ -245,8 +245,8 @@ class pluginclass( object ):
         self.builder.get_object("label6").set_text(_("Favorites"))
         self.builder.get_object("label3").set_text(_("Favorites"))
         self.builder.get_object("label7").set_text(_("All applications"))
-        self.builder.get_object("label2").set_text(_("Applications"))                
-        
+        self.builder.get_object("label2").set_text(_("Applications"))
+
         self.headingstocolor = [self.builder.get_object("label6"),self.builder.get_object("label2")]
 
         self.numApps = 0
@@ -329,8 +329,8 @@ class pluginclass( object ):
             #       self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
             #for f in mymenu.directory.AppDirs:
             #       self.menuFileMonitors.append( filemonitor.addMonitor(f, self.onMenuChanged, mymenu.directory.Filename ) )
-                        
-        self.refresh_apt_cache()        
+
+        self.refresh_apt_cache()
         self.suggestions = []
         self.current_suggestion = None
         self.panel = "top"
@@ -341,7 +341,7 @@ class pluginclass( object ):
     def refresh_apt_cache(self):
         if self.useAPT:
             os.system("mkdir -p %s/.linuxmint/mintMenu/" % home)
-            os.system("/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py > %s/.linuxmint/mintMenu/apt.cache &" % home)            
+            os.system("/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py > %s/.linuxmint/mintMenu/apt.cache &" % home)
 
     def get_panel(self):
         panelsettings = Gio.Settings.new("org.mate.panel")
@@ -356,12 +356,12 @@ class pluginclass( object ):
                     self.panel_position = object_schema.get_int("position") + 1
 
     def apturl_install(self, widget, pkg_name):
-		if os.path.exists("/usr/bin/apturl"):
-			os.system("/usr/bin/apturl apt://%s &" % pkg_name)
-		else:
-			os.system("xdg-open apt://" + pkg_name + " &")    
-		self.mintMenuWin.hide()
-    
+        if os.path.exists("/usr/bin/apturl"):
+            os.system("/usr/bin/apturl apt://%s &" % pkg_name)
+        else:
+            os.system("xdg-open apt://" + pkg_name + " &")
+        self.mintMenuWin.hide()
+
     def __del__( self ):
         print u"Applications plugin deleted"
 
@@ -426,7 +426,7 @@ class pluginclass( object ):
             try:
                 child.setIconSize( self.iconSize )
             except:
-                pass        
+                pass
 
     def changeFavIconSize( self, settings, key, args ):
         self.faviconsize = settings.get_int(key)
@@ -434,7 +434,7 @@ class pluginclass( object ):
         for child in self.favoritesBox:
             if isinstance( child, FavApplicationLauncher):
                 child.setIconSize( self.faviconsize )
-                
+
     def switchAPTUsage( self, settings, key, args ):
         self.useAPT = settings.get_boolean(key)
         self.refresh_apt_cache()
@@ -465,9 +465,9 @@ class pluginclass( object ):
             self.favoritesBox.remove( fav )
             self.favoritesPositionOnGrid( fav )
 
-    def RegenPlugin( self, *args, **kargs ):            
+    def RegenPlugin( self, *args, **kargs ):
         self.refresh_apt_cache()
-        
+
         # save old config - this is necessary because the app will notified when it sets the default values and you don't want the to reload itself several times
         oldcategories_mouse_over = self.categories_mouse_over
         oldiconsize = self.iconSize
@@ -582,11 +582,11 @@ class pluginclass( object ):
         self.showAllAppsButton.connect( "clicked", lambda widget: self.changeTab( 1 ) )
         self.showFavoritesButton.connect( "clicked", lambda widget: self.changeTab( 0 ) )
         self.buildButtonList()
-        
+
     def blockOnPopup( self, *args ):
         self.mintMenuWin.stopHiding()
         return False
-        
+
     def blockOnRightPress( self, widget, event ):
         if event.button == 3:
             self.mintMenuWin.stopHiding()
@@ -603,7 +603,7 @@ class pluginclass( object ):
         else:
             self.searchEntry.set_text("")
 
-    def buildButtonList( self ):         
+    def buildButtonList( self ):
         if self.buildingButtonList:
             self.stopBuildingButtonList = True
             GLib.timeout_add( 100, self.buildButtonList )
@@ -629,68 +629,68 @@ class pluginclass( object ):
             self.filterTimer = None
 
     def add_search_suggestions(self, text):
-        
+
         text = "<b>%s</b>" % text
-        
+
         suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
         suggestionButton.connect("clicked", self.search_google)
         suggestionButton.set_text(_("Search Google for %s") % text)
         suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/google.ico")
         self.applicationsBox.add(suggestionButton)
         self.suggestions.append(suggestionButton)
-        
+
         suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
         suggestionButton.connect("clicked", self.search_wikipedia)
         suggestionButton.set_text(_("Search Wikipedia for %s") % text)
         suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico")
         self.applicationsBox.add(suggestionButton)
         self.suggestions.append(suggestionButton)
-                
+
         separator = Gtk.EventBox()
         separator.add(Gtk.HSeparator())
         separator.set_visible_window(False)
-        separator.set_size_request(-1, 20)       
-        separator.type = "separator"        
+        separator.set_size_request(-1, 20)
+        separator.type = "separator"
         separator.show_all()
         self.applicationsBox.add(separator)
-        self.suggestions.append(separator)        
-        
+        self.suggestions.append(separator)
+
         suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
         suggestionButton.connect("clicked", self.search_dictionary)
         suggestionButton.set_text(_("Lookup %s in Dictionary") % text)
         suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/dictionary.png")
         self.applicationsBox.add(suggestionButton)
-        self.suggestions.append(suggestionButton)  
-        
+        self.suggestions.append(suggestionButton)
+
         suggestionButton = SuggestionButton(Gtk.STOCK_FIND, self.iconSize, "")
         suggestionButton.connect("clicked", self.Search)
-        suggestionButton.set_text(_("Search Computer for %s") % text)                        
+        suggestionButton.set_text(_("Search Computer for %s") % text)
         self.applicationsBox.add(suggestionButton)
-        self.suggestions.append(suggestionButton)  
-        
+        self.suggestions.append(suggestionButton)
+
         #self.last_separator = gtk.EventBox()
         #self.last_separator.add(gtk.HSeparator())
-        #self.last_separator.set_size_request(-1, 20)       
-        #self.last_separator.type = "separator"   
-        #self.mintMenuWin.SetPaneColors( [  self.last_separator ] )     
+        #self.last_separator.set_size_request(-1, 20)
+        #self.last_separator.type = "separator"
+        #self.mintMenuWin.SetPaneColors( [  self.last_separator ] )
         #self.last_separator.show_all()
         #self.applicationsBox.add(self.last_separator)
-        #self.suggestions.append(self.last_separator)            
+        #self.suggestions.append(self.last_separator)
 
     def add_apt_filter_results(self, keyword):
-        try:   
+        try:
             # Wait to see if the keyword has changed.. before doing anything
             current_keyword = keyword
             current_keyword = self.searchEntry.get_text()
             if keyword != current_keyword:
-                return            
+                return
             found_packages = []
             found_in_name = []
             found_elsewhere = []
             keywords = keyword.split(" ")
             command = "cat %(home)s/.linuxmint/mintMenu/apt.cache" % {'home':home}
             for word in keywords:
-                command = "%(command)s | grep %(word)s" % {'command':command, 'word':word}            
+                command = "%(command)s | grep %(word)s" % {'command':command, 'word':word}
             pkgs = commands.getoutput(command)
             pkgs = pkgs.split("\n")
             num_pkg_found = 0
@@ -715,30 +715,30 @@ class pluginclass( object ):
                                 some_not_found = True
                         if some_found and not some_not_found:
                             found_in_name.append(package)
-                        else:                        
-                            found_elsewhere.append(package)                                        
+                        else:
+                            found_elsewhere.append(package)
                         num_pkg_found+=1
                     else:
                         print "Invalid status code: " + status
-                
+
             found_packages.extend(found_in_name)
             found_packages.extend(found_elsewhere)
-            if keyword == self.searchEntry.get_text() and len(found_packages) > 0:         
+            if keyword == self.searchEntry.get_text() and len(found_packages) > 0:
                 last_separator = Gtk.EventBox()
                 last_separator.add(Gtk.HSeparator())
                 last_separator.set_visible_window(False)
-                last_separator.set_size_request(-1, 20)       
-                last_separator.type = "separator"       
+                last_separator.set_size_request(-1, 20)
+                last_separator.type = "separator"
                 last_separator.show_all()
                 self.applicationsBox.add(last_separator)
                 self.suggestions.append(last_separator)
                 #Reduce the number of results to 10 max... it takes a HUGE amount of time to add the GTK box in the menu otherwise..
                 if len(found_packages) > 10:
                     found_packages = found_packages[:10]
-                for pkg in found_packages:                        
+                for pkg in found_packages:
                     name = pkg.name
-                    for word in keywords: 
-                        if word != "":             
+                    for word in keywords:
+                        if word != "":
                             name = name.replace(word, "<b>%s</b>" % word);
                     suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
                     suggestionButton.connect("clicked", self.apturl_install, pkg.name)
@@ -756,18 +756,18 @@ class pluginclass( object ):
             #        self.applicationsBox.remove(self.last_separator)
             #        self.suggestions.remove(self.last_separator)
             #    finally:
-            #        gtk.gdk.threads_leave()           
-                
-        except Exception, detail:
-            print detail           
+            #        gtk.gdk.threads_leave()
 
-            
+        except Exception, detail:
+            print detail
+
+
     def add_apt_filter_results_sync(self, cache, keyword):
-        try:           
-            found_packages = []           
+        try:
+            found_packages = []
             keywords = keyword.split(" ")
             if cache is not None:
-                for pkg in cache:                      
+                for pkg in cache:
                     some_found = False
                     some_not_found = False
                     for word in keywords:
@@ -776,9 +776,9 @@ class pluginclass( object ):
                         else:
                             some_not_found = True
                     if some_found and not some_not_found:
-                        found_packages.append(pkg)                     
-                                                           
-            if len(found_packages) > 0:         
+                        found_packages.append(pkg)
+
+            if len(found_packages) > 0:
                 last_separator = Gtk.EventBox()
                 last_separator.add(Gtk.HSeparator())
                 last_separator.set_visible_window(False)
@@ -787,11 +787,11 @@ class pluginclass( object ):
                 last_separator.show_all()
                 self.applicationsBox.add(last_separator)
                 self.suggestions.append(last_separator)
-            
+
             for pkg in found_packages:
                 name = pkg.name
                 for word in keywords:
-                    if word != "":                    
+                    if word != "":
                         name = name.replace(word, "<b>%s</b>" % word);
                 suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
                 suggestionButton.connect("clicked", self.apturl_install, pkg.name)
@@ -800,24 +800,24 @@ class pluginclass( object ):
                 suggestionButton.set_icon_size(self.iconSize)
                 self.applicationsBox.add(suggestionButton)
                 self.suggestions.append(suggestionButton)
-                        
+
             #if len(found_packages) == 0:
             #    self.applicationsBox.remove(self.last_separator)
             #    self.suggestions.remove(self.last_separator)
-                
+
         except Exception, detail:
             print detail
-            
+
     def Filter( self, widget, category = None ):
         self.filterTimer = None
-       
+
         for suggestion in self.suggestions:
             self.applicationsBox.remove(suggestion)
         self.suggestions = []
 
         if widget == self.searchEntry:
             if self.donotfilterapps:
-                widget.set_text( "" )    
+                widget.set_text( "" )
             else:
                 text = widget.get_text()
                 if self.lastActiveTab != 1:
@@ -844,14 +844,14 @@ class pluginclass( object ):
                 if (not showns and os.path.exists("/usr/bin/mintinstall")):
                     if len(text) >= 3:
                         if self.current_suggestion is not None and self.current_suggestion in text:
-                            # We're restricting our search... 
+                            # We're restricting our search...
                             self.add_search_suggestions(text)
                             #if (len(self.current_results) > 0):
                                 #self.add_apt_filter_results_sync(self.current_results, text)
                             #else:
                             GLib.timeout_add (300, self.add_apt_filter_results, text)
                         else:
-                            self.current_results = []  
+                            self.current_results = []
                             self.add_search_suggestions(text)
                             GLib.timeout_add (300, self.add_apt_filter_results, text)
 
@@ -889,13 +889,13 @@ class pluginclass( object ):
                 i.released()
                 i.set_relief( Gtk.ReliefStyle.NONE )
             widget.set_relief( Gtk.ReliefStyle.HALF )
-   
+
         self.applicationsScrolledWindow.get_vadjustment().set_value( 0 )
 
     def FilterAndClear( self, widget, category = None ):
         self.searchEntry.set_text( "" )
         self.Filter( widget, category )
-        
+
     # Forward all text to the search box
     def keyPress( self, widget, event ):
 
@@ -1058,8 +1058,8 @@ class pluginclass( object ):
             gtk.gtk_menu_popup.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_uint, c_uint]
             gtk.gtk_menu_popup(hash(mTree), None, None, None, None, event.button, event.time)
 
-    
-    def searchPopup( self, widget=None, event=None ):    
+
+    def searchPopup( self, widget=None, event=None ):
         menu = Gtk.Menu()
 
         menuItem = Gtk.ImageMenuItem(_("Search Google"))
@@ -1068,69 +1068,69 @@ class pluginclass( object ):
         menuItem.set_image(img)
         menuItem.connect("activate", self.search_google)
         menu.append(menuItem)
-        
+
         menuItem = Gtk.ImageMenuItem(_("Search Wikipedia"))
         img = Gtk.Image()
         img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico')
         menuItem.set_image(img)
         menuItem.connect("activate", self.search_wikipedia)
         menu.append(menuItem)
-        
+
         menuItem = Gtk.SeparatorMenuItem()
         menu.append(menuItem)
-        
+
         menuItem = Gtk.ImageMenuItem(_("Lookup Dictionary"))
         img = Gtk.Image()
         img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/dictionary.png')
         menuItem.set_image(img)
         menuItem.connect("activate", self.search_dictionary)
         menu.append(menuItem)
-        
+
         menuItem = Gtk.ImageMenuItem(_("Search Computer"))
         img = Gtk.Image()
         img.set_from_stock(Gtk.STOCK_FIND, self.iconSize)
         menuItem.set_image(img)
         menuItem.connect("activate", self.Search)
         menu.append(menuItem)
-        
+
         menuItem = Gtk.SeparatorMenuItem()
         menu.append(menuItem)
-        
+
         menuItem = Gtk.ImageMenuItem(_("Find Software"))
         img = Gtk.Image()
         img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/software.png')
         menuItem.set_image(img)
         menuItem.connect("activate", self.search_mint_software)
         menu.append(menuItem)
-        
+
         menuItem = Gtk.ImageMenuItem(_("Find Tutorials"))
         img = Gtk.Image()
         img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/tutorials.png')
         menuItem.set_image(img)
         menuItem.connect("activate", self.search_mint_tutorials)
         menu.append(menuItem)
-        
+
         menuItem = Gtk.ImageMenuItem(_("Find Hardware"))
         img = Gtk.Image()
         img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/hardware.png')
         menuItem.set_image(img)
         menuItem.connect("activate", self.search_mint_hardware)
         menu.append(menuItem)
-        
+
         menuItem =Gtk.ImageMenuItem(_("Find Ideas"))
         img = Gtk.Image()
         img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/ideas.png')
         menuItem.set_image(img)
         menuItem.connect("activate", self.search_mint_ideas)
         menu.append(menuItem)
-        
+
         menuItem = Gtk.ImageMenuItem(_("Find Users"))
         img = Gtk.Image()
         img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/users.png')
         menuItem.set_image(img)
         menuItem.connect("activate", self.search_mint_users)
         menu.append(menuItem)
-        
+
         menu.show_all()
 
         self.mintMenuWin.stopHiding()
@@ -1143,60 +1143,60 @@ class pluginclass( object ):
         #self.mintMenuWin.grab()
         self.focusSearchEntry(clear = False)
         return True
-        
+
     def pos_func(self, menu=None):
         rect = self.searchButton.get_allocation()
         x = rect.x + rect.width
         y = rect.y + rect.height
         return (x, y, False)
-        
+
     def search_google(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "+")
-        os.system("xdg-open \"http://www.google.com/cse?cx=002683415331144861350%3Atsq8didf9x0&ie=utf-8&sa=Search&q=" + text + "\" &")     
+        os.system("xdg-open \"http://www.google.com/cse?cx=002683415331144861350%3Atsq8didf9x0&ie=utf-8&sa=Search&q=" + text + "\" &")
         self.mintMenuWin.hide()
-        
+
     def search_wikipedia(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "+")
-        os.system("xdg-open \"http://en.wikipedia.org/wiki/Special:Search?search=" + text + "\" &")    
-        self.mintMenuWin.hide()    
-        
+        os.system("xdg-open \"http://en.wikipedia.org/wiki/Special:Search?search=" + text + "\" &")
+        self.mintMenuWin.hide()
+
     def search_dictionary(self, widget):
         text = self.searchEntry.get_text()
         os.system("mate-dictionary \"" + text + "\" &")
         self.mintMenuWin.hide()
-        
+
     def search_mint_tutorials(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "%20")
-        os.system("xdg-open \"http://community.linuxmint.com/index.php/tutorial/search/0/" + text + "\" &")     
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/tutorial/search/0/" + text + "\" &")
         self.mintMenuWin.hide()
-    
+
     def search_mint_ideas(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "%20")
-        os.system("xdg-open \"http://community.linuxmint.com/index.php/idea/search/0/" + text + "\" &")     
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/idea/search/0/" + text + "\" &")
         self.mintMenuWin.hide()
-    
+
     def search_mint_users(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "%20")
-        os.system("xdg-open \"http://community.linuxmint.com/index.php/user/search/0/" + text + "\" &")     
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/user/search/0/" + text + "\" &")
         self.mintMenuWin.hide()
-    
+
     def search_mint_hardware(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "%20")
-        os.system("xdg-open \"http://community.linuxmint.com/index.php/hardware/search/0/" + text + "\" &")     
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/hardware/search/0/" + text + "\" &")
         self.mintMenuWin.hide()
-        
+
     def search_mint_software(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "%20")
-        os.system("xdg-open \"http://community.linuxmint.com/index.php/software/search/0/" + text + "\" &")     
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/software/search/0/" + text + "\" &")
         self.mintMenuWin.hide()
-        
+
     def add_to_desktop(self, widget, desktopEntry):
         os.system("xdg-desktop-icon install --novendor %s" % desktopEntry.desktopFile)
 
@@ -1228,7 +1228,7 @@ class pluginclass( object ):
         except Exception, detail:
             print detail
 
-    def onLaunchApp( self, menu, widget ):         
+    def onLaunchApp( self, menu, widget ):
         widget.execute()
         self.mintMenuWin.hide()
 
@@ -1325,7 +1325,7 @@ class pluginclass( object ):
     def Search( self, widget ):
 
         text = self.searchEntry.get_text().strip()
-        if text != "":            
+        if text != "":
             for app_button in self.applicationsBox.get_children():
                 if( isinstance(app_button, ApplicationLauncher) and app_button.filterText( text ) ):
                     app_button.execute()
@@ -1334,14 +1334,14 @@ class pluginclass( object ):
 
             self.mintMenuWin.hide()
             fullstring = self.searchtool.replace( "%s", text )
-            os.system(fullstring + " &")          
+            os.system(fullstring + " &")
 
     def SearchWithButton( self, widget, event ):
         self.Search( widget )
 
     def do_plugin( self ):
         self.Todos()
-        self.buildFavorites()        
+        self.buildFavorites()
 
     # Scroll button into view
     def scrollItemIntoView( self, widget, event = None ):
@@ -1612,15 +1612,15 @@ class pluginclass( object ):
 
         self.menuChangedTimer = GLib.timeout_add( 100, self.updateBoxes, True )
 
-    def updateBoxes( self, menu_has_changed ):        
+    def updateBoxes( self, menu_has_changed ):
         # FIXME: This is really bad!
-        if self.rebuildLock:            
+        if self.rebuildLock:
             return
 
         self.rebuildLock = True
 
         self.menuChangedTimer = None
-        
+
         self.loadMenuFiles()
 
         # Find added and removed categories than update the category list
@@ -1641,7 +1641,7 @@ class pluginclass( object ):
                         break
                 if not found:
                     addedCategories.append(item)
-            
+
             for item in self.categoryList:
                 found = False
                 for item2 in newCategoryList:
@@ -1655,10 +1655,10 @@ class pluginclass( object ):
             categoryIconSize = self.iconSize
         else:
             categoryIconSize = 0
-        
+
         for item in removedCategories:
             try:
-                button = item["button"]            
+                button = item["button"]
                 self.categoryList.remove(item)
                 button.destroy()
                 del item
@@ -1709,7 +1709,7 @@ class pluginclass( object ):
         newApplicationList = self.buildApplicationList()
         addedApplications = []
         removedApplications = []
-        
+
         # TODO: optimize this!!!
         if not self.applicationList:
             addedApplications = newApplicationList
@@ -1737,22 +1737,22 @@ class pluginclass( object ):
                     # because when it is removed the index of all later items is
                     # going to be decreased
                     key += 1
-        
+
         for key in removedApplications:
             self.applicationList[key]["button"].destroy()
-            del self.applicationList[key]        
+            del self.applicationList[key]
         if addedApplications:
             sortedApplicationList = []
             for item in self.applicationList:
                 self.applicationsBox.remove( item["button"] )
                 sortedApplicationList.append( ( item["button"].appName, item["button"] ) )
             for item in addedApplications:
-                item["button"] = MenuApplicationLauncher( item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments, highlight=(True and menu_has_changed) )                
+                item["button"] = MenuApplicationLauncher( item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments, highlight=(True and menu_has_changed) )
                 if item["button"].appExec:
                     self.mintMenuWin.setTooltip( item["button"], item["button"].getTooltip() )
                     item["button"].connect( "button-press-event", self.menuPopup )
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )
-                    item["button"].connect( "clicked", lambda w: self.mintMenuWin.hide() )                    
+                    item["button"].connect( "clicked", lambda w: self.mintMenuWin.hide() )
                     if self.activeFilter[0] == 0:
                         item["button"].filterText( self.activeFilter[1] )
                     else:
@@ -1764,8 +1764,8 @@ class pluginclass( object ):
                     item["button"].destroy()
 
 
-            sortedApplicationList.sort()      
-            launcherNames = [] # Keep track of launcher names so we don't add them twice in the list..      
+            sortedApplicationList.sort()
+            launcherNames = [] # Keep track of launcher names so we don't add them twice in the list..
             for item in sortedApplicationList:
                 launcherName = item[0]
                 button = item[1]
@@ -1774,8 +1774,8 @@ class pluginclass( object ):
                     button.hide()
                 else:
                     launcherNames.append(launcherName)
-                      
-        self.rebuildLock = False        
+
+        self.rebuildLock = False
 
     # Reload the menufiles from the filesystem
     def loadMenuFiles( self ):

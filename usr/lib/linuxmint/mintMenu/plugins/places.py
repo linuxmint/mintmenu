@@ -28,10 +28,10 @@ class pluginclass( object ):
         self.toggleButton = toggleButton
         self.de = de
 
-        # Read UI file        
+        # Read UI file
         builder = Gtk.Builder()
-        builder.add_from_file(os.path.join( os.path.dirname( __file__ ), "places.glade" ))        
-               
+        builder.add_from_file(os.path.join( os.path.dirname( __file__ ), "places.glade" ))
+
         self.placesBtnHolder    = builder.get_object( "places_button_holder" )
         self.editableBtnHolder  = builder.get_object( "editable_button_holder" )
         self.scrolledWindow=builder.get_object("scrolledwindow2")
@@ -49,7 +49,7 @@ class pluginclass( object ):
         # Items to get custom colors
         self.itemstocolor = [ builder.get_object( "viewport2" ) ]
 
-        # Settings        
+        # Settings
         self.settings = EasyGSettings("com.linuxmint.mintmenu.plugins.places")
 
         self.settings.notifyAdd( "icon-size", self.RegenPlugin )
@@ -62,11 +62,11 @@ class pluginclass( object ):
         self.settings.notifyAdd( "allow-scrollbar", self.RegenPlugin )
         self.settings.notifyAdd( "show-gtk-bookmarks", self.RegenPlugin )
         self.settings.notifyAdd( "height", self.changePluginSize )
-        self.settings.notifyAdd( "width", self.changePluginSize )        
+        self.settings.notifyAdd( "width", self.changePluginSize )
 
         self.loadSettings()
 
-        self.content_holder.set_size_request( self.width, self.height )                            
+        self.content_holder.set_size_request( self.width, self.height )
 
     def wake (self) :
         if ( self.showtrash == True ):
@@ -77,7 +77,7 @@ class pluginclass( object ):
 
     def changePluginSize( self, settings, key, args = None):
         self.allowScrollbar = self.settings.get( "bool", "allow-scrollbar" )
-        self.width = self.settings.get( "int", "width" )               
+        self.width = self.settings.get( "int", "width" )
         if (self.allowScrollbar == False):
             self.height = -1
             self.scrolledWindow.set_policy( Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER )
@@ -103,7 +103,7 @@ class pluginclass( object ):
         if (self.allowScrollbar == False):
             self.height = -1
             self.scrolledWindow.set_policy( Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER )
-        self.content_holder.set_size_request( self.width, self.height )        
+        self.content_holder.set_size_request( self.width, self.height )
         self.iconsize = self.settings.get( "int", "icon-size" )
 
         # Check default items
@@ -127,7 +127,7 @@ class pluginclass( object ):
         # Allow plugin to be minimized to the left plugin pane
         self.sticky = self.settings.get( "bool", "sticky")
         self.minimized = self.settings.get( "bool", "minimized")
-        
+
     def ClearAll(self):
         for child in self.placesBtnHolder.get_children():
             child.destroy()
@@ -221,7 +221,7 @@ class pluginclass( object ):
             currentbutton.show()
             self.placesBtnHolder.pack_start( currentbutton, False, False, 0)
 
-    def do_gtk_bookmarks( self ):        
+    def do_gtk_bookmarks( self ):
         if self.showGTKBookmarks:
             if not os.path.exists(os.path.expanduser('~/.gtk-bookmarks')):
                 return
@@ -247,7 +247,7 @@ class pluginclass( object ):
                 currentbutton.connect( "clicked", self.launch_gtk_bookmark, path )
                 currentbutton.show()
                 self.placesBtnHolder.pack_start( currentbutton, False, False, 0)
-                
+
     def launch_gtk_bookmark (self, widget, path):
         self.mintMenuWin.hide()
         if self.de == "mate":

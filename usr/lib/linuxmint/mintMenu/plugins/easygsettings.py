@@ -73,10 +73,10 @@ class EasyGSettings:
             if i not in ['a', 'A', 'b', 'B', 'c', 'C', 'd', 'D', 'e', 'E', 'f', 'F', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
                 return False
         return True
-        
+
     def bindGSettingsEntryToVar( self, type, key, obj, varName ):
         return self.notifyAdd( key, self.setVar, ( type, obj, varName ) )
-        
+
     def setVar( self, settings, key, args ):
         type, obj, varName = args
 

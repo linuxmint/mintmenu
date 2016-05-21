@@ -31,7 +31,7 @@ if hasInotify:
                 if mId >= 0:
                     self.callbacks[mId] = ( callback, args )
             except Exception, detail:
-                mId = 0                
+                mId = 0
             return mId
 
         def removeMonitor( self, monitorId ):
