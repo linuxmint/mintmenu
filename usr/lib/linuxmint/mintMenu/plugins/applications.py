@@ -282,6 +282,10 @@ class pluginclass( object ):
 
         self.builder.get_object("searchButton").connect( "button-press-event", self.searchPopup )
 
+        self.icon_theme = Gtk.IconTheme.get_default();
+        self.icon_theme.connect("changed", self.on_icon_theme_changed)
+
+
     def refresh_apt_cache(self):
         if self.useAPT:
             os.system("mkdir -p %s/.linuxmint/mintMenu/" % home)
@@ -1545,6 +1549,10 @@ class pluginclass( object ):
         if targetType == self.TARGET_TYPE_FAV:
             #self.favoritesReorder( int(selection.data), widget.position )
             self.favoritesReorder( self.drag_origin, widget.position )
+
+    def on_icon_theme_changed(self, theme):
+        print "on_icon_theme_changed"
+        self.menuChanged (0, 0)
 
     def menuChanged( self, x, y ):
         print ("menuChanged")
