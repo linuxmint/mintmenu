@@ -1,3 +1,11 @@
+mintmenu (5.6.9) sarah; urgency=medium
+
+  * Fixed indentation and trailing spaces
+  * Clean up and add debugging info
+  * Refresh the apps on icon-theme-changed
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sat, 21 May 2016 18:40:09 +0100
+
 mintmenu (5.6.8) sarah; urgency=medium
 
   * Favorites: Replace gedit/pluma with xed
