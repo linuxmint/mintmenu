@@ -141,7 +141,7 @@ class pluginclass( object ):
 
         if ( self.showPackageManager == True ):
             Button2 = easyButton( "applications-system", self.iconsize, [_("Package Manager")], -1, -1 )
-            Button2.connect( "clicked", self.ButtonClicked, "gksu /usr/sbin/synaptic" )
+            Button2.connect( "clicked", self.ButtonClicked, "synaptic-pkexec" )
             Button2.show()
             self.systemBtnHolder.pack_start( Button2, False, False, 0 )
             self.mintMenuWin.setTooltip( Button2, _("Install, remove and upgrade software packages") )
