@@ -1,97 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
   <schema id="com.linuxmint.mintmenu" path="/com/linuxmint/mintmenu/">
-            
+
     <key type="b" name="hide-applet-icon">
       <default>false</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="use-custom-color">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="tooltips-enabled">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="start-with-favorites">
       <default>false</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="i" name="applet-icon-size">
       <default>22</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="i" name="border-width">
       <default>1</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="i" name="opacity">
       <default>98</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="i" name="offset">
       <default>0</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="s" name="applet-text">
       <default>"Menu"</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="s" name="theme-name">
       <default>"default"</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="s" name="hot-key">
       <default>"Super_L"</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="s" name="applet-icon">
       <default>"/usr/lib/linuxmint/mintMenu/mintMenu.png"</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="as" name="plugins-list">
       <default>['places', 'system_management', 'newpane', 'applications']</default>
       <summary></summary>
       <description></description>
     </key>
-        
+
     <key type="s" name="custom-color">
       <default>"#DEDEDE"</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="s" name="custom-heading-color">
       <default>"#3C3C3C"</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="s" name="custom-border-color">
       <default>"#DEDEDE"</default>
       <summary></summary>
@@ -106,25 +106,25 @@
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="minimized">
       <default>false</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="allow-scrollbar">
       <default>false</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="show-gtk-bookmarks">
       <default>false</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="hide-separator">
       <default>false</default>
       <summary></summary>
@@ -136,61 +136,61 @@
       <summary></summary>
       <description></description>
     </key>
-        
+
     <key type="i" name="width">
       <default>200</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="i" name="icon-size">
       <default>16</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="show-computer">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
-        
+
     <key type="b" name="show-home-folder">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="show-network">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="show-desktop">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="b" name="show-trash">
       <default>true</default>
       <summary></summary>
       <description></description>
     </key>
-   
+
      <key type="as" name="custom-paths">
       <default>[]</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
      <key type="as" name="custom-names">
       <default>[]</default>
       <summary></summary>
       <description></description>
     </key>
-    
+
     <key type="s" name="icon">
       <default>"mate-fs-directory.png"</default>
       <summary></summary>
