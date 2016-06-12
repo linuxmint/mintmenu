@@ -9,7 +9,7 @@
     </key>
 
     <key type="b" name="use-custom-color">
-      <default>true</default>
+      <default>false</default>
       <summary></summary>
       <description></description>
     </key>
