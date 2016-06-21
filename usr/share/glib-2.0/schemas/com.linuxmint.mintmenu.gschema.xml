@@ -38,12 +38,6 @@
       <description></description>
     </key>
 
-    <key type="i" name="opacity">
-      <default>98</default>
-      <summary></summary>
-      <description></description>
-    </key>
-
     <key type="i" name="offset">
       <default>0</default>
       <summary></summary>

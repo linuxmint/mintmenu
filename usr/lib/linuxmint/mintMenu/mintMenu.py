@@ -108,7 +108,6 @@ class MainWindow( object ):
         self.settings.connect( "changed::custom-heading-color", self.toggleCustomHeadingColor )
         self.settings.connect( "changed::custom-color", self.toggleCustomBackgroundColor )
         self.settings.connect( "changed::border-width", self.toggleBorderWidth )
-        self.settings.connect( "changed::opacity", self.toggleOpacity )
 
         self.getSetGSettingEntries()
 
@@ -149,10 +148,6 @@ class MainWindow( object ):
         self.borderwidth = settings.get_int(key)
         self.SetupMintMenuBorder()
 
-    def toggleOpacity( self, settings, key, args = None ):
-        self.opacity = settings.get_int(key)
-        self.SetupMintMenuOpacity()
-
     def toggleUseCustomColor( self, settings, key, args = None ):
         self.usecustomcolor = settings.get_boolean(key)
         self.loadTheme()
@@ -178,7 +173,6 @@ class MainWindow( object ):
         self.customheadingcolor   = self.settings.get_string( "custom-heading-color" )
         self.custombordercolor    = self.settings.get_string( "custom-border-color" )
         self.borderwidth          = self.settings.get_int( "border-width" )
-        self.opacity              = self.settings.get_int( "opacity" )
         self.offset               = self.settings.get_int( "offset" )
         self.enableTooltips       = self.settings.get_boolean( "tooltips-enabled" )
         self.startWithFavorites   = self.settings.get_boolean( "start-with-favorites" )
@@ -191,12 +185,6 @@ class MainWindow( object ):
         elif defaultStyle is not None:
             self.window.modify_bg( Gtk.StateType.NORMAL, defaultStyle.lookup_color('bg_color')[1] )
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )
-
-    def SetupMintMenuOpacity( self ):
-        print "Opacity is: " + str(self.opacity)
-        opacity = float(self.opacity) / float(100)
-        print "Setting opacity to: " + str(opacity)
-        self.window.set_opacity(opacity)
 
     def detect_desktop_environment (self):
         self.de = "mate"
@@ -445,7 +433,7 @@ class MainWindow( object ):
         # Hack for opacity not showing on first composited draw
         if self.firstTime:
             self.firstTime = False
-            self.SetupMintMenuOpacity()
+            self.window.set_opacity(1.0)
 
         self.window.window.focus( Gdk.CURRENT_TIME )
 

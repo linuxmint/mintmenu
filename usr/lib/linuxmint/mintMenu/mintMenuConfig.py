@@ -60,9 +60,6 @@ class mintMenuConfig( object ):
         self.builder.get_object("label11").set_text(_("Border width:"))
         self.builder.get_object("label25").set_text(_("pixels"))
 
-        self.builder.get_object("label8").set_text(_("Opacity:"))
-        self.builder.get_object("label9").set_text("%")
-
         self.builder.get_object("buttonTextLabel").set_text(_("Button text:"))
         self.builder.get_object("label1").set_text(_("Options"))
         self.builder.get_object("label23").set_text(_("Applications"))
@@ -134,7 +131,6 @@ class mintMenuConfig( object ):
         self.systemIconSize = self.builder.get_object( "systemIconSize" )
         self.favCols = self.builder.get_object( "numFavCols" )
         self.borderWidth = self.builder.get_object( "borderWidth" )
-        self.opacity = self.builder.get_object( "opacity" )
         self.useCustomColors = self.builder.get_object( "useCustomColors" )
         self.backgroundColor = self.builder.get_object( "backgroundColor" )
         self.borderColor = self.builder.get_object( "borderColor" )
@@ -217,7 +213,6 @@ class mintMenuConfig( object ):
         self.bindGSettingsValueToWidget( self.settingsSystem, "int", "icon-size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value )
 
         self.bindGSettingsValueToWidget( self.settings, "int", "border-width", self.borderWidth, "value-changed", self.borderWidth.set_value, self.borderWidth.get_value_as_int )
-        self.bindGSettingsValueToWidget( self.settings, "int", "opacity", self.opacity, "value-changed", self.opacity.set_value, self.opacity.get_value_as_int )
         self.bindGSettingsValueToWidget( self.settings, "bool", "use-custom-color", self.useCustomColors, "toggled", self.useCustomColors.set_active, self.useCustomColors.get_active )
         self.bindGSettingsValueToWidget( self.settings, "color", "custom-color", self.backgroundColor, "color-set", self.backgroundColor.set_color, self.getBackgroundColor )
         self.bindGSettingsValueToWidget( self.settings, "color", "custom-heading-color", self.headingColor, "color-set", self.headingColor.set_color, self.getHeadingColor )
