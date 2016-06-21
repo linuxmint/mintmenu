@@ -1,3 +1,11 @@
+mintmenu (5.7.1) sarah; urgency=medium
+
+  * Deleted trailing spaces in gsettings schema
+  * Changed default for use-custom-color to False
+  * Removed support for opacity
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 21 Jun 2016 17:42:01 +0100
+
 mintmenu (5.7.0) sarah; urgency=medium
 
   * System: Use pkexec for synaptic
