@@ -1,3 +1,9 @@
+mintmenu (5.7.2) sarah; urgency=medium
+
+  * Menu icon: Scale svg files to 22px to prevent them from getting too big
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 22 Jun 2016 15:51:41 +0100
+
 mintmenu (5.7.1) sarah; urgency=medium
 
   * Deleted trailing spaces in gsettings schema
