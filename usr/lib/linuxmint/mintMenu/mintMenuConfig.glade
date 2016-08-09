@@ -913,7 +913,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="n_rows">9</property>
+                    <property name="n_rows">8</property>
                     <property name="n_columns">2</property>
                     <property name="row_spacing">5</property>
                     <property name="homogeneous">True</property>
@@ -1120,26 +1120,7 @@
                         <property name="x_padding">5</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkCheckButton" id="enableInternetSearch">
-                        <property name="label" translatable="yes">Enable internet search</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="use_action_appearance">False</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">8</property>
-                        <property name="bottom_attach">9</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
-                        <property name="x_padding">5</property>
-                      </packing>
-                    </child>
-		          </object>
+                  </object>
                 </child>
                 <child type="label">
                   <object class="GtkLabel" id="applicationsLabel">
@@ -2089,4 +2070,3 @@
     </child>
   </object>
 </interface>
-

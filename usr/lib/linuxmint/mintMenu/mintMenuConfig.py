@@ -44,7 +44,6 @@ class mintMenuConfig( object ):
 
         self.builder.get_object("startWithFavorites").set_label(_("Always start with favorites pane"))
         self.builder.get_object("showButtonIcon").set_label(_("Show button icon"))
-        self.builder.get_object("enableInternetSearch").set_label(_("Enable internet search"))
         self.builder.get_object("useCustomColors").set_label(_("Use custom colors"))
         self.builder.get_object("showRecentPlugin").set_label(_("Show recent documents plugin"))
         self.builder.get_object("showApplicationsPlugin").set_label(_("Show applications plugin"))
@@ -140,7 +139,6 @@ class mintMenuConfig( object ):
         self.borderColorLabel = self.builder.get_object( "borderColorLabel" )
         self.headingColorLabel = self.builder.get_object( "headingColorLabel" )
         self.showButtonIcon = self.builder.get_object( "showButtonIcon" )
-        self.enableInternetSearch = self.builder.get_object( "enableInternetSearch" )
         self.buttonText = self.builder.get_object( "buttonText" )
         self.hotkeyWidget = keybinding.KeybindingWidget(_("Keyboard shortcut:") )
         table = self.builder.get_object( "main_table" )
@@ -210,7 +208,7 @@ class mintMenuConfig( object ):
         self.bindGSettingsValueToWidget( self.settingsApplications, "int", "favicon-size", self.favIconSize, "value-changed", self.favIconSize.set_value, self.favIconSize.get_value )
         self.bindGSettingsValueToWidget( self.settingsApplications, "int", "fav-cols", self.favCols, "value-changed", self.favCols.set_value, self.favCols.get_value )
         self.bindGSettingsValueToWidget( self.settingsApplications, "bool", "remember-filter", self.rememberFilter, "toggled", self.rememberFilter.set_active, self.rememberFilter.get_active)
-        self.bindGSettingsValueToWidget( self.settingsApplications, "bool", "enable-internet-search", self.enableInternetSearch, "toggled", self.enableInternetSearch.set_active,  self.enableInternetSearch.get_active)
+
         self.bindGSettingsValueToWidget( self.settingsPlaces, "int", "icon-size", self.placesIconSize, "value-changed", self.placesIconSize.set_value, self.placesIconSize.get_value )
         self.bindGSettingsValueToWidget( self.settingsSystem, "int", "icon-size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value )
 

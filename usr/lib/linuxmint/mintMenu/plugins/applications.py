@@ -242,11 +242,9 @@ class pluginclass( object ):
             self.settings.notifyAdd( "use-apt", self.switchAPTUsage)
             self.settings.notifyAdd( "fav-cols", self.changeFavCols )
             self.settings.notifyAdd( "remember-filter", self.changeRememberFilter)
-            self.settings.notifyAdd( "enable-internet-search", self.changeEnableInternetSearch)
 
             self.settings.bindGSettingsEntryToVar( "int", "category-hover-delay", self, "categoryhoverdelay" )
             self.settings.bindGSettingsEntryToVar( "bool", "do-not-filter", self, "donotfilterapps" )
-            self.settings.bindGSettingsEntryToVar( "bool", "enable-internet-search", self, "enableInternetSearch" )
             self.settings.bindGSettingsEntryToVar( "string", "search-command", self, "searchtool" )
             self.settings.bindGSettingsEntryToVar( "int", "default-tab", self, "defaultTab" )
         except Exception, detail:
@@ -389,9 +387,6 @@ class pluginclass( object ):
     def changeRememberFilter( self, settings, key, args):
         self.rememberFilter = settings.get_boolean(key)
 
-    def changeEnableInternetSearch( self, settings, key, args):
-        self.enableInternetSearch = settings.get_boolean(key)
-
     def changeShowApplicationComments( self, settings, key, args ):
         self.showapplicationcomments = settings.get_boolean(key)
         for child in self.applicationsBox:
@@ -456,7 +451,6 @@ class pluginclass( object ):
         self.showapplicationcomments = self.settings.get( "bool", "show-application-comments")
         self.useAPT = self.settings.get( "bool", "use-apt")
         self.rememberFilter = self.settings.get( "bool", "remember-filter")
-        self.enableInternetSearch = self.settings.get( "bool", "enable-internet-search")
 
         self.lastActiveTab =  self.settings.get( "int", "last-active-tab")
         self.defaultTab = self.settings.get( "int", "default-tab")
@@ -583,29 +577,28 @@ class pluginclass( object ):
 
         text = "<b>%s</b>" % text
 
-        if self.enableInternetSearch:
-            suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
-            suggestionButton.connect("clicked", self.search_google)
-            suggestionButton.set_text(_("Search Google for %s") % text)
-            suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/google.ico")
-            self.applicationsBox.add(suggestionButton)
-            self.suggestions.append(suggestionButton)
+        suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton.connect("clicked", self.search_google)
+        suggestionButton.set_text(_("Search Google for %s") % text)
+        suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/google.ico")
+        self.applicationsBox.add(suggestionButton)
+        self.suggestions.append(suggestionButton)
 
-            suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
-            suggestionButton.connect("clicked", self.search_wikipedia)
-            suggestionButton.set_text(_("Search Wikipedia for %s") % text)
-            suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico")
-            self.applicationsBox.add(suggestionButton)
-            self.suggestions.append(suggestionButton)
+        suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton.connect("clicked", self.search_wikipedia)
+        suggestionButton.set_text(_("Search Wikipedia for %s") % text)
+        suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico")
+        self.applicationsBox.add(suggestionButton)
+        self.suggestions.append(suggestionButton)
 
-            separator = Gtk.EventBox()
-            separator.add(Gtk.HSeparator())
-            separator.set_visible_window(False)
-            separator.set_size_request(-1, 20)
-            separator.type = "separator"
-            separator.show_all()
-            self.applicationsBox.add(separator)
-            self.suggestions.append(separator)
+        separator = Gtk.EventBox()
+        separator.add(Gtk.HSeparator())
+        separator.set_visible_window(False)
+        separator.set_size_request(-1, 20)
+        separator.type = "separator"
+        separator.show_all()
+        self.applicationsBox.add(separator)
+        self.suggestions.append(separator)
 
         suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
         suggestionButton.connect("clicked", self.search_dictionary)
@@ -1014,24 +1007,22 @@ class pluginclass( object ):
     def searchPopup( self, widget=None, event=None ):
         menu = Gtk.Menu()
 
-        if self.enableInternetSearch:
+        menuItem = Gtk.ImageMenuItem(_("Search Google"))
+        img = Gtk.Image()
+        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/google.ico')
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.search_google)
+        menu.append(menuItem)
 
-            menuItem = Gtk.ImageMenuItem(_("Search Google"))
-            img = Gtk.Image()
-            img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/google.ico')
-            menuItem.set_image(img)
-            menuItem.connect("activate", self.search_google)
-            menu.append(menuItem)
+        menuItem = Gtk.ImageMenuItem(_("Search Wikipedia"))
+        img = Gtk.Image()
+        img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico')
+        menuItem.set_image(img)
+        menuItem.connect("activate", self.search_wikipedia)
+        menu.append(menuItem)
 
-            menuItem = Gtk.ImageMenuItem(_("Search Wikipedia"))
-            img = Gtk.Image()
-            img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico')
-            menuItem.set_image(img)
-            menuItem.connect("activate", self.search_wikipedia)
-            menu.append(menuItem)
-
-            menuItem = Gtk.SeparatorMenuItem()
-            menu.append(menuItem)
+        menuItem = Gtk.SeparatorMenuItem()
+        menu.append(menuItem)
 
         menuItem = Gtk.ImageMenuItem(_("Lookup Dictionary"))
         img = Gtk.Image()
@@ -1105,18 +1096,16 @@ class pluginclass( object ):
         return (x, y, False)
 
     def search_google(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "+")
-            os.system("xdg-open \"http://www.google.com/cse?cx=002683415331144861350%3Atsq8didf9x0&ie=utf-8&sa=Search&q=" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "+")
+        os.system("xdg-open \"http://www.google.com/cse?cx=002683415331144861350%3Atsq8didf9x0&ie=utf-8&sa=Search&q=" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_wikipedia(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "+")
-            os.system("xdg-open \"http://en.wikipedia.org/wiki/Special:Search?search=" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "+")
+        os.system("xdg-open \"http://en.wikipedia.org/wiki/Special:Search?search=" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_dictionary(self, widget):
         text = self.searchEntry.get_text()
@@ -1124,39 +1113,34 @@ class pluginclass( object ):
         self.mintMenuWin.hide()
 
     def search_mint_tutorials(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "%20")
-            os.system("xdg-open \"http://community.linuxmint.com/index.php/tutorial/search/0/" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/tutorial/search/0/" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_mint_ideas(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "%20")
-            os.system("xdg-open \"http://community.linuxmint.com/index.php/idea/search/0/" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/idea/search/0/" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_mint_users(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "%20")
-            os.system("xdg-open \"http://community.linuxmint.com/index.php/user/search/0/" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/user/search/0/" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_mint_hardware(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "%20")
-            os.system("xdg-open \"http://community.linuxmint.com/index.php/hardware/search/0/" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/hardware/search/0/" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_mint_software(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "%20")
-            os.system("xdg-open \"http://community.linuxmint.com/index.php/software/search/0/" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/software/search/0/" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def add_to_desktop(self, widget, desktopEntry):
         os.system("xdg-desktop-icon install --novendor %s" % desktopEntry.desktopFile)
