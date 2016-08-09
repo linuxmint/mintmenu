@@ -480,6 +480,7 @@ class MenuWin( object ):
         self.settings.connect( "changed::hot-key", self.reloadSettings )
         self.settings.connect( "changed::applet-icon", self.reloadSettings )
         self.settings.connect( "changed::hide-applet-icon", self.reloadSettings )
+        #self.settings.connect( "changed::enable-internet-search", self.reloadSettings )
         self.settings.connect( "changed::applet-icon-size", self.reloadSettings )
         self.settings.connect( "changed::hot-key", self.hotkeyChanged )
         self.loadSettings()
@@ -601,6 +602,7 @@ class MenuWin( object ):
 
     def loadSettings( self, *args, **kargs ):
         self.hideIcon   =  self.settings.get_boolean( "hide-applet-icon" )
+        #self.internetSearchEnabled   =  self.settings.get_boolean( "enable-internet-search" )
         self.buttonText =  self.settings.get_string( "applet-text" )
         self.theme_name =  self.settings.get_string( "theme-name" )
         self.hotkeyText =  self.settings.get_string( "hot-key" )
