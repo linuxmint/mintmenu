@@ -400,7 +400,7 @@
                           <object class="GtkImage" id="image_button_icon">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-missing-image</property>>
+                            <property name="stock">gtk-missing-image</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -503,7 +503,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="showPlacesPlugin">
-                            <property name="label" translatable="yes">Show places plugin</property>>
+                            <property name="label" translatable="yes">Show places plugin</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -1577,7 +1577,7 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkBox" id="vbox5">>
+                  <object class="GtkBox" id="vbox5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
