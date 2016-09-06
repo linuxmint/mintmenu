@@ -1397,7 +1397,7 @@ class pluginclass( object ):
                     self.favorites.append( favButton )
                     self.favoritesPositionOnGrid( favButton )
                     favButton.connect( "drag-data-received", self.onFavButtonDragReorder )
-                    favButton.drag_dest_set( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY 
+                    favButton.drag_dest_set( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY )
                     favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
                     favButton.drag_source_set ( Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
                     position += 1

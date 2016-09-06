@@ -356,7 +356,7 @@ class MainWindow( object ):
 
         self.paneholder.pack_start( ImageBox, False, False, 0 )
         self.paneholder.pack_start( PluginPane, False, False, 0 )
-        self.tooltipsEnable( False ))
+        self.tooltipsEnable( False )
 
     def loadTheme( self ):
         self.SetPaneColors( self.panesToColor )
