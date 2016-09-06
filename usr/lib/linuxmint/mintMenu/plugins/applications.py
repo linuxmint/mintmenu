@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 
 import gi
-gi.require_version("Gtk", "2.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk, Pango, Gdk, Gio, GLib
 
@@ -19,8 +19,6 @@ from easybuttons import *
 from execute import Execute
 from easygsettings import EasyGSettings
 from easyfiles import *
-
-gtk = CDLL("libgtk-x11-2.0.so.0")
 
 import matemenu
 
@@ -122,10 +120,11 @@ class SuggestionButton ( Gtk.Button ):
         self.set_size_request( -1, -1 )
         Align1 = Gtk.Alignment()
         Align1.set( 0, 0.5, 1.0, 0 )
-        HBox1 = Gtk.HBox()
-        labelBox = Gtk.VBox( False, 2 )
+        HBox1 = Gtk.Box( orientation=Gtk.Orientation.HORIZONTAL )
+        labelBox = Gtk.Box( orientation=Gtk.Orientation.VERTICAL, spacing=2 )
         self.image = Gtk.Image()
-        self.image.set_from_stock( self.iconName, iconSize )
+        self.image.set_from_icon_name( self.iconName, Gtk.IconSize.INVALID )
+        self.image.set_pixel_size( iconSize )
         self.image.show()
         HBox1.pack_start( self.image, False, False, 5 )
         self.label = Gtk.Label()
@@ -148,7 +147,7 @@ class SuggestionButton ( Gtk.Button ):
         self.label.set_markup(text)
 
     def set_icon_size (self, size):
-        self.image.set_from_stock( self.iconName, size )
+        self.image.set_pixel_size( size )
 
 class TargetEntry(Structure):
     _fields_ = [("target", c_char_p),
@@ -157,13 +156,10 @@ class TargetEntry(Structure):
 
 class pluginclass( object ):
     TARGET_TYPE_TEXT = 80
-    array2 = TargetEntry * 2
-    toButton = array2( ("text/uri-list", 0, TARGET_TYPE_TEXT), ("text/uri-list", 0, TARGET_TYPE_TEXT) )
+    toButton = ( Gtk.TargetEntry.new( "text/uri-list", 0, TARGET_TYPE_TEXT ), Gtk.TargetEntry.new( "text/uri-list", 0, TARGET_TYPE_TEXT ) )
     TARGET_TYPE_FAV = 81
-    array = TargetEntry * 3
-    toFav = array( ( "FAVORITES", Gtk.TargetFlags.SAME_APP, 81 ), ( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ) )
-    array1 = TargetEntry * 2
-    fromFav = array1( ("FAVORITES", Gtk.TargetFlags.SAME_APP, 81), ("FAVORITES", Gtk.TargetFlags.SAME_APP, 81) )
+    toFav = ( Gtk.TargetEntry.new( "FAVORITES", Gtk.TargetFlags.SAME_APP, 81 ), Gtk.TargetEntry.new( "text/plain", 0, 100 ), Gtk.TargetEntry.new( "text/uri-list", 0, 101 ) )
+    fromFav = ( Gtk.TargetEntry.new( "FAVORITES", Gtk.TargetFlags.SAME_APP, 81 ), Gtk.TargetEntry.new( "FAVORITES", Gtk.TargetFlags.SAME_APP, 81 ) )
 
     @print_timing
     def __init__( self, mintMenuWin, toggleButton, de ):
@@ -221,10 +217,9 @@ class pluginclass( object ):
 
         self.favoritesBox.connect( "drag-data-received", self.ReceiveCallback )
 
-        gtk.gtk_drag_dest_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
-        gtk.gtk_drag_dest_set ( hash(self.favoritesBox), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, 2, Gdk.DragAction.COPY )
+        self.favoritesBox.drag_dest_set ( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, Gdk.DragAction.COPY )
         self.showFavoritesButton.connect( "drag-data-received", self.ReceiveCallback )
-        gtk.gtk_drag_dest_set ( hash(self.showFavoritesButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, 2, Gdk.DragAction.COPY )
+        self.showFavoritesButton.drag_dest_set ( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, Gdk.DragAction.COPY )
 
        # self.searchButton.connect( "button_release_event", self.SearchWithButton )
         try:
@@ -543,8 +538,7 @@ class pluginclass( object ):
         # of the existing text, that's the most likely candidate anyhow
         self.searchEntry.grab_focus()
         if self.rememberFilter or not clear:
-            gtk.gtk_editable_set_position.argtypes = [c_void_p, c_int]
-            gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
+            self.searchEntry.set_position(-1)
         else:
             self.searchEntry.set_text("")
 
@@ -577,14 +571,14 @@ class pluginclass( object ):
 
         text = "<b>%s</b>" % text
 
-        suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton = SuggestionButton("list-add", self.iconSize, "")
         suggestionButton.connect("clicked", self.search_google)
         suggestionButton.set_text(_("Search Google for %s") % text)
         suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/google.ico")
         self.applicationsBox.add(suggestionButton)
         self.suggestions.append(suggestionButton)
 
-        suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton = SuggestionButton("list-add", self.iconSize, "")
         suggestionButton.connect("clicked", self.search_wikipedia)
         suggestionButton.set_text(_("Search Wikipedia for %s") % text)
         suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico")
@@ -592,7 +586,7 @@ class pluginclass( object ):
         self.suggestions.append(suggestionButton)
 
         separator = Gtk.EventBox()
-        separator.add(Gtk.HSeparator())
+        separator.add(Gtk.Separator( orientation=Gtk.Orientation.HORIZONTAL ))
         separator.set_visible_window(False)
         separator.set_size_request(-1, 20)
         separator.type = "separator"
@@ -600,21 +594,21 @@ class pluginclass( object ):
         self.applicationsBox.add(separator)
         self.suggestions.append(separator)
 
-        suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
+        suggestionButton = SuggestionButton("list-add", self.iconSize, "")
         suggestionButton.connect("clicked", self.search_dictionary)
         suggestionButton.set_text(_("Lookup %s in Dictionary") % text)
         suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/dictionary.png")
         self.applicationsBox.add(suggestionButton)
         self.suggestions.append(suggestionButton)
 
-        suggestionButton = SuggestionButton(Gtk.STOCK_FIND, self.iconSize, "")
+        suggestionButton = SuggestionButton("edit-find", self.iconSize, "")
         suggestionButton.connect("clicked", self.Search)
         suggestionButton.set_text(_("Search Computer for %s") % text)
         self.applicationsBox.add(suggestionButton)
         self.suggestions.append(suggestionButton)
 
-        #self.last_separator = gtk.EventBox()
-        #self.last_separator.add(gtk.HSeparator())
+        #self.last_separator = Gtk.EventBox()
+        #self.last_separator.add(Gtk.Separator( orientation=Gtk.Orientation.HORIZONTAL ))
         #self.last_separator.set_size_request(-1, 20)
         #self.last_separator.type = "separator"
         #self.mintMenuWin.SetPaneColors( [  self.last_separator ] )
@@ -846,8 +840,7 @@ class pluginclass( object ):
 
         if event.string.strip() != "" or event.keyval == Gdk.KEY_BackSpace:
             self.searchEntry.grab_focus()
-            gtk.gtk_editable_set_position.argtypes = [c_void_p, c_int]
-            gtk.gtk_editable_set_position(hash(self.searchEntry), -1)
+            self.searchEntry.set_position( -1 )
             self.searchEntry.event( event )
             return True
 
@@ -917,8 +910,7 @@ class pluginclass( object ):
 
                 mTree.show_all()
                 self.mintMenuWin.stopHiding()
-                gtk.gtk_menu_popup.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_uint, c_uint]
-                gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
+                mTree.popup(None, None, None, None, ev.button, ev.time)
             else:
                 mTree = Gtk.Menu()
                 mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
@@ -937,8 +929,7 @@ class pluginclass( object ):
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
                 self.mintMenuWin.stopHiding()
-                gtk.gtk_menu_popup.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_uint, c_uint]
-                gtk.gtk_menu_popup(hash(mTree), None, None, None, None, ev.button, ev.time)
+                mTree.popup(None, None, None, None, ev.button, ev.time)
 
     def menuPopup( self, widget, event ):
         if event.button == 3:
@@ -1000,8 +991,7 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             self.mintMenuWin.stopHiding()
-            gtk.gtk_menu_popup.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_uint, c_uint]
-            gtk.gtk_menu_popup(hash(mTree), None, None, None, None, event.button, event.time)
+            mTree.popup(None, None, None, None, ev.button, ev.time)
 
 
     def searchPopup( self, widget=None, event=None ):
@@ -1033,7 +1023,8 @@ class pluginclass( object ):
 
         menuItem = Gtk.ImageMenuItem(_("Search Computer"))
         img = Gtk.Image()
-        img.set_from_stock(Gtk.STOCK_FIND, self.iconSize)
+        img.set_from_icon_name("edit-find", Gtk.IconSize.INVALID)
+        img.set_pixel_size( self.iconSize )
         menuItem.set_image(img)
         menuItem.connect("activate", self.Search)
         menu.append(menuItem)
@@ -1079,8 +1070,7 @@ class pluginclass( object ):
         menu.show_all()
 
         self.mintMenuWin.stopHiding()
-        gtk.gtk_menu_popup.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_uint, c_uint]
-        gtk.gtk_menu_popup(hash(menu), None, None, None, None, event.button, event.time)
+        menu.popup(None, None, None, None, event.button, event.time)
 
         #menu.attach_to_widget(self.searchButton, None)
         #menu.reposition()
@@ -1290,11 +1280,11 @@ class pluginclass( object ):
 
     # Scroll button into view
     def scrollItemIntoView( self, widget, event = None ):
-        viewport = widget.parent
+        viewport = widget.get_parent()
         while not isinstance( viewport, Gtk.Viewport ):
-            if not viewport.parent:
+            if not viewport.get_parent():
                 return
-            viewport = viewport.parent
+            viewport = viewport.get_parent()
         aloc = widget.get_allocation()
         viewport.get_vadjustment().clamp_page(aloc.y, aloc.y + aloc.height)
 
@@ -1310,8 +1300,9 @@ class pluginclass( object ):
         return space
 
     def favoritesBuildSeparator( self ):
-        separator = Gtk.HSeparator()
-        separator.set_size_request( -1, 20 )
+        separator = Gtk.Separator( orientation=Gtk.Orientation.HORIZONTAL )
+        separator.set_margin_top( 5 )
+        separator.set_margin_bottom( 5 )
         separator.type = "separator"
 
         separator.show_all()
@@ -1406,33 +1397,14 @@ class pluginclass( object ):
                     self.favorites.append( favButton )
                     self.favoritesPositionOnGrid( favButton )
                     favButton.connect( "drag-data-received", self.onFavButtonDragReorder )
-                    gtk.gtk_drag_dest_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
-                    gtk.gtk_drag_dest_set( hash(favButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.fromFav, 2, Gdk.DragAction.COPY )
+                    favButton.drag_dest_set( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY 
                     favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
-                    gtk.gtk_drag_source_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
-                    gtk.gtk_drag_source_set( hash(favButton), Gdk.ModifierType.BUTTON1_MASK, self.toFav, 3, Gdk.DragAction.COPY )
+                    favButton.drag_source_set ( Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
                     position += 1
 
             self.favoritesSave()
         except Exception, e:
             print e
-
-    def favoritesGetNumRows( self ):
-        rows = 0
-        col = 0
-        for fav in self.favorites:
-            if  ( fav.type == "separator" or fav.type == "space" ) and col != 0:
-                rows += 1
-                col = 0
-            col += 1
-            if  fav.type == "separator" or fav.type == "space":
-                rows += 1
-                col = 0
-
-            if col >= self.favCols:
-                rows += 1
-                col = 0
-        return rows
 
     def favoritesPositionOnGrid( self, favorite ):
         row = 0
@@ -1453,9 +1425,9 @@ class pluginclass( object ):
                 col = 0
 
         if favorite.type == "separator" or favorite.type == "space":
-            self.favoritesBox.attach( favorite, col, col + self.favCols, row, row + 1, yoptions = 0 )
+            self.favoritesBox.attach( favorite, col, row, self.favCols, 1 )
         else:
-            self.favoritesBox.attach( favorite, col, col + 1, row, row + 1, yoptions = 0 )
+            self.favoritesBox.attach( favorite, col, row, 1, 1 )
 
     def favoritesReorder( self, oldposition, newposition ):
         if oldposition == newposition:
@@ -1479,7 +1451,6 @@ class pluginclass( object ):
             self.favoritesPositionOnGrid( fav )
 
         self.favoritesSave()
-        self.favoritesBox.resize( self.favoritesGetNumRows(), self.favCols )
 
     def favoritesAdd( self, favButton, position = -1 ):
         if favButton:
@@ -1488,11 +1459,9 @@ class pluginclass( object ):
             self.favoritesPositionOnGrid( favButton )
 
             favButton.connect( "drag-data-received", self.onFavButtonDragReorder )
-            gtk.gtk_drag_dest_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
-            gtk.gtk_drag_dest_set( hash(favButton), Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, 3, Gdk.DragAction.COPY )
+            favButton.drag_dest_set( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY )
             favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
-            gtk.gtk_drag_source_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
-            gtk.gtk_drag_source_set ( hash(favButton), Gdk.ModifierType.BUTTON1_MASK, self.toFav, 3, Gdk.DragAction.COPY )
+            favButton.drag_source_set ( Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
 
             if position >= 0:
                 self.favoritesReorder( favButton.position, position )
@@ -1509,7 +1478,6 @@ class pluginclass( object ):
             self.favoritesBox.remove( self.favorites[ i ] )
             self.favoritesPositionOnGrid( self.favorites[ i ] )
         self.favoritesSave()
-        self.favoritesBox.resize( self.favoritesGetNumRows(), self.favCols )
 
     def favoritesRemoveLocation( self, location ):
         for fav in self.favorites:
@@ -1529,7 +1497,7 @@ class pluginclass( object ):
 
             appListFile.close( )
         except Exception, e:
-            msgDlg = Gtk.MessageDialog( None, gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu")+"\n(" + e.__str__() + ")" )
+            msgDlg = Gtk.MessageDialog( None, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu")+"\n(" + e.__str__() + ")" )
             msgDlg.run();
             msgDlg.destroy();
 
@@ -1722,7 +1690,7 @@ class pluginclass( object ):
                 for item in sortedApplicationList:
                     launcherName = item[0]
                     button = item[1]
-                    self.applicationsBox.pack_start( button, False, False, 0 )
+                    self.applicationsBox.add( button )
                     if launcherName in launcherNames:
                         button.hide()
                     else:
@@ -1740,7 +1708,7 @@ class pluginclass( object ):
 
     # Build a list of all categories in the menu ( [ { "name", "icon", tooltip" } ]
     def buildCategoryList( self ):
-        newCategoryList = [ { "name": _("All"), "icon": "stock_select-all", "tooltip": _("Show all applications"), "filter":"", "index": 0 } ]
+        newCategoryList = [ { "name": _("All"), "icon": "edit-select-all", "tooltip": _("Show all applications"), "filter":"", "index": 0 } ]
 
         num = 1
 

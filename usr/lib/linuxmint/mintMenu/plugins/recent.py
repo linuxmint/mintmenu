@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 
 import gi
-gi.require_version("Gtk", "2.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk, Pango
 import os
@@ -140,13 +140,12 @@ class pluginclass:
         Align1 = Gtk.Alignment()
         Align1.set( 0, 0.5, 0, 0)
         Align1.set_padding( 0, 0, 0, 0 )
-        HBox1 = Gtk.HBox( False, 5 )
-        VBox1 = Gtk.VBox( False, 2 )
+        HBox1 = Gtk.Box( orientation=Gtk.Orientation.HORIZONTAL, spacing=5 )
+        VBox1 = Gtk.Box( orientation=Gtk.Orientation.VERTICAL, spacing=2 )
 
         VBox1.show()
 
-        req = Gtk.Requisition()
-        AButton.size_request(req)
+        req = AButton.size_request()
 
         Label1 = Gtk.Label( DispName )
         Label1.set_size_request( req.width-20, -1 )
@@ -190,7 +189,7 @@ class pluginclass:
         FileString=[]
         IconString=[]
         RecentInfo=self.RecManagerInstance.get_items()
-        # print RecentInfo[0].get_icon(gtk.ICON_SIZE_MENU)
+        # print RecentInfo[0].get_icon(Gtk.IconSize.MENU)
         count=0
         MaxEntries=self.numentries
         if self.numentries == -1:

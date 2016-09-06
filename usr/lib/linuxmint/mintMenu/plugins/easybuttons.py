@@ -13,8 +13,6 @@ from filemonitor import monitor as filemonitor
 import ctypes
 from ctypes import *
 
-gtk = CDLL("libgtk-x11-2.0.so.0")
-
 class IconManager(GObject.GObject):
 
     __gsignals__ = {
@@ -124,8 +122,8 @@ class easyButton( Gtk.Button ):
         self.set_size_request( buttonWidth, buttonHeight )
 
         Align1 = Gtk.Alignment.new( 0, 0.5, 1.0, 0 )
-        HBox1 = Gtk.HBox()
-        self.labelBox = Gtk.VBox( False, 2 )
+        HBox1 = Gtk.Box( orientation=Gtk.Orientation.HORIZONTAL )
+        self.labelBox = Gtk.Box( orientation=Gtk.Orientation.VERTICAL, spacing=2 )
 
 
         self.buttonImage = Gtk.Image()
@@ -135,7 +133,7 @@ class easyButton( Gtk.Button ):
         else:
             #[ iW, iH ] = iconManager.getIconSize( self.iconSize )
             self.buttonImage.set_size_request( self.iconSize, self.iconSize  )
-        self.image_box = Gtk.HBox()
+        self.image_box = Gtk.Box( orientation=Gtk.Orientation.HORIZONTAL )
         self.image_box.pack_start(self.buttonImage, False, False, 5)
         self.image_box.show_all()
         HBox1.pack_start( self.image_box, False, False, 0 )
@@ -163,7 +161,7 @@ class easyButton( Gtk.Button ):
         self.connections.append( self.connect( event, callback ) )
 
     def onRelease( self, widget ):
-        widget.set_state(Gtk.StateType.NORMAL)
+        widget.get_style_context().set_state( Gtk.StateFlags.NORMAL )
 
     def onDestroy( self, widget ):
         self.buttonImage.clear()
@@ -188,6 +186,7 @@ class easyButton( Gtk.Button ):
 
         label.set_ellipsize( Pango.EllipsizeMode.END )
         label.set_alignment( 0.0, 1.0 )
+        label.set_max_width_chars(0)
         label.show()
         self.labelBox.pack_start( label , True, True, 0)
 
@@ -271,17 +270,13 @@ class ApplicationLauncher( easyButton ):
         # Drag and Drop
         self.connectSelf( "drag-data-get", self.dragDataGet )
 
-        array = TargetEntry * 2
-        targets = array(( "text/plain", 0, 100 ), ( "text/uri-list", 0, 101 ))
-        gtk.gtk_drag_source_set.argtypes = [c_void_p, c_ushort, c_void_p, c_int, c_ushort]
-        gtk.gtk_drag_source_set(hash(self), Gdk.ModifierType.BUTTON1_MASK, targets, 2, Gdk.DragAction.COPY)
+        targets = ( Gtk.TargetEntry.new( "text/plain", 0, 100 ), Gtk.TargetEntry.new( "text/uri-list", 0, 101 ) )
+        self.drag_source_set( Gdk.ModifierType.BUTTON1_MASK, targets, Gdk.DragAction.COPY )
 
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
             iconName, s = icon.get_icon_name()
-            c = c_char_p(iconName.decode('utf-8', 'ignore').encode('ascii', 'ignore'))
-            gtk.gtk_drag_source_set_icon_name.argtypes = [c_void_p, c_char_p]
-            gtk.gtk_drag_source_set_icon_name( hash(self), c)
+            self.drag_source_set_icon_name( iconName )
 
         self.connectSelf( "focus-in-event", self.onFocusIn )
         self.connectSelf( "focus-out-event", self.onFocusOut )
@@ -398,9 +393,7 @@ class ApplicationLauncher( easyButton ):
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
             iconName, size = icon.get_icon_name()
-            c = c_char_p(iconName.encode('ascii', 'ignore'))
-            gtk.gtk_drag_source_set_icon_name.argtypes = [c_void_p, c_char_p]
-            gtk.gtk_drag_source_set_icon_name( hash(self), c)
+            self.drag_source_set_icon_name( iconName )
 
     def startupFileChanged( self, *args ):
         self.inStartup = os.path.exists( self.startupFilePath )
@@ -493,7 +486,7 @@ class MenuApplicationLauncher( ApplicationLauncher ):
         appComment = self.appComment
         if self.highlight:
             try:
-                #color = self.labelBox.rc_get_style().fg[ Gtk.StateType.SELECTED ].to_string()
+                #color = self.labelBox.get_style_context().get_color( Gtk.StateFlags.SELECTED ).to_string()
                 #if len(color) > 0 and color[0] == "#":
                     #appName = "<span foreground=\"%s\"><b>%s</b></span>" % (color, appName);
                     #appComment = "<span foreground=\"%s\"><b>%s</b></span>" % (color, appComment);
