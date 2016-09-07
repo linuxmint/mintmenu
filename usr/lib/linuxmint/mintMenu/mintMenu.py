@@ -177,18 +177,15 @@ class MainWindow( object ):
 
         self.globalEnableTooltips = self.panelSettings.get_boolean( "tooltips-enabled" )
 
-    def SetupMintMenuBorder( self ):
+    def SetupMintMenuBorder( self, color = None ):
         context = self.window.get_style_context()
-        context.save()
-        context.set_state( Gtk.StateFlags.NORMAL )
         if self.usecustomcolor:
-            bg_color = Gdk.RGBA()
-            bg_color.parse( self.custombordercolor ) 
-            self.window.override_background_color( Gtk.StateFlags.NORMAL, bg_color )
-        else:
-            self.window.override_background_color( Gtk.StateFlags.NORMAL, None )
+            borderColor = Gdk.RGBA()
+            borderColor.parse( self.custombordercolor )
+            self.window.override_background_color( context.get_state(), borderColor )
+        elif color is not None:
+            self.window.override_background_color( context.get_state(), color )
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )
-        context.restore()
 
     def detect_desktop_environment (self):
         self.de = "mate"
@@ -358,23 +355,37 @@ class MainWindow( object ):
         self.paneholder.pack_start( PluginPane, False, False, 0 )
         self.tooltipsEnable( False )
 
+    # A little bit hacky but works.
+    def getDefaultColors( self ):
+        widget = Gtk.EventBox()
+        widget.show()
+
+        context = widget.get_style_context()
+        context.set_state( Gtk.StateFlags.NORMAL )
+        context.add_class( Gtk.STYLE_CLASS_DEFAULT )
+        context.add_class( Gtk.STYLE_CLASS_BACKGROUND )
+
+        fgColor = context.get_color( context.get_state() )
+        bgColor = context.get_background_color( context.get_state() )
+        borderColor = context.get_border_color( context.get_state() )
+
+        return { "fg": fgColor, "bg": bgColor, "border": borderColor }
+
     def loadTheme( self ):
-        self.SetPaneColors( self.panesToColor )
-        self.SetupMintMenuBorder()
+        colors = self.getDefaultColors()
+        self.SetPaneColors( self.panesToColor, colors["bg"] )
+        self.SetupMintMenuBorder( colors["border"] )
         self.SetHeadingStyle( self.headingsToColor )
 
-    def SetPaneColors( self, items ):
+    def SetPaneColors( self, items, color = None ):
         for item in items:
             context = item.get_style_context()
-            context.save()
-            context.set_state( Gtk.StateFlags.NORMAL )
             if self.usecustomcolor:
-                bg_color = Gdk.RGBA()
-                bg_color.parse( self.customcolor )
-                item.override_background_color( Gtk.StateFlags.NORMAL, bg_color )
-            else:
-                item.override_background_color( Gtk.StateFlags.NORMAL, None )
-            context.restore()
+                bgColor = Gdk.RGBA()
+                bgColor.parse( self.customcolor )
+                item.override_background_color( context.get_state(), bgColor )
+            elif color is not None:
+                item.override_background_color( context.get_state(), color )
 
     def SetHeadingStyle( self, items ):
         if self.usecustomcolor:
