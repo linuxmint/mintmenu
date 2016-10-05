@@ -294,7 +294,7 @@ class ApplicationLauncher( easyButton ):
             self.appName = self.strip_accents(desktopItem.getName())
             self.appGenericName = self.strip_accents(desktopItem.getGenericName())
             self.appComment = self.strip_accents(desktopItem.getComment())
-            self.appExec = self.strip_accents(desktopItem.getExec())
+            self.appExec = self.strip_accents(desktopItem.getExec().replace('\\\\', '\\'))
             self.appIconName = desktopItem.getIcon()
             self.appCategories = desktopItem.getCategories()
             self.appMateDocPath = desktopItem.get( "X-MATE-DocPath" ) or ""
