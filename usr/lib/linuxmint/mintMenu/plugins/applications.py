@@ -1667,30 +1667,22 @@ class pluginclass( object ):
             if not self.applicationList:
                 addedApplications = newApplicationList
             else:
+                applicationListPaths = sorted([ item["entry"].get_desktop_file_path() for item in self.applicationList ])                
                 for item in newApplicationList:
-                    found = False
-                    for item2 in self.applicationList:
-                        if item["entry"].get_desktop_file_path() == item2["entry"].get_desktop_file_path():
-                            found = True
-                            break
-                    if not found:
+                    if not (item["entry"].get_desktop_file_path() in applicationListPaths):
                         addedApplications.append(item)
-
+                                                
                 key = 0
+                newApplicationListPaths = sorted([ item["entry"].get_desktop_file_path() for item in newApplicationList ])
                 for item in self.applicationList:
-                    found = False
-                    for item2 in newApplicationList:
-                        if item["entry"].get_desktop_file_path() == item2["entry"].get_desktop_file_path():
-                            found = True
-                            break
-                    if not found:
-                        removedApplications.append(key)
+                    if not ( item["entry"].get_desktop_file_path() in newApplicationListPaths ):
+                        removeApplications.append(key)
                     else:
                         # don't increment the key if this item is going to be removed
                         # because when it is removed the index of all later items is
                         # going to be decreased
                         key += 1
-
+                        
             for key in removedApplications:
                 self.applicationList[key]["button"].destroy()
                 del self.applicationList[key]
