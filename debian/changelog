@@ -1,3 +1,9 @@
+mintmenu (5.7.3) serena; urgency=medium
+
+  * Fixed launching some Wine applications
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 02 Nov 2016 14:03:20 +0000
+
 mintmenu (5.7.2) sarah; urgency=medium
 
   * Menu icon: Scale svg files to 22px to prevent them from getting too big
