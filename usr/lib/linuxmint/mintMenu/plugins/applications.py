@@ -1671,7 +1671,7 @@ class pluginclass( object ):
                 for item in newApplicationList:
                     if not (item["entry"].get_desktop_file_path() in applicationListPaths):
                         addedApplications.append(item)
-                                                
+
                 key = 0
                 newApplicationListPaths = sorted([ item["entry"].get_desktop_file_path() for item in newApplicationList ])
                 for item in self.applicationList:
@@ -1682,7 +1682,7 @@ class pluginclass( object ):
                         # because when it is removed the index of all later items is
                         # going to be decreased
                         key += 1
-                        
+
             for key in removedApplications:
                 self.applicationList[key]["button"].destroy()
                 del self.applicationList[key]
