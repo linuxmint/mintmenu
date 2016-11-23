@@ -585,9 +585,9 @@ class pluginclass( object ):
 
         if self.enableInternetSearch:
             suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
-            suggestionButton.connect("clicked", self.search_google)
-            suggestionButton.set_text(_("Search Google for %s") % text)
-            suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/google.ico")
+            suggestionButton.connect("clicked", self.search_ddg)
+            suggestionButton.set_text(_("Search DuckDuckGo for %s") % text)
+            suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/ddg.png")
             self.applicationsBox.add(suggestionButton)
             self.suggestions.append(suggestionButton)
 
@@ -1016,11 +1016,11 @@ class pluginclass( object ):
 
         if self.enableInternetSearch:
 
-            menuItem = Gtk.ImageMenuItem(_("Search Google"))
+            menuItem = Gtk.ImageMenuItem(_("Search DuckDuckGo"))
             img = Gtk.Image()
-            img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/google.ico')
+            img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/ddg.png')
             menuItem.set_image(img)
-            menuItem.connect("activate", self.search_google)
+            menuItem.connect("activate", self.search_ddg)
             menu.append(menuItem)
 
             menuItem = Gtk.ImageMenuItem(_("Search Wikipedia"))
@@ -1104,11 +1104,11 @@ class pluginclass( object ):
         y = rect.y + rect.height
         return (x, y, False)
 
-    def search_google(self, widget):
+    def search_ddg(self, widget):
         if self.enableInternetSearch:
             text = self.searchEntry.get_text()
             text = text.replace(" ", "+")
-            os.system("xdg-open \"http://www.google.com/cse?cx=002683415331144861350%3Atsq8didf9x0&ie=utf-8&sa=Search&q=" + text + "\" &")
+            os.system("xdg-open \"https://duckduckgo.com/?q=%s&t=lm&ia=web\" &" % text)
             self.mintMenuWin.hide()
 
     def search_wikipedia(self, widget):
