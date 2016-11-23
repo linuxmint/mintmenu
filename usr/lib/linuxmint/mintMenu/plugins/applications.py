@@ -174,6 +174,12 @@ class pluginclass( object ):
         self.toggleButton = toggleButton
         self.de = de
 
+        # Detect the locale (this is used for the Wikipedia search)
+        self.lang = "en"
+        lang = os.getenv('LANG')
+        if lang is not None and lang != "":
+            self.lang = lang.split("_")[0]
+
         self.builder = Gtk.Builder()
         # The Glade file for the plugin
         self.builder.add_from_file (os.path.join( os.path.dirname( __file__ ), "applications.glade" ))
@@ -1113,7 +1119,7 @@ class pluginclass( object ):
     def search_wikipedia(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "+")
-        os.system("xdg-open \"http://en.wikipedia.org/wiki/Special:Search?search=" + text + "\" &")
+        os.system("xdg-open \"http://%s.wikipedia.org/wiki/Special:Search?search=%s\" &" % (self.lang, text))
         self.mintMenuWin.hide()
 
     def search_dictionary(self, widget):
