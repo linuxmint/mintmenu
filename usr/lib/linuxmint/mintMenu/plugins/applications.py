@@ -1105,18 +1105,16 @@ class pluginclass( object ):
         return (x, y, False)
 
     def search_ddg(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "+")
-            os.system("xdg-open \"https://duckduckgo.com/?q=%s&t=lm&ia=web\" &" % text)
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "+")
+        os.system("xdg-open \"https://duckduckgo.com/?q=%s&t=lm&ia=web\" &" % text)
+        self.mintMenuWin.hide()
 
     def search_wikipedia(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "+")
-            os.system("xdg-open \"http://en.wikipedia.org/wiki/Special:Search?search=" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "+")
+        os.system("xdg-open \"http://en.wikipedia.org/wiki/Special:Search?search=" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_dictionary(self, widget):
         text = self.searchEntry.get_text()
@@ -1124,39 +1122,34 @@ class pluginclass( object ):
         self.mintMenuWin.hide()
 
     def search_mint_tutorials(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "%20")
-            os.system("xdg-open \"http://community.linuxmint.com/index.php/tutorial/search/0/" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/tutorial/search/0/" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_mint_ideas(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "%20")
-            os.system("xdg-open \"http://community.linuxmint.com/index.php/idea/search/0/" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/idea/search/0/" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_mint_users(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "%20")
-            os.system("xdg-open \"http://community.linuxmint.com/index.php/user/search/0/" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/user/search/0/" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_mint_hardware(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "%20")
-            os.system("xdg-open \"http://community.linuxmint.com/index.php/hardware/search/0/" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/hardware/search/0/" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def search_mint_software(self, widget):
-        if self.enableInternetSearch:
-            text = self.searchEntry.get_text()
-            text = text.replace(" ", "%20")
-            os.system("xdg-open \"http://community.linuxmint.com/index.php/software/search/0/" + text + "\" &")
-            self.mintMenuWin.hide()
+        text = self.searchEntry.get_text()
+        text = text.replace(" ", "%20")
+        os.system("xdg-open \"http://community.linuxmint.com/index.php/software/search/0/" + text + "\" &")
+        self.mintMenuWin.hide()
 
     def add_to_desktop(self, widget, desktopEntry):
         os.system("xdg-desktop-icon install --novendor %s" % desktopEntry.desktopFile)
