@@ -44,7 +44,7 @@ class mintMenuConfig( object ):
 
         self.builder.get_object("startWithFavorites").set_label(_("Always start with favorites pane"))
         self.builder.get_object("showButtonIcon").set_label(_("Show button icon"))
-        self.builder.get_object("enableInternetSearch").set_label(_("Enable internet search"))
+        self.builder.get_object("enableInternetSearch").set_label(_("Enable Internet search"))
         self.builder.get_object("useCustomColors").set_label(_("Use custom colors"))
         self.builder.get_object("showRecentPlugin").set_label(_("Show recent documents plugin"))
         self.builder.get_object("showApplicationsPlugin").set_label(_("Show applications plugin"))
