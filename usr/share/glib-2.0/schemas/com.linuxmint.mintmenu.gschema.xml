@@ -315,7 +315,7 @@
     </key>
 
     <key type="b" name="enable-internet-search">
-      <default>false</default>
+      <default>true</default>
       <summary></summary>
       <description></description>
     </key>
