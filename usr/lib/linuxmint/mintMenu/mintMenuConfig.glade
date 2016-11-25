@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -310,10 +311,10 @@
               <object class="GtkFrame" id="frame1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">10</property>
+                <property name="margin_left">5</property>
+                <property name="margin_right">5</property>
+                <property name="margin_top">5</property>
+                <property name="margin_bottom">5</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
@@ -333,6 +334,7 @@
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="halign">start</property>
+                        <property name="margin_left">5</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -347,6 +349,7 @@
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="halign">start</property>
+                        <property name="margin_left">5</property>
                         <property name="label" translatable="yes">Button text:</property>
                       </object>
                       <packing>
@@ -373,6 +376,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
+                        <property name="margin_left">5</property>
                         <property name="label" translatable="yes">Button icon:</property>
                       </object>
                       <packing>
@@ -439,10 +443,10 @@
               <object class="GtkFrame" id="frame6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">10</property>
+                <property name="margin_left">5</property>
+                <property name="margin_right">5</property>
+                <property name="margin_top">5</property>
+                <property name="margin_bottom">5</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
@@ -657,17 +661,21 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">10</property>
-                <property name="label_xalign">0</property>
+                <property name="margin_left">5</property>
+                <property name="margin_right">5</property>
+                <property name="margin_top">5</property>
+                <property name="margin_bottom">4</property>
+                <property name="label_xalign">0.5</property>
                 <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkBox" id="vbox13">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="margin_left">7</property>
+                    <property name="margin_right">7</property>
+                    <property name="margin_top">21</property>
+                    <property name="margin_bottom">7</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkCheckButton" id="useCustomColors">
@@ -829,17 +837,22 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">10</property>
+                <property name="margin_left">5</property>
+                <property name="margin_right">5</property>
+                <property name="margin_top">5</property>
+                <property name="margin_bottom">5</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkGrid" id="table17">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="margin_left">7</property>
+                    <property name="margin_right">7</property>
+                    <property name="margin_bottom">7</property>
                     <property name="row_spacing">5</property>
+                    <property name="column_spacing">2</property>
                     <child>
                       <object class="GtkCheckButton" id="showAppComments">
                         <property name="label" translatable="yes">Show application comments</property>
@@ -847,7 +860,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="margin_top">10</property>
+                        <property name="margin_top">11</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -980,16 +993,12 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="right_attach">2</property>
+                        <property name="left_attach">0</property>
                         <property name="top_attach">6</property>
-                        <property name="bottom_attach">7</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
-                        <property name="x_padding">5</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -1008,10 +1017,19 @@
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
+                      <object class="GtkCheckButton" id="enableInternetSearch">
+                        <property name="label" translatable="yes">Enable Internet search</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">8</property>
+                        <property name="width">2</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -1037,10 +1055,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">10</property>
+                <property name="margin_left">7</property>
+                <property name="margin_right">7</property>
+                <property name="margin_top">21</property>
+                <property name="margin_bottom">7</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
@@ -1146,10 +1164,10 @@
               <object class="GtkFrame" id="frame10">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">10</property>
+                <property name="margin_left">7</property>
+                <property name="margin_right">7</property>
+                <property name="margin_top">2</property>
+                <property name="margin_bottom">7</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
@@ -1570,10 +1588,10 @@
               <object class="GtkFrame" id="frame11">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">10</property>
+                <property name="margin_left">7</property>
+                <property name="margin_right">7</property>
+                <property name="margin_top">7</property>
+                <property name="margin_bottom">7</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
@@ -1587,6 +1605,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="margin_left">10</property>
                         <property name="margin_top">10</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -1607,6 +1626,7 @@
                           <object class="GtkLabel" id="systemHeightEntryLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_left">10</property>
                             <property name="label" translatable="yes">Height:</property>
                             <property name="use_markup">True</property>
                           </object>
@@ -1653,6 +1673,7 @@
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
+                            <property name="margin_left">10</property>
                             <property name="label" translatable="yes">Icon size:</property>
                           </object>
                           <packing>
@@ -1703,6 +1724,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="margin_left">10</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -1717,6 +1739,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="margin_left">10</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -1731,6 +1754,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="margin_left">10</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -1745,6 +1769,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="margin_left">10</property>
                                 <property name="relief">none</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -1760,6 +1785,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="margin_left">10</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -1774,6 +1800,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="margin_left">10</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -1788,6 +1815,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="margin_left">10</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>

@@ -1,3 +1,32 @@
+mintmenu (5.7.5) serena; urgency=medium
+
+  * Favorites: Add rhythmbox
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 23 Nov 2016 22:49:47 +0000
+
+mintmenu (5.7.4) serena; urgency=medium
+
+  [ JKAbrams ]
+  * Added setting to disable internet searching
+  * Revert "Added setting to disable internet searching"
+  * Making internet searching from the start menu optional
+
+  [ Clement Lefebvre ]
+  * Search engines: Replace Google CSE with DDG
+  * Search engines: Re-enable search engines by default.
+  * Search engines: Fix community links when Internet search is disabled
+  * l10n: Capitalize "Internet"
+  * Search engines: Point to local version of Wikipedia
+  * l10n: Update POT file
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 23 Nov 2016 15:37:46 +0000
+
+mintmenu (5.7.3) serena; urgency=medium
+
+  * Fixed launching some Wine applications
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 02 Nov 2016 14:03:20 +0000
+
 mintmenu (5.7.2) sarah; urgency=medium
 
   * Menu icon: Scale svg files to 22px to prevent them from getting too big
