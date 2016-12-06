@@ -7,22 +7,18 @@ from gi.repository import Gtk, GdkPixbuf, Gdk, GObject
 from gi.repository import MatePanelApplet
 from gi.repository import Gio
 
-try:
-    import sys
-    import os
-    import commands
-    import gettext
-    import traceback
-    import time
-    import gc
-    import ctypes
-    from ctypes import *
-    import xdg.Config
-    import keybinding
-    import pointerMonitor
-except Exception, e:
-    print e
-    sys.exit( 1 )
+import sys
+import os
+import commands
+import gettext
+import traceback
+import time
+import gc
+import ctypes
+from ctypes import *
+import xdg.Config
+import keybinding
+import pointerMonitor
 
 GObject.threads_init()
 
