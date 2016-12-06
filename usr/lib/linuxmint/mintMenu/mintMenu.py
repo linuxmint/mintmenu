@@ -19,24 +19,14 @@ from ctypes import *
 import xdg.Config
 import keybinding
 import pointerMonitor
+import setproctitle
 
 GObject.threads_init()
 
 gdk = CDLL("libgdk-x11-2.0.so.0")
 
 # Rename the process
-architecture = commands.getoutput("uname -a")
-if (architecture.find("x86_64") >= 0):
-    libc = CDLL('libc.so.6')
-    libc.prctl(15, 'mintmenu', 0, 0, 0)
-else:
-    import dl
-    if os.path.exists('/lib/libc.so.6'):
-        libc = dl.open('/lib/libc.so.6')
-        libc.call('prctl', 15, 'mintmenu', 0, 0, 0)
-    elif os.path.exists('/lib/i386-linux-gnu/libc.so.6'):
-        libc = dl.open('/lib/i386-linux-gnu/libc.so.6')
-        libc.call('prctl', 15, 'mintmenu', 0, 0, 0)
+setproctitle.setproctitle('mintmenu')
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
