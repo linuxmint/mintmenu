@@ -1,3 +1,11 @@
+mintmenu (5.7.6) serena; urgency=medium
+
+  * Reorganize imports
+  * Use setproctitle to name the process
+  * Add Cinnamon support
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 07 Dec 2016 09:24:58 +0000
+
 mintmenu (5.7.5) serena; urgency=medium
 
   * Favorites: Add rhythmbox
