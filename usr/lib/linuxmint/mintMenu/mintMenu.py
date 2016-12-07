@@ -46,14 +46,14 @@ from execute import *
 class MainWindow( object ):
     """This is the main class for the application"""
 
-    def __init__( self, toggleButton, settings, keybinder ):
+    def __init__( self, toggleButton, settings, keybinder, de ):
 
         self.settings = settings
         self.keybinder = keybinder
         self.path = PATH
         sys.path.append( os.path.join( self.path, "plugins") )
 
-        self.detect_desktop_environment()
+        self.de = de
 
         self.icon = "/usr/lib/linuxmint/mintMenu/visualisation-logo.png"
 
@@ -171,20 +171,6 @@ class MainWindow( object ):
         elif defaultStyle is not None:
             self.window.modify_bg( Gtk.StateType.NORMAL, defaultStyle.lookup_color('bg_color')[1] )
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )
-
-    def detect_desktop_environment (self):
-        self.de = "mate"
-        try:
-            de = os.environ["DESKTOP_SESSION"]
-            if de in ["gnome", "gnome-shell", "mate", "kde", "xfce"]:
-                self.de = de
-            else:
-                if os.path.exists("/usr/bin/caja"):
-                    self.de = "mate"
-                elif os.path.exists("/usr/bin/thunar"):
-                    self.de = "xfce"
-        except Exception, detail:
-            print detail
 
     def PopulatePlugins( self ):
         self.panesToColor = [ ]
@@ -459,6 +445,7 @@ class MainWindow( object ):
 class MenuWin( object ):
     def __init__( self, applet, iid ):
         self.applet = applet
+        self.detect_desktop_environment()
         self.settings = Gio.Settings.new("com.linuxmint.mintmenu")
         self.keybinder = keybinding.GlobalKeyBinding()
         self.settings.connect( "changed::applet-text", self.reloadSettings )
@@ -480,7 +467,8 @@ class MenuWin( object ):
         self.applet.connect( "change-orient", self.changeOrientation )
         self.applet.connect("enter-notify-event", self.enter_notify)
         self.applet.connect("leave-notify-event", self.leave_notify)
-        self.mainwin = MainWindow( self.button_box, self.settings, self.keybinder )
+
+        self.mainwin = MainWindow( self.button_box, self.settings, self.keybinder, self.de )
         self.mainwin.window.connect( "map-event", self.onWindowMap )
         self.mainwin.window.connect( "unmap-event", self.onWindowUnmap )
         self.mainwin.window.connect( "realize", self.onRealize )
@@ -587,7 +575,7 @@ class MenuWin( object ):
 
     def loadSettings( self, *args, **kargs ):
         self.hideIcon   =  self.settings.get_boolean( "hide-applet-icon" )
-        self.buttonText =  self.settings.get_string( "applet-text" )
+        self.buttonText =  self.settings.get_string("applet-text")
         self.theme_name =  self.settings.get_string( "theme-name" )
         self.hotkeyText =  self.settings.get_string( "hot-key" )
         self.buttonIcon =  self.settings.get_string( "applet-icon" )
@@ -814,6 +802,22 @@ class MenuWin( object ):
 
         xml = os.path.join( os.path.join( os.path.dirname( __file__ )), "popup.xml" )
         self.applet.setup_menu_from_file(xml, action_group)
+
+    def detect_desktop_environment (self):
+        self.de = "mate"
+        try:
+            de = os.environ["XDG_CURRENT_DESKTOP"].lower()
+            if de in ["gnome", "gnome-shell", "mate", "kde", "xfce"]:
+                self.de = de
+            elif de in ['cinnamon', 'x-cinnamon']:
+            	self.de = 'cinnamon'
+            else:
+                if os.path.exists("/usr/bin/caja"):
+                    self.de = "mate"
+                elif os.path.exists("/usr/bin/thunar"):
+                    self.de = "xfce"
+        except Exception, detail:
+            print detail
 
 def applet_factory( applet, iid, data ):
     MenuWin( applet, iid )

@@ -105,7 +105,6 @@ class pluginclass( object ):
         self.iconsize = self.settings.get( "int","icon-size")
 
         # Check toggles
-
         self.showSoftwareManager = self.settings.get( "bool", "show-software-manager")
         self.showPackageManager = self.settings.get( "bool", "show-package-manager")
         self.showControlCenter = self.settings.get( "bool", "show-control-center")
@@ -113,6 +112,27 @@ class pluginclass( object ):
         self.showLockScreen = self.settings.get( "bool", "show-lock-screen")
         self.showLogout = self.settings.get( "bool", "show-logout")
         self.showQuit = self.settings.get( "bool", "show-quit")
+
+        if self.de == "cinnamon":
+            self.lock_cmd = "cinnamon-screensaver-command --lock"
+            self.logout_cmd = "cinnamon-session-quit --logout"
+            self.shutdown_cmd = "cinnamon-session-quit --power-off"
+            self.terminal_cmd = "/usr/bin/gnome-terminal"
+            self.settings_cmd = "cinnamon-settings"
+        elif self.de == "xfce":
+            self.lock_cmd = "xdg-screensaver lock"
+            self.logout_cmd = "xfce4-session-logout"
+            self.shutdown_cmd = ""
+            self.terminal_cmd = "/usr/bin/gnome-terminal"
+            self.settings_cmd = "xfce4-settings-manager"
+            self.showLockScreen = False
+            self.showQuit = False
+        else:
+            self.lock_cmd = "mate-screensaver-command -l"
+            self.logout_cmd = "mate-session-save --logout-dialog"
+            self.shutdown_cmd = "mate-session-save --shutdown-dialog"
+            self.terminal_cmd = "/usr/bin/mate-terminal"
+            self.settings_cmd = "mate-control-center"
 
         # Hide vertical dotted separator
         self.hideseparator = self.settings.get( "bool", "hide-separator")
@@ -148,54 +168,41 @@ class pluginclass( object ):
 
         if ( self.showControlCenter == True ):
             Button3 = easyButton( "gtk-preferences", self.iconsize, [_("Control Center")], -1, -1 )
-            if self.de == "xfce":
-                Button3.connect( "clicked", self.ButtonClicked, "xfce4-settings-manager" )
-            else:
-                Button3.connect( "clicked", self.ButtonClicked, "mate-control-center" )
+            Button3.connect( "clicked", self.ButtonClicked, self.settings_cmd )
             Button3.show()
             self.systemBtnHolder.pack_start( Button3, False, False, 0 )
             self.mintMenuWin.setTooltip( Button3, _("Configure your system") )
 
         if ( self.showTerminal == True ):
             Button4 = easyButton( "terminal", self.iconsize, [_("Terminal")], -1, -1 )
-            if os.path.exists("/usr/bin/mate-terminal"):
-                Button4.connect( "clicked", self.ButtonClicked, "mate-terminal" )
+            if os.path.exists(self.terminal_cmd):
+                Button4.connect( "clicked", self.ButtonClicked, self.terminal_cmd )
             else:
                 Button4.connect( "clicked", self.ButtonClicked, "x-terminal-emulator" )
             Button4.show()
             self.systemBtnHolder.pack_start( Button4, False, False, 0 )
             self.mintMenuWin.setTooltip( Button4, _("Use the command line") )
+    
+        if ( self.showLockScreen == True ):
+            Button5 = easyButton( "system-lock-screen", self.iconsize, [_("Lock Screen")], -1, -1 )
+            Button5.connect( "clicked", self.ButtonClicked, self.lock_cmd )
+            Button5.show()
+            self.systemBtnHolder.pack_start( Button5, False, False, 0 )
+            self.mintMenuWin.setTooltip( Button5, _("Requires password to unlock") )
 
-        if self.de == "xfce":
+        if ( self.showLogout == True ):
             Button6 = easyButton( "system-log-out", self.iconsize, [_("Logout")], -1, -1 )
-            Button6.connect( "clicked", self.ButtonClicked, "xfce4-session-logout" )
+            Button6.connect( "clicked", self.ButtonClicked, self.logout_cmd )
             Button6.show()
             self.systemBtnHolder.pack_start( Button6, False, False, 0 )
             self.mintMenuWin.setTooltip( Button6, _("Log out or switch user") )
-        else:
-            if ( self.showLockScreen == True ):
-                Button5 = easyButton( "system-lock-screen", self.iconsize, [_("Lock Screen")], -1, -1 )
-                if os.path.exists("/usr/bin/mate-screensaver-command"):
-                    Button5.connect( "clicked", self.ButtonClicked, "mate-screensaver-command -l" )
-                else:
-                    Button5.connect( "clicked", self.ButtonClicked, "xdg-screensaver lock" )
-                Button5.show()
-                self.systemBtnHolder.pack_start( Button5, False, False, 0 )
-                self.mintMenuWin.setTooltip( Button5, _("Requires password to unlock") )
 
-            if ( self.showLogout == True ):
-                Button6 = easyButton( "system-log-out", self.iconsize, [_("Logout")], -1, -1 )
-                Button6.connect( "clicked", self.ButtonClicked, "mate-session-save --logout-dialog" )
-                Button6.show()
-                self.systemBtnHolder.pack_start( Button6, False, False, 0 )
-                self.mintMenuWin.setTooltip( Button6, _("Log out or switch user") )
-
-            if ( self.showQuit == True ):
-                Button7 = easyButton( "system-shutdown", self.iconsize, [_("Quit")], -1, -1 )
-                Button7.connect( "clicked", self.ButtonClicked, "mate-session-save --shutdown-dialog" )
-                Button7.show()
-                self.systemBtnHolder.pack_start( Button7, False, False, 0 )
-                self.mintMenuWin.setTooltip( Button7, _("Shutdown, restart, suspend or hibernate") )
+        if ( self.showQuit == True ):
+            Button7 = easyButton( "system-shutdown", self.iconsize, [_("Quit")], -1, -1 )
+            Button7.connect( "clicked", self.ButtonClicked, self.shutdown_cmd )
+            Button7.show()
+            self.systemBtnHolder.pack_start( Button7, False, False, 0 )
+            self.mintMenuWin.setTooltip( Button7, _("Shutdown, restart, suspend or hibernate") )
 
     def ButtonClicked( self, widget, Exec ):
         self.mintMenuWin.hide()
