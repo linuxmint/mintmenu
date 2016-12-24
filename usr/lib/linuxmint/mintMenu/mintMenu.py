@@ -578,6 +578,12 @@ class MenuWin( object ):
         self.buttonText =  self.settings.get_string("applet-text")
         self.theme_name =  self.settings.get_string( "theme-name" )
         self.hotkeyText =  self.settings.get_string( "hot-key" )
+
+        # If applet-icon does not exist fall back to default or else menu wont start
+        if not os.path.exists( self.settings.get_string( "applet-icon" ) ):
+            os.system( "gsettings reset com.linuxmint.mintmenu applet-icon" )
+            self.settings = Gio.Settings.new( "com.linuxmint.mintmenu" )
+
         self.buttonIcon =  self.settings.get_string( "applet-icon" )
         self.iconSize = self.settings.get_int( "applet-icon-size" )
 
