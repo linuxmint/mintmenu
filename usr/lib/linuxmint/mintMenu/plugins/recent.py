@@ -9,6 +9,7 @@ from easygsettings import EasyGSettings
 from execute import Execute
 from easyfiles import *
 from easybuttons import *
+import recentHelper as RecentHelper
 
 class pluginclass:
     """This is the main class for the plugin"""
@@ -28,12 +29,17 @@ class pluginclass:
         self.window = self.builder.get_object( "window1" )
 
         #Set 'heading' property for plugin
-        self.heading = _("Recent documents")
+        self.heading = _("Recently used")
 
         #This should be the first item added to the window in glade
         self.content_holder = self.builder.get_object( "eventbox1" )
 
         self.recentBox = self.builder.get_object("RecentBox")
+        self.recentAppBox = self.builder.get_object("RecentApps")
+        RecentHelper.recentAppBox = self.recentAppBox
+        
+        #self.recentApps = []
+        
         self.recentVBox = self.builder.get_object( "vbox1" )
 
         #Specify plugin width
@@ -49,12 +55,15 @@ class pluginclass:
         self.settings.notifyAdd( 'num-recent-docs', self.RegenPlugin )
         self.settings.notifyAdd( 'recent-font-size', self.RegenPlugin )
 
+        self.appSettings = EasyGSettings( "com.linuxmint.mintmenu.plugins.applications" )
+        self.appSettings.notifyAdd( "icon-size", self.RegenPlugin )
+        
         self.FileList=[]
         self.RecManagerInstance = Gtk.RecentManager.get_default()
         self.recentManagerId = self.RecManagerInstance.connect("changed", self.DoRecent)
 
         self.RegenPlugin()
-        self.builder.get_object( "RecentTabs" ).set_current_page(1)
+        self.builder.get_object( "RecentTabs" ).set_current_page(0)
 
         #Connect event handlers
         self.builder.get_object("ClrBtn").connect("clicked", self.clrmenu)
@@ -79,6 +88,8 @@ class pluginclass:
         self.recenth = self.settings.get( 'int', 'height' )
         self.recentw = self.settings.get( 'int', 'width' )
         self.numentries = self.settings.get( 'int', 'num-recent-docs' )
+        RecentHelper.numentries = self.numentries
+        
         self.recentfontsize = self.settings.get( 'int', 'recent-font-size' )
 
         # Hide vertical dotted separator
@@ -88,6 +99,7 @@ class pluginclass:
         # Allow plugin to be minimized to the left plugin pane
         self.sticky = self.settings.get( "bool", "sticky" )
         self.minimized = self.settings.get( "bool", "minimized" )
+        RecentHelper.iconSize = self.appSettings.get( "int", "icon-size")
         self.RebuildPlugin()
 
     def SetHidden( self, state ):
@@ -105,7 +117,7 @@ class pluginclass:
     def DoRecent( self, *args, **kargs ):
         for i in self.recentBox.get_children():
             i.destroy()
-
+        
         self.recentVBox.set_size_request( self.recentw, self.recenth )
         if len( self.recentBox.get_children() ) < self.numentries:
             n=len( self.recentBox.get_children() )-1
@@ -121,6 +133,9 @@ class pluginclass:
             if Name != None:
                 self.AddRecentBtn( Name, self.IconList[loc] )
             loc = loc + 1
+        
+        RecentHelper.doRecentApps()
+        
         return True
 
     def clrmenu(self, *args, **kargs):
@@ -224,3 +239,4 @@ class pluginclass:
 
     def do_plugin(self):
         self.DoRecent()
+        

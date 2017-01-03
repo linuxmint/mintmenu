@@ -19,6 +19,7 @@ from easybuttons import *
 from execute import Execute
 from easygsettings import EasyGSettings
 from easyfiles import *
+import recentHelper as RecentHelper
 
 gtk = CDLL("libgtk-x11-2.0.so.0")
 
@@ -168,6 +169,7 @@ class pluginclass( object ):
     @print_timing
     def __init__( self, mintMenuWin, toggleButton, de ):
         self.mintMenuWin = mintMenuWin
+        RecentHelper.mintMenuWin = mintMenuWin
 
         self.mainMenus = [ ]
 
@@ -259,7 +261,7 @@ class pluginclass( object ):
             print detail
         self.currentFavCol = 0
         self.favorites = []
-
+        
         self.content_holder.set_size_request( self.width, self.height )
         self.categoriesBox.set_size_request( self.width / 3, -1 )
         self.applicationsBox.set_size_request( self.width / 2, -1 )
@@ -292,8 +294,7 @@ class pluginclass( object ):
 
         self.icon_theme = Gtk.IconTheme.get_default();
         self.icon_theme.connect("changed", self.on_icon_theme_changed)
-
-
+        
     def refresh_apt_cache(self):
         if self.useAPT:
             os.system("mkdir -p %s/.linuxmint/mintMenu/" % home)
@@ -445,6 +446,7 @@ class pluginclass( object ):
 
         self.Todos()
         self.buildFavorites()
+        RecentHelper.buildRecentApps()
         self.RebuildPlugin()
 
     def GetGSettingsEntries( self ):
@@ -1302,6 +1304,7 @@ class pluginclass( object ):
     def do_plugin( self ):
         self.Todos()
         self.buildFavorites()
+        RecentHelper.buildRecentApps()
 
     # Scroll button into view
     def scrollItemIntoView( self, widget, event = None ):
@@ -1374,7 +1377,7 @@ class pluginclass( object ):
                 favButton.connect( "popup-menu", self.favPopup )
                 favButton.connect( "button-press-event", self.favPopup )
                 favButton.connect( "focus-in-event", self.scrollItemIntoView )
-                favButton.connect( "clicked", lambda w: self.mintMenuWin.hide() )
+                favButton.connect( "clicked", RecentHelper.applicationButtonClicked )
 
                 self.mintMenuWin.setTooltip( favButton, favButton.getTooltip() )
                 favButton.type = "location"
@@ -1513,7 +1516,7 @@ class pluginclass( object ):
                 self.favoritesReorder( favButton.position, position )
 
             self.favoritesSave()
-
+     
     def favoritesRemove( self, position ):
         tmp = self.favorites[ position ]
         self.favorites.remove( self.favorites[ position ] )
@@ -1720,7 +1723,7 @@ class pluginclass( object ):
                         self.mintMenuWin.setTooltip( item["button"], item["button"].getTooltip() )
                         item["button"].connect( "button-press-event", self.menuPopup )
                         item["button"].connect( "focus-in-event", self.scrollItemIntoView )
-                        item["button"].connect( "clicked", lambda w: self.mintMenuWin.hide() )
+                        item["button"].connect( "clicked", RecentHelper.applicationButtonClicked )
                         if self.activeFilter[0] == 0:
                             item["button"].filterText( self.activeFilter[1] )
                         else:
