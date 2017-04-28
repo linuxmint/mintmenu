@@ -14,8 +14,6 @@ import gettext
 import traceback
 import time
 import gc
-import ctypes
-from ctypes import *
 import xdg.Config
 import keybinding
 import pointerMonitor
@@ -753,9 +751,8 @@ class MenuWin( object ):
         ourWidth  = self.mainwin.window.get_size()[0]
         ourHeight = self.mainwin.window.get_size()[1] + self.mainwin.offset
 
-        x = c_int()
-        y = c_int()
         # Get the dimensions/position of the widgetToAlignWith
+        print(self.applet.get_window().get_origin())
         entryX = self.applet.get_window().get_origin().x
         entryY = self.applet.get_window().get_origin().y
 

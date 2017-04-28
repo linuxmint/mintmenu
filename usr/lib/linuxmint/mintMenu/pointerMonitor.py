@@ -7,10 +7,6 @@ from Xlib.display import Display
 from Xlib import X, error
 from gi.repository import Gtk, Gdk, GObject, GLib
 import threading
-import ctypes
-from ctypes import *
-
-gdk = CDLL("libgdk-3.so.0")
 
 class PointerMonitor(GObject.GObject, threading.Thread):
     __gsignals__ = {
@@ -27,9 +23,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
 
     # Receives GDK windows
     def addWindowToMonitor(self, window):
-        gdk.gdk_x11_drawable_get_xid.argtypes = [c_void_p]
-        xWindow = self.display.create_resource_object("window", gdk.gdk_x11_drawable_get_xid(hash(window)))
-        self.windows.append(xWindow)
+        self.windows.append(window)
 
     def grabPointer(self):
         self.root.grab_button(X.AnyButton, X.AnyModifier, True, X.ButtonPressMask, X.GrabModeSync, X.GrabModeAsync, 0, 0)
@@ -54,9 +48,14 @@ class PointerMonitor(GObject.GObject, threading.Thread):
                 if event.type == X.ButtonPress:
                     # Check if pointer is inside monitored windows
                     for w in self.windows:
-                        p = w.query_pointer()
-                        g = w.get_geometry()
-                        if p.win_x >= 0 and p.win_y >= 0 and p.win_x <= g.width and p.win_y <= g.height:
+                        if Gtk.check_version (3, 20, 0) is None:
+                            pdevice = Gdk.Display.get_default().get_default_seat().get_pointer()
+                        else:
+                            pdevice = Gdk.Display.get_default().get_device_manager().get_client_pointer()
+                        p = self.get_window().get_device_position(pdevice)
+                        g = self.get_size()
+
+                        if p.x >= 0 and p.y >= 0 and p.x <= g.width and p.y <= g.height:                        
                             break
                     else:
                         # Is outside, so activate

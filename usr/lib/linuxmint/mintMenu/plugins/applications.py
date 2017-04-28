@@ -13,8 +13,6 @@ import threading
 import commands
 import subprocess
 import filecmp
-import ctypes
-from ctypes import *
 from easybuttons import *
 from execute import Execute
 from easygsettings import EasyGSettings
@@ -148,11 +146,6 @@ class SuggestionButton ( Gtk.Button ):
 
     def set_icon_size (self, size):
         self.image.set_pixel_size( size )
-
-class TargetEntry(Structure):
-    _fields_ = [("target", c_char_p),
-                ("flags", c_int),
-                ("info", c_int)]
 
 class pluginclass( object ):
     TARGET_TYPE_TEXT = 80

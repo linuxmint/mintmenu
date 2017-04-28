@@ -6,8 +6,6 @@ import string
 import gettext
 import commands
 import time
-import ctypes
-from ctypes import *
 
 from easybuttons import *
 from easygsettings import EasyGSettings
