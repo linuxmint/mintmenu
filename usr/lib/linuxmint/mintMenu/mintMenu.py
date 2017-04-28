@@ -462,7 +462,14 @@ class MenuWin( object ):
         self.applet = applet
         self.detect_desktop_environment()
         self.settings = Gio.Settings.new("com.linuxmint.mintmenu")
-        self.keybinder = keybinding.GlobalKeyBinding()
+        self.keybinder = keybinding.GlobalKeyBinding()        
+        self.loadSettings()
+
+        self.createPanelButton()
+
+        self.mate_settings = Gio.Settings.new("org.mate.interface")
+        self.mate_settings.connect( "changed::gtk-theme", self.changeTheme )
+
         self.settings.connect( "changed::applet-text", self.reloadSettings )
         self.settings.connect( "changed::theme-name", self.changeTheme )
         self.settings.connect( "changed::hot-key", self.reloadSettings )
@@ -470,12 +477,6 @@ class MenuWin( object ):
         self.settings.connect( "changed::hide-applet-icon", self.reloadSettings )
         self.settings.connect( "changed::applet-icon-size", self.reloadSettings )
         self.settings.connect( "changed::hot-key", self.hotkeyChanged )
-        self.loadSettings()
-
-        self.mate_settings = Gio.Settings.new("org.mate.interface")
-        self.mate_settings.connect( "changed::gtk-theme", self.changeTheme )
-
-        self.createPanelButton()
 
         self.applet.set_flags( MatePanelApplet.AppletFlags.EXPAND_MINOR )
         self.applet.connect( "button-press-event", self.showMenu )
