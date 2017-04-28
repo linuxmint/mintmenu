@@ -592,6 +592,8 @@ class MenuWin( object ):
         self.buttonText =  self.settings.get_string("applet-text")
         self.theme_name =  self.settings.get_string( "theme-name" )
         self.hotkeyText =  self.settings.get_string( "hot-key" )
+        if not os.path.exists(self.settings.get_string("applet-icon")):
+            self.settings.reset("applet-icon")
         self.buttonIcon =  self.settings.get_string( "applet-icon" )
         self.iconSize = self.settings.get_int( "applet-icon-size" )
 
