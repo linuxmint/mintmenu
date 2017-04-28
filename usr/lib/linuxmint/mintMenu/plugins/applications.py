@@ -1407,10 +1407,10 @@ class pluginclass( object ):
                     favButton.position = position
                     self.favorites.append( favButton )
                     self.favoritesPositionOnGrid( favButton )
-                    favButton.connect( "drag-data-received", self.onFavButtonDragReorder )
-                    favButton.drag_dest_set( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY )
-                    favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
-                    favButton.drag_source_set ( Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
+                    favButton.drag_source_set (Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY)
+                    favButton.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY)
+                    favButton.connect("drag-data-get", self.on_drag_data_get)
+                    favButton.connect("drag-data-received", self.on_drag_data_received)
                     position += 1
 
             self.favoritesSave()
@@ -1469,10 +1469,10 @@ class pluginclass( object ):
             self.favorites.append( favButton )
             self.favoritesPositionOnGrid( favButton )
 
-            favButton.connect( "drag-data-received", self.onFavButtonDragReorder )
-            favButton.drag_dest_set( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY )
-            favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
-            favButton.drag_source_set ( Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
+            favButton.connect("drag-data-received", self.on_drag_data_received)
+            favButton.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY)
+            favButton.connect("drag-data-get", self.on_drag_data_get)
+            favButton.drag_source_set (Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY)
 
             if position >= 0:
                 self.favoritesReorder( favButton.position, position )
@@ -1519,15 +1519,14 @@ class pluginclass( object ):
 
         return False
 
-    def onFavButtonDragReorderGet( self, widget, context, selection, targetType, eventTime ):
-        if targetType == self.TARGET_TYPE_FAV:
+    def on_drag_data_get(self, widget, context, selection, info, time):
+        if info == self.TARGET_TYPE_FAV:
             self.drag_origin = widget.position
-            selection.set( selection.target, 8, str(widget.position))
+            selection.set(selection.get_target(), 8, str(widget.position))
 
-    def onFavButtonDragReorder( self, widget, context, x, y, selection, targetType, time  ):
-        if targetType == self.TARGET_TYPE_FAV:
-            #self.favoritesReorder( int(selection.data), widget.position )
-            self.favoritesReorder( self.drag_origin, widget.position )
+    def on_drag_data_received( self, widget, context, x, y, selection, info, time):
+        if info == self.TARGET_TYPE_FAV:
+            self.favoritesReorder( int(selection.get_data()), widget.position )
 
     def on_icon_theme_changed(self, theme):
         print "on_icon_theme_changed"
