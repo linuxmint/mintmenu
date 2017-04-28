@@ -3,6 +3,7 @@
 from gi.repository import Gtk, Gdk, GLib
 from gi.repository import Pango
 from gi.repository import GObject
+from gi.repository import MateDesktop
 import os.path
 import shutil
 import re
@@ -399,11 +400,11 @@ class ApplicationLauncher( easyButton ):
         shutil.copyfile( self.desktopFile, self.startupFilePath )
 
         # Remove %u, etc. from Exec entry, because MATE will not replace them when it starts the app
-        item = matedesktop.item_new_from_uri( self.startupFilePath, matedesktop.LOAD_ONLY_IF_EXISTS )
+        item = MateDesktop.DesktopItem.new_from_uri(self.startupFilePath, MateDesktop.DesktopItemLoadFlags.ONLY_IF_EXISTS)
         if item:
             r = re.compile("%[A-Za-z]");
-            tmp = r.sub("", item.get_string( matedesktop.KEY_EXEC ) ).strip()
-            item.set_string( matedesktop.KEY_EXEC, tmp )
+            tmp = r.sub("", item.get_string( MateDesktop.DESKTOP_ITEM_EXEC ) ).strip()
+            item.set_string( MateDesktop.DESKTOP_ITEM_EXEC, tmp )
             item.save( self.startupFilePath, 0 )
 
     def removeFromStartup( self ):
