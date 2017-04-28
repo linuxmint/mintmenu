@@ -860,9 +860,9 @@ class pluginclass( object ):
 
         return False
 
-    def favPopup( self, widget, ev ):
-        if ev.button == 3:
-            if ev.y > widget.get_allocation().height / 2:
+    def favPopup( self, widget, event ):
+        if event.button == 3:
+            if event.y > widget.get_allocation().height / 2:
                 insertBefore = False
             else:
                 insertBefore = True
@@ -916,7 +916,7 @@ class pluginclass( object ):
 
                 mTree.show_all()
                 self.mintMenuWin.stopHiding()
-                mTree.popup(None, None, None, None, ev.button, ev.time)
+                mTree.popup(None, None, None, None, event.button, event.time)
             else:
                 mTree = Gtk.Menu()
                 mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
@@ -935,7 +935,7 @@ class pluginclass( object ):
                 insertSpaceMenuItem.connect( "activate", self.onFavoritesInsertSpace, widget, insertBefore )
                 insertSeparatorMenuItem.connect( "activate", self.onFavoritesInsertSeparator, widget, insertBefore )
                 self.mintMenuWin.stopHiding()
-                mTree.popup(None, None, None, None, ev.button, ev.time)
+                mTree.popup(None, None, None, None, event.button, event.time)
 
     def menuPopup( self, widget, event ):
         if event.button == 3:
@@ -997,7 +997,7 @@ class pluginclass( object ):
                 startupMenuItem.connect( "toggled", self.onAddToStartup, widget )
 
             self.mintMenuWin.stopHiding()
-            mTree.popup(None, None, None, None, ev.button, ev.time)
+            mTree.popup(None, None, None, None, event.button, event.time)
 
 
     def searchPopup( self, widget=None, event=None ):
