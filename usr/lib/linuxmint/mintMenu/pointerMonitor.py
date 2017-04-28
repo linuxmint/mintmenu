@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 
 import gi
-gi.require_version("Gtk", "2.0")
+gi.require_version("Gtk", "3.0")
 
 from Xlib.display import Display
 from Xlib import X, error
@@ -10,8 +10,7 @@ import threading
 import ctypes
 from ctypes import *
 
-gdk = CDLL("libgdk-x11-2.0.so.0")
-gtk = CDLL("libgtk-x11-2.0.so.0")
+gdk = CDLL("libgdk-3.so.0")
 
 class PointerMonitor(GObject.GObject, threading.Thread):
     __gsignals__ = {
