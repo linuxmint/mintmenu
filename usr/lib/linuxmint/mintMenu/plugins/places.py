@@ -259,6 +259,7 @@ class pluginclass( object ):
             trashMenu.show_all()
             emptyTrashMenuItem.connect ( "activate", self.emptyTrash, widget )
             self.mintMenuWin.stopHiding()
+            trashMenu.attach_to_widget(widget, None)
             trashMenu.popup(None, None, None, None, 3, 0)
 
     def emptyTrash( self, menu, widget):
