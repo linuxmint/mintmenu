@@ -136,34 +136,21 @@ class pluginclass:
         AButton.set_size_request( 200, -1 )
         AButton.set_relief( Gtk.ReliefStyle.NONE )
         AButton.connect( "clicked", self.callback, Name )
+        AButton.show()
 
-        Align1 = Gtk.Alignment()
-        Align1.set( 0, 0.5, 0, 0)
-        Align1.set_padding( 0, 0, 0, 0 )
-        HBox1 = Gtk.Box( orientation=Gtk.Orientation.HORIZONTAL, spacing=5 )
-        VBox1 = Gtk.Box( orientation=Gtk.Orientation.VERTICAL, spacing=2 )
-
-        VBox1.show()
-
-        req = AButton.size_request()
-
-        Label1 = Gtk.Label( DispName )
-        Label1.set_size_request( req.width-20, -1 )
-        Label1.set_ellipsize( Pango.EllipsizeMode.END )
-        Label1.show()
-        VBox1.add( Label1 )
+        Box1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 
         ButtonIcon = Gtk.Image()
+        ButtonIcon.set_size_request(20, -1)
         ButtonIcon.set_from_pixbuf(RecentImage)
-        HBox1.add( ButtonIcon )
+        Box1.add(ButtonIcon)
 
-        ButtonIcon.show()
-        HBox1.add( VBox1 )
-        HBox1.show()
-        Align1.add( HBox1 )
-        Align1.show()
-        AButton.add( Align1 )
-        AButton.show()
+        Label1 = Gtk.Label( DispName )
+        Label1.set_ellipsize( Pango.EllipsizeMode.END )
+        Box1.add( Label1 )
+
+        AButton.add( Box1 )
+        AButton.show_all()
 
         self.recentBox.pack_start( AButton, False, True, 0 )
 
