@@ -88,7 +88,7 @@ class IconManager(GObject.GObject):
             image = Gtk.Image()
             icon_found = False
             for theme in self.themes:
-                if theme.has_icon( realIconName ):
+                if theme.lookup_icon(realIconName, 0, Gtk.IconLookupFlags.FORCE_REGULAR):
                     icon_found = True
                     break
 
