@@ -62,7 +62,6 @@ class MainWindow( object ):
         self.window.get_window().set_decorations(Gdk.WMDecoration.BORDER)
         self.window.set_title("")
         self.paneholder = builder.get_object( "paneholder" )
-        self.border     = builder.get_object( "border" )
 
         builder.connect_signals(self)
 
@@ -86,10 +85,8 @@ class MainWindow( object ):
         self.settings.connect( "changed::start-with-favorites", self.toggleStartWithFavorites )
         self.settings.connect( "changed::tooltips-enabled", self.toggleTooltipsEnabled )
         self.settings.connect( "changed::use-custom-color", self.toggleUseCustomColor )
-        self.settings.connect( "changed::custom-border-color", self.toggleCustomBorderColor )
         self.settings.connect( "changed::custom-heading-color", self.toggleCustomHeadingColor )
         self.settings.connect( "changed::custom-color", self.toggleCustomBackgroundColor )
-        self.settings.connect( "changed::border-width", self.toggleBorderWidth )
 
         self.getSetGSettingEntries()
 
@@ -126,17 +123,9 @@ class MainWindow( object ):
     def toggleStartWithFavorites( self, settings, key, args = None ):
         self.startWithFavorites = settings.get_boolean(key)
 
-    def toggleBorderWidth( self, settings, key,  args = None ):
-        self.borderwidth = settings.get_int(key)
-        self.SetupMintMenuBorder()
-
     def toggleUseCustomColor( self, settings, key, args = None ):
         self.usecustomcolor = settings.get_boolean(key)
         self.loadTheme()
-
-    def toggleCustomBorderColor( self, settings, key, args = None ):
-        self.custombordercolor = settings.get_string(key)
-        self.SetupMintMenuBorder()
 
     def toggleCustomBackgroundColor( self, settings, key, args = None):
         self.customcolor = settings.get_string(key)
@@ -153,23 +142,11 @@ class MainWindow( object ):
         self.usecustomcolor       = self.settings.get_boolean( "use-custom-color" )
         self.customcolor          = self.settings.get_string( "custom-color" )
         self.customheadingcolor   = self.settings.get_string( "custom-heading-color" )
-        self.custombordercolor    = self.settings.get_string( "custom-border-color" )
-        self.borderwidth          = self.settings.get_int( "border-width" )
         self.offset               = self.settings.get_int( "offset" )
         self.enableTooltips       = self.settings.get_boolean( "tooltips-enabled" )
         self.startWithFavorites   = self.settings.get_boolean( "start-with-favorites" )
 
         self.globalEnableTooltips = self.panelSettings.get_boolean( "tooltips-enabled" )
-
-    def SetupMintMenuBorder( self, color = None ):
-        context = self.window.get_style_context()
-        if self.usecustomcolor:
-            borderColor = Gdk.RGBA()
-            borderColor.parse( self.custombordercolor )
-            self.window.override_background_color( context.get_state(), borderColor )
-        elif color is not None:
-            self.window.override_background_color( context.get_state(), color )
-        self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )
 
     def PopulatePlugins( self ):
         self.panesToColor = [ ]
@@ -337,14 +314,12 @@ class MainWindow( object ):
 
         fgColor = context.get_color( context.get_state() )
         bgColor = context.get_background_color( context.get_state() )
-        borderColor = context.get_border_color( context.get_state() )
 
-        return { "fg": fgColor, "bg": bgColor, "border": borderColor }
+        return { "fg": fgColor, "bg": bgColor }
 
     def loadTheme( self ):
         colors = self.getDefaultColors()
         self.SetPaneColors( self.panesToColor, colors["bg"] )
-        self.SetupMintMenuBorder( colors["border"] )
         self.SetHeadingStyle( self.headingsToColor )
 
     def SetPaneColors( self, items, color = None ):

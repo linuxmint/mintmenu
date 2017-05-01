@@ -58,9 +58,6 @@ class mintMenuConfig( object ):
         self.builder.get_object("use_apt").set_label(_("Search for packages to install"))
         self.builder.get_object("swapGeneric").set_label(_("Swap name and generic name"))
 
-        self.builder.get_object("label11").set_text(_("Border width:"))
-        self.builder.get_object("label25").set_text(_("pixels"))
-
         self.builder.get_object("buttonTextLabel").set_text(_("Button text:"))
         self.builder.get_object("label1").set_text(_("Options"))
         self.builder.get_object("applicationsLabel").set_text(_("Applications"))
@@ -72,7 +69,6 @@ class mintMenuConfig( object ):
 
         self.builder.get_object("backgroundColorLabel").set_text(_("Background:"))
         self.builder.get_object("headingColorLabel").set_text(_("Headings:"))
-        self.builder.get_object("borderColorLabel").set_text(_("Borders:"))
         self.builder.get_object("themeLabel").set_text(_("Theme:"))
 
         #self.builder.get_object("applicationsLabel").set_text(_("Applications"))
@@ -131,13 +127,10 @@ class mintMenuConfig( object ):
         self.placesIconSize = self.builder.get_object( "placesIconSize" )
         self.systemIconSize = self.builder.get_object( "systemIconSize" )
         self.favCols = self.builder.get_object( "numFavCols" )
-        self.borderWidth = self.builder.get_object( "borderWidth" )
         self.useCustomColors = self.builder.get_object( "useCustomColors" )
         self.backgroundColor = self.builder.get_object( "backgroundColor" )
-        self.borderColor = self.builder.get_object( "borderColor" )
         self.headingColor = self.builder.get_object( "headingColor" )
         self.backgroundColorLabel = self.builder.get_object( "backgroundColorLabel" )
-        self.borderColorLabel = self.builder.get_object( "borderColorLabel" )
         self.headingColorLabel = self.builder.get_object( "headingColorLabel" )
         self.showButtonIcon = self.builder.get_object( "showButtonIcon" )
         self.enableInternetSearch = self.builder.get_object( "enableInternetSearch" )
@@ -215,11 +208,9 @@ class mintMenuConfig( object ):
         self.bindGSettingsValueToWidget( self.settingsPlaces, "int", "icon-size", self.placesIconSize, "value-changed", self.placesIconSize.set_value, self.placesIconSize.get_value )
         self.bindGSettingsValueToWidget( self.settingsSystem, "int", "icon-size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value )
 
-        self.bindGSettingsValueToWidget( self.settings, "int", "border-width", self.borderWidth, "value-changed", self.borderWidth.set_value, self.borderWidth.get_value_as_int )
         self.bindGSettingsValueToWidget( self.settings, "bool", "use-custom-color", self.useCustomColors, "toggled", self.useCustomColors.set_active, self.useCustomColors.get_active )
         self.bindGSettingsValueToWidget( self.settings, "color", "custom-color", self.backgroundColor, "color-set", self.backgroundColor.set_rgba, self.getBackgroundColor )
         self.bindGSettingsValueToWidget( self.settings, "color", "custom-heading-color", self.headingColor, "color-set", self.headingColor.set_rgba, self.getHeadingColor )
-        self.bindGSettingsValueToWidget( self.settings, "color", "custom-border-color", self.borderColor, "color-set", self.borderColor.set_rgba, self.getBorderColor )
         self.bindGSettingsValueToWidget( self.settings, "bool", "hide-applet-icon", self.showButtonIcon, "toggled", self.setShowButtonIcon, self.getShowButtonIcon )
         self.bindGSettingsValueToWidget( self.settings, "string", "applet-text", self.buttonText, "changed", self.buttonText.set_text, self.buttonText.get_text )
         self.bindGSettingsValueToWidget( self.settings, "string", "hot-key", self.hotkeyWidget, "accel-edited", self.hotkeyWidget.set_val, self.hotkeyWidget.get_val )
@@ -382,18 +373,12 @@ class mintMenuConfig( object ):
 
     def toggleUseCustomColors( self, widget ):
         self.backgroundColor.set_sensitive( widget.get_active() )
-        self.borderColor.set_sensitive( widget.get_active() )
         self.headingColor.set_sensitive(  widget.get_active() )
         self.backgroundColorLabel.set_sensitive( widget.get_active() )
-        self.borderColorLabel.set_sensitive( widget.get_active() )
         self.headingColorLabel.set_sensitive(  widget.get_active() )
 
     def getBackgroundColor( self ):
         color = self.backgroundColor.get_rgba()
-        return self.gdkRGBAToString( color )
-
-    def getBorderColor( self ):
-        color = self.borderColor.get_rgba()
         return self.gdkRGBAToString( color )
 
     def getHeadingColor( self ):
