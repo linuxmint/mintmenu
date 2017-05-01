@@ -1,3 +1,37 @@
+mintmenu (5.7.7) sonya; urgency=medium
+
+  [ leigh123linux ]
+  * gtk3
+  * glade part #1
+  * glade part #2
+  * glade part #3
+  * fix errors
+  * fix some glade typos
+  * fix border colour
+
+  [ Clement Lefebvre ]
+  * Remove more ctypes
+  * Fix get_origin calls in Betsy
+  * Fix keybinding in LMDE
+  * Fix unknown variable name
+  * Fix popup menus
+  * Fix DND in favorites
+  * Fix add to desktop
+  * Fix empty trash popup
+  * Removed obsolete opacity support in config window
+  * [Alexei Sorokin] Recent: Fix Gtk warnings
+  * Fix race condition with dconf on session start
+  * Fix #157
+  * Fix typo in debian/control
+
+  [ JosephMcc ]
+  * Don't ignore icons from /usr/share/pixmaps
+
+  [ Clement Lefebvre ]
+  * Give the applet box a class name to allow easier themeing
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 01 May 2017 19:50:14 +0100
+
 mintmenu (5.7.6) serena; urgency=medium
 
   * Reorganize imports
