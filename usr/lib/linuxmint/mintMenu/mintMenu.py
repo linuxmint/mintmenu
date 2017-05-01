@@ -505,11 +505,13 @@ class MenuWin( object ):
 
     def onWindowMap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.SELECTED )
+        self.button_box.get_style_context().set_state( Gtk.StateFlags.SELECTED )
         self.keybinder.set_focus_window( self.mainwin.window.get_window() )
         return False
 
     def onWindowUnmap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.NORMAL )
+        self.button_box.get_style_context().set_state( Gtk.StateFlags.NORMAL )
         self.keybinder.set_focus_window()
         return False
 
@@ -582,6 +584,8 @@ class MenuWin( object ):
         self.button_box.set_homogeneous( False )
         self.button_box.show_all()
         self.sizeButton()
+
+        self.button_box.get_style_context().add_class('mintmenu')
 
         self.applet.add( self.button_box )
         self.applet.set_background_widget( self.applet )
