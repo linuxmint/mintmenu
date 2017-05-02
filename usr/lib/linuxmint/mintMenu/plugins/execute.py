@@ -23,7 +23,7 @@ def Execute( cmd , commandCwd=None):
             cwd = tmpCwd
 
     if isinstance( cmd, str ) or isinstance( cmd, unicode):
-        if (cmd.find("ubiquity") >= 0) or (cmd.find("/home/") >= 0) or (cmd.find("xdg-su") >= 0) or (cmd.find("\"") >= 0):
+        if (cmd.find("ubiquity") >= 0) or (cmd.find("/home/") >= 0) or (cmd.find("su-to-root") >= 0) or (cmd.find("xdg-su") >= 0) or (cmd.find("\"") >= 0):
             print "running manually..."
             try:
                 os.chdir(cwd)
