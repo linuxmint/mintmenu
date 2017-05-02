@@ -1,3 +1,13 @@
+mintmenu (5.7.8) sonya; urgency=medium
+
+  [ JosephMcc ]
+  * Remove the ability to set a custom border
+
+  [ Clement Lefebvre ]
+  * Fix launching apps which use su-to-root
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 02 May 2017 13:10:32 +0100
+
 mintmenu (5.7.7) sonya; urgency=medium
 
   [ leigh123linux ]
