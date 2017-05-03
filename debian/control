@@ -14,7 +14,6 @@ Depends:
  mint-common,
  python-mate-menu, python-xdg, xdg-utils,
  python-setproctitle,
- libmatepanelapplet, libmatedesktop,
  mate-menus,
  gvfs-bin,
  python-xlib,
