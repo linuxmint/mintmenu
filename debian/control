@@ -11,15 +11,13 @@ Depends:
  ${python:Depends},
  ${misc:Depends},
  python (>= 2.4), python (<< 3),
- python-gtk2, python-glade2,
  mint-common,
  python-mate-menu, python-xdg, xdg-utils,
  python-setproctitle,
- libmatepanelapplet, libmatedesktop,
  mate-menus,
  gvfs-bin,
  python-xlib,
- gir1.2-mate-panel, gir1.2-gtk-2.0, gir1.2-mate-desktop,
+ gir1.2-mate-panel (>= 1.18.0), gir1.2-gtk-3.0, gir1.2-mate-desktop (>= 1.18.0),
  mozo
 Description: Advanced MATE menu
  One of the most advanced menus under Linux. MintMenu supports filtering,
