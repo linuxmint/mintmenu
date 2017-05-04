@@ -548,8 +548,8 @@ class MenuWin( object ):
             self.button_box.pack_start( self.button_icon , False, False, 0)
             self.button_box.pack_start( self.systemlabel , False, False, 0)
             self.button_icon.set_padding( 0, 5 )
-        elif self.applet.get_orient( orientation=Gtk.Orientation.VERTICAL ) == MatePanelApplet.AppletOrient.RIGHT:
-            self.button_box = Gtk.Box()
+        elif self.applet.get_orient() == MatePanelApplet.AppletOrient.RIGHT:
+            self.button_box = Gtk.Box( orientation=Gtk.Orientation.VERTICAL )
             self.systemlabel.set_angle( 90 )
             self.button_box.pack_start( self.systemlabel , False, False, 0)
             self.button_box.pack_start( self.button_icon , False, False, 0)
