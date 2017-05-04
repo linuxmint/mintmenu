@@ -1,5 +1,7 @@
 #!/usr/bin/python2
 
+import gi
+gi.require_version('MateDesktop', '2.0')
 from gi.repository import Gtk, Gdk, GLib
 from gi.repository import Pango
 from gi.repository import GObject
