@@ -25,18 +25,12 @@
 # DEALINGS IN THE SOFTWARE.
 
 import gi
-gi.require_version("Gtk", "2.0")
+gi.require_version("Gtk", "3.0")
 
 from Xlib.display import Display
 from Xlib import X, error
-from gi.repository import Gtk, Gdk, GObject, GLib
+from gi.repository import Gtk, Gdk, GdkX11, GObject, GLib
 import threading
-import ctypes
-from ctypes import *
-import capi
-
-gdk = CDLL("libgdk-x11-2.0.so.0")
-gtk = CDLL("libgtk-x11-2.0.so.0")
 
 SPECIAL_MODS = (["Super_L",    "<Super>"],
                 ["Super_R",    "<Super>"],
@@ -57,8 +51,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         threading.Thread.__init__ (self)
         self.setDaemon (True)
 
-        gdk.gdk_keymap_get_default.restype = c_void_p
-        self.keymap = capi.get_widget (gdk.gdk_keymap_get_default())
+        self.keymap = Gdk.Keymap().get_default()
         self.display = Display()
         self.screen = self.display.screen()
         self.window = self.screen.root
@@ -66,19 +59,6 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         self.map_modifiers()
         self.raw_keyval = None
         self.keytext = ""
-
-    def is_hotkey(self, key, modifier):
-        keymatch = False
-        modmatch = False
-        modifier = modifier & ~Gdk.ModifierType.SUPER_MASK
-        modint = int(modifier)
-        if self.get_keycode(key) == self.keycode:
-            keymatch = True
-        for ignored_mask in self.ignored_masks:
-            if self.modifiers | ignored_mask == modint | ignored_mask:
-                modmatch = True
-                break
-        return keymatch and modmatch
 
     def map_modifiers(self):
         gdk_modifiers =(Gdk.ModifierType.CONTROL_MASK, Gdk.ModifierType.SHIFT_MASK, Gdk.ModifierType.MOD1_MASK,
@@ -88,14 +68,6 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         for modifier in gdk_modifiers:
             if "Mod" not in Gtk.accelerator_name(0, modifier) or "Mod4" in Gtk.accelerator_name(0, modifier):
                 self.known_modifiers_mask |= modifier
-
-    def get_keycode(self, keyval):
-        count = c_int()
-        array = (KeymapKey * 10)()
-        keys = cast(array, POINTER(KeymapKey))
-        gdk.gdk_keymap_get_entries_for_keyval.argtypes = [c_void_p, c_uint, c_void_p, c_void_p]
-        gdk.gdk_keymap_get_entries_for_keyval(hash(self.keymap), keyval, byref(keys), byref(count))
-        return keys[0].keycode
 
     def grab(self, key):
         accelerator = key
@@ -107,7 +79,11 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
             return False
 
         self.keytext = key
-        self.keycode = self.get_keycode(keyval)
+        try:
+            self.keycode = self.keymap.get_entries_for_keyval(keyval).keys[0].keycode
+        except:
+            # In Betsy, the get_entries_for_keyval() returns an unamed tuple...
+            self.keycode = self.keymap.get_entries_for_keyval(keyval)[1][0].keycode
         self.modifiers = int(modifiers)
 
         catch = error.CatchError(error.BadAccess)
@@ -137,8 +113,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         if window is None:
             self.window = self.screen.root
         else:
-            gdk.gdk_x11_drawable_get_xid.argtypes = [c_void_p]
-            self.window = self.display.create_resource_object("window", gdk.gdk_x11_drawable_get_xid(hash(window)))
+            self.window = self.display.create_resource_object("window", window.get_xid())
         self.grab(self.keytext)
 
     def get_mask_combinations(self, mask):
@@ -180,12 +155,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         self.ungrab()
         self.display.close()
 
-class KeymapKey(Structure):
-    _fields_ = [("keycode", c_uint),
-                ("group", c_int),
-                ("level", c_int)]
-
-class KeybindingWidget(Gtk.HBox):
+class KeybindingWidget(Gtk.Box):
     __gsignals__ = {
         'accel-edited': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
@@ -235,8 +205,7 @@ class KeybindingWidget(Gtk.HBox):
             self.set_button_text()
             self.emit("accel-edited")
             return True
-        gtk.gtk_accelerator_name.restype = c_char_p
-        accel_string = gtk.gtk_accelerator_name(event.keyval, event.state)
+        accel_string = Gtk.accelerator_name( event.keyval, event.state )
         accel_string = self.sanitize(accel_string)
         self.value = accel_string
         self.set_button_text()

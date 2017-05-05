@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 
 import gi
-gi.require_version("Gtk", "2.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk, Pango
 import os
@@ -151,35 +151,21 @@ class pluginclass:
         AButton.set_size_request( 200, -1 )
         AButton.set_relief( Gtk.ReliefStyle.NONE )
         AButton.connect( "clicked", self.callback, Name )
+        AButton.show()
 
-        Align1 = Gtk.Alignment()
-        Align1.set( 0, 0.5, 0, 0)
-        Align1.set_padding( 0, 0, 0, 0 )
-        HBox1 = Gtk.HBox( False, 5 )
-        VBox1 = Gtk.VBox( False, 2 )
-
-        VBox1.show()
-
-        req = Gtk.Requisition()
-        AButton.size_request(req)
-
-        Label1 = Gtk.Label( DispName )
-        Label1.set_size_request( req.width-20, -1 )
-        Label1.set_ellipsize( Pango.EllipsizeMode.END )
-        Label1.show()
-        VBox1.add( Label1 )
+        Box1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 
         ButtonIcon = Gtk.Image()
+        ButtonIcon.set_size_request(20, -1)
         ButtonIcon.set_from_pixbuf(RecentImage)
-        HBox1.add( ButtonIcon )
+        Box1.add(ButtonIcon)
 
-        ButtonIcon.show()
-        HBox1.add( VBox1 )
-        HBox1.show()
-        Align1.add( HBox1 )
-        Align1.show()
-        AButton.add( Align1 )
-        AButton.show()
+        Label1 = Gtk.Label( DispName )
+        Label1.set_ellipsize( Pango.EllipsizeMode.END )
+        Box1.add( Label1 )
+
+        AButton.add( Box1 )
+        AButton.show_all()
 
         self.recentBox.pack_start( AButton, False, True, 0 )
 
@@ -205,7 +191,7 @@ class pluginclass:
         FileString=[]
         IconString=[]
         RecentInfo=self.RecManagerInstance.get_items()
-        # print RecentInfo[0].get_icon(gtk.ICON_SIZE_MENU)
+        # print RecentInfo[0].get_icon(Gtk.IconSize.MENU)
         count=0
         MaxEntries=self.numentries
         if self.numentries == -1:

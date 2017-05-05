@@ -3,7 +3,7 @@
 import sys
 
 import gi
-gi.require_version("Gtk", "2.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk, Gdk, GdkPixbuf
 import keybinding
@@ -58,12 +58,9 @@ class mintMenuConfig( object ):
         self.builder.get_object("use_apt").set_label(_("Search for packages to install"))
         self.builder.get_object("swapGeneric").set_label(_("Swap name and generic name"))
 
-        self.builder.get_object("label11").set_text(_("Border width:"))
-        self.builder.get_object("label25").set_text(_("pixels"))
-
         self.builder.get_object("buttonTextLabel").set_text(_("Button text:"))
         self.builder.get_object("label1").set_text(_("Options"))
-        self.builder.get_object("label23").set_text(_("Applications"))
+        self.builder.get_object("applicationsLabel").set_text(_("Applications"))
 
         self.builder.get_object("colorsLabel").set_text(_("Theme"))
         self.builder.get_object("favLabel").set_text(_("Favorites"))
@@ -72,7 +69,6 @@ class mintMenuConfig( object ):
 
         self.builder.get_object("backgroundColorLabel").set_text(_("Background:"))
         self.builder.get_object("headingColorLabel").set_text(_("Headings:"))
-        self.builder.get_object("borderColorLabel").set_text(_("Borders:"))
         self.builder.get_object("themeLabel").set_text(_("Theme:"))
 
         #self.builder.get_object("applicationsLabel").set_text(_("Applications"))
@@ -131,20 +127,17 @@ class mintMenuConfig( object ):
         self.placesIconSize = self.builder.get_object( "placesIconSize" )
         self.systemIconSize = self.builder.get_object( "systemIconSize" )
         self.favCols = self.builder.get_object( "numFavCols" )
-        self.borderWidth = self.builder.get_object( "borderWidth" )
         self.useCustomColors = self.builder.get_object( "useCustomColors" )
         self.backgroundColor = self.builder.get_object( "backgroundColor" )
-        self.borderColor = self.builder.get_object( "borderColor" )
         self.headingColor = self.builder.get_object( "headingColor" )
         self.backgroundColorLabel = self.builder.get_object( "backgroundColorLabel" )
-        self.borderColorLabel = self.builder.get_object( "borderColorLabel" )
         self.headingColorLabel = self.builder.get_object( "headingColorLabel" )
         self.showButtonIcon = self.builder.get_object( "showButtonIcon" )
         self.enableInternetSearch = self.builder.get_object( "enableInternetSearch" )
         self.buttonText = self.builder.get_object( "buttonText" )
         self.hotkeyWidget = keybinding.KeybindingWidget(_("Keyboard shortcut:") )
-        table = self.builder.get_object( "main_table" )
-        table.attach(self.hotkeyWidget, 0, 2, 2, 3, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
+        grid = self.builder.get_object( "main_grid" )
+        grid.attach(self.hotkeyWidget, 0, 2, 2, 1)
         self.buttonIcon = self.builder.get_object( "buttonIcon" )
         self.buttonIconChooser = self.builder.get_object( "button_icon_chooser" )
         self.image_filter = Gtk.FileFilter()
@@ -215,11 +208,9 @@ class mintMenuConfig( object ):
         self.bindGSettingsValueToWidget( self.settingsPlaces, "int", "icon-size", self.placesIconSize, "value-changed", self.placesIconSize.set_value, self.placesIconSize.get_value )
         self.bindGSettingsValueToWidget( self.settingsSystem, "int", "icon-size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value )
 
-        self.bindGSettingsValueToWidget( self.settings, "int", "border-width", self.borderWidth, "value-changed", self.borderWidth.set_value, self.borderWidth.get_value_as_int )
         self.bindGSettingsValueToWidget( self.settings, "bool", "use-custom-color", self.useCustomColors, "toggled", self.useCustomColors.set_active, self.useCustomColors.get_active )
-        self.bindGSettingsValueToWidget( self.settings, "color", "custom-color", self.backgroundColor, "color-set", self.backgroundColor.set_color, self.getBackgroundColor )
-        self.bindGSettingsValueToWidget( self.settings, "color", "custom-heading-color", self.headingColor, "color-set", self.headingColor.set_color, self.getHeadingColor )
-        self.bindGSettingsValueToWidget( self.settings, "color", "custom-border-color", self.borderColor, "color-set", self.borderColor.set_color, self.getBorderColor )
+        self.bindGSettingsValueToWidget( self.settings, "color", "custom-color", self.backgroundColor, "color-set", self.backgroundColor.set_rgba, self.getBackgroundColor )
+        self.bindGSettingsValueToWidget( self.settings, "color", "custom-heading-color", self.headingColor, "color-set", self.headingColor.set_rgba, self.getHeadingColor )
         self.bindGSettingsValueToWidget( self.settings, "bool", "hide-applet-icon", self.showButtonIcon, "toggled", self.setShowButtonIcon, self.getShowButtonIcon )
         self.bindGSettingsValueToWidget( self.settings, "string", "applet-text", self.buttonText, "changed", self.buttonText.set_text, self.buttonText.get_text )
         self.bindGSettingsValueToWidget( self.settings, "string", "hot-key", self.hotkeyWidget, "accel-edited", self.hotkeyWidget.set_val, self.hotkeyWidget.get_val )
@@ -355,7 +346,9 @@ class mintMenuConfig( object ):
     def bindGSettingsValueToWidget( self, settings, setting_type, key, widget, changeEvent, setter, getter ):
         settings.notifyAdd( key, self.callSetter, args = [ setting_type, setter ] )
         if setting_type == "color":
-            setter( Gdk.color_parse( settings.get( setting_type, key ) ) )
+            color = Gdk.RGBA()
+            color.parse( settings.get( setting_type, key ) )
+            setter( color )
         else:
             setter( settings.get( setting_type, key ) )
         widget.connect( changeEvent, lambda *args: self.callGetter( settings, setting_type, key, getter ) )
@@ -368,7 +361,9 @@ class mintMenuConfig( object ):
         elif args[0] == "int":
             args[1]( settings.get_int(key) )
         elif args[0] == "color":
-            args[1]( Gdk.color_parse( settings.get_string(key) ) )
+            color = Gdk.RGBA()
+            color.parse( settings.get_string(key) )
+            args[1]( color )
 
     def callGetter( self, settings, setting_type, key, getter ):
         if (setting_type == "int"):
@@ -378,38 +373,20 @@ class mintMenuConfig( object ):
 
     def toggleUseCustomColors( self, widget ):
         self.backgroundColor.set_sensitive( widget.get_active() )
-        self.borderColor.set_sensitive( widget.get_active() )
         self.headingColor.set_sensitive(  widget.get_active() )
         self.backgroundColorLabel.set_sensitive( widget.get_active() )
-        self.borderColorLabel.set_sensitive( widget.get_active() )
         self.headingColorLabel.set_sensitive(  widget.get_active() )
 
     def getBackgroundColor( self ):
-        try:
-            color = self.backgroundColor.get_color()
-        except:
-            color = Gdk.Color(0, 0, 0)
-            self.backgroundColor.get_color(color)
-        return self.gdkColorToString( color )
-
-    def getBorderColor( self ):
-        try:
-            color = self.borderColor.get_color()
-        except:
-            color = Gdk.Color(0, 0, 0)
-            self.borderColor.get_color(color)
-        return self.gdkColorToString( color )
+        color = self.backgroundColor.get_rgba()
+        return self.gdkRGBAToString( color )
 
     def getHeadingColor( self ):
-        try:
-            color = self.headingColor.get_color()
-        except:
-            color = Gdk.Color(0, 0, 0)
-            self.headingColor.get_color(color)
-        return self.gdkColorToString( color )
+        color = self.headingColor.get_rgba()
+        return self.gdkRGBAToString( color )
 
-    def gdkColorToString( self, gdkColor ):
-        return "#%.2X%.2X%.2X" % ( gdkColor.red / 256, gdkColor.green / 256, gdkColor.blue / 256 )
+    def gdkRGBAToString( self, gdkRGBA ):
+        return "#%.2X%.2X%.2X" % ( gdkRGBA.red * 256, gdkRGBA.green * 256, gdkRGBA.blue * 256 )
 
     def moveUp( self, upButton ):
 
