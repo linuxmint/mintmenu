@@ -417,7 +417,7 @@
     </key>
 
     <key type="i" name="num-recent-docs">
-      <default>10</default>
+      <default>20</default>
       <summary></summary>
       <description></description>
     </key>

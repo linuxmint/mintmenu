@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 
 import gi
-gi.require_version("Gtk", "2.0")
+gi.require_version("Gtk", "3.0")
 
 import os
 import string
@@ -118,9 +118,6 @@ def doRecentApps():
         
         AButton.set_size_request( 200, -1 )
         AButton.set_relief( Gtk.ReliefStyle.NONE )
-
-        req = Gtk.Requisition()
-        AButton.size_request(req)
 
         recentAppBox.pack_start( AButton, False, True, 0 )
 
