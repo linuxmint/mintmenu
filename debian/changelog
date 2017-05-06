@@ -1,3 +1,14 @@
+mintmenu (5.8.0) sonya; urgency=medium
+
+  [ Alexei Sorokin ]
+  * Use the Gtk3 bookmarks location (#174)
+
+  [ Clement Lefebvre ]
+  * Places: Explicitly import GLib
+  * l10n: Update POT file
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sat, 06 May 2017 16:18:18 +0100
+
 mintmenu (5.7.9) sonya; urgency=medium
 
   [ monsta ]
