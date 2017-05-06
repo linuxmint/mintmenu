@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, GLib
 import os
 import string
 import gettext
