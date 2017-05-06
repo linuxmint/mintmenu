@@ -219,10 +219,13 @@ class pluginclass( object ):
 
     def do_gtk_bookmarks( self ):
         if self.showGTKBookmarks:
-            if not os.path.exists(os.path.expanduser('~/.gtk-bookmarks')):
+            bookmarksFile = os.path.join(GLib.get_user_config_dir(), "gtk-3.0", "bookmarks")
+            if not os.path.exists(bookmarksFile):
+                bookmarksFile = os.path.join(GLib.get_home_dir(), ".gtk-bookmarks")
+            if not os.path.exists(bookmarksFile):
                 return
             bookmarks = []
-            with open(os.path.expanduser('~/.gtk-bookmarks'), 'r') as f:
+            with open(bookmarksFile, "r") as f:
                 for line in f:
                     #line = line.replace('file://', '')
                     line = line.rstrip()
