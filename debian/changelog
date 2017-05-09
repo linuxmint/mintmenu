@@ -1,3 +1,28 @@
+mintmenu (5.8.0) sonya; urgency=medium
+
+  [ Alexei Sorokin ]
+  * Use the Gtk3 bookmarks location (#174)
+
+  [ Clement Lefebvre ]
+  * Places: Explicitly import GLib
+  * l10n: Update POT file
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sat, 06 May 2017 16:18:18 +0100
+
+mintmenu (5.7.9) sonya; urgency=medium
+
+  [ monsta ]
+  * build: fix dependencies for GTK+3
+  * build: depend on GI packages of MATE >= 1.18.0
+  * build: remove dependencies on C libs of MATE
+  * fix menu crash when placed on left vertical panel
+  * easybuttons: fix runtime warning about missing MateDesktop version
+
+  [ Victor Kareh ]
+  * Fix windows-key global keybinding. (#172)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 05 May 2017 16:10:29 +0100
+
 mintmenu (5.7.8) sonya; urgency=medium
 
   [ JosephMcc ]
