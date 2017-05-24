@@ -1742,7 +1742,6 @@ class pluginclass( object ):
         def find_applications_recursively(app_list, directory, catName):
             for item in directory.get_contents():
                 if item.get_type() == matemenu.TYPE_ENTRY:
-                    print "=======>>> " + str(item.name) + " = " + str(catName)
                     app_list.append( { "entry": item, "category": catName } )
                 elif item.get_type() == matemenu.TYPE_DIRECTORY:
                     find_applications_recursively(app_list, item, catName)
