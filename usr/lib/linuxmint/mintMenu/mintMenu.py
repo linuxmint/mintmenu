@@ -42,10 +42,9 @@ from execute import *
 class MainWindow( object ):
     """This is the main class for the application"""
 
-    def __init__( self, toggleButton, settings, keybinder, de ):
+    def __init__( self, toggleButton, settings, de ):
 
         self.settings = settings
-        self.keybinder = keybinder
         self.path = PATH
         sys.path.append( os.path.join( self.path, "plugins") )
 
@@ -437,7 +436,6 @@ class MenuWin( object ):
         self.applet = applet
         self.detect_desktop_environment()
         self.settings = Gio.Settings.new("com.linuxmint.mintmenu")
-        self.keybinder = keybinding.GlobalKeyBinding()        
         self.loadSettings()
 
         self.createPanelButton()
@@ -451,7 +449,6 @@ class MenuWin( object ):
         self.settings.connect( "changed::applet-icon", self.reloadSettings )
         self.settings.connect( "changed::hide-applet-icon", self.reloadSettings )
         self.settings.connect( "changed::applet-icon-size", self.reloadSettings )
-        self.settings.connect( "changed::hot-key", self.hotkeyChanged )
 
         self.applet.set_flags( MatePanelApplet.AppletFlags.EXPAND_MINOR )
         self.applet.connect( "button-press-event", self.showMenu )
@@ -459,7 +456,7 @@ class MenuWin( object ):
         self.applet.connect("enter-notify-event", self.enter_notify)
         self.applet.connect("leave-notify-event", self.leave_notify)
 
-        self.mainwin = MainWindow( self.button_box, self.settings, self.keybinder, self.de )
+        self.mainwin = MainWindow( self.button_box, self.settings, self.de )
         self.mainwin.window.connect( "map-event", self.onWindowMap )
         self.mainwin.window.connect( "unmap-event", self.onWindowUnmap )
         self.mainwin.window.connect( "size-allocate", lambda *args: self.positionMenu() )
@@ -471,7 +468,19 @@ class MenuWin( object ):
         if self.mainwin.icon:
             Gtk.Window.set_default_icon_name( self.mainwin.icon )
 
-        self.bind_hot_key()
+        try:
+            self.keybinder = keybinding.GlobalKeyBinding()
+            if self.hotkeyText != "":
+                self.keybinder.grab( self.hotkeyText )
+            self.keybinder.connect("activate", self.onBindingPress)
+            self.keybinder.start()
+            self.settings.connect( "changed::hot-key", self.hotkeyChanged )
+            print "Binding to Hot Key: " + self.hotkeyText
+        except Exception, cause:
+            self.keybinder = None
+            print "** WARNING ** - Keybinder Error"
+            print "Error Report :\n", str(cause)
+
         self.applet.set_can_focus(False)
 
         try:
@@ -485,13 +494,15 @@ class MenuWin( object ):
     def onWindowMap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.SELECTED )
         self.button_box.get_style_context().set_state( Gtk.StateFlags.SELECTED )
-        self.keybinder.set_focus_window( self.mainwin.window.get_window() )
+        if self.keybinder is not None:
+            self.keybinder.set_focus_window( self.mainwin.window.get_window() )
         return False
 
     def onWindowUnmap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.NORMAL )
         self.button_box.get_style_context().set_state( Gtk.StateFlags.NORMAL )
-        self.keybinder.set_focus_window()
+        if self.keybinder is not None:
+            self.keybinder.set_focus_window()
         return False
 
     def onRealize( self, *args):
@@ -635,19 +646,6 @@ class MenuWin( object ):
         self.button_icon.clear()
         self.do_image(self.buttonIcon, False)
         self.sizeButton()
-
-    def bind_hot_key (self):
-        try:
-            if self.hotkeyText != "":
-                self.keybinder.grab( self.hotkeyText )
-            self.keybinder.connect("activate", self.onBindingPress)
-            self.keybinder.start()
-            # Binding menu to hotkey
-            print "Binding to Hot Key: " + self.hotkeyText
-
-        except Exception, cause:
-            print "** WARNING ** - Menu Hotkey Binding Error"
-            print "Error Report :\n", str(cause)
 
     def hotkeyChanged (self, schema, key):
         self.hotkeyText =  self.settings.get_string( "hot-key" )
