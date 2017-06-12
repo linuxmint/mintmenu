@@ -1,3 +1,17 @@
+mintmenu (5.8.1) sonya; urgency=medium
+
+  [ monsta ]
+  * applications: don't spam system log with system tools names (#177)
+
+  [ Clement Lefebvre ]
+  * Add exception handling around pointer monitor
+  * Add exception handling around keybinder
+
+  [ monsta ]
+  * build: add build-dep on dh-python to fix build warning (#179)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 12 Jun 2017 15:54:53 +0100
+
 mintmenu (5.8.0) sonya; urgency=medium
 
   [ Alexei Sorokin ]
