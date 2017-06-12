@@ -462,7 +462,6 @@ class MenuWin( object ):
         self.mainwin = MainWindow( self.button_box, self.settings, self.keybinder, self.de )
         self.mainwin.window.connect( "map-event", self.onWindowMap )
         self.mainwin.window.connect( "unmap-event", self.onWindowUnmap )
-        self.mainwin.window.connect( "realize", self.onRealize )
         self.mainwin.window.connect( "size-allocate", lambda *args: self.positionMenu() )
 
         self.mainwin.window.set_name("mintmenu") # Name used in Gtk RC files
@@ -475,8 +474,13 @@ class MenuWin( object ):
         self.bind_hot_key()
         self.applet.set_can_focus(False)
 
-        self.pointerMonitor = pointerMonitor.PointerMonitor()
-        self.pointerMonitor.connect("activate", self.onPointerOutside)
+        try:
+            self.pointerMonitor = pointerMonitor.PointerMonitor()
+            self.pointerMonitor.connect("activate", self.onPointerOutside)
+            self.mainwin.window.connect( "realize", self.onRealize )
+        except Exception, cause:
+            print "** WARNING ** - Pointer Monitor Error"
+            print "Error Report :\n", str(cause)
 
     def onWindowMap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.SELECTED )
@@ -644,7 +648,6 @@ class MenuWin( object ):
         except Exception, cause:
             print "** WARNING ** - Menu Hotkey Binding Error"
             print "Error Report :\n", str(cause)
-            pass
 
     def hotkeyChanged (self, schema, key):
         self.hotkeyText =  self.settings.get_string( "hot-key" )
