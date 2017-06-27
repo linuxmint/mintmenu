@@ -1,3 +1,9 @@
+mintmenu (5.8.2) sonya; urgency=medium
+
+  * Recent: Expand plugin to fill empty space
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 27 Jun 2017 10:02:19 +0200
+
 mintmenu (5.8.1) sonya; urgency=medium
 
   [ monsta ]
