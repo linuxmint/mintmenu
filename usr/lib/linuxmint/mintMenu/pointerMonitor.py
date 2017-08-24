@@ -55,7 +55,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
                         p = self.get_window().get_device_position(pdevice)
                         g = self.get_size()
 
-                        if p.x >= 0 and p.y >= 0 and p.x <= g.width and p.y <= g.height:                        
+                        if p.x >= 0 and p.y >= 0 and p.x <= g.width and p.y <= g.height:
                             break
                     else:
                         # Is outside, so activate
@@ -70,4 +70,3 @@ class PointerMonitor(GObject.GObject, threading.Thread):
         self.running = False
         self.root.ungrab_button(X.AnyButton, X.AnyModifier)
         self.display.close()
-

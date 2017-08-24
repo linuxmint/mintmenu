@@ -182,7 +182,7 @@ class pluginclass( object ):
             Button4.show()
             self.systemBtnHolder.pack_start( Button4, False, False, 0 )
             self.mintMenuWin.setTooltip( Button4, _("Use the command line") )
-    
+
         if ( self.showLockScreen == True ):
             Button5 = easyButton( "system-lock-screen", self.iconsize, [_("Lock Screen")], -1, -1 )
             Button5.connect( "clicked", self.ButtonClicked, self.lock_cmd )

@@ -702,7 +702,7 @@ class MenuWin( object ):
 
 
     def showPreferences( self, action, userdata = None ):
-#               Execute( "mateconf-editor /apps/mintMenu" )
+        #               Execute( "mateconf-editor /apps/mintMenu" )
         Execute( os.path.join( PATH, "mintMenuConfig.py" ) )
 
     def showMenuEditor( self, action, userdata = None ):
@@ -751,7 +751,7 @@ class MenuWin( object ):
         screenWidth = Gdk.Screen.width()
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
             if entryX + ourWidth < screenWidth or  entryX + entryWidth / 2 < screenWidth / 2:
-            # Align to the left of the entry
+                # Align to the left of the entry
                 newX = entryX
             else:
                 # Align to the right of the entry
@@ -805,7 +805,7 @@ class MenuWin( object ):
             if de in ["gnome", "gnome-shell", "mate", "kde", "xfce"]:
                 self.de = de
             elif de in ['cinnamon', 'x-cinnamon']:
-            	self.de = 'cinnamon'
+                self.de = 'cinnamon'
             else:
                 if os.path.exists("/usr/bin/caja"):
                     self.de = "mate"
@@ -826,4 +826,3 @@ def quit_all(widget):
 MatePanelApplet.Applet.factory_main("MintMenuAppletFactory", True,
                                     MatePanelApplet.Applet.__gtype__,
                                     applet_factory, None)
-

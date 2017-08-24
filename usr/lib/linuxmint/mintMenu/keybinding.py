@@ -5,23 +5,23 @@
 # Copyright (C) 2008  Luca Bruno <lethalman88@gmail.com>
 #
 # This a slightly modified version of the globalkeybinding.py file which is part of FreeSpeak.
-#   
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell   
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-#   
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-#   
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,  
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER    
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
 import gi
@@ -62,8 +62,8 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
 
     def map_modifiers(self):
         gdk_modifiers =(Gdk.ModifierType.CONTROL_MASK, Gdk.ModifierType.SHIFT_MASK, Gdk.ModifierType.MOD1_MASK,
-                         Gdk.ModifierType.MOD2_MASK, Gdk.ModifierType.MOD3_MASK, Gdk.ModifierType.MOD4_MASK, Gdk.ModifierType.MOD5_MASK,
-                         Gdk.ModifierType.SUPER_MASK, Gdk.ModifierType.HYPER_MASK)
+                        Gdk.ModifierType.MOD2_MASK, Gdk.ModifierType.MOD3_MASK, Gdk.ModifierType.MOD4_MASK, Gdk.ModifierType.MOD5_MASK,
+                        Gdk.ModifierType.SUPER_MASK, Gdk.ModifierType.HYPER_MASK)
         self.known_modifiers_mask = 0
         for modifier in gdk_modifiers:
             if "Mod" not in Gtk.accelerator_name(0, modifier) or "Mod4" in Gtk.accelerator_name(0, modifier):
@@ -100,14 +100,14 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
     def ungrab(self):
         if self.keycode:
             self.window.ungrab_key(self.keycode, X.AnyModifier, self.window)
-            
+
     def rebind(self, key):
         self.ungrab()
         if key != "":
             self.grab(key)
         else:
             self.keytext = ""
-    
+
     def set_focus_window(self, window = None):
         self.ungrab()
         if window is None:

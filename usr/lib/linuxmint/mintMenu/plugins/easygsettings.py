@@ -90,5 +90,3 @@ class EasyGSettings:
             setattr( obj, varName, settings.get_boolean(key) )
         else:
             setattr( obj, varName, settings.get_value(key) )
-
-

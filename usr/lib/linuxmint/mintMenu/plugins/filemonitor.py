@@ -41,7 +41,7 @@ if hasInotify:
 
         def fileChanged(self, event ):
             if event.wd in self.callbacks:
-    #                       print event.path
+                #                       print event.path
                 callback = self.callbacks[event.wd]
                 if callback[1]:
                     GLib.idle_add( callback[0], callback[1] )
