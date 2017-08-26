@@ -222,7 +222,7 @@ class pluginclass( object ):
 
        # self.searchButton.connect( "button_release_event", self.SearchWithButton )
         try:
-        # GSettings stuff
+            # GSettings stuff
             self.settings = EasyGSettings( "com.linuxmint.mintmenu.plugins.applications" )
             self.GetGSettingsEntries()
             self.settings.notifyAdd( "icon-size", self.changeIconSize )
@@ -792,7 +792,7 @@ class pluginclass( object ):
                             # We're restricting our search...
                             self.add_search_suggestions(text)
                             #if (len(self.current_results) > 0):
-                                #self.add_apt_filter_results_sync(self.current_results, text)
+                            #self.add_apt_filter_results_sync(self.current_results, text)
                             #else:
                             GLib.timeout_add (300, self.add_apt_filter_results, text)
                         else:

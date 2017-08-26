@@ -17,7 +17,7 @@ from filemonitor import monitor as filemonitor
 class IconManager(GObject.GObject):
 
     __gsignals__ = {
-            "changed" : (GObject.SignalFlags.RUN_LAST, None, () )
+        "changed" : (GObject.SignalFlags.RUN_LAST, None, () )
     }
 
     def __init__( self ):

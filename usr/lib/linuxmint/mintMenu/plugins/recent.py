@@ -199,9 +199,9 @@ class pluginclass:
         if ev.button == 1:
             if not hasattr( self, "press_x" ) or \
                     not w.drag_check_threshold( int( self.press_x ),
-                                                                             int( self.press_y ),
-                                                                             int( ev.x ),
-                                                                             int( ev.y ) ):
+                                                int( self.press_y ),
+                                                int( ev.x ),
+                                                int( ev.y ) ):
                 if self.Win.pinmenu == False:
                     self.Win.wTree.get_widget( "window1" ).hide()
                 if "applications" in self.Win.plugins:
