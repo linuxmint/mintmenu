@@ -587,7 +587,7 @@ class pluginclass( object ):
             suggestionButton = SuggestionButton("list-add", self.iconSize, "")
             suggestionButton.connect("clicked", self.search_wikipedia)
             suggestionButton.set_text(_("Search Wikipedia for %s") % text)
-            suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico")
+            suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.png")
             self.applicationsBox.add(suggestionButton)
             self.suggestions.append(suggestionButton)
 
@@ -1017,7 +1017,7 @@ class pluginclass( object ):
 
             menuItem = Gtk.ImageMenuItem(_("Search Wikipedia"))
             img = Gtk.Image()
-            img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico')
+            img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.png')
             menuItem.set_image(img)
             menuItem.connect("activate", self.search_wikipedia)
             menu.append(menuItem)
