@@ -587,7 +587,7 @@ class pluginclass( object ):
             suggestionButton = SuggestionButton("list-add", self.iconSize, "")
             suggestionButton.connect("clicked", self.search_wikipedia)
             suggestionButton.set_text(_("Search Wikipedia for %s") % text)
-            suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico")
+            suggestionButton.set_image("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.png")
             self.applicationsBox.add(suggestionButton)
             self.suggestions.append(suggestionButton)
 
@@ -1017,7 +1017,7 @@ class pluginclass( object ):
 
             menuItem = Gtk.ImageMenuItem(_("Search Wikipedia"))
             img = Gtk.Image()
-            img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.ico')
+            img.set_from_file('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.png')
             menuItem.set_image(img)
             menuItem.connect("activate", self.search_wikipedia)
             menu.append(menuItem)
@@ -1105,7 +1105,7 @@ class pluginclass( object ):
     def search_wikipedia(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "+")
-        os.system("xdg-open \"http://%s.wikipedia.org/wiki/Special:Search?search=%s\" &" % (self.lang, text))
+        os.system("xdg-open \"https://%s.wikipedia.org/wiki/Special:Search?search=%s\" &" % (self.lang, text))
         self.mintMenuWin.hide()
 
     def search_dictionary(self, widget):
@@ -1116,31 +1116,31 @@ class pluginclass( object ):
     def search_mint_tutorials(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "%20")
-        os.system("xdg-open \"http://community.linuxmint.com/index.php/tutorial/search/0/" + text + "\" &")
+        os.system("xdg-open \"https://community.linuxmint.com/index.php/tutorial/search/0/" + text + "\" &")
         self.mintMenuWin.hide()
 
     def search_mint_ideas(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "%20")
-        os.system("xdg-open \"http://community.linuxmint.com/index.php/idea/search/0/" + text + "\" &")
+        os.system("xdg-open \"https://community.linuxmint.com/index.php/idea/search/0/" + text + "\" &")
         self.mintMenuWin.hide()
 
     def search_mint_users(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "%20")
-        os.system("xdg-open \"http://community.linuxmint.com/index.php/user/search/0/" + text + "\" &")
+        os.system("xdg-open \"https://community.linuxmint.com/index.php/user/search/0/" + text + "\" &")
         self.mintMenuWin.hide()
 
     def search_mint_hardware(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "%20")
-        os.system("xdg-open \"http://community.linuxmint.com/index.php/hardware/search/0/" + text + "\" &")
+        os.system("xdg-open \"https://community.linuxmint.com/index.php/hardware/search/0/" + text + "\" &")
         self.mintMenuWin.hide()
 
     def search_mint_software(self, widget):
         text = self.searchEntry.get_text()
         text = text.replace(" ", "%20")
-        os.system("xdg-open \"http://community.linuxmint.com/index.php/software/search/0/" + text + "\" &")
+        os.system("xdg-open \"https://community.linuxmint.com/index.php/software/search/0/" + text + "\" &")
         self.mintMenuWin.hide()
 
     def add_to_desktop(self, widget, desktopEntry):
