@@ -1,3 +1,16 @@
+mintmenu (5.8.3) sylvia; urgency=medium
+
+  [ Leigh Scott ]
+  * fix indent (#183)
+
+  [ wesdawg ]
+  * Search updates (#185)
+
+  [ Hrotkó Gábor ]
+  * Show recently used apps (#167)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sat, 11 Nov 2017 09:00:30 +0000
+
 mintmenu (5.8.2) sonya; urgency=medium
 
   * Recent: Expand plugin to fill empty space
