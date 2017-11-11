@@ -126,9 +126,9 @@ msgstr ""
 msgid "Theme"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:66
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:189
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:190
+#: usr/lib/linuxmint/mintMenu/mintMenuConfig.py:69
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:202
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:203
 msgid "Favorites"
 msgstr ""
 
@@ -333,8 +333,8 @@ msgstr ""
 msgid "<not set>"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/recent.py:31
-msgid "Recent documents"
+#: usr/lib/linuxmint/mintMenu/plugins/recent.py:32
+msgid "Recently used"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/plugins/applications.py:187
@@ -531,4 +531,10 @@ msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/plugins/places.py:260
 msgid "Empty trash"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/plugins/recentHelper.py:44
+msgid ""
+"Couldn't save recent apps. Check if you have write access to ~/.linuxmint/"
+"mintMenu"
 msgstr ""
