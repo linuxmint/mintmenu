@@ -1,3 +1,9 @@
+mintmenu (5.8.4) sylvia; urgency=medium
+
+  * Don't run mintinstall as root
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sun, 12 Nov 2017 14:33:53 +0000
+
 mintmenu (5.8.3) sylvia; urgency=medium
 
   [ Leigh Scott ]
