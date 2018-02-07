@@ -656,20 +656,23 @@ class MenuWin( object ):
             self.button_icon.hide()
         else:
             self.button_icon.show()
-     #   This code calculates width and height for the button_box
-     #   and takes the orientation in account
-        bi_req = self.button_icon.size_request()
-        sl_req = self.systemlabel.size_request()
+
+        # This code calculates width and height for the button_box
+        # and takes the orientation and scale factor in account
+        bi_req = self.button_icon.get_preferred_size()[1]
+        bi_scale = self.button_icon.get_scale_factor()
+        sl_req = self.systemlabel.get_preferred_size()[1]
+        sl_scale = self.systemlabel.get_scale_factor()
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
             if self.hideIcon:
-                self.applet.set_size_request( sl_req.width + 2, bi_req.height )
+                self.applet.set_size_request( sl_req.width / sl_scale + 2, bi_req.height )
             else:
-                self.applet.set_size_request( sl_req.width + bi_req.width + 5, bi_req.height )
+                self.applet.set_size_request( sl_req.width / sl_scale + bi_req.width / bi_scale + 5, bi_req.height )
         else:
             if self.hideIcon:
-                self.applet.set_size_request( bi_req.width, sl_req.height + 2 )
+                self.applet.set_size_request( bi_req.width, sl_req.height / sl_scale + 2 )
             else:
-                self.applet.set_size_request( bi_req.width, sl_req.height + bi_req.height + 5 )
+                self.applet.set_size_request( bi_req.width, sl_req.height / sl_scale + bi_req.height / bi_scale + 5 )
 
     def reloadSettings( self, *args ):
         self.loadSettings()
