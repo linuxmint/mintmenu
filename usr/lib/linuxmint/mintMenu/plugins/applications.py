@@ -18,6 +18,7 @@ from execute import Execute
 from easygsettings import EasyGSettings
 from easyfiles import *
 import recentHelper as RecentHelper
+import pipes
 
 import matemenu
 
@@ -637,7 +638,7 @@ class pluginclass( object ):
             keywords = keyword.split(" ")
             command = "cat %(home)s/.linuxmint/mintMenu/apt.cache" % {'home':home}
             for word in keywords:
-                command = "%(command)s | grep %(word)s" % {'command':command, 'word':word}
+                command = "%(command)s | grep %(word)s" % {'command':command, 'word':pipes.quote(word)}
             pkgs = commands.getoutput(command)
             pkgs = pkgs.split("\n")
             num_pkg_found = 0
