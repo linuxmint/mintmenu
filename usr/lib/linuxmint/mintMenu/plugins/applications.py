@@ -503,7 +503,6 @@ class pluginclass( object ):
         else:
             self.changeTab( 1 )
 
-        self.searchEntry.select_region( 0, -1 )
         if self.rememberFilter and self.searchEntry.get_text().strip() != "":
             self.Filter(self.activeFilter[2], self.activeFilter[1])
 
@@ -546,6 +545,7 @@ class pluginclass( object ):
         self.searchEntry.grab_focus()
         if self.rememberFilter or not clear:
             self.searchEntry.set_position(-1)
+            self.searchEntry.select_region( 0, -1 )
         else:
             self.searchEntry.set_text("")
 
