@@ -544,7 +544,6 @@ class pluginclass( object ):
         # of the existing text, that's the most likely candidate anyhow
         self.searchEntry.grab_focus()
         if self.rememberFilter or not clear:
-            self.searchEntry.set_position(-1)
             self.searchEntry.select_region( 0, -1 )
         else:
             self.searchEntry.set_text("")
