@@ -1,3 +1,14 @@
+mintmenu (5.8.5) tara; urgency=medium
+
+  [ Vincent Vermeulen ]
+  * safe apt search with shell escapes (#190)
+  * Highlight previous search so typing overwrites it (#191)
+
+  [ Clement Lefebvre ]
+  * mint-remove-application: Don't use gksu
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 07 May 2018 12:26:50 +0100
+
 mintmenu (5.8.4) sylvia; urgency=medium
 
   * Don't run mintinstall as root
