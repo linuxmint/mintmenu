@@ -1,3 +1,10 @@
+mintmenu (5.8.7) tara; urgency=medium
+
+  [ monsta ]
+  * add missing deps on python-apt and python-configobj (#193)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 30 May 2018 18:20:21 +0100
+
 mintmenu (5.8.6) tara; urgency=medium
 
   * Favorites: Remove pidgin, add pix, fix gnome-calculator..
