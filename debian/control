@@ -13,6 +13,8 @@ Depends:
  python (>= 2.4), python (<< 3),
  mint-common,
  python-mate-menu, python-xdg, xdg-utils,
+ python-apt,
+ python-configobj,
  python-setproctitle,
  mate-menus,
  gvfs-bin,
