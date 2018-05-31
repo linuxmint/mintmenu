@@ -1,3 +1,14 @@
+mintmenu (5.8.8) tara; urgency=medium
+
+  [ Victor Kareh ]
+  * Support correct widget sizes for HiDPI displays
+  * Fix menu positioning to account for multiple monitors (#24)
+
+  [ Clement Lefebvre ]
+  * Don't set window decorations
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 31 May 2018 13:53:53 +0100
+
 mintmenu (5.8.7) tara; urgency=medium
 
   [ monsta ]
