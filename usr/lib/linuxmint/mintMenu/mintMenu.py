@@ -57,9 +57,6 @@ class MainWindow( object ):
         builder = Gtk.Builder()
         builder.add_from_file(os.path.join( self.path, "mintMenu.glade" ))
         self.window     = builder.get_object( "mainWindow" )
-        self.window.realize()
-        self.window.get_window().set_decorations(Gdk.WMDecoration.BORDER)
-        self.window.set_title("")
         self.paneholder = builder.get_object( "paneholder" )
 
         builder.connect_signals(self)
