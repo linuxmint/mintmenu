@@ -109,17 +109,21 @@ def buildRecentApps():
     return recentApps
 
 def doRecentApps():
-    for i in recentAppBox.get_children():
-        i.destroy()
+    if recentAppBox is not None:
+        # recentAppBox is initiated by the recent plugin
+        # only build UI widgets if it's enabled
 
-    # recent apps
-    buildRecentApps()
-    for AButton in recentApps:
-        
-        AButton.set_size_request( 200, -1 )
-        AButton.set_relief( Gtk.ReliefStyle.NONE )
+        for i in recentAppBox.get_children():
+            i.destroy()
 
-        recentAppBox.pack_start( AButton, False, True, 0 )
+        # recent apps
+        buildRecentApps()
+        for AButton in recentApps:
+
+            AButton.set_size_request( 200, -1 )
+            AButton.set_relief( Gtk.ReliefStyle.NONE )
+
+            recentAppBox.pack_start( AButton, False, True, 0 )
 
     return True
 
