@@ -1,3 +1,9 @@
+mintmenu (5.8.9) tara; urgency=medium
+
+  * Fix RecentHelper spam in logs
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 08 Jun 2018 12:21:24 +0100
+
 mintmenu (5.8.8) tara; urgency=medium
 
   [ Victor Kareh ]
