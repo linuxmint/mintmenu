@@ -19,7 +19,7 @@ Depends:
  mate-menus,
  gvfs-bin,
  python-xlib,
- gir1.2-mate-panel (>= 1.18.0), gir1.2-gtk-3.0, gir1.2-mate-desktop (>= 1.18.0),
+ gir1.2-mate-panel, gir1.2-gtk-3.0, gir1.2-mate-desktop,
  mozo
 Description: Advanced MATE menu
  One of the most advanced menus under Linux. MintMenu supports filtering,
