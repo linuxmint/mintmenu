@@ -1,3 +1,9 @@
+mintmenu (5.9.1) tessa; urgency=medium
+
+  * Change default menu icon
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 30 Nov 2018 20:17:38 +0000
+
 mintmenu (5.9.0) tara; urgency=medium
 
   * Packaging: Don't force dependency on MATE 1.18+
