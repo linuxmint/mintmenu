@@ -135,20 +135,14 @@ class pluginclass( object ):
 
         if ( self.showcomputer == True ):
             Button1 = easyButton( "computer", self.iconsize, [_("Computer")], -1, -1 )
-            if self.de == "mate":
-                Button1.connect( "clicked", self.ButtonClicked, "caja computer:" )
-            else:
-                Button1.connect( "clicked", self.ButtonClicked, "xdg-open /" )
+            Button1.connect( "clicked", self.ButtonClicked, "xdg-open computer:" )
             Button1.show()
             self.placesBtnHolder.pack_start( Button1, False, False, 0)
             self.mintMenuWin.setTooltip( Button1, _("Browse all local and remote disks and folders accessible from this computer") )
 
         if ( self.showhomefolder == True ):
             Button2 = easyButton( "user-home", self.iconsize, [_("Home Folder")], -1, -1 )
-            if self.de == "mate":
-                Button2.connect( "clicked", self.ButtonClicked, "caja %s " % home )
-            else:
-                Button2.connect( "clicked", self.ButtonClicked, "xdg-open %s " % home )
+            Button2.connect( "clicked", self.ButtonClicked, "xdg-open %s " % home )
             Button2.show()
             self.placesBtnHolder.pack_start( Button2, False, False, 0)
             self.mintMenuWin.setTooltip( Button2, _("Open your personal folder") )
@@ -160,10 +154,7 @@ class pluginclass( object ):
                 Button3 = easyButton( "notification-network-ethernet-connected", self.iconsize, [_("Network")], -1, -1)
             else:
                 Button3 = easyButton( "network-workgroup", self.iconsize, [_("Network")], -1, -1)
-            if self.de == "mate":
-                Button3.connect( "clicked", self.ButtonClicked, "caja network:" )
-            else:
-                Button3.connect( "clicked", self.ButtonClicked, "xdg-open network:" )
+            Button3.connect( "clicked", self.ButtonClicked, "xdg-open network:" )
             Button3.show()
             self.placesBtnHolder.pack_start( Button3, False, False, 0)
             self.mintMenuWin.setTooltip( Button3, _("Browse bookmarked and local network locations") )
@@ -182,22 +173,14 @@ class pluginclass( object ):
             except Exception, detail:
                 print detail
             Button4 = easyButton( "desktop", self.iconsize, [_("Desktop")], -1, -1 )
-            if self.de == "mate":
-                Button4.connect( "clicked", self.ButtonClicked, "caja \"" + desktopDir + "\"")
-            else:
-                Button4.connect( "clicked", self.ButtonClicked, "xdg-open \"" + desktopDir + "\"")
+            Button4.connect( "clicked", self.ButtonClicked, "xdg-open \"" + desktopDir + "\"")
             Button4.show()
             self.placesBtnHolder.pack_start( Button4, False, False, 0)
             self.mintMenuWin.setTooltip( Button4, _("Browse items placed on the desktop") )
 
         if ( self.showtrash == True ):
             self.trashButton = easyButton( "user-trash", self.iconsize, [_("Trash")], -1, -1 )
-            if self.de == "xfce":
-                self.trashButton.connect( "clicked", self.ButtonClicked, "thunar trash:" )
-            elif self.de == "mate":
-                self.trashButton.connect( "clicked", self.ButtonClicked, "caja trash:" )
-            else:
-                self.trashButton.connect( "clicked", self.ButtonClicked, "xdg-open trash:" )
+            self.trashButton.connect( "clicked", self.ButtonClicked, "xdg-open trash:" )
             self.trashButton.show()
             self.trashButton.connect( "button-release-event", self.trashPopup )
             self.refreshTrash()
@@ -208,10 +191,7 @@ class pluginclass( object ):
         for index in range( len(self.custompaths) ):
             path = self.custompaths[index]
             path = path.replace("~", home)
-            if self.de == "mate":
-                command = ( "caja \"" + path + "\"")
-            else:
-                command = ( "xdg-open \"" + path + "\"")
+            command = ( "xdg-open \"" + path + "\"")
             currentbutton = easyButton( "folder", self.iconsize, [self.customnames[index]], -1, -1 )
             currentbutton.connect( "clicked", self.ButtonClicked, command )
             currentbutton.show()
@@ -249,10 +229,7 @@ class pluginclass( object ):
 
     def launch_gtk_bookmark (self, widget, path):
         self.mintMenuWin.hide()
-        if self.de == "mate":
-            os.system("caja \"%s\" &" % path)
-        else:
-            os.system("xdg-open \"%s\" &" % path)
+        os.system("xdg-open \"%s\" &" % path)
 
     def trashPopup( self, widget, event ):
         if event.button == 3:
