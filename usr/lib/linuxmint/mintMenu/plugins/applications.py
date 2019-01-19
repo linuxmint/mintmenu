@@ -843,23 +843,11 @@ class pluginclass( object ):
         self.searchEntry.set_text( "" )
         self.Filter( widget, category )
 
-    # Forward all text to the search box
     def keyPress( self, widget, event ):
-
-        if event.string.strip() != "" or event.keyval == Gdk.KEY_BackSpace:
-            self.searchEntry.grab_focus()
-            self.searchEntry.set_position( -1 )
+        """ Forward all text to the search box """
+        if event.string.strip() or event.keyval == Gdk.KEY_space:
             self.searchEntry.event( event )
             return True
-
-
-        if event.keyval == Gdk.KEY_space:
-            self.searchEntry.event( event )
-            return True
-
-        if event.keyval == Gdk.KEY_Down and self.searchEntry.is_focus():
-            self.applicationsBox.get_children()[0].grab_focus()
-
         return False
 
     def favPopup( self, widget, event ):
