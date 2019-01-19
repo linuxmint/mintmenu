@@ -215,7 +215,7 @@ class pluginclass( object ):
         self.filterTimer = None
         self.menuChangedTimer = None
         # Hookup for text input
-        self.mintMenuWin.window.connect( "key-press-event", self.keyPress )
+        self.keyPress_handler = self.mintMenuWin.window.connect( "key-press-event", self.keyPress )
 
         self.favoritesBox.connect( "drag-data-received", self.ReceiveCallback )
 
@@ -323,6 +323,8 @@ class pluginclass( object ):
         self.applicationsBox.destroy()
         self.categoriesBox.destroy()
         self.favoritesBox.destroy()
+
+        self.mintMenuWin.window.disconnect(self.keyPress_handler)
 
         self.settings.notifyRemoveAll()
 
