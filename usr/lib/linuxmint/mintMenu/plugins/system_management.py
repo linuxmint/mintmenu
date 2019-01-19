@@ -1,16 +1,15 @@
 #!/usr/bin/python2
 
+import gettext
+import os
+
 import gi
 gi.require_version("Gtk", "3.0")
-
 from gi.repository import Gtk
-import os
-import string
-import gettext
 
-from easybuttons import *
-from execute import Execute
-from easygsettings import EasyGSettings
+from plugins.easybuttons import easyButton
+from plugins.easygsettings import EasyGSettings
+from plugins.execute import Execute
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")

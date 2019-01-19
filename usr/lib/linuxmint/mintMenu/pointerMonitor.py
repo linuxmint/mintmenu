@@ -1,12 +1,14 @@
 #!/usr/bin/python2
 
+import threading
+
 import gi
 gi.require_version("Gtk", "3.0")
-
-from Xlib.display import Display
-from Xlib import X, error
 from gi.repository import Gtk, Gdk, GObject, GLib
-import threading
+
+from Xlib import X
+from Xlib.display import Display
+
 
 class PointerMonitor(GObject.GObject, threading.Thread):
     __gsignals__ = {

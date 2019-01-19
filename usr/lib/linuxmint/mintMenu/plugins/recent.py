@@ -1,19 +1,20 @@
 #!/usr/bin/python2
 
+import os
+
 import gi
 gi.require_version("Gtk", "3.0")
-
 from gi.repository import Gtk, Pango
-import os
-from easygsettings import EasyGSettings
-from execute import Execute
-from easyfiles import *
-from easybuttons import *
-import recentHelper as RecentHelper
+
+from plugins.execute import Execute
+import plugins.recentHelper as RecentHelper
+from plugins.easygsettings import EasyGSettings
+
 
 class pluginclass:
-    """This is the main class for the plugin"""
-    """It MUST be named pluginclass"""
+    """ This is the main class for the plugin.
+        It MUST be named pluginclass
+    """
 
     def __init__( self, mintMenuWin, toggleButton, de ):
 
@@ -37,9 +38,9 @@ class pluginclass:
         self.recentBox = self.builder.get_object("RecentBox")
         self.recentAppBox = self.builder.get_object("RecentApps")
         RecentHelper.recentAppBox = self.recentAppBox
-        
+
         #self.recentApps = []
-        
+
         self.recentVBox = self.builder.get_object( "vbox1" )
 
         #Specify plugin width
@@ -57,7 +58,7 @@ class pluginclass:
 
         self.appSettings = EasyGSettings( "com.linuxmint.mintmenu.plugins.applications" )
         self.appSettings.notifyAdd( "icon-size", self.RegenPlugin )
-        
+
         self.FileList=[]
         self.RecManagerInstance = Gtk.RecentManager.get_default()
         self.recentManagerId = self.RecManagerInstance.connect("changed", self.DoRecent)
@@ -89,7 +90,7 @@ class pluginclass:
         self.recentw = self.settings.get( 'int', 'width' )
         self.numentries = self.settings.get( 'int', 'num-recent-docs' )
         RecentHelper.numentries = self.numentries
-        
+
         self.recentfontsize = self.settings.get( 'int', 'recent-font-size' )
 
         # Hide vertical dotted separator
@@ -108,16 +109,16 @@ class pluginclass:
         else:
             self.settings.set( "bool", "minimized", False )
 
-
     def RebuildPlugin(self):
         self.content_holder.set_size_request(self.recentw, self.recenth )
+        # TODO
+        print "recent.RebuildPlugin calling recent.DoRecent"
         self.DoRecent()
-
 
     def DoRecent( self, *args, **kargs ):
         for i in self.recentBox.get_children():
             i.destroy()
-        
+
         self.recentVBox.set_size_request( self.recentw, self.recenth )
         if len( self.recentBox.get_children() ) < self.numentries:
             n=len( self.recentBox.get_children() )-1
@@ -133,13 +134,17 @@ class pluginclass:
             if Name != None:
                 self.AddRecentBtn( Name, self.IconList[loc] )
             loc = loc + 1
-        
+
+        # TODO
+        print "recent.DoRecent calling RecentHelper.doRecentApps"
         RecentHelper.doRecentApps()
-        
+
         return True
 
     def clrmenu(self, *args, **kargs):
         self.RecManagerInstance.purge_items()
+        # TODO
+        print "recent.clrmenu calling recent.DoRecent"
         self.DoRecent()
         return
 
@@ -185,8 +190,6 @@ class pluginclass:
             if result == 77:
                 dia.destroy()
 
-
-
     def GetRecent(self, *args, **kargs):
         FileString=[]
         IconString=[]
@@ -203,7 +206,6 @@ class pluginclass:
             if count >= MaxEntries:
                 break
         return FileString,  IconString
-
 
     def ButtonClicked( self, widget, event, Exec ):
         self.press_x = event.x
@@ -223,6 +225,7 @@ class pluginclass:
                     self.Win.plugins["applications"].wTree.get_widget( "entry1" ).grab_focus()
                 Execute( w, self.Exec )
 
-    def do_plugin(self):
-        self.DoRecent()
-        
+    # TODO - skipping this because we're already doing this on __init__
+    # def do_plugin(self):
+    #     print "recent.do_plugin calling recent.DoRecent"
+    #     self.DoRecent()

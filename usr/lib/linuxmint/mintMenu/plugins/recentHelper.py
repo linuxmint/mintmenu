@@ -1,13 +1,13 @@
 #!/usr/bin/python2
 
+import os
+from user import home
+
 import gi
 gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk
 
-import os
-import string
-from user import home
-from easyfiles import *
-from easybuttons import *
+from plugins.easybuttons import ApplicationLauncher
 
 recentApps = []
 mintMenuWin = None
@@ -41,21 +41,22 @@ def recentAppsSave():
         recentAppListFile.close( )
     except Exception, e:
         print e
-        msgDlg = Gtk.MessageDialog( None, gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("Couldn't save recent apps. Check if you have write access to ~/.linuxmint/mintMenu")+"\n(" + e.__str__() + ")" )
-        msgDlg.run();
-        msgDlg.destroy();
+        msgDlg = Gtk.MessageDialog( None, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("Couldn't save recent apps. Check if you have write access to ~/.linuxmint/mintMenu")+"\n(" + e.__str__() + ")" )
+        msgDlg.run()
+        msgDlg.destroy()
 
 def recentAppBuildLauncher( location ):
     try:
-        ButtonIcon = None
         # For Folders and Network Shares
-        location = string.join( location.split( "%20" ) )
+        location = "".join( location.split( "%20" ) )
 
-        if location.startswith( "file" ):
-            ButtonIcon = "mate-fs-directory"
+        # ButtonIcon = None
 
-        if location.startswith( "smb" ) or location.startswith( "ssh" ) or location.startswith( "network" ):
-            ButtonIcon = "mate-fs-network"
+        # if location.startswith( "file" ):
+        #     ButtonIcon = "mate-fs-directory"
+
+        # if location.startswith( "smb" ) or location.startswith( "ssh" ) or location.startswith( "network" ):
+        #     ButtonIcon = "mate-fs-network"
 
         #For Special locations
         if location == "x-nautilus-desktop:///computer":
@@ -83,13 +84,16 @@ def recentAppBuildLauncher( location ):
 
 
 def buildRecentApps():
+    print "-- recentHelper.buildRecentApps"
     del recentApps[:]
     try:
-        if (not os.path.exists(home + "/.linuxmint/mintMenu/recentApplications.list")):
-            os.system("touch " + home + "/.linuxmint/mintMenu/recentApplications.list")
-        recentAppListFile = open( os.path.join( os.path.expanduser( "~"), ".linuxmint", "mintMenu", "recentApplications.list" ) , "r" )
-
-        recentApplicationsList = recentAppListFile.readlines()
+        path = os.path.join(home, ".linuxmint/mintMenu/recentApplications.list")
+        if not os.path.exists(path):
+            print "does not exist"
+            #os.system("touch " + path)
+            recentApplicationsList = []
+        else:
+            recentApplicationsList = open(path).readlines()
 
         for app in recentApplicationsList :
             app = app.strip()
@@ -109,6 +113,7 @@ def buildRecentApps():
     return recentApps
 
 def doRecentApps():
+    print "-- recentHelper.doRecentApps"
     if recentAppBox is not None:
         # recentAppBox is initiated by the recent plugin
         # only build UI widgets if it's enabled
@@ -128,6 +133,7 @@ def doRecentApps():
     return True
 
 def applicationButtonClicked( widget ):
+    # TODO all this runs whether the plugin is enabled or not
     mintMenuWin.hide()
     recentAppsAdd(widget)
     recentAppsSave()

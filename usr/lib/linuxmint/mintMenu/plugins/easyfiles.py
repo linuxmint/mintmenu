@@ -1,7 +1,5 @@
 #!/usr/bin/python2
 
-import os
-import os.path
 import urllib
 
 def GetFilePath(uri):

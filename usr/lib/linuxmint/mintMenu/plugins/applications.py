@@ -1,28 +1,26 @@
 #!/usr/bin/python2
 
+import commands
+import filecmp
+import gettext
+import os
+import pipes
+import string
+import subprocess
+import threading
+import time
+from user import home
+
 import gi
 gi.require_version("Gtk", "3.0")
-
 from gi.repository import Gtk, Pango, Gdk, Gio, GLib
 
-import os
-import time
-import string
-import gettext
-import threading
-import commands
-import subprocess
-import filecmp
-from easybuttons import *
-from execute import Execute
-from easygsettings import EasyGSettings
-from easyfiles import *
-import recentHelper as RecentHelper
-import pipes
-
 import matemenu
-
-from user import home
+import plugins.recentHelper as RecentHelper
+from plugins.easybuttons import (CategoryButton, FavApplicationLauncher,
+                                 MenuApplicationLauncher)
+from plugins.easygsettings import EasyGSettings
+from plugins.execute import Execute
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -281,7 +279,7 @@ class pluginclass( object ):
 
         self.builder.get_object("searchButton").connect( "button-press-event", self.searchPopup )
 
-        self.icon_theme = Gtk.IconTheme.get_default();
+        self.icon_theme = Gtk.IconTheme.get_default()
         self.icon_theme.connect("changed", self.on_icon_theme_changed)
 
     def refresh_apt_cache(self):
@@ -437,6 +435,8 @@ class pluginclass( object ):
 
         self.Todos()
         self.buildFavorites()
+        # TODO all this runs whether the plugin is enabled or not
+        print "applications.RegenPlugin calling buildRecentApps"
         RecentHelper.buildRecentApps()
         self.RebuildPlugin()
 
@@ -688,7 +688,7 @@ class pluginclass( object ):
                     name = pkg.name
                     for word in keywords:
                         if word != "":
-                            name = name.replace(word, "<b>%s</b>" % word);
+                            name = name.replace(word, "<b>%s</b>" % word)
                     suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
                     suggestionButton.connect("clicked", self.apturl_install, pkg.name)
                     suggestionButton.set_text(_("Install package '%s'") % name)
@@ -741,7 +741,7 @@ class pluginclass( object ):
                 name = pkg.name
                 for word in keywords:
                     if word != "":
-                        name = name.replace(word, "<b>%s</b>" % word);
+                        name = name.replace(word, "<b>%s</b>" % word)
                 suggestionButton = SuggestionButton(Gtk.STOCK_ADD, self.iconSize, "")
                 suggestionButton.connect("clicked", self.apturl_install, pkg.name)
                 suggestionButton.set_text(_("Install package '%s'") % name)
@@ -816,7 +816,7 @@ class pluginclass( object ):
                     i.released()
                     i.set_relief( Gtk.ReliefStyle.NONE )
 
-                allButton = self.categoriesBox.get_children()[0];
+                allButton = self.categoriesBox.get_children()[0]
                 allButton.set_relief( Gtk.ReliefStyle.HALF )
                 self.activeFilter = (0, text, widget)
         else:
@@ -1082,11 +1082,12 @@ class pluginclass( object ):
         self.focusSearchEntry(clear = False)
         return True
 
-    def pos_func(self, menu=None):
-        rect = self.searchButton.get_allocation()
-        x = rect.x + rect.width
-        y = rect.y + rect.height
-        return (x, y, False)
+    # TODO: Is this in use?
+    # def pos_func(self, menu=None):
+    #     rect = self.searchButton.get_allocation()
+    #     x = rect.x + rect.width
+    #     y = rect.y + rect.height
+    #     return (x, y, False)
 
     def search_ddg(self, widget):
         text = self.searchEntry.get_text()
@@ -1261,7 +1262,6 @@ class pluginclass( object ):
                 self.favoritesAdd( self.favoritesBuildLauncher( uri ) )
 
     def Search( self, widget ):
-
         text = self.searchEntry.get_text().strip()
         if text != "":
             for app_button in self.applicationsBox.get_children():
@@ -1280,7 +1280,9 @@ class pluginclass( object ):
     def do_plugin( self ):
         self.Todos()
         self.buildFavorites()
-        RecentHelper.buildRecentApps()
+        # TODO all this runs whether the plugin is enabled or not
+        # print "applications.do_plugin calling buildRecentApps"
+        # RecentHelper.buildRecentApps()
 
     # Scroll button into view
     def scrollItemIntoView( self, widget, event = None ):
@@ -1408,7 +1410,7 @@ class pluginclass( object ):
 
             self.favoritesSave()
         except Exception, e:
-            print e
+            print  e
 
     def favoritesPositionOnGrid( self, favorite ):
         row = 0
@@ -1502,8 +1504,8 @@ class pluginclass( object ):
             appListFile.close( )
         except Exception, e:
             msgDlg = Gtk.MessageDialog( None, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu")+"\n(" + e.__str__() + ")" )
-            msgDlg.run();
-            msgDlg.destroy();
+            msgDlg.run()
+            msgDlg.destroy()
 
     def isLocationInFavorites( self, location ):
         for fav in self.favorites:
@@ -1533,6 +1535,7 @@ class pluginclass( object ):
 
         self.menuChangedTimer = GLib.timeout_add( 1000, self.updateBoxes, True )
 
+    @print_timing
     def updateBoxes( self, menu_has_changed ):
         print ("updateBoxes")
         # FIXME: This is really bad!

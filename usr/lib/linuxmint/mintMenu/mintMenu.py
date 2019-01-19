@@ -1,5 +1,12 @@
 #!/usr/bin/python2
 
+
+import gc
+import gettext
+import os
+import sys
+import traceback
+
 import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version('MatePanelApplet', '4.0')
@@ -7,17 +14,12 @@ from gi.repository import Gtk, GdkPixbuf, Gdk, GObject
 from gi.repository import MatePanelApplet
 from gi.repository import Gio
 
-import sys
-import os
-import commands
-import gettext
-import traceback
-import time
-import gc
 import xdg.Config
+
 import keybinding
 import pointerMonitor
 import setproctitle
+from plugins.execute import Execute
 
 GObject.threads_init()
 
@@ -37,7 +39,6 @@ if not windowManager:
     windowManager = "MATE"
 xdg.Config.setWindowManager( windowManager.upper() )
 
-from execute import *
 
 class MainWindow( object ):
     """This is the main class for the application"""
@@ -92,9 +93,10 @@ class MainWindow( object ):
         else:
             self.tooltipsEnable( False )
 
-        self.PopulatePlugins();
-        self.firstTime = True;
+        self.PopulatePlugins()
+        self.firstTime = True
 
+    @staticmethod
     def on_window1_destroy (self, widget, data=None):
         Gtk.main_quit()
         sys.exit(0)
@@ -116,18 +118,18 @@ class MainWindow( object ):
         else:
             self.tooltipsEnable( False )
 
-    def toggleStartWithFavorites( self, settings, key, args = None ):
+    def toggleStartWithFavorites( self, settings, key ):
         self.startWithFavorites = settings.get_boolean(key)
 
-    def toggleUseCustomColor( self, settings, key, args = None ):
+    def toggleUseCustomColor( self, settings, key ):
         self.usecustomcolor = settings.get_boolean(key)
         self.loadTheme()
 
-    def toggleCustomBackgroundColor( self, settings, key, args = None):
+    def toggleCustomBackgroundColor( self, settings, key ):
         self.customcolor = settings.get_string(key)
         self.SetPaneColors( self.panesToColor )
 
-    def toggleCustomHeadingColor( self, settings, key, args = None ):
+    def toggleCustomHeadingColor( self, settings, key ):
         self.customheadingcolor = settings.get_string(key)
         self.SetHeadingStyle( self.headingsToColor )
 
@@ -147,7 +149,6 @@ class MainWindow( object ):
     def PopulatePlugins( self ):
         self.panesToColor = [ ]
         self.headingsToColor = [ ]
-        start = time.time()
         PluginPane = Gtk.EventBox()
         PluginPane.show()
         PaneLadder = Gtk.Box( orientation=Gtk.Orientation.VERTICAL )
@@ -186,7 +187,7 @@ class MainWindow( object ):
                     #        Image1.show()
 
                     #print u"Loading plugin '" + plugin + "' : sucessful"
-                except Exception, e:
+                except Exception:
                     MyPlugin = Gtk.EventBox() #Fake class for MyPlugin
                     MyPlugin.heading = _("Couldn't load plugin:") + " " + plugin
                     MyPlugin.content_holder = Gtk.EventBox()
@@ -265,8 +266,8 @@ class MainWindow( object ):
 
                     error = _("Couldn't initialize plugin") + " " + plugin + " : " + "\n".join(traceback.format_exception( info[0], info[1], info[2] )).replace("\\n", "\n")
                     msgDlg = Gtk.MessageDialog( None, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, error )
-                    msgDlg.run();
-                    msgDlg.destroy();
+                    msgDlg.run()
+                    msgDlg.destroy()
 
                 self.plugins[plugin] = MyPlugin
 
@@ -540,14 +541,14 @@ class MenuWin( object ):
         self.button_icon = Gtk.Image()
         self.do_image(self.buttonIcon, False)
         self.systemlabel = Gtk.Label(label= "%s " % self.buttonText )
-        if os.path.exists("/etc/linuxmint/info"):
-            import commands
-            tooltip = commands.getoutput("cat /etc/linuxmint/info | grep DESCRIPTION")
-            tooltip = tooltip.replace("DESCRIPTION", "")
-            tooltip = tooltip.replace("=", "")
-            tooltip = tooltip.replace("\"", "")
-            self.systemlabel.set_tooltip_text(tooltip)
-            self.button_icon.set_tooltip_text(tooltip)
+        if os.path.isfile("/etc/linuxmint/info"):
+            info = open("/etc/linuxmint/info").readlines() #TODO py3 encoding="utf-8"
+            for line in info:
+                if line.startswith("DESCRIPTION="):
+                    tooltip = line.split("=",1)[1].replace('"','')
+                    self.systemlabel.set_tooltip_text(tooltip)
+                    self.button_icon.set_tooltip_text(tooltip)
+                    break
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
             self.button_box = Gtk.Box( orientation=Gtk.Orientation.HORIZONTAL )
             self.button_box.pack_start( self.button_icon, False, False, 0 )
@@ -605,7 +606,6 @@ class MenuWin( object ):
                 style_settings.set_property("gtk-theme-name", desktop_theme)
 
     def changeOrientation( self, *args, **kargs ):
-
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
             tmpbox = Gtk.Box( orientation=Gtk.Orientation.HORIZONTAL )
             self.systemlabel.set_angle( 0 )
@@ -644,7 +644,7 @@ class MenuWin( object ):
         self.do_image(self.buttonIcon, False)
         self.sizeButton()
 
-    def hotkeyChanged (self, schema, key):
+    def hotkeyChanged (self, schema, key ):
         self.hotkeyText =  self.settings.get_string( "hot-key" )
         self.keybinder.rebind(self.hotkeyText)
 
@@ -705,7 +705,7 @@ class MenuWin( object ):
         #               Execute( "mateconf-editor /apps/mintMenu" )
         Execute( os.path.join( PATH, "mintMenuConfig.py" ) )
 
-    def showMenuEditor( self, action, userdata = None ):
+    def showMenuEditor( self, action, userdata = None):
         Execute( "mozo" )
 
     def showMenu( self, widget=None, event=None ):
@@ -781,7 +781,7 @@ class MenuWin( object ):
         if newX < monitorGeometry.x:
             newX = monitorGeometry.x
             if applet_orient == MatePanelApplet.AppletOrient.RIGHT:
-                newX -= entryWidth;
+                newX -= entryWidth
 
         # Bind to the bottom
         if newY + ourHeight > (monitorGeometry.y + monitorGeometry.height):

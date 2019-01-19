@@ -1,17 +1,19 @@
 #!/usr/bin/python2
 
-from gi.repository import Gtk, Gio, GLib
+from glob import glob
+import gettext
 import os
 import string
-import gettext
-import commands
-import time
-
-from easybuttons import *
-from easygsettings import EasyGSettings
-from execute import Execute
-from user import home
 from urllib import unquote
+from user import home
+
+import gi
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk, Gio, GLib
+
+from plugins.easybuttons import easyButton
+from plugins.easygsettings import EasyGSettings
+from plugins.execute import Execute
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -183,6 +185,7 @@ class pluginclass( object ):
             self.trashButton.connect( "clicked", self.ButtonClicked, "xdg-open trash:" )
             self.trashButton.show()
             self.trashButton.connect( "button-release-event", self.trashPopup )
+            self.trash_path = os.path.join(home, "/.local/share/Trash/info")
             self.refreshTrash()
             self.placesBtnHolder.pack_start( self.trashButton, False, False, 0)
             self.mintMenuWin.setTooltip( self.trashButton, _("Browse deleted files") )
@@ -258,9 +261,8 @@ class pluginclass( object ):
         self.do_gtk_bookmarks()
 
     def refreshTrash (self):
-        iconName = "user-trash"
-        if (os.path.exists(home + "/.local/share/Trash/info")):
-            infoFiles = commands.getoutput("ls " + home + "/.local/share/Trash/info/ | wc -l")
-            if (int(infoFiles) > 0):
-                iconName = "user-trash-full"
+        if os.path.exists(self.trash_path) and glob(os.path.join(self.trash_path, "*")):
+            iconName = "user-trash-full"
+        else:
+            iconName = "user-trash"
         self.trashButton.setIcon(iconName)

@@ -1,18 +1,22 @@
 #!/usr/bin/python2
 
+import os.path
+import re
+import shutil
+
+import xdg.DesktopEntry
+import xdg.Menu
+
 import gi
 gi.require_version('MateDesktop', '2.0')
 from gi.repository import Gtk, Gdk, GLib
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import MateDesktop
-import os.path
-import shutil
-import re
-from execute import *
-import xdg.DesktopEntry
-import xdg.Menu
-from filemonitor import monitor as filemonitor
+
+from plugins.execute import Execute
+from plugins.filemonitor import monitor as filemonitor
+
 
 class IconManager(GObject.GObject):
 
@@ -240,12 +244,13 @@ class ApplicationLauncher( easyButton ):
         if isinstance( desktopFile, xdg.Menu.MenuEntry ):
             desktopItem = desktopFile.DesktopEntry
             desktopFile = desktopItem.filename
-            self.appDirs = desktop.desktopFile.AppDirs
+            self.appDirs = desktopFile.AppDirs
         elif isinstance( desktopFile, xdg.Menu.DesktopEntry ):
             desktopItem = desktopFile
             desktopFile = desktopItem.filename
             self.appDirs = [ os.path.dirname( desktopItem.filename ) ]
         else:
+            # XXX: All menu entries on LM19.1 end here
             desktopItem = xdg.DesktopEntry.DesktopEntry( desktopFile )
             self.appDirs = [ os.path.dirname( desktopFile ) ]
 
@@ -277,8 +282,6 @@ class ApplicationLauncher( easyButton ):
         self.connectSelf( "focus-in-event", self.onFocusIn )
         self.connectSelf( "focus-out-event", self.onFocusOut )
         self.connectSelf( "clicked", self.execute )
-
-
 
     def loadDesktopEntry( self, desktopItem ):
         try:
@@ -316,7 +319,6 @@ class ApplicationLauncher( easyButton ):
             self.appCategories      = ""
             self.appDocPath         = ""
             self.startupMonitorId   = 0
-
 
     def onFocusIn( self, widget, event ):
         self.set_relief( Gtk.ReliefStyle.HALF )
@@ -358,8 +360,6 @@ class ApplicationLauncher( easyButton ):
 
         return tooltip
 
-
-
     def dragDataGet( self, widget, context, selection, targetType, eventTime ):
         if targetType == 100: # text/plain
             selection.set_text( "'" + self.desktopFile + "'", -1 )
@@ -394,39 +394,39 @@ class ApplicationLauncher( easyButton ):
     def startupFileChanged( self, *args ):
         self.inStartup = os.path.exists( self.startupFilePath )
 
-    def addToStartup( self ):
-        startupDir = os.path.join( os.path.expanduser("~"), ".config", "autostart" );
-        if not os.path.exists( startupDir ):
-            os.makedirs( startupDir )
+    # def addToStartup( self ):
+    #     startupDir = os.path.join( os.path.expanduser("~"), ".config", "autostart" )
+    #     if not os.path.exists( startupDir ):
+    #         os.makedirs( startupDir )
 
-        shutil.copyfile( self.desktopFile, self.startupFilePath )
+    #     shutil.copyfile( self.desktopFile, self.startupFilePath )
 
-        # Remove %u, etc. from Exec entry, because MATE will not replace them when it starts the app
-        item = MateDesktop.DesktopItem.new_from_uri(self.startupFilePath, MateDesktop.DesktopItemLoadFlags.ONLY_IF_EXISTS)
-        if item:
-            r = re.compile("%[A-Za-z]");
-            tmp = r.sub("", item.get_string( MateDesktop.DESKTOP_ITEM_EXEC ) ).strip()
-            item.set_string( MateDesktop.DESKTOP_ITEM_EXEC, tmp )
-            item.save( self.startupFilePath, 0 )
+    #     # Remove %u, etc. from Exec entry, because MATE will not replace them when it starts the app
+    #     item = MateDesktop.DesktopItem.new_from_uri(self.startupFilePath, MateDesktop.DesktopItemLoadFlags.ONLY_IF_EXISTS)
+    #     if item:
+    #         r = re.compile("%[A-Za-z]");
+    #         tmp = r.sub("", item.get_string( MateDesktop.DESKTOP_ITEM_EXEC ) ).strip()
+    #         item.set_string( MateDesktop.DESKTOP_ITEM_EXEC, tmp )
+    #         item.save( self.startupFilePath, 0 )
 
-    def removeFromStartup( self ):
-        if os.path.exists( self.startupFilePath ):
-            os.remove( self.startupFilePath )
+    # def removeFromStartup( self ):
+    #     if os.path.exists( self.startupFilePath ):
+    #         os.remove( self.startupFilePath )
 
-    def addToFavourites( self ):
-        favouritesDir = os.path.join( os.path.expanduser("~"), ".linuxmint", "mintMenu", "applications" );
-        if not os.path.exists( favouritesDir ):
-            os.makedirs( favouritesDir )
+    # def addToFavourites( self ):
+    #     favouritesDir = os.path.join( os.path.expanduser("~"), ".linuxmint", "mintMenu", "applications" )
+    #     if not os.path.exists( favouritesDir ):
+    #         os.makedirs( favouritesDir )
 
-        shutil.copyfile( self.desktopFile, self.favouritesFilePath )
+    #     shutil.copyfile( self.desktopFile, self.favouritesFilePath )
 
-    def removeFromFavourites( self ):
-        if os.path.exists( self.favouritesFilePath ):
-            os.remove( self.favouritesFilePath )
+    # def removeFromFavourites( self ):
+    #     if os.path.exists( self.favouritesFilePath ):
+    #         os.remove( self.favouritesFilePath )
 
-    def isInStartup( self ):
-        #return self.inStartup
-        return os.path.exists( self.startupFilePath )
+    # def isInStartup( self ):
+    #     #return self.inStartup
+    #     return os.path.exists( self.startupFilePath )
 
     def onDestroy( self, widget ):
         easyButton.onDestroy( self, widget )
