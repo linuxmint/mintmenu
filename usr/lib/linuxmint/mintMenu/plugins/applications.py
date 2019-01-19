@@ -215,7 +215,7 @@ class pluginclass( object ):
         self.filterTimer = None
         self.menuChangedTimer = None
         # Hookup for text input
-        self.content_holder.connect( "key-press-event", self.keyPress )
+        self.mintMenuWin.window.connect( "key-press-event", self.keyPress )
 
         self.favoritesBox.connect( "drag-data-received", self.ReceiveCallback )
 
@@ -250,7 +250,7 @@ class pluginclass( object ):
             print detail
         self.currentFavCol = 0
         self.favorites = []
-        
+
         self.content_holder.set_size_request( self.width, self.height )
         self.categoriesBox.set_size_request( self.width / 3, -1 )
         self.applicationsBox.set_size_request( self.width / 2, -1 )
@@ -283,7 +283,7 @@ class pluginclass( object ):
 
         self.icon_theme = Gtk.IconTheme.get_default();
         self.icon_theme.connect("changed", self.on_icon_theme_changed)
-        
+
     def refresh_apt_cache(self):
         if self.useAPT:
             os.system("mkdir -p %s/.linuxmint/mintMenu/" % home)
@@ -1481,7 +1481,7 @@ class pluginclass( object ):
                 self.favoritesReorder( favButton.position, position )
 
             self.favoritesSave()
-     
+
     def favoritesRemove( self, position ):
         tmp = self.favorites[ position ]
         self.favorites.remove( self.favorites[ position ] )
