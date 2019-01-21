@@ -215,7 +215,7 @@ class pluginclass( object ):
         self.filterTimer = None
         self.menuChangedTimer = None
         # Hookup for text input
-        self.content_holder.connect( "key-press-event", self.keyPress )
+        self.keyPress_handler = self.mintMenuWin.window.connect( "key-press-event", self.keyPress )
 
         self.favoritesBox.connect( "drag-data-received", self.ReceiveCallback )
 
@@ -250,7 +250,7 @@ class pluginclass( object ):
             print detail
         self.currentFavCol = 0
         self.favorites = []
-        
+
         self.content_holder.set_size_request( self.width, self.height )
         self.categoriesBox.set_size_request( self.width / 3, -1 )
         self.applicationsBox.set_size_request( self.width / 2, -1 )
@@ -283,7 +283,7 @@ class pluginclass( object ):
 
         self.icon_theme = Gtk.IconTheme.get_default();
         self.icon_theme.connect("changed", self.on_icon_theme_changed)
-        
+
     def refresh_apt_cache(self):
         if self.useAPT:
             os.system("mkdir -p %s/.linuxmint/mintMenu/" % home)
@@ -323,6 +323,8 @@ class pluginclass( object ):
         self.applicationsBox.destroy()
         self.categoriesBox.destroy()
         self.favoritesBox.destroy()
+
+        self.mintMenuWin.window.disconnect(self.keyPress_handler)
 
         self.settings.notifyRemoveAll()
 
@@ -843,23 +845,11 @@ class pluginclass( object ):
         self.searchEntry.set_text( "" )
         self.Filter( widget, category )
 
-    # Forward all text to the search box
     def keyPress( self, widget, event ):
-
-        if event.string.strip() != "" or event.keyval == Gdk.KEY_BackSpace:
-            self.searchEntry.grab_focus()
-            self.searchEntry.set_position( -1 )
+        """ Forward all text to the search box """
+        if event.string.strip() or event.keyval == Gdk.KEY_space:
             self.searchEntry.event( event )
             return True
-
-
-        if event.keyval == Gdk.KEY_space:
-            self.searchEntry.event( event )
-            return True
-
-        if event.keyval == Gdk.KEY_Down and self.searchEntry.is_focus():
-            self.applicationsBox.get_children()[0].grab_focus()
-
         return False
 
     def favPopup( self, widget, event ):
@@ -1481,7 +1471,7 @@ class pluginclass( object ):
                 self.favoritesReorder( favButton.position, position )
 
             self.favoritesSave()
-     
+
     def favoritesRemove( self, position ):
         tmp = self.favorites[ position ]
         self.favorites.remove( self.favorites[ position ] )
