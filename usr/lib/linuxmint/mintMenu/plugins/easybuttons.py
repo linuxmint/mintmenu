@@ -377,7 +377,7 @@ class ApplicationLauncher( easyButton ):
                     cmd = "mate-terminal -e \"" + self.appExec + "\""
                 Execute(cmd, self.appPath)
             else:
-                Execute(self.appExec, self.appPath)
+                Execute(None, desktopFile=self.desktopFile)
 
     def uninstall (self, *args ):
         Execute("mint-remove-application " + self.desktopFile)
