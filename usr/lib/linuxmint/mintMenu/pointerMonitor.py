@@ -66,7 +66,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
                 else:
                     self.display.allow_events(X.ReplayPointer, X.CurrentTime)
             except Exception as e:
-                print "Unexpected error: " + str(e)
+                print("Unexpected error:", e)
 
     def stop(self):
         self.running = False

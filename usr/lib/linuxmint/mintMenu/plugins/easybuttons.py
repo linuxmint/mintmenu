@@ -7,10 +7,9 @@ import xdg.DesktopEntry
 import xdg.Menu
 
 import gi
-gi.require_version('MateDesktop', '2.0')
-from gi.repository import Gtk, Gdk, GLib
-from gi.repository import Pango
-from gi.repository import GObject
+gi.require_version("Gtk", "3.0")
+gi.require_version("MateDesktop", "2.0")
+from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, GObject, Pango, MateDesktop
 
 from plugins.execute import Execute
 from plugins.filemonitor import monitor as filemonitor
@@ -37,7 +36,7 @@ class IconManager(GObject.GObject):
         #self.themes = map( createTheme, [d for d in os.listdir("/usr/share/icons") if os.path.isdir(os.path.join("/usr/share/icons", d))])
 
         self.defaultTheme = Gtk.IconTheme.get_default()
-        defaultKdeTheme = createTheme("kde.default")
+        #defaultKdeTheme = createTheme("kde.default")
 
         # Setup and clean up the temp icon dir
         configDir = GLib.get_user_config_dir()
@@ -49,19 +48,17 @@ class IconManager(GObject.GObject):
             os.remove(os.path.join(self.iconDir, fn))
 
         self.defaultTheme.append_search_path(self.iconDir)
-
         # Themes with the same content as the default them aren't needed
         #self.themes = [theme for theme in self.themes if  theme.list_icons() != defaultTheme.list_icons()]
 
-        self.themes = [self.defaultTheme, defaultKdeTheme]
+        #self.themes = [self.defaultTheme, defaultKdeTheme]
+        self.themes = [self.defaultTheme]
 
         # Listen for changes in the themes
-        for theme in self.themes:
-            theme.connect("changed", self.themeChanged)
-
+        # for theme in self.themes:
+        #     theme.connect("changed", self.themeChanged)
 
     def getIcon(self, iconName, iconSize):
-
         if not iconName:
             return None
 
@@ -89,22 +86,12 @@ class IconManager(GObject.GObject):
                     shutil.copyfile(iconFileName, os.path.join(self.iconDir, tmpIconName))
                     self.defaultTheme.append_search_path(self.iconDir)
 
-            image = Gtk.Image()
-            icon_found = False
-            for theme in self.themes:
-                if theme.lookup_icon(realIconName, 0, Gtk.IconLookupFlags.FORCE_REGULAR):
-                    icon_found = True
-                    break
-
-            if icon_found:
-                image.set_from_icon_name(realIconName, Gtk.IconSize.DND)
-                image.set_pixel_size(iconSize)
-            else:
-                image = None
-
+            image = Gtk.Image.new_from_icon_name(realIconName, Gtk.IconSize.DND)
+            image.set_pixel_size(iconSize)
             return image
-        except Exception, e:
-            print "Exception " + e.__class__.__name__ + ": " + e.message
+
+        except Exception as e:
+            print("Exception %s: %s" % (e.__class__.__name__, e))
             return None
 
     def themeChanged(self, theme):
@@ -128,14 +115,11 @@ class easyButton(Gtk.Button):
         HBox1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self.labelBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
 
+        self.buttonImage = self.getIcon(self.iconSize)
+        if not self.buttonImage:
+            self.buttonImage = Gtk.Image()
+            self.buttonImage.set_size_request(self.iconSize, self.iconSize)
 
-        self.buttonImage = Gtk.Image()
-        icon = self.getIcon(self.iconSize)
-        if icon:
-            self.buttonImage = icon
-        else:
-            #[iW, iH] = iconManager.getIconSize(self.iconSize)
-            self.buttonImage.set_size_request(self.iconSize, self.iconSize )
         self.image_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self.image_box.pack_start(self.buttonImage, False, False, 5)
         self.image_box.show_all()
@@ -158,7 +142,7 @@ class easyButton(Gtk.Button):
         self.connectSelf("destroy", self.onDestroy)
         self.connect("released", self.onRelease)
         # Reload icons when the theme changed
-        self.themeChangedHandlerId = iconManager.connect("changed", self.themeChanged)
+        # self.themeChangedHandlerId = iconManager.connect("changed", self.themeChanged)
 
     def connectSelf(self, event, callback):
         self.connections.append(self.connect(event, callback))
@@ -168,11 +152,10 @@ class easyButton(Gtk.Button):
 
     def onDestroy(self, widget):
         self.buttonImage.clear()
-        iconManager.disconnect(self.themeChangedHandlerId)
+        # iconManager.disconnect(self.themeChangedHandlerId)
         for connection in self.connections:
             self.disconnect(connection)
         del self.connections
-
 
     def addLabel(self, text, styles = None):
         label = Gtk.Label()
@@ -193,15 +176,10 @@ class easyButton(Gtk.Button):
         label.show()
         self.labelBox.pack_start(label , True, True, 0)
 
-
     def getIcon(self, iconSize):
         if not self.iconName:
             return None
-
         icon = iconManager.getIcon(self.iconName, iconSize)
-        if icon is None:
-            icon = iconManager.getIcon("application-default-icon", iconSize)
-
         return icon
 
     def setIcon(self, iconName):
@@ -248,7 +226,6 @@ class ApplicationLauncher(easyButton):
             desktopFile = desktopItem.filename
             self.appDirs = [os.path.dirname(desktopItem.filename)]
         else:
-            # XXX: All menu entries on LM19.1 end here
             desktopItem = xdg.DesktopEntry.DesktopEntry(desktopFile)
             self.appDirs = [os.path.dirname(desktopFile)]
 
@@ -260,8 +237,8 @@ class ApplicationLauncher(easyButton):
         self.desktopEntryMonitors = []
 
         base = os.path.basename(self.desktopFile)
-        for dir in self.appDirs:
-            self.desktopEntryMonitors.append(filemonitor.addMonitor(os.path.join(dir, base) , self.desktopEntryFileChangedCallback))
+        for directory in self.appDirs:
+            self.desktopEntryMonitors.append(filemonitor.addMonitor(os.path.join(directory, base) , self.desktopEntryFileChangedCallback))
 
         easyButton.__init__(self, self.appIconName, iconSize)
         self.setupLabels()
@@ -271,11 +248,7 @@ class ApplicationLauncher(easyButton):
 
         targets = (Gtk.TargetEntry.new("text/plain", 0, 100), Gtk.TargetEntry.new("text/uri-list", 0, 101))
         self.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, targets, Gdk.DragAction.COPY)
-
-        icon = self.getIcon(Gtk.IconSize.DND)
-        if icon:
-            iconName, s = icon.get_icon_name()
-            self.drag_source_set_icon_name(iconName)
+        self.drag_source_set_icon_name(self.iconName)
 
         self.connectSelf("focus-in-event", self.onFocusIn)
         self.connectSelf("focus-out-event", self.onFocusOut)
@@ -301,19 +274,19 @@ class ApplicationLauncher(easyButton):
             self.appComment         = self.appComment.strip()
 
             basename = os.path.basename(self.desktopFile)
-            self.startupFilePath = os.path.join(os.path.expanduser("~"), ".config", "autostart", basename)
+            self.startupFilePath = os.path.join(os.environ['HOME'], ".config/autostart", basename)
             if self.startupMonitorId:
                 filemonitor.removeMonitor(self.startupMonitorId )
             if os.path.exists(self.startupFilePath):
                 self.startupMonitorId = filemonitor.addMonitor(self.startupFilePath, self.startupFileChanged)
 
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
             self.appName            = ""
             self.appGenericName     = ""
             self.appComment         = ""
             self.appExec            = ""
-            self.appIconName                = ""
+            self.appIconName        = ""
             self.appCategories      = ""
             self.appDocPath         = ""
             self.startupMonitorId   = 0
@@ -338,7 +311,6 @@ class ApplicationLauncher(easyButton):
             if keyw != "" and appName.find(keyw) == -1 and appGenericName.find(keyw) == -1 and appComment.find(keyw) == -1 and appExec.find(keyw) == -1:
                 self.hide()
                 return False
-
         self.show()
         return True
 
@@ -392,39 +364,39 @@ class ApplicationLauncher(easyButton):
     def startupFileChanged(self, *args):
         self.inStartup = os.path.exists(self.startupFilePath)
 
-    # def addToStartup(self):
-    #     startupDir = os.path.join(os.path.expanduser("~"), ".config", "autostart")
-    #     if not os.path.exists(startupDir):
-    #         os.makedirs(startupDir)
+    def addToStartup(self):
+        startupDir = os.path.join(os.path.dirname(self.startupFilePath))
+        if not os.path.exists(startupDir):
+            os.makedirs(startupDir)
 
-    #     shutil.copyfile(self.desktopFile, self.startupFilePath)
+        shutil.copyfile(self.desktopFile, self.startupFilePath)
 
-    #     # Remove %u, etc. from Exec entry, because MATE will not replace them when it starts the app
-    #     item = MateDesktop.DesktopItem.new_from_uri(self.startupFilePath, MateDesktop.DesktopItemLoadFlags.ONLY_IF_EXISTS)
-    #     if item:
-    #         r = re.compile("%[A-Za-z]");
-    #         tmp = r.sub("", item.get_string(MateDesktop.DESKTOP_ITEM_EXEC)).strip()
-    #         item.set_string(MateDesktop.DESKTOP_ITEM_EXEC, tmp)
-    #         item.save(self.startupFilePath, 0)
+        # Remove %u, etc. from Exec entry, because MATE will not replace them when it starts the app
+        item = MateDesktop.DesktopItem.new_from_uri(self.startupFilePath, MateDesktop.DesktopItemLoadFlags.ONLY_IF_EXISTS)
+        if item:
+            r = re.compile("%[A-Za-z]")
+            tmp = r.sub("", item.get_string(MateDesktop.DESKTOP_ITEM_EXEC)).strip()
+            item.set_string(MateDesktop.DESKTOP_ITEM_EXEC, tmp)
+            item.save(self.startupFilePath, 0)
 
-    # def removeFromStartup(self):
-    #     if os.path.exists(self.startupFilePath):
-    #         os.remove(self.startupFilePath)
+    def removeFromStartup(self):
+        if os.path.exists(self.startupFilePath):
+            os.remove(self.startupFilePath)
 
-    # def addToFavourites(self):
-    #     favouritesDir = os.path.join(os.path.expanduser("~"), ".linuxmint", "mintMenu", "applications")
-    #     if not os.path.exists(favouritesDir):
-    #         os.makedirs(favouritesDir)
+    def addToFavourites(self):
+        favouritesDir = os.path.join(os.environ['HOME'], ".linuxmint/mintMenu/applications")
+        if not os.path.exists(favouritesDir):
+            os.makedirs(favouritesDir)
 
-    #     shutil.copyfile(self.desktopFile, self.favouritesFilePath)
+        shutil.copyfile(self.desktopFile, self.favouritesFilePath)
 
-    # def removeFromFavourites(self):
-    #     if os.path.exists(self.favouritesFilePath):
-    #         os.remove(self.favouritesFilePath)
+    def removeFromFavourites(self):
+        if os.path.exists(self.favouritesFilePath):
+            os.remove(self.favouritesFilePath)
 
-    # def isInStartup(self):
-    #     #return self.inStartup
-    #     return os.path.exists(self.startupFilePath)
+    def isInStartup(self):
+        #return self.inStartup
+        return os.path.exists(self.startupFilePath)
 
     def onDestroy(self, widget):
         easyButton.onDestroy(self, widget)
@@ -439,10 +411,10 @@ class ApplicationLauncher(easyButton):
     def onDesktopEntryFileChanged(self):
         exists = False
         base = os.path.basename(self.desktopFile)
-        for dir in self.appDirs:
-            if os.path.exists(os.path.join(dir, base)):
+        for directory in self.appDirs:
+            if os.path.exists(os.path.join(directory, base)):
                 # print os.path.join(dir, base), self.desktopFile
-                self.loadDesktopEntry(xdg.DesktopEntry.DesktopEntry(os.path.join(dir, base)))
+                self.loadDesktopEntry(xdg.DesktopEntry.DesktopEntry(os.path.join(directory, base)))
                 for child in self.labelBox:
                     child.destroy()
 
@@ -468,7 +440,6 @@ class MenuApplicationLauncher(ApplicationLauncher):
 
         ApplicationLauncher.__init__(self, desktopFile, iconSize)
 
-
     def filterCategory(self, category):
         if self.appCategory == category or category == "":
             self.show()
@@ -491,17 +462,16 @@ class MenuApplicationLauncher(ApplicationLauncher):
                     #appComment = "<b>%s</b>" % (appComment);
                 appName = "<b>%s</b>" % appName
                 appComment = "<b>%s</b>" % appComment
-            except Exception, detail:
-                print detail
-                pass
+            except Exception as e:
+                print(e)
 
         if self.showComment and self.appComment != "":
             if self.iconSize <= 2:
-                self.addLabel('<span size="small">%s</span>' % appName)
-                self.addLabel('<span size="x-small">%s</span>' % appComment)
+                self.addLabel('<span size="small">%s</span>\n<span size="x-small">%s</span>' %
+                    (appName, appComment))
             else:
-                self.addLabel(appName)
-                self.addLabel('<span size="small">%s</span>' % appComment)
+                self.addLabel('%s\n<span size="small">%s</span>' %
+                    (appName, appComment))
         else:
             self.addLabel(appName)
 
@@ -548,12 +518,10 @@ class FavApplicationLauncher(ApplicationLauncher):
 
         self.setupLabels()
 
-
 class CategoryButton(easyButton):
 
     def __init__(self, iconName, iconSize, labels , f):
         easyButton.__init__(self, iconName, iconSize, labels)
         self.filter = f
-
 
 iconManager = IconManager()

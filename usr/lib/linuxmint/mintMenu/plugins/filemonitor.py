@@ -32,7 +32,7 @@ if hasInotify:
                 mId = self.wm.add_watch(filename, mask, rec = True)[filename]
                 if mId >= 0:
                     self.callbacks[mId] = (callback, args)
-            except Exception, detail:
+            except:
                 mId = 0
             return mId
 
@@ -43,7 +43,7 @@ if hasInotify:
 
         def fileChanged(self, event):
             if event.wd in self.callbacks:
-                #                       print event.path
+                #print event.path
                 callback = self.callbacks[event.wd]
                 if callback[1]:
                     GLib.idle_add(callback[0], callback[1])

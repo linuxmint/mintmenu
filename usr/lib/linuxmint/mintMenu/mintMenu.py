@@ -20,7 +20,6 @@ import pointerMonitor
 import setproctitle
 from plugins.execute import Execute
 
-
 GObject.threads_init()
 
 # Rename the process
@@ -71,7 +70,7 @@ class MainWindow(object):
 
         self.window.stick()
 
-        plugindir = os.path.join(os.path.expanduser("~"), ".linuxmint/mintMenu/plugins")
+        plugindir = os.path.join(os.environ["HOME"], ".linuxmint/mintMenu/plugins")
         sys.path.append(plugindir)
 
         self.panelSettings = Gio.Settings.new("org.mate.panel")
@@ -162,7 +161,7 @@ class MainWindow(object):
 
         for plugin in self.pluginlist:
             if plugin in self.plugins:
-                print u"Duplicate plugin in list: ", plugin
+                print("Duplicate plugin in list: %s" % plugin)
                 continue
 
             if plugin != "newpane":
@@ -205,8 +204,7 @@ class MainWindow(object):
                     MyPlugin.add(MyPlugin.content_holder)
                     MyPlugin.width = 270
                     MyPlugin.icon = 'mate-logo-icon.png'
-                    print u"Unable to load " + plugin + " plugin :-("
-
+                    print("Unable to load %s plugin" % plugin)
 
                 self.panesToColor.append(MyPlugin.content_holder)
                 MyPlugin.content_holder.show()
@@ -352,7 +350,6 @@ class MainWindow(object):
         widget.set_tooltip_text(tip)
 
     def RegenPlugins(self, *args, **kargs):
-        #print
         #print u"Reloading Plugins..."
         for item in self.paneholder:
             item.destroy()
@@ -473,11 +470,11 @@ class MenuWin(object):
             self.keybinder.connect("activate", self.onBindingPress)
             self.keybinder.start()
             self.settings.connect("changed::hot-key", self.hotkeyChanged)
-            print "Binding to Hot Key: " + self.hotkeyText
-        except Exception, cause:
+            print("Binding to Hot Key: %s" % self.hotkeyText)
+        except Exception as e:
             self.keybinder = None
-            print "** WARNING ** - Keybinder Error"
-            print "Error Report :\n", str(cause)
+            print("** WARNING ** - Keybinder Error")
+            print("Error Report :\n", e)
 
         self.applet.set_can_focus(False)
 
@@ -485,9 +482,9 @@ class MenuWin(object):
             self.pointerMonitor = pointerMonitor.PointerMonitor()
             self.pointerMonitor.connect("activate", self.onPointerOutside)
             self.mainwin.window.connect("realize", self.onRealize)
-        except Exception, cause:
-            print "** WARNING ** - Pointer Monitor Error"
-            print "Error Report :\n", str(cause)
+        except Exception as e:
+            print("** WARNING ** - Pointer Monitor Error")
+            print("Error Report :\n", e)
 
     def onWindowMap(self, *args):
         self.applet.get_style_context().set_state(Gtk.StateFlags.SELECTED)
@@ -522,9 +519,9 @@ class MenuWin(object):
 
     def leave_notify(self, applet, event):
         # Hack for mate-panel-test-applets focus issue (this can be commented)
-        if event.state & Gdk.ModifierType.BUTTON1_MASK and applet.get_style_context().get_state() & Gtk.StateFlags.SELECTED:
-            if event.x >= 0 and event.y >= 0 and event.x < applet.get_window().get_width() and event.y < applet.get_window().get_height():
-                self.mainwin.stopHiding()
+        # if event.state & Gdk.ModifierType.BUTTON1_MASK and applet.get_style_context().get_state() & Gtk.StateFlags.SELECTED:
+        #     if event.x >= 0 and event.y >= 0 and event.x < applet.get_window().get_width() and event.y < applet.get_window().get_height():
+        #         self.mainwin.stopHiding()
 
         self.do_image(self.buttonIcon, False)
 
@@ -542,13 +539,14 @@ class MenuWin(object):
         self.do_image(self.buttonIcon, False)
         self.systemlabel = Gtk.Label(label= "%s " % self.buttonText)
         if os.path.isfile("/etc/linuxmint/info"):
-            info = open("/etc/linuxmint/info").readlines() #TODO py3 encoding="utf-8"
-            for line in info:
-                if line.startswith("DESCRIPTION="):
-                    tooltip = line.split("=",1)[1].replace('"','')
-                    self.systemlabel.set_tooltip_text(tooltip)
-                    self.button_icon.set_tooltip_text(tooltip)
-                    break
+            with open("/etc/linuxmint/info") as info:
+                for line in info:
+                    line = line.decode("utf-8")
+                    if line.startswith("DESCRIPTION="):
+                        tooltip = line.split("=",1)[1].strip('"\n')
+                        self.systemlabel.set_tooltip_text(tooltip)
+                        self.button_icon.set_tooltip_text(tooltip)
+                        break
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
             self.button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
             self.button_box.pack_start(self.button_icon, False, False, 0)
@@ -568,16 +566,12 @@ class MenuWin(object):
             self.button_box.pack_start(self.button_icon , False, False, 0)
             self.button_icon.set_padding(0, 5)
 
-
         self.button_box.set_homogeneous(False)
         self.button_box.show_all()
         self.sizeButton()
-
         self.button_box.get_style_context().add_class('mintmenu')
-
         self.applet.add(self.button_box)
         self.applet.set_background_widget(self.applet)
-
 
     def loadSettings(self, *args, **kargs):
         self.hideIcon   =  self.settings.get_boolean("hide-applet-icon")
@@ -637,7 +631,6 @@ class MenuWin(object):
         self.updateButton()
         self.applet.add(self.button_box)
 
-
     def updateButton(self):
         self.systemlabel.set_text(self.buttonText)
         self.button_icon.clear()
@@ -676,22 +669,17 @@ class MenuWin(object):
         self.updateButton()
 
     def showAboutDialog(self, action, userdata = None):
-
         about = Gtk.AboutDialog()
         about.set_name("mintMenu")
-        import commands
-        version = commands.getoutput("/usr/lib/linuxmint/common/version.py mintmenu")
-        about.set_version(version)
+        import subprocess
+        (stdout, stderr) = subprocess.Popen(["/usr/lib/linuxmint/common/version.py", "mintmenu"],
+            stdout=subprocess.PIPE).communicate()
+        about.set_version(stdout.strip())
         try:
-            h = open('/usr/share/common-licenses/GPL','r')
-            s = h.readlines()
-            gpl = ""
-            for line in s:
-                gpl += line
-            h.close()
+            gpl = open('/usr/share/common-licenses/GPL','r').read()
             about.set_license(gpl)
-        except Exception, detail:
-            print detail
+        except Exception as e:
+            print(e)
         about.set_comments(_("Advanced MATE Menu"))
         # about.set_authors(["Clement Lefebvre <clem@linuxmint.com>", "Lars-Peter Clausen <lars@laprican.de>"])
         about.set_translator_credits(("translator-credits"))
@@ -699,7 +687,6 @@ class MenuWin(object):
         about.set_logo(GdkPixbuf.Pixbuf.new_from_file("/usr/lib/linuxmint/mintMenu/icon.svg"))
         about.connect("response", lambda dialog, r: dialog.destroy())
         about.show()
-
 
     def showPreferences(self, action, userdata = None):
         # Execute("mateconf-editor /apps/mintMenu")
@@ -831,8 +818,8 @@ class MenuWin(object):
                     self.de = "mate"
                 elif os.path.exists("/usr/bin/thunar"):
                     self.de = "xfce"
-        except Exception, detail:
-            print detail
+        except Exception as e:
+            print(e)
 
 def applet_factory(applet, iid, data):
     MenuWin(applet, iid)

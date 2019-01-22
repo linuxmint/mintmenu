@@ -1,7 +1,6 @@
 #!/usr/bin/python2
 
 import os
-from user import home
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -9,7 +8,7 @@ from gi.repository import Gtk
 
 from plugins.easybuttons import ApplicationLauncher
 
-
+home = os.environ.get("HOME")
 recentApps = []
 mintMenuWin = None
 recentAppBox = None
@@ -35,8 +34,8 @@ def recentAppsSave():
                 else:
                     recentAppListFile.write(recentApp.type + "\n")
 
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
         msgDlg = Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
             _("Couldn't save recent apps. Check if you have write access to ~/.linuxmint/mintMenu")+"\n(" + e.__str__() + ")")
         msgDlg.run()
@@ -74,18 +73,16 @@ def recentAppBuildLauncher(location):
             appButton.connect("clicked", applicationButtonClicked)
             appButton.type = "location"
             return appButton
-    except Exception, e:
-        print u"File in recentapp not found: '" + location + "'", e
+    except Exception as e:
+        print("File in recentapp not found: '%s': %s" % (location, e))
 
     return None
 
 def buildRecentApps():
-    print "-- recentHelper.buildRecentApps"
     del recentApps[:]
     try:
         path = os.path.join(home, ".linuxmint/mintMenu/recentApplications.list")
         if not os.path.exists(path):
-            print "does not exist"
             recentApplicationsList = []
         else:
             recentApplicationsList = open(path).readlines()
@@ -103,12 +100,11 @@ def buildRecentApps():
 
             if appButton:
                 recentApps.append(appButton)
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
     return recentApps
 
 def doRecentApps():
-    print "-- recentHelper.doRecentApps"
     if recentAppBox is not None:
         # recentAppBox is initiated by the recent plugin
         # only build UI widgets if it's enabled

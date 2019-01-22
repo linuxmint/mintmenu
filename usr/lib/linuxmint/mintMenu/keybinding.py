@@ -29,7 +29,7 @@ gi.require_version("Gtk", "3.0")
 
 from Xlib.display import Display
 from Xlib import X, error
-from gi.repository import Gtk, Gdk, GdkX11, GObject, GLib
+from gi.repository import Gtk, Gdk, GObject, GLib
 import threading
 
 SPECIAL_MODS = (["Super_L",    "<Super>"],

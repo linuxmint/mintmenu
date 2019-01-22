@@ -1,11 +1,10 @@
 #!/usr/bin/python2
 
-from glob import glob
 import gettext
 import os
 import string
+from glob import glob
 from urllib import unquote
-from user import home
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -18,6 +17,7 @@ from plugins.execute import Execute
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
+home = os.environ.get("HOME")
 
 class pluginclass(object):
 
@@ -173,8 +173,8 @@ class pluginclass(object):
                 tmpdesktopDir = config['XDG_DESKTOP_DIR']
                 if os.path.exists(os.path.expandvars(tmpdesktopDir)):
                     desktopDir = tmpdesktopDir
-            except Exception, detail:
-                print detail
+            except Exception as e:
+                print(e)
             Button4 = easyButton("desktop", self.iconsize, [_("Desktop")], -1, -1)
             Button4.connect("clicked", self.ButtonClicked, "xdg-open \"" + desktopDir + "\"")
             Button4.show()

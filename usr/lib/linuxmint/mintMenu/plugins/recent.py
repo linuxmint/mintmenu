@@ -1,14 +1,15 @@
 #!/usr/bin/python2
 
 import os
+import subprocess
 
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Pango
+from gi.repository import Gtk
 
-from plugins.execute import Execute
 import plugins.recentHelper as RecentHelper
 from plugins.easygsettings import EasyGSettings
+from plugins.execute import Execute
 
 
 class pluginclass:
@@ -70,7 +71,7 @@ class pluginclass:
         self.builder.get_object("ClrBtn").connect("clicked", self.clrmenu)
 
     def wake(self):
-        pass
+        return
 
     def destroy(self):
         self.recentBox.destroy()
@@ -111,8 +112,6 @@ class pluginclass:
 
     def RebuildPlugin(self):
         self.content_holder.set_size_request(self.recentw, self.recenth)
-        # TODO
-        print "recent.RebuildPlugin calling recent.DoRecent"
         self.DoRecent()
 
     def DoRecent(self, *args, **kargs):
@@ -135,18 +134,13 @@ class pluginclass:
                 self.AddRecentBtn(Name, self.IconList[loc])
             loc = loc + 1
 
-        # TODO
-        print "recent.DoRecent calling RecentHelper.doRecentApps"
         RecentHelper.doRecentApps()
 
         return True
 
     def clrmenu(self, *args, **kargs):
         self.RecManagerInstance.purge_items()
-        # TODO
-        print "recent.clrmenu calling recent.DoRecent"
         self.DoRecent()
-        return
 
     def AddRecentBtn(self, Name, RecentImage):
         DispName=os.path.basename(Name)
@@ -166,7 +160,7 @@ class pluginclass:
         Box1.add(ButtonIcon)
 
         Label1 = Gtk.Label(DispName)
-        Label1.set_ellipsize(Pango.EllipsizeMode.END)
+        Label1.set_ellipsize(3)
         Box1.add(Label1)
 
         AButton.add(Box1)
@@ -174,27 +168,22 @@ class pluginclass:
 
         self.recentBox.pack_start(AButton, False, True, 0)
 
-    def callback(self, widget, filename=None):
+    def callback(self, widget, filename):
         self.Win.hide()
 
-        x = os.system("gvfs-open \""+filename+"\"")
-        if x == 256:
-            dia = Gtk.Dialog('File not found!',
-                             None,  #the toplevel wgt of your app
-                             Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,  #binary flags or'ed together
-                             ("Ok", 77))
-            dia.vbox.pack_start(Gtk.Label('The location or file could not be found!'), False, False, 0)
-            dia.vbox.show_all()
-            dia.show()
-            result = dia.run()
-            if result == 77:
-                dia.destroy()
+        try:
+            subprocess.check_call(["xdg-open", filename])
+        except subprocess.CalledProcessError:
+            dialog = Gtk.MessageDialog(self.window, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+            Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("The file or location could not be opened."))
+            dialog.set_title("mintMenu")
+            dialog.run()
+            dialog.destroy()
 
     def GetRecent(self, *args, **kargs):
         FileString=[]
         IconString=[]
         RecentInfo=self.RecManagerInstance.get_items()
-        # print RecentInfo[0].get_icon(Gtk.IconSize.MENU)
         count=0
         MaxEntries=self.numentries
         if self.numentries == -1:
@@ -205,7 +194,7 @@ class pluginclass:
             count+=1
             if count >= MaxEntries:
                 break
-        return FileString,  IconString
+        return FileString, IconString
 
     def ButtonClicked(self, widget, event, Exec):
         self.press_x = event.x
@@ -225,7 +214,6 @@ class pluginclass:
                     self.Win.plugins["applications"].wTree.get_widget("entry1").grab_focus()
                 Execute(w, self.Exec)
 
-    # TODO - skipping this because we're already doing this on __init__
-    # def do_plugin(self):
-    #     print "recent.do_plugin calling recent.DoRecent"
-    #     self.DoRecent()
+    def do_plugin(self):
+        return
+        # self.DoRecent()

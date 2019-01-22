@@ -66,7 +66,7 @@ class pluginclass(object):
     def destroy(self):
         self.settings.notifyRemoveAll()
 
-    def wake(self) :
+    def wake(self):
         pass
 
     def changePluginSize(self, settings, key, args):
