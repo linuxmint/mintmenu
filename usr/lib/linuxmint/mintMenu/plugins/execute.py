@@ -3,6 +3,7 @@
 import os
 from gi.repository import Gio
 
+
 def RemoveArgs(Execline):
     if isinstance(Execline, list):
         Execline = ' '.join(Execline)

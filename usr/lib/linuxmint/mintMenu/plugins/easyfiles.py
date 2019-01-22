@@ -2,6 +2,7 @@
 
 import urllib
 
+
 def GetFilePath(uri):
     path = urllib.url2pathname(uri) # escape special chars
     path = path.strip('\r\n\x00') # remove \r\n and NULL

@@ -9,53 +9,50 @@ from gi.repository import Gtk
 
 from plugins.easybuttons import ApplicationLauncher
 
+
 recentApps = []
 mintMenuWin = None
 recentAppBox = None
 numentries = 10
 iconSize = 16
 
-def recentAppsAdd( recentAppsButton ):
+def recentAppsAdd(recentAppsButton):
     if recentAppsButton:
-
-        recentApps.insert(0, recentAppsButton )
-
+        recentApps.insert(0, recentAppsButton)
         counter = 0
         for recentApp in recentApps:
-            if counter != 0 and ( recentApp.desktopFile == recentAppsButton.desktopFile or counter >= numentries ):
+            if counter != 0 and (recentApp.desktopFile == recentAppsButton.desktopFile or counter >= numentries):
                 del recentApps[counter]
             counter = counter + 1
 
 def recentAppsSave():
     try:
-        if (not os.path.exists(home + "/.linuxmint/mintMenu/recentApplications.list")):
-            os.system("touch " + home + "/.linuxmint/mintMenu/recentApplications.list")
-        recentAppListFile = open( os.path.join( os.path.expanduser( "~"), ".linuxmint", "mintMenu", "recentApplications.list" ) , "w" )
+        path = os.path.join(home, ".linuxmint/mintMenu/recentApplications.list")
+        with open(path, "w") as recentAppListFile:
+            for recentApp in recentApps:
+                if not hasattr(recentApp, "type") or recentApp.type == "location":
+                    recentAppListFile.write("location:" + recentApp.desktopFile + "\n")
+                else:
+                    recentAppListFile.write(recentApp.type + "\n")
 
-        for recentApp in recentApps:
-            if not hasattr(recentApp, "type") or recentApp.type == "location":
-                recentAppListFile.write( "location:" + recentApp.desktopFile + "\n" )
-            else:
-                recentAppListFile.write( recentApp.type + "\n" )
-
-        recentAppListFile.close( )
     except Exception, e:
         print e
-        msgDlg = Gtk.MessageDialog( None, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("Couldn't save recent apps. Check if you have write access to ~/.linuxmint/mintMenu")+"\n(" + e.__str__() + ")" )
+        msgDlg = Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
+            _("Couldn't save recent apps. Check if you have write access to ~/.linuxmint/mintMenu")+"\n(" + e.__str__() + ")")
         msgDlg.run()
         msgDlg.destroy()
 
-def recentAppBuildLauncher( location ):
+def recentAppBuildLauncher(location):
     try:
         # For Folders and Network Shares
-        location = "".join( location.split( "%20" ) )
+        location = "".join(location.split("%20"))
 
         # ButtonIcon = None
 
-        # if location.startswith( "file" ):
+        # if location.startswith("file"):
         #     ButtonIcon = "mate-fs-directory"
 
-        # if location.startswith( "smb" ) or location.startswith( "ssh" ) or location.startswith( "network" ):
+        # if location.startswith("smb") or location.startswith("ssh") or location.startswith("network"):
         #     ButtonIcon = "mate-fs-network"
 
         #For Special locations
@@ -65,23 +62,22 @@ def recentAppBuildLauncher( location ):
             location =  "/usr/share/applications/nautilus-home.desktop"
         elif location == "x-nautilus-desktop:///network":
             location = "/usr/share/applications/network-scheme.desktop"
-        elif location.startswith( "x-nautilus-desktop:///" ):
+        elif location.startswith("x-nautilus-desktop:///"):
             location = "/usr/share/applications/nautilus-computer.desktop"
 
-        if location.startswith( "file://" ):
+        if location.startswith("file://"):
             location = location[7:]
-        appButton = ApplicationLauncher( location, iconSize)
+        appButton = ApplicationLauncher(location, iconSize)
 
         if appButton.appExec:
             appButton.show()
-            appButton.connect( "clicked", applicationButtonClicked )
+            appButton.connect("clicked", applicationButtonClicked)
             appButton.type = "location"
             return appButton
     except Exception, e:
         print u"File in recentapp not found: '" + location + "'", e
 
     return None
-
 
 def buildRecentApps():
     print "-- recentHelper.buildRecentApps"
@@ -90,7 +86,6 @@ def buildRecentApps():
         path = os.path.join(home, ".linuxmint/mintMenu/recentApplications.list")
         if not os.path.exists(path):
             print "does not exist"
-            #os.system("touch " + path)
             recentApplicationsList = []
         else:
             recentApplicationsList = open(path).readlines()
@@ -99,15 +94,15 @@ def buildRecentApps():
             app = app.strip()
 
             if app[0:9] == "location:":
-                appButton = recentAppBuildLauncher( app[9:] )
+                appButton = recentAppBuildLauncher(app[9:])
             else:
-                if ( app.endswith( ".desktop" ) ):
-                    appButton = recentAppBuildLauncher( app )
+                if (app.endswith(".desktop")):
+                    appButton = recentAppBuildLauncher(app)
                 else:
                     appButton = None
 
             if appButton:
-                recentApps.append( appButton )
+                recentApps.append(appButton)
     except Exception, e:
         print e
     return recentApps
@@ -124,15 +119,13 @@ def doRecentApps():
         # recent apps
         buildRecentApps()
         for AButton in recentApps:
-
-            AButton.set_size_request( 200, -1 )
-            AButton.set_relief( Gtk.ReliefStyle.NONE )
-
-            recentAppBox.pack_start( AButton, False, True, 0 )
+            AButton.set_size_request(200, -1)
+            AButton.set_relief(Gtk.ReliefStyle.NONE)
+            recentAppBox.pack_start(AButton, False, True, 0)
 
     return True
 
-def applicationButtonClicked( widget ):
+def applicationButtonClicked(widget):
     # TODO all this runs whether the plugin is enabled or not
     mintMenuWin.hide()
     recentAppsAdd(widget)
