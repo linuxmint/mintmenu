@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import gettext
 import os
@@ -378,7 +378,7 @@ class mintMenuConfig(object):
         return self.gdkRGBAToString(color)
 
     def gdkRGBAToString(self, gdkRGBA):
-        return "#%.2X%.2X%.2X" % (gdkRGBA.red * 256, gdkRGBA.green * 256, gdkRGBA.blue * 256)
+        return "#%.2f%.2f%.2f" % (gdkRGBA.red * 256, gdkRGBA.green * 256, gdkRGBA.blue * 256)
 
     def moveUp(self, upButton):
 
