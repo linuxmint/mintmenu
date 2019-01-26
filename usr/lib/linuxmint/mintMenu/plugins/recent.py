@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import os
 import subprocess
@@ -173,7 +173,7 @@ class pluginclass:
         self.Win.hide()
 
         try:
-            subprocess.check_call(["xdg-open", filename])
+            subprocess.run(["xdg-open", filename], check=True)
         except subprocess.CalledProcessError:
             dialog = Gtk.MessageDialog(self.window, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
             Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("The file or location could not be opened."))

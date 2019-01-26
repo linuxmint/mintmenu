@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 # -*- coding: utf-8; -*-
 # Copyright (C) 2013  Ozcan Esen <ozcanesen@gmail.com>
@@ -118,7 +118,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         self.grab(self.keytext)
 
     def get_mask_combinations(self, mask):
-        return [x for x in xrange(mask+1) if not (x & ~mask)]
+        return [x for x in range(mask+1) if not (x & ~mask)]
 
     def idle(self):
         self.emit("activate")

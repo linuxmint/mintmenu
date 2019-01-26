@@ -1,10 +1,9 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import gettext
 import os
-import string
-from glob import glob
-from urllib import unquote
+import shutil
+from urllib.parse import unquote
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -62,10 +61,13 @@ class pluginclass(object):
         self.settings.notifyAdd("show-gtk-bookmarks", self.RegenPlugin)
         self.settings.notifyAdd("height", self.changePluginSize)
         self.settings.notifyAdd("width", self.changePluginSize)
-
         self.loadSettings()
 
         self.content_holder.set_size_request(self.width, self.height)
+
+        # Variables
+        self.trash_info = os.path.join(home, ".local/share/Trash/info")
+        self.trash_files = os.path.join(home, ".local/share/Trash/files")
 
     def wake(self):
         if self.showtrash:
@@ -186,7 +188,6 @@ class pluginclass(object):
             self.trashButton.connect("clicked", self.ButtonClicked, "xdg-open trash:")
             self.trashButton.show()
             self.trashButton.connect("button-release-event", self.trashPopup)
-            self.trash_path = os.path.join(home, ".local/share/Trash/info")
             self.refreshTrash()
             self.placesBtnHolder.pack_start(self.trashButton, False, False, 0)
             self.mintMenuWin.setTooltip(self.trashButton, _("Browse deleted files"))
@@ -247,8 +248,8 @@ class pluginclass(object):
             trashMenu.popup(None, None, None, None, 3, 0)
 
     def emptyTrash(self, menu, widget):
-        os.system("rm -rf " + home + "/.local/share/Trash/info/*")
-        os.system("rm -rf " + home + "/.local/share/Trash/files/*")
+        shutil.rmtree(self.trash_info)
+        shutil.rmtree(self.trash_files)
         self.trashButton.setIcon("user-trash")
 
     def ButtonClicked(self, widget, Exec):
@@ -262,7 +263,7 @@ class pluginclass(object):
         self.do_gtk_bookmarks()
 
     def refreshTrash(self):
-        if os.path.exists(self.trash_path) and glob(os.path.join(self.trash_path, "*")):
+        if os.path.isdir(self.trash_info) and os.listdir(self.trash_info):
             iconName = "user-trash-full"
         else:
             iconName = "user-trash"

@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import threading
 
@@ -56,7 +56,6 @@ class PointerMonitor(GObject.GObject, threading.Thread):
                             pdevice = Gdk.Display.get_default().get_device_manager().get_client_pointer()
                         p = self.get_window().get_device_position(pdevice)
                         g = self.get_size()
-
                         if p.x >= 0 and p.y >= 0 and p.x <= g.width and p.y <= g.height:
                             break
                     else:

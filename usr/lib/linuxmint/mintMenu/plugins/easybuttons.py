@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import os.path
 import shutil
@@ -89,7 +89,6 @@ class IconManager(GObject.GObject):
             image = Gtk.Image.new_from_icon_name(realIconName, Gtk.IconSize.DND)
             image.set_pixel_size(iconSize)
             return image
-
         except Exception as e:
             print("Exception %s: %s" % (e.__class__.__name__, e))
             return None
@@ -127,7 +126,7 @@ class easyButton(Gtk.Button):
 
         if labels:
             for label in labels:
-                if isinstance(label, basestring):
+                if isinstance(label, str):
                     self.addLabel(label)
                 elif isinstance(label, list):
                     self.addLabel(label[0], label[1])
@@ -315,13 +314,7 @@ class ApplicationLauncher(easyButton):
         return True
 
     def strip_accents(self, string):
-        value = string
-        if isinstance(string, unicode):
-            try:
-                value = string.encode('UTF8', 'ignore')
-            except:
-                pass
-        return value
+        return string
 
     def getTooltip(self):
         tooltip = self.appName
