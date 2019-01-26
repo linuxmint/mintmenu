@@ -108,7 +108,6 @@ def doRecentApps():
     if recentAppBox is not None:
         # recentAppBox is initiated by the recent plugin
         # only build UI widgets if it's enabled
-
         for i in recentAppBox.get_children():
             i.destroy()
 
@@ -122,7 +121,6 @@ def doRecentApps():
     return True
 
 def applicationButtonClicked(widget):
-    # TODO all this runs whether the plugin is enabled or not
     mintMenuWin.hide()
     recentAppsAdd(widget)
     recentAppsSave()

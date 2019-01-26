@@ -50,7 +50,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
                 if event.type == X.ButtonPress:
                     # Check if pointer is inside monitored windows
                     for w in self.windows:
-                        if Gtk.check_version (3, 20, 0) is None:
+                        if (Gtk.MAJOR_VERSION, Gtk.MINOR_VERSION) >= (3, 20):
                             pdevice = Gdk.Display.get_default().get_default_seat().get_pointer()
                         else:
                             pdevice = Gdk.Display.get_default().get_device_manager().get_client_pointer()

@@ -24,13 +24,14 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import threading
+
 import gi
 gi.require_version("Gtk", "3.0")
+from gi.repository import Gdk, GLib, GObject, Gtk
 
-from Xlib.display import Display
 from Xlib import X, error
-from gi.repository import Gtk, Gdk, GObject, GLib
-import threading
+from Xlib.display import Display
 
 SPECIAL_MODS = (["Super_L",    "<Super>"],
                 ["Super_R",    "<Super>"],
