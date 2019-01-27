@@ -741,28 +741,11 @@ class pluginclass(object):
                             if(not showns):
                                 i.grab_focus()
                             showns = True
-                if not showns and os.path.exists("/usr/bin/mintinstall"):
+                if not showns:
                     if len(text) >= 3:
-                        if self.current_suggestion is not None and self.current_suggestion in text:
-                            # We're restricting our search...
-                            self.add_search_suggestions(text)
-                            #if (len(self.current_results) > 0):
-                            #self.add_apt_filter_results_sync(self.current_results, text)
-                            #else:
+                        self.add_search_suggestions(text)
+                        if self.useAPT:
                             GLib.timeout_add(300, self.add_apt_filter_results, text)
-                        else:
-                            self.current_results = []
-                            self.add_search_suggestions(text)
-                            GLib.timeout_add(300, self.add_apt_filter_results, text)
-
-                        self.current_suggestion = text
-                    else:
-                        self.current_suggestion = None
-                        self.current_results = []
-                else:
-                    self.current_suggestion = None
-                    self.current_results = []
-
                 for i in self.categoriesBox.get_children():
                     i.released()
                     i.set_relief(Gtk.ReliefStyle.NONE)
