@@ -27,10 +27,10 @@ class IconManager(GObject.GObject):
         self.count = 0
 
         # Some apps don't put a default icon in the default theme folder, so we will search all themes
-        def createTheme(d):
-            theme = Gtk.IconTheme()
-            theme.set_custom_theme(d)
-            return theme
+        # def createTheme(d):
+        #     theme = Gtk.IconTheme()
+        #     theme.set_custom_theme(d)
+        #     return theme
 
         # This takes to much time and there are only a very few applications that use icons from different themes
         #self.themes = map( createTheme, [d for d in os.listdir("/usr/share/icons") if os.path.isdir(os.path.join("/usr/share/icons", d))])

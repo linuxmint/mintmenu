@@ -4,7 +4,6 @@ import cgi
 import filecmp
 import gettext
 import os
-import string
 import subprocess
 import threading
 import urllib
@@ -19,7 +18,6 @@ from plugins.easybuttons import (ApplicationLauncher, CategoryButton,
                                  FavApplicationLauncher,
                                  MenuApplicationLauncher)
 from plugins.easygsettings import EasyGSettings
-from plugins.execute import Execute
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -303,11 +301,8 @@ class pluginclass(object):
         #     os.system("xdg-open apt://" + pkg_name + " &")
         self.mintMenuWin.hide()
 
-    def __del__(self):
-        #print("Applications plugin deleted")
-        return
-
-    def wake(self):
+    @staticmethod
+    def wake():
         return
 
     def destroy(self):

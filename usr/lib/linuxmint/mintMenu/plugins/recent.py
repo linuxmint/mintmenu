@@ -70,7 +70,8 @@ class pluginclass:
         #Connect event handlers
         self.builder.get_object("ClrBtn").connect("clicked", self.clrmenu)
 
-    def wake(self):
+    @staticmethod
+    def wake():
         return
 
     def destroy(self):
@@ -214,6 +215,6 @@ class pluginclass:
                     self.Win.plugins["applications"].wTree.get_widget("entry1").grab_focus()
                 Execute(w, self.Exec)
 
-    def do_plugin(self):
+    @staticmethod
+    def do_plugin():
         return
-        # self.DoRecent()

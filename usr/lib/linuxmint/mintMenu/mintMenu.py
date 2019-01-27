@@ -297,7 +297,8 @@ class MainWindow(object):
         self.tooltipsEnable(False)
 
     # A little bit hacky but works.
-    def getDefaultColors(self):
+    @staticmethod
+    def getDefaultColors():
         widget = Gtk.EventBox()
         widget.show()
 
