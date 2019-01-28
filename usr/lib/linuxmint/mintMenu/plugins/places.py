@@ -176,7 +176,7 @@ class pluginclass(object):
             except Exception as e:
                 print(e)
             Button4 = easyButton("desktop", self.iconsize, [_("Desktop")], -1, -1)
-            Button4.connect("clicked", self.ButtonClicked, "xdg-open \"" + desktopDir + "\"")
+            Button4.connect("clicked", self.ButtonClicked, 'xdg-open "%s"' % desktopDir)
             Button4.show()
             self.placesBtnHolder.pack_start(Button4, False, False, 0)
             self.mintMenuWin.setTooltip(Button4, _("Browse items placed on the desktop"))
@@ -186,7 +186,7 @@ class pluginclass(object):
             self.trashButton.connect("clicked", self.ButtonClicked, "xdg-open trash:")
             self.trashButton.show()
             self.trashButton.connect("button-release-event", self.trashPopup)
-            self.trash_path = os.path.join(home, "/.local/share/Trash/info")
+            self.trash_path = os.path.join(home, ".local/share/Trash/info")
             self.refreshTrash()
             self.placesBtnHolder.pack_start(self.trashButton, False, False, 0)
             self.mintMenuWin.setTooltip(self.trashButton, _("Browse deleted files"))
