@@ -94,8 +94,8 @@ class MainWindow(object):
         self.PopulatePlugins()
         self.firstTime = True
 
-    @staticmethod
-    def on_window1_destroy (self, widget, data=None):
+    @classmethod
+    def on_window1_destroy (widget, data=None):
         Gtk.main_quit()
         sys.exit(0)
 

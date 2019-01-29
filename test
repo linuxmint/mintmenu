@@ -4,6 +4,8 @@ sudo rm -rf /usr/lib/linuxmint/mintMenu
 sudo cp -R usr /
 sudo glib-compile-schemas /usr/share/glib-2.0/schemas
 
+killall -q mintmenu
+
 mate-terminal --maximize -e /usr/lib/linuxmint/mintMenu/mintMenu.py
 
 mate-panel-test-applets --iid MintMenuAppletFactory::MintMenuApplet
