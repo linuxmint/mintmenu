@@ -28,7 +28,7 @@ import threading
 
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gdk, GLib, GObject, Gtk, GdkX11
+from gi.repository import Gtk, Gdk, GLib, GObject
 
 from Xlib import X, error
 from Xlib.display import Display
@@ -114,6 +114,8 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         if window is None:
             self.window = self.screen.root
         else:
+            print("set_focus_window")
+            print("xid:", window.get_xid())
             self.window = self.display.create_resource_object("window", window.get_xid())
         self.grab(self.keytext)
 
