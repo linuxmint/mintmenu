@@ -177,16 +177,6 @@ class pluginclass(object):
         self.favoritesBox =self.builder.get_object("favoritesBox")
         self.applicationsScrolledWindow =self.builder.get_object("applicationsScrolledWindow")
 
-        #i18n
-        self.builder.get_object("searchLabel").set_text("<span weight='bold'>" + _("Search:") + "</span>")
-        self.builder.get_object("searchLabel").set_use_markup(True)
-        self.builder.get_object("label6").set_text(_("Favorites"))
-        self.builder.get_object("label3").set_text(_("Favorites"))
-        self.builder.get_object("label7").set_text(_("All applications"))
-        self.builder.get_object("label2").set_text(_("Applications"))
-
-        self.headingstocolor = [self.builder.get_object("label6"),self.builder.get_object("label2")]
-
         self.numApps = 0
         # These properties are NECESSARY to maintain consistency
 
@@ -238,6 +228,7 @@ class pluginclass(object):
             self.settings.bindGSettingsEntryToVar("int", "default-tab", self, "defaultTab")
         except Exception as e:
             print(e)
+
         self.currentFavCol = 0
         self.favorites = []
 
