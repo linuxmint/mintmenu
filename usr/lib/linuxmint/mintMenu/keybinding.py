@@ -114,8 +114,6 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         if window is None:
             self.window = self.screen.root
         else:
-            print("set_focus_window")
-            print("xid:", window.get_xid())
             self.window = self.display.create_resource_object("window", window.get_xid())
         self.grab(self.keytext)
 
