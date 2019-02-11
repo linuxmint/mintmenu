@@ -19,6 +19,12 @@ from plugins.easybuttons import (ApplicationLauncher, CategoryButton,
                                  MenuApplicationLauncher)
 from plugins.easygsettings import EasyGSettings
 
+try:
+    from plugins.terminal import IntegratedTerminal
+    hasVte = True
+except:
+    hasVte = False
+
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 home = os.path.expanduser("~")
@@ -28,6 +34,23 @@ class PackageDescriptor():
         self.name = name
         self.summary = summary
         self.description = description
+
+class subprocess_thread(threading.Thread):
+
+    def __init__(self, _cmd, parent):
+        threading.Thread.__init__(self)
+        self.cmd = _cmd
+        self.parent = parent
+
+    def run(self):
+        try:
+            output = subprocess.check_output(self.cmd,
+                stderr=subprocess.STDOUT, cwd=home, shell=True)
+            if output:
+                GLib.timeout_add(0, self.parent.subprocess_thread_output, output, self.cmd)
+        except subprocess.CalledProcessError as e:
+            if e.output:
+                GLib.timeout_add(0, self.parent.subprocess_thread_output, e.output, self.cmd)
 
 # import time
 # def print_timing(func):
@@ -181,9 +204,8 @@ class pluginclass(object):
         self.favoritesBox = self.builder.get_object("favoritesBox")
         self.applicationsScrolledWindow = self.builder.get_object("applicationsScrolledWindow")
 
-
-        self.headingstocolor = [self.builder.get_object("label6"), self.builder.get_object("label2")]
         self.numApps = 0
+
         # These properties are NECESSARY to maintain consistency
 
         # Set 'window' property for the plugin (Must be the root widget)
@@ -233,13 +255,14 @@ class pluginclass(object):
             self.settings.notifyAdd("use-apt", self.switchAPTUsage)
             self.settings.notifyAdd("fav-cols", self.changeFavCols)
             self.settings.notifyAdd("remember-filter", self.changeRememberFilter)
-            self.settings.notifyAdd("enable-internet-search", self.changeEnableInternetSearch)
+            self.settings.notifyAdd("allow-execute", self.update_allow_execute)
 
             self.settings.bindGSettingsEntryToVar("int", "category-hover-delay", self, "categoryhoverdelay")
             self.settings.bindGSettingsEntryToVar("bool", "do-not-filter", self, "donotfilterapps")
             self.settings.bindGSettingsEntryToVar("bool", "enable-internet-search", self, "enableInternetSearch")
             self.settings.bindGSettingsEntryToVar("string", "search-command", self, "searchtool")
             self.settings.bindGSettingsEntryToVar("int", "default-tab", self, "defaultTab")
+            self.settings.bindGSettingsEntryToVar("bool", "integrated-terminal-enabled", self, "integrated_terminal_enabled")
         except Exception as e:
             print(e)
 
@@ -275,6 +298,8 @@ class pluginclass(object):
         self.panel_position = -1
 
         self.builder.get_object("searchButton").connect("button-press-event", self.searchPopup)
+        self.builder.get_object("executeButton").connect("button-press-event", self.on_execute_button_pressed)
+        self.update_allow_execute()
 
         # self.icon_theme = Gtk.IconTheme.get_default()
         # self.icon_theme.connect("changed", self.on_icon_theme_changed)
@@ -383,8 +408,19 @@ class pluginclass(object):
     def changeRememberFilter(self, settings, key, args):
         self.rememberFilter = settings.get_boolean(key)
 
-    def changeEnableInternetSearch(self, settings, key, args):
-        self.enableInternetSearch = settings.get_boolean(key)
+    def update_allow_execute(self, settings=None, key=None, args=None):
+        if settings and key:
+            self.allow_execute = settings.get_boolean(key)
+        #self.builder.get_object("executeButton").set_visible(self.allow_execute)
+        if self.allow_execute:
+            self.builder.get_object("executeButton").show()
+            searchLabel_text = _("Search/Run:")
+        else:
+            self.builder.get_object("executeButton").hide()
+            searchLabel_text = _("Search:")
+        searchLabel = self.builder.get_object("searchLabel")
+        searchLabel.set_markup("<b>%s</b>" % searchLabel_text)
+        searchLabel.show()
 
     def changeShowApplicationComments(self, settings, key, args):
         self.showapplicationcomments = settings.get_boolean(key)
@@ -465,6 +501,10 @@ class pluginclass(object):
         self.useAPT = self.settings.get("bool", "use-apt")
         self.rememberFilter = self.settings.get("bool", "remember-filter")
         self.enableInternetSearch = self.settings.get("bool", "enable-internet-search")
+        self.allow_execute = self.settings.get("bool", "allow-execute")
+        self.integrated_terminal_enabled = self.settings.get("bool", "integrated-terminal-enabled")
+        self.integrated_terminal_width = self.settings.get("int", "integrated-terminal-width")
+        self.integrated_terminal_height = self.settings.get("int", "integrated-terminal-height")
 
         self.lastActiveTab =  self.settings.get("int", "last-active-tab")
         self.defaultTab = self.settings.get("int", "default-tab")
@@ -607,6 +647,22 @@ class pluginclass(object):
 
         self.applicationsBox.get_children()[-1].grab_focus()
 
+    def add_execute_suggestions(self, user_text):
+        # Wait to see if the keyword has changed.. before doing anything
+        text = self.searchEntry.get_text()
+        if user_text != text:
+            return
+        commands = user_text.split()
+        cmd = self.verify_command(commands[0])
+        if cmd:
+            text = "<b>%s</b>" % cgi.escape(text)
+            commands[0] = cmd
+            if cmd.startswith("xdg-open"):
+                self.add_suggestion("document-open", _("Try to open %s") % text, None, self.execute_user_input, commands, False)
+            else:
+                self.add_suggestion("application-x-executable", _("Run %s") % text, None, self.execute_user_input, commands, False)
+        self.applicationsBox.get_children()[-1].grab_focus()
+
     def add_apt_filter_results(self, keyword):
         try:
             # Wait to see if the keyword has changed.. before doing anything
@@ -660,7 +716,7 @@ class pluginclass(object):
                     for word in keywords:
                         if word != "":
                             name = name.replace(word, "<b>%s</b>" % word)
-                    self.add_suggestion(Gtk.STOCK_ADD,
+                    self.add_suggestion("package-x-generic",
                         _("Install package '%s'") % name,
                         "%s\n\n%s\n\n%s" % (pkg.name, pkg.summary, pkg.description),
                         self.apturl_install, pkg.name)
@@ -725,7 +781,7 @@ class pluginclass(object):
             if self.donotfilterapps:
                 widget.set_text("")
             else:
-                text = widget.get_text()
+                text = widget.get_text().strip()
                 if self.lastActiveTab != 1:
                     self.changeTab(1, clear = False)
                 text = widget.get_text()
@@ -750,8 +806,11 @@ class pluginclass(object):
                 if not showns:
                     if len(text) >= 3:
                         self.add_search_suggestions(text)
+                        if self.allow_execute:
+                            GLib.timeout_add(150, self.add_execute_suggestions, text)
                         if self.useAPT:
                             GLib.timeout_add(300, self.add_apt_filter_results, text)
+
                 for i in self.categoriesBox.get_children():
                     i.released()
                     i.set_relief(Gtk.ReliefStyle.NONE)
@@ -786,9 +845,16 @@ class pluginclass(object):
         self.Filter(widget, category)
 
     def keyPress(self, widget, event):
-        """ Forward all text to the search box """
+        # Forward all text to the search box
         if event.string.strip() or event.keyval == Gdk.KEY_space:
             self.searchEntry.event(event)
+            return True
+
+        # Ctrl+Enter for the Run button
+        if self.allow_execute and \
+            (event.state & Gdk.ModifierType.CONTROL_MASK) and \
+            event.keyval == Gdk.KEY_Return:
+            self.on_execute_button_pressed(widget, event)
             return True
         return False
 
@@ -930,6 +996,102 @@ class pluginclass(object):
         self.mintMenuWin.stopHiding()
         mTree.attach_to_widget(widget, None)
         mTree.popup(None, None, None, None, event.button, event.time)
+
+    def subprocess_thread_output(self, output, command):
+        output = output.strip()
+        if not output:
+            return
+        self.mintMenuWin.hide()
+
+        def on_key_press_event(widget, event):
+            if event.keyval == Gdk.KEY_Escape or \
+               event.keyval == Gdk.KEY_Return or \
+               event.keyval == Gdk.KEY_KP_Enter:
+                widget.destroy()
+
+        window = Gtk.Window()
+        window.set_title(_("Output from your command: %s" % command))
+        window.set_transient_for(self.window)
+        window.set_icon_from_file("/usr/lib/linuxmint/mintMenu/icon.svg")
+        #window.set_skip_taskbar_hint(True)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        output_box = Gtk.TextView()
+        output_box.set_editable(False)
+        output_box.set_monospace(True)
+        output_box.set_right_margin(16)
+        output_box.set_wrap_mode(Gtk.WrapMode.WORD)
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scrolled_window.set_hexpand(True)
+        scrolled_window.set_vexpand(True)
+        scrolled_window.set_size_request(self.integrated_terminal_width, self.integrated_terminal_height)
+        scrolled_window.add(output_box)
+        box.pack_start(scrolled_window, False, True, 0)
+        window.add(box)
+
+        output_box.get_buffer().set_text(output)
+        window.show_all()
+        window.connect("key-press-event", on_key_press_event)
+
+    @staticmethod
+    def find_file_in_path(filename):
+        if os.path.isfile(filename):
+            return filename
+        path = os.environ.get("PATH", os.defpath)
+        paths = path.split(os.pathsep)
+        paths.append(home)
+        for p in paths:
+            f = os.path.join(p, filename)
+            if os.path.isfile(f):
+                return f
+        return None
+
+    def verify_command(self, cmd):
+        cmd = os.path.expanduser(os.path.expandvars(cmd))
+        cmd = self.find_file_in_path(cmd)
+        if cmd and not os.access(cmd, os.X_OK):
+            cmd = "xdg-open %s" % cmd
+            # TODO: We could check mime type first to ensure this goes through
+        return cmd
+
+    def on_execute_button_pressed(self, widget, event):
+        command = self.searchEntry.get_text().strip()
+        if command:
+            self.execute_user_input(widget, command.split())
+
+    def execute_user_input(self, widget, commands, verify=True):
+        self.mintMenuWin.hide()
+        if verify:
+            cmd = self.verify_command(commands[0])
+            if not cmd:
+                # file not found
+                dialog = Gtk.MessageDialog(self.window,
+                    Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                    Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
+                    _("Invalid command or file reference."))
+                dialog.set_title("mintMenu")
+                dialog.run()
+                dialog.destroy()
+                return
+            commands[0] = cmd
+        command = " ".join(commands)
+        try:
+            global hasVte
+            if hasVte and self.integrated_terminal_enabled:
+                try:
+                    IntegratedTerminal(command,
+                        _("mintMenu Integrated Terminal"),
+                        width=self.integrated_terminal_width,
+                        height=self.integrated_terminal_height
+                        )
+                except Exception as e:
+                    print("IntegratedTerminal exception:", e)
+                    hasVte = False
+            if not hasVte or not self.integrated_terminal_enabled:
+                thread = subprocess_thread(command, self)
+                thread.start()
+        except:
+            pass
 
     def searchPopup(self, widget, event):
         def add_menu_item(icon=None, text=None, callback=None):

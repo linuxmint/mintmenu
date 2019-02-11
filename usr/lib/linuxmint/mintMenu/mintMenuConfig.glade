@@ -12,6 +12,18 @@
     <property name="value">1</property>
     <property name="step_increment">1</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment11">
+    <property name="lower">200</property>
+    <property name="upper">10000</property>
+    <property name="value">600</property>
+    <property name="step_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment12">
+    <property name="lower">200</property>
+    <property name="upper">10000</property>
+    <property name="value">500</property>
+    <property name="step_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
@@ -750,8 +762,8 @@
                     <property name="margin_left">7</property>
                     <property name="margin_right">7</property>
                     <property name="margin_bottom">7</property>
-                    <property name="row_spacing">5</property>
-                    <property name="column_spacing">2</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="showAppComments">
                         <property name="label" translatable="yes">Show application comments</property>
@@ -759,8 +771,8 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="halign">start</property>
                         <property name="margin_top">11</property>
-                        <property name="xalign">0.5</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -776,7 +788,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="xalign">0.5</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -787,12 +799,12 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="hover">
-                        <property name="label" translatable="yes">Hover</property>
+                        <property name="label" translatable="yes">Open categories on hover</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="xalign">0.5</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -823,7 +835,7 @@
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
                         <property name="adjustment">adjustment4</property>
-                        <property name="value">100</property>
+                        <property name="value">99.999999999776477</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -893,7 +905,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="xalign">0.5</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -909,7 +921,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="xalign">0.5</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -925,12 +937,107 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="xalign">0.5</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">8</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="allow-execute">
+                        <property name="label" translatable="yes">Enable run/open features for search entry</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="halign">start</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">9</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="integrated-terminal-height">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="invisible_char">●</property>
+                        <property name="text">500</property>
+                        <property name="primary_icon_activatable">False</property>
+                        <property name="secondary_icon_activatable">False</property>
+                        <property name="adjustment">adjustment12</property>
+                        <property name="value">500</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">12</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="integrated-terminal-width">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="invisible_char">●</property>
+                        <property name="text">600</property>
+                        <property name="primary_icon_activatable">False</property>
+                        <property name="secondary_icon_activatable">False</property>
+                        <property name="adjustment">adjustment11</property>
+                        <property name="value">600</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">11</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="integrated-terminal-height-label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="halign">start</property>
+                        <property name="margin_left">18</property>
+                        <property name="label" translatable="yes">Output/terminal height (pixels):</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">12</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="integrated-terminal-width-label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="halign">start</property>
+                        <property name="margin_left">18</property>
+                        <property name="label" translatable="yes">Output/terminal width (pixels):</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">11</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="integrated-terminal-enabled">
+                        <property name="label" translatable="yes">Enable integrated terminal</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="halign">start</property>
+                        <property name="margin_left">18</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">10</property>
                         <property name="width">2</property>
                       </packing>
                     </child>

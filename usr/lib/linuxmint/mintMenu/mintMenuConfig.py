@@ -134,6 +134,16 @@ class mintMenuConfig(object):
         self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "remember-filter", self.rememberFilter, "toggled", self.rememberFilter.set_active, self.rememberFilter.get_active)
         self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "enable-internet-search", self.enableInternetSearch, "toggled", self.enableInternetSearch.set_active,  self.enableInternetSearch.get_active)
 
+        self.allow_execute = self.builder.get_object("allow-execute")
+        self.integrated_terminal_enabled = self.builder.get_object("integrated-terminal-enabled")
+        self.integrated_terminal_width = self.builder.get_object("integrated-terminal-width")
+        self.integrated_terminal_height = self.builder.get_object("integrated-terminal-height")
+
+        self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "allow-execute", self.allow_execute, "toggled", self.allow_execute.set_active,  self.allow_execute.get_active)
+        self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "integrated-terminal-enabled", self.integrated_terminal_enabled, "toggled", self.integrated_terminal_enabled.set_active,  self.integrated_terminal_enabled.get_active)
+        self.bindGSettingsValueToWidget(self.settingsApplications, "int", "integrated-terminal-width", self.integrated_terminal_width, "value-changed", self.integrated_terminal_width.set_value,  self.integrated_terminal_width.get_value)
+        self.bindGSettingsValueToWidget(self.settingsApplications, "int", "integrated-terminal-height", self.integrated_terminal_height, "value-changed", self.integrated_terminal_height.set_value,  self.integrated_terminal_height.get_value)
+
         self.bindGSettingsValueToWidget(self.settingsPlaces, "int", "icon-size", self.placesIconSize, "value-changed", self.placesIconSize.set_value, self.placesIconSize.get_value)
         self.bindGSettingsValueToWidget(self.settingsSystem, "int", "icon-size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value)
 

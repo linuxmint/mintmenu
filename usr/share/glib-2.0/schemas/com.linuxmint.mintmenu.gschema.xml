@@ -307,6 +307,28 @@
       <summary></summary>
       <description></description>
     </key>
+
+    <key type="b" name="allow-execute">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key type="b" name="integrated-terminal-enabled">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key type="i" name="integrated-terminal-width">
+      <default>600</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="i" name="integrated-terminal-height">
+      <default>500</default>
+      <summary></summary>
+      <description></description>
+    </key>
   </schema>
 
   <schema id="com.linuxmint.mintmenu.plugins.system_management" path="/com/linuxmint/mintmenu/plugins/system_management/">

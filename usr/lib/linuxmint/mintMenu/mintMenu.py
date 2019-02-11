@@ -471,7 +471,7 @@ class MenuWin(object):
             self.keybinder.connect("activate", self.onBindingPress)
             self.keybinder.start()
             self.settings.connect("changed::hot-key", self.hotkeyChanged)
-            print("Binding to Hot Key: %s" % self.hotkeyText)
+            # print("Binding to Hot Key: %s" % self.hotkeyText)
         except Exception as e:
             self.keybinder = None
             print("** WARNING ** - Keybinder Error")
