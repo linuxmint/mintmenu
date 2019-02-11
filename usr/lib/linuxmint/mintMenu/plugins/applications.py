@@ -144,10 +144,14 @@ class SuggestionButton(Gtk.Button):
 
 class pluginclass(object):
     TARGET_TYPE_TEXT = 80
-    toButton = (Gtk.TargetEntry.new("text/uri-list", 0, TARGET_TYPE_TEXT), Gtk.TargetEntry.new("text/uri-list", 0, TARGET_TYPE_TEXT))
+    toButton = (Gtk.TargetEntry.new("text/uri-list", 0, TARGET_TYPE_TEXT),
+                Gtk.TargetEntry.new("text/uri-list", 0, TARGET_TYPE_TEXT))
     TARGET_TYPE_FAV = 81
-    toFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81), Gtk.TargetEntry.new("text/plain", 0, 100), Gtk.TargetEntry.new("text/uri-list", 0, 101))
-    fromFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81), Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81))
+    toFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81),
+             Gtk.TargetEntry.new("text/plain", 0, 100),
+             Gtk.TargetEntry.new("text/uri-list", 0, 101))
+    fromFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81),
+               Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81))
 
     #@print_timing
     def __init__(self, mintMenuWin, toggleButton, de):
@@ -168,14 +172,14 @@ class pluginclass(object):
         self.builder.add_from_file (os.path.join(os.path.dirname(__file__), "applications.glade"))
 
         # Read GLADE file
-        self.searchEntry =self.builder.get_object("searchEntry")
-        self.searchButton =self.builder.get_object("searchButton")
-        self.showAllAppsButton =self.builder.get_object("showAllAppsButton")
-        self.showFavoritesButton =self.builder.get_object("showFavoritesButton")
-        self.applicationsBox =self.builder.get_object("applicationsBox")
-        self.categoriesBox =self.builder.get_object("categoriesBox")
-        self.favoritesBox =self.builder.get_object("favoritesBox")
-        self.applicationsScrolledWindow =self.builder.get_object("applicationsScrolledWindow")
+        self.searchEntry = self.builder.get_object("searchEntry")
+        self.searchButton = self.builder.get_object("searchButton")
+        self.showAllAppsButton = self.builder.get_object("showAllAppsButton")
+        self.showFavoritesButton = self.builder.get_object("showFavoritesButton")
+        self.applicationsBox = self.builder.get_object("applicationsBox")
+        self.categoriesBox = self.builder.get_object("categoriesBox")
+        self.favoritesBox = self.builder.get_object("favoritesBox")
+        self.applicationsScrolledWindow = self.builder.get_object("applicationsScrolledWindow")
 
         #i18n
         self.builder.get_object("searchLabel").set_text("<span weight='bold'>" + _("Search:") + "</span>")
@@ -197,10 +201,12 @@ class pluginclass(object):
         self.heading = ""#_("Applications")
 
         # This should be the first item added to the window in glade
-        self.content_holder =self.builder.get_object("Applications")
+        self.content_holder = self.builder.get_object("Applications")
 
         # Items to get custom colors
-        self.itemstocolor = [self.builder.get_object("viewport1"),self.builder.get_object("viewport2"),self.builder.get_object("viewport3")]
+        self.itemstocolor = [self.builder.get_object("viewport1"),
+                             self.builder.get_object("viewport2"),
+                             self.builder.get_object("viewport3")]
 
         # Unset all timers
         self.filterTimer = None
@@ -209,11 +215,17 @@ class pluginclass(object):
         self.keyPress_handler = self.mintMenuWin.window.connect("key-press-event", self.keyPress)
 
         self.favoritesBox.connect("drag-data-received", self.ReceiveCallback)
-        self.favoritesBox.drag_dest_set (Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, Gdk.DragAction.COPY)
+        self.favoritesBox.drag_dest_set(Gtk.DestDefaults.MOTION |
+                                        Gtk.DestDefaults.HIGHLIGHT |
+                                        Gtk.DestDefaults.DROP,
+                                        self.toButton, Gdk.DragAction.COPY)
         self.showFavoritesButton.connect("drag-data-received", self.ReceiveCallback)
-        self.showFavoritesButton.drag_dest_set (Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toButton, Gdk.DragAction.COPY)
+        self.showFavoritesButton.drag_dest_set(Gtk.DestDefaults.MOTION |
+                                               Gtk.DestDefaults.HIGHLIGHT |
+                                               Gtk.DestDefaults.DROP,
+                                               self.toButton, Gdk.DragAction.COPY)
 
-       # self.searchButton.connect("button_release_event", self.SearchWithButton)
+        # self.searchButton.connect("button_release_event", self.SearchWithButton)
         try:
             # GSettings stuff
             self.settings = EasyGSettings("com.linuxmint.mintmenu.plugins.applications")
@@ -285,7 +297,7 @@ class pluginclass(object):
         panelsettings = Gio.Settings.new("org.mate.panel")
         applet_list = panelsettings.get_strv("object-id-list")
         for applet in applet_list:
-            object_schema = Gio.Settings.new_with_path("org.mate.panel.object", "/org/mate/panel/objects/%s/" % (applet))
+            object_schema = Gio.Settings.new_with_path("org.mate.panel.object", "/org/mate/panel/objects/%s/" % applet)
             keys = object_schema.list_keys()
             if "applet-iid" in keys:
                 iid = object_schema.get_string("applet-iid")
@@ -407,7 +419,9 @@ class pluginclass(object):
     def RegenPlugin(self, *args, **kargs):
         self.refresh_apt_cache()
 
-        # save old config - this is necessary because the app will notified when it sets the default values and you don't want the to reload itself several times
+        # save old config - this is necessary because the app will notified
+        # when it sets the default values and you don't want the to reload
+        # itself several times
         oldcategories_mouse_over = self.categories_mouse_over
         oldiconsize = self.iconSize
         oldfaviconsize = self.faviconsize
@@ -588,11 +602,14 @@ class pluginclass(object):
     def add_search_suggestions(self, text):
         text = "<b>%s</b>" % cgi.escape(text)
         if self.enableInternetSearch:
-            self.add_suggestion("/usr/lib/linuxmint/mintMenu/search_engines/ddg.svg", _("Search DuckDuckGo for %s") % text, None, self.search_ddg)
-            self.add_suggestion("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.svg", _("Search Wikipedia for %s") % text, None, self.search_wikipedia)
+            self.add_suggestion("/usr/lib/linuxmint/mintMenu/search_engines/ddg.svg",
+                                _("Search DuckDuckGo for %s") % text, None, self.search_ddg)
+            self.add_suggestion("/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.svg",
+                                _("Search Wikipedia for %s") % text, None, self.search_wikipedia)
             self.add_suggestion()
 
-        self.add_suggestion("accessories-dictionary", _("Lookup %s in Dictionary") % text, None, self.search_dictionary)
+        self.add_suggestion("accessories-dictionary", _("Lookup %s in Dictionary") % text, None,
+                            self.search_dictionary)
         self.add_suggestion("edit-find", _("Search Computer for %s") % text, None, self.Search)
 
         self.applicationsBox.get_children()[-1].grab_focus()
@@ -623,7 +640,7 @@ class pluginclass(object):
                         summary = values[2]
                         description = values[3].replace("~~~", "\n")
                         package = PackageDescriptor(name, summary, description)
-                        #See if all keywords are in the name (so we put these results at the top of the list)
+                        # See if all keywords are in the name (so we put these results at the top of the list)
                         some_found = False
                         some_not_found = False
                         for word in keywords:
@@ -641,7 +658,8 @@ class pluginclass(object):
             found_packages.extend(found_elsewhere)
             if keyword == self.searchEntry.get_text() and len(found_packages) > 0:
                 self.add_suggestion()
-                #Reduce the number of results to 10 max... it takes a HUGE amount of time to add the GTK box in the menu otherwise..
+                # Reduce the number of results to 10 max...
+                # it takes a HUGE amount of time to add the GTK box in the menu otherwise..
                 if len(found_packages) > 10:
                     found_packages = found_packages[:10]
                 for pkg in found_packages:
@@ -791,8 +809,10 @@ class pluginclass(object):
 
         if widget.type == "location":
             mTree = Gtk.Menu()
-            mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
-                                Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK)
+            mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK |
+                             Gdk.EventMask.POINTER_MOTION_HINT_MASK |
+                             Gdk.EventMask.BUTTON_PRESS_MASK |
+                             Gdk.EventMask.BUTTON_RELEASE_MASK)
             #i18n
             desktopMenuItem = Gtk.MenuItem(_("Add to desktop"))
             panelMenuItem = Gtk.MenuItem(_("Add to panel"))
@@ -836,8 +856,10 @@ class pluginclass(object):
             mTree.append(propsMenuItem)
         else:
             mTree = Gtk.Menu()
-            mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
-                                Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK)
+            mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK |
+                             Gdk.EventMask.POINTER_MOTION_HINT_MASK |
+                             Gdk.EventMask.BUTTON_PRESS_MASK |
+                             Gdk.EventMask.BUTTON_RELEASE_MASK)
 
             #i18n
             removeMenuItem = Gtk.MenuItem(_("Remove"))
@@ -1255,7 +1277,10 @@ class pluginclass(object):
                     self.favorites.append(favButton)
                     self.favoritesPositionOnGrid(favButton)
                     favButton.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY)
-                    favButton.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY)
+                    favButton.drag_dest_set(Gtk.DestDefaults.MOTION |
+                                            Gtk.DestDefaults.HIGHLIGHT |
+                                            Gtk.DestDefaults.DROP,
+                                            self.toFav, Gdk.DragAction.COPY)
                     favButton.connect("drag-data-get", self.on_drag_data_get)
                     favButton.connect("drag-data-received", self.on_drag_data_received)
                     position += 1
@@ -1291,7 +1316,8 @@ class pluginclass(object):
             return
         tmp = self.favorites[oldposition]
         if newposition > oldposition:
-            if (self.favorites[newposition - 1].type == "space" or self.favorites[newposition - 1].type == "separator") and self.favCols > 1:
+            if (self.favorites[newposition - 1].type == "space" or
+                self.favorites[newposition - 1].type == "separator") and self.favCols > 1:
                 newposition = newposition - 1
             for i in range(oldposition, newposition):
                 self.favorites[i] = self.favorites[i + 1]
@@ -1316,7 +1342,10 @@ class pluginclass(object):
             self.favoritesPositionOnGrid(favButton)
 
             favButton.connect("drag-data-received", self.on_drag_data_received)
-            favButton.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.toFav, Gdk.DragAction.COPY)
+            favButton.drag_dest_set(Gtk.DestDefaults.MOTION |
+                                    Gtk.DestDefaults.HIGHLIGHT |
+                                    Gtk.DestDefaults.DROP,
+                                    self.toFav, Gdk.DragAction.COPY)
             favButton.connect("drag-data-get", self.on_drag_data_get)
             favButton.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY)
 
@@ -1352,7 +1381,8 @@ class pluginclass(object):
                         appListFile.write(favorite.type + "\n")
         except Exception as e:
             msgDlg = Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                _("Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu")+"\n(" + e.__str__() + ")")
+                _("Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu") +
+                "\n(" + e.__str__() + ")")
             msgDlg.run()
             msgDlg.destroy()
 
@@ -1410,7 +1440,11 @@ class pluginclass(object):
                     found = False
                     for item2 in self.categoryList:
                         pass
-                        if item["name"] == item2["name"] and item["icon"] == item2["icon"] and item["tooltip"] == item2["tooltip"] and item["index"] == item2["index"]:
+                        if (item["name"] == item2["name"] and
+                            item["icon"] == item2["icon"] and
+                            item["tooltip"] == item2["tooltip"] and
+                            item["index"] == item2["index"]
+                            ):
                             found = True
                             break
                     if not found:
@@ -1419,7 +1453,11 @@ class pluginclass(object):
                 for item in self.categoryList:
                     found = False
                     for item2 in newCategoryList:
-                        if item["name"] == item2["name"] and item["icon"] == item2["icon"] and item["tooltip"] == item2["tooltip"] and item["index"] == item2["index"]:
+                        if (item["name"] == item2["name"] and
+                            item["icon"] == item2["icon"] and
+                            item["tooltip"] == item2["tooltip"] and
+                            item["index"] == item2["index"]
+                            ):
                             found = True
                             break
                     if not found:
@@ -1520,7 +1558,9 @@ class pluginclass(object):
                     self.applicationsBox.remove(item["button"])
                     sortedApplicationList.append((item["button"].appName, item["button"]))
                 for item in addedApplications:
-                    item["button"] = MenuApplicationLauncher(item["entry"].get_desktop_file_path(), self.iconSize, item["category"], self.showapplicationcomments, highlight=(True and menu_has_changed))
+                    item["button"] = MenuApplicationLauncher(item["entry"].get_desktop_file_path(),
+                            self.iconSize, item["category"], self.showapplicationcomments,
+                            highlight=(True and menu_has_changed))
                     if item["button"].appExec:
                         self.mintMenuWin.setTooltip(item["button"], item["button"].getTooltip())
                         item["button"].connect("button-press-event", self.menuPopup)
@@ -1559,7 +1599,10 @@ class pluginclass(object):
 
     # Build a list of all categories in the menu ([{"name", "icon", tooltip"}]
     def buildCategoryList(self):
-        newCategoryList = [{"name": _("All"), "icon": "edit-select-all", "tooltip": _("Show all applications"), "filter":"", "index": 0}]
+        newCategoryList = [{"name": _("All"),
+                            "icon": "edit-select-all",
+                            "tooltip": _("Show all applications"),
+                            "filter":"", "index": 0}]
         num = 1
         for menu in self.menuFiles:
             for child in menu.directory.get_contents():
@@ -1568,7 +1611,11 @@ class pluginclass(object):
                     #if (icon == "preferences-system"):
                     #       self.adminMenu = child.name
                     #if (icon != "applications-system" and icon != "applications-other"):
-                    newCategoryList.append({"name": child.name, "icon": child.icon, "tooltip": child.name, "filter": child.name, "index": num})
+                    newCategoryList.append({"name": child.name,
+                                            "icon": child.icon,
+                                            "tooltip": child.name,
+                                            "filter": child.name,
+                                            "index": num})
             num += 1
         return newCategoryList
 
