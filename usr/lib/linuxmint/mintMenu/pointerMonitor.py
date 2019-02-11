@@ -1,12 +1,14 @@
 #!/usr/bin/python2
 
+import threading
+
 import gi
 gi.require_version("Gtk", "3.0")
-
-from Xlib.display import Display
-from Xlib import X, error
 from gi.repository import Gtk, Gdk, GObject, GLib
-import threading
+
+from Xlib import X
+from Xlib.display import Display
+
 
 class PointerMonitor(GObject.GObject, threading.Thread):
     __gsignals__ = {
@@ -48,7 +50,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
                 if event.type == X.ButtonPress:
                     # Check if pointer is inside monitored windows
                     for w in self.windows:
-                        if Gtk.check_version (3, 20, 0) is None:
+                        if (Gtk.MAJOR_VERSION, Gtk.MINOR_VERSION) >= (3, 20):
                             pdevice = Gdk.Display.get_default().get_default_seat().get_pointer()
                         else:
                             pdevice = Gdk.Display.get_default().get_device_manager().get_client_pointer()
@@ -64,7 +66,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
                 else:
                     self.display.allow_events(X.ReplayPointer, X.CurrentTime)
             except Exception as e:
-                print "Unexpected error: " + str(e)
+                print("Unexpected error:", e)
 
     def stop(self):
         self.running = False

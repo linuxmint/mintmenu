@@ -3,6 +3,7 @@
 import os
 from gi.repository import Gio
 
+
 def RemoveArgs(Execline):
     if isinstance(Execline, list):
         Execline = ' '.join(Execline)
@@ -36,6 +37,6 @@ def Execute(cmd , commandCwd=None, desktopFile=None):
         os.chdir(cwd)
         os.system(cmd + " &")
         return True
-    except Exception as err:
-        print err
+    except Exception as e:
+        print(e)
         return False
