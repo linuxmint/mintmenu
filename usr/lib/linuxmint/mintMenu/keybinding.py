@@ -28,7 +28,7 @@ import threading
 
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gdk, GLib, GObject, Gtk
+from gi.repository import Gdk, GLib, GObject, Gtk, GdkX11
 
 from Xlib import X, error
 from Xlib.display import Display
