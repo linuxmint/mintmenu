@@ -378,7 +378,7 @@ class mintMenuConfig(object):
         return self.gdkRGBAToString(color)
 
     def gdkRGBAToString(self, gdkRGBA):
-        return "#%.2f%.2f%.2f" % (gdkRGBA.red * 256, gdkRGBA.green * 256, gdkRGBA.blue * 256)
+        return "#%.2X%.2X%.2X" % (int(gdkRGBA.red * 256), int(gdkRGBA.green * 256), int(gdkRGBA.blue * 256))
 
     def moveUp(self, upButton):
 
