@@ -10,6 +10,7 @@ Architecture: all
 Depends:
  ${python:Depends},
  ${misc:Depends},
+ mint-common,
  python (>= 2.4), python (<< 3),
  python-apt,
  python-configobj,
