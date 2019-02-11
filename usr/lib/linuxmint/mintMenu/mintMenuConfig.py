@@ -41,6 +41,7 @@ class mintMenuConfig(object):
 
         self.startWithFavorites = self.builder.get_object("startWithFavorites")
         self.showAppComments = self.builder.get_object("showAppComments")
+        self.search_on_top = self.builder.get_object("search_on_top")
         self.useAPT = self.builder.get_object("use_apt")
         self.showCategoryIcons = self.builder.get_object("showCategoryIcons")
         self.showRecentPlugin = self.builder.get_object("showRecentPlugin")
@@ -122,6 +123,7 @@ class mintMenuConfig(object):
 
         self.bindGSettingsValueToWidget(self.settings, "bool", "start-with-favorites", self.startWithFavorites, "toggled", self.startWithFavorites.set_active, self.startWithFavorites.get_active)
         self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "show-application-comments", self.showAppComments, "toggled", self.showAppComments.set_active, self.showAppComments.get_active)
+        self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "search-on-top", self.search_on_top, "toggled", self.search_on_top.set_active, self.search_on_top.get_active)
         self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "use-apt", self.useAPT, "toggled", self.useAPT.set_active, self.useAPT.get_active)
         self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "show-category-icons", self.showCategoryIcons, "toggled", self.showCategoryIcons.set_active, self.showCategoryIcons.get_active)
         self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "categories-mouse-over", self.hover, "toggled", self.hover.set_active, self.hover.get_active)

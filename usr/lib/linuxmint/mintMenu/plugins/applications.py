@@ -172,6 +172,9 @@ class pluginclass(object):
         self.builder.add_from_file (os.path.join(os.path.dirname(__file__), "applications.glade"))
 
         # Read GLADE file
+        self.main_box = self.builder.get_object("main_box")
+        self.notebook = self.builder.get_object("notebook2")
+        self.search_bar = self.builder.get_object("search_bar")
         self.searchEntry = self.builder.get_object("searchEntry")
         self.searchButton = self.builder.get_object("searchButton")
         self.showAllAppsButton = self.builder.get_object("showAllAppsButton")
@@ -180,7 +183,6 @@ class pluginclass(object):
         self.categoriesBox = self.builder.get_object("categoriesBox")
         self.favoritesBox = self.builder.get_object("favoritesBox")
         self.applicationsScrolledWindow = self.builder.get_object("applicationsScrolledWindow")
-
 
         self.headingstocolor = [self.builder.get_object("label6"), self.builder.get_object("label2")]
         self.numApps = 0
@@ -230,6 +232,7 @@ class pluginclass(object):
             self.settings.notifyAdd("swap-generic-name", self.changeSwapGenericName)
             self.settings.notifyAdd("show-category-icons", self.changeShowCategoryIcons)
             self.settings.notifyAdd("show-application-comments", self.changeShowApplicationComments)
+            self.settings.notifyAdd("search-on-top", self.switch_search_bar_position)
             self.settings.notifyAdd("use-apt", self.switchAPTUsage)
             self.settings.notifyAdd("fav-cols", self.changeFavCols)
             self.settings.notifyAdd("remember-filter", self.changeRememberFilter)
@@ -242,6 +245,9 @@ class pluginclass(object):
             self.settings.bindGSettingsEntryToVar("int", "default-tab", self, "defaultTab")
         except Exception as e:
             print(e)
+
+        # Position search bar
+        self.position_search_bar()
 
         self.currentFavCol = 0
         self.favorites = []
@@ -376,6 +382,21 @@ class pluginclass(object):
             if isinstance(child, FavApplicationLauncher):
                 child.setIconSize(self.faviconsize)
 
+    def switch_search_bar_position(self, settings, key, args):
+        self.search_on_top = settings.get_boolean(key)
+        self.position_search_bar()
+
+    def position_search_bar(self):
+        """ Set search bar position (top/bottom) based on self.search_on_top """
+        self.main_box.remove(self.notebook)
+        self.main_box.remove(self.search_bar)
+        if self.search_on_top:
+            self.main_box.pack_start(self.search_bar, False, False, 0)
+            self.main_box.pack_start(self.notebook, True, True, 0)
+        else:
+            self.main_box.pack_start(self.notebook, True, True, 0)
+            self.main_box.pack_start(self.search_bar, False, False, 0)
+
     def switchAPTUsage(self, settings, key, args):
         self.useAPT = settings.get_boolean(key)
         self.refresh_apt_cache()
@@ -462,6 +483,7 @@ class pluginclass(object):
         self.showcategoryicons = self.settings.get("bool", "show-category-icons")
         self.categoryhoverdelay = self.settings.get("int", "category-hover-delay")
         self.showapplicationcomments = self.settings.get("bool", "show-application-comments")
+        self.search_on_top = self.settings.get("bool", "search-on-top")
         self.useAPT = self.settings.get("bool", "use-apt")
         self.rememberFilter = self.settings.get("bool", "remember-filter")
         self.enableInternetSearch = self.settings.get("bool", "enable-internet-search")
@@ -520,11 +542,10 @@ class pluginclass(object):
         self.settings.set("int", "last-active-tab", self.lastActiveTab)
 
     def changeTab(self, tabNum, clear = True):
-        notebook = self.builder.get_object("notebook2")
         if tabNum == 0:
-            notebook.set_current_page(0)
+            self.notebook.set_current_page(0)
         elif tabNum == 1:
-            notebook.set_current_page(1)
+            self.notebook.set_current_page(1)
 
         self.focusSearchEntry(clear)
         self.lastActiveTab = tabNum
