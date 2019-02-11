@@ -274,7 +274,7 @@ class ApplicationLauncher(easyButton):
             self.appComment         = self.appComment.strip()
 
             basename = os.path.basename(self.desktopFile)
-            self.startupFilePath = os.path.join(os.environ['HOME'], ".config/autostart", basename)
+            self.startupFilePath = os.path.join(os.path.expanduser("~"), ".config/autostart", basename)
             if self.startupMonitorId:
                 filemonitor.removeMonitor(self.startupMonitorId )
             if os.path.exists(self.startupFilePath):
@@ -384,7 +384,7 @@ class ApplicationLauncher(easyButton):
             os.remove(self.startupFilePath)
 
     def addToFavourites(self):
-        favouritesDir = os.path.join(os.environ['HOME'], ".linuxmint/mintMenu/applications")
+        favouritesDir = os.path.join(os.path.expanduser("~"), ".linuxmint/mintMenu/applications")
         if not os.path.exists(favouritesDir):
             os.makedirs(favouritesDir)
 

@@ -70,7 +70,7 @@ class MainWindow(object):
 
         self.window.stick()
 
-        plugindir = os.path.join(os.environ["HOME"], ".linuxmint/mintMenu/plugins")
+        plugindir = os.path.join(os.path.expanduser("~"), ".linuxmint/mintMenu/plugins")
         sys.path.append(plugindir)
 
         self.panelSettings = Gio.Settings.new("org.mate.panel")

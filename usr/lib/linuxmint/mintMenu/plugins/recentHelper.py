@@ -8,7 +8,7 @@ from gi.repository import Gtk
 
 from plugins.easybuttons import ApplicationLauncher
 
-home = os.environ.get("HOME")
+home = os.path.expanduser("~")
 recentApps = []
 mintMenuWin = None
 recentAppBox = None

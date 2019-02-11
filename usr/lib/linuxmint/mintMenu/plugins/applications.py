@@ -21,7 +21,7 @@ from plugins.easygsettings import EasyGSettings
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
-home = os.environ.get("HOME")
+home = os.path.expanduser("~")
 
 class PackageDescriptor():
     def __init__(self, name, summary, description):

@@ -17,7 +17,7 @@ from plugins.execute import Execute
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
-home = os.environ.get("HOME")
+home = os.path.expanduser("~")
 
 class pluginclass(object):
 
