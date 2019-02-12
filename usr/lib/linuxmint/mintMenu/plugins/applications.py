@@ -177,6 +177,8 @@ class pluginclass(object):
         self.favoritesBox =self.builder.get_object("favoritesBox")
         self.applicationsScrolledWindow =self.builder.get_object("applicationsScrolledWindow")
 
+
+        self.headingstocolor = [self.builder.get_object("label6"), self.builder.get_object("label2")]
         self.numApps = 0
         # These properties are NECESSARY to maintain consistency
 

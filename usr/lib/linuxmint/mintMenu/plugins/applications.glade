@@ -189,7 +189,6 @@
                             <property name="xpad">15</property>
                             <property name="ypad">10</property>
                             <property name="label" translatable="yes">Applications</property>
-                            <property name="use_markup">True</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -363,8 +362,10 @@
                   <object class="GtkLabel" id="searchLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;span weight="bold"&gt;Search:&lt;/span&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Search</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">False</property>
