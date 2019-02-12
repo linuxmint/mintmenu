@@ -1189,15 +1189,8 @@ class pluginclass(object):
 
     def favoritesBuildLauncher(self, location):
         try:
-            ButtonIcon = None
             # For Folders and Network Shares
             location = "".join(location.split("%20"))
-
-            if location.startswith("file"):
-                ButtonIcon = "mate-fs-directory"
-
-            if location.startswith("smb") or location.startswith("ssh") or location.startswith("network"):
-                ButtonIcon = "mate-fs-network"
 
             # TODO: Do we still need this?
             #For Special locations
