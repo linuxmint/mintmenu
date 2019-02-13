@@ -19,9 +19,9 @@ class IntegratedTerminal(Gtk.Window):
             self.command = command
             self.ready = False
             self.output_handler = self.terminal.connect("cursor-moved",
-                self.on_cursor_moved)
-            # apparently Vte.Terminal.spawn_sync() is deprecated in favour of the
-            # non-existent Vte.Terminal.spawn_async()...
+                                                        self.on_cursor_moved)
+            # apparently Vte.Terminal.spawn_sync() is deprecated in favour of
+            # the non-existent Vte.Terminal.spawn_async()...
             self.terminal.spawn_sync(
                     Vte.PtyFlags.DEFAULT, # pty_flags
                     cwd or os.environ.get("HOME"), # working_directory
@@ -81,11 +81,11 @@ class IntegratedTerminal(Gtk.Window):
                 if not line.lstrip(prefix):
                     # we got a command prompt, exit
                     self.exit()
-                    break
+                    return
                 # the command generated output, show the terminal
                 terminal.disconnect(self.output_handler)
                 self.show_all()
-                break
+                return
             if self.command in line:
                 # this is our command line
                 prefix = line.split(self.command, 1)[0]

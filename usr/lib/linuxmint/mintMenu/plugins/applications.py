@@ -654,13 +654,16 @@ class pluginclass(object):
             return
         commands = user_text.split()
         cmd = self.verify_command(commands[0])
-        if cmd:
-            text = "<b>%s</b>" % cgi.escape(text)
-            commands[0] = cmd
-            if cmd.startswith("xdg-open"):
-                self.add_suggestion("document-open", _("Try to open %s") % text, None, self.execute_user_input, commands, False)
-            else:
-                self.add_suggestion("application-x-executable", _("Run %s") % text, None, self.execute_user_input, commands, False)
+        if not cmd:
+            return
+        text = "<b>%s</b>" % cgi.escape(text)
+        commands[0] = cmd
+        if cmd.startswith("xdg-open"):
+            self.add_suggestion("document-open", _("Try to open %s") % text,
+                                None, self.execute_user_input, commands, False)
+        else:
+            self.add_suggestion("application-x-executable", _("Run %s") % text,
+                                None, self.execute_user_input, commands, False)
         self.applicationsBox.get_children()[-1].grab_focus()
 
     def add_apt_filter_results(self, keyword):
@@ -1086,10 +1089,9 @@ class pluginclass(object):
             if hasVte and self.integrated_terminal_enabled:
                 try:
                     IntegratedTerminal(command,
-                        _("mintMenu Integrated Terminal"),
-                        width=self.integrated_terminal_width,
-                        height=self.integrated_terminal_height
-                        )
+                                       _("mintMenu Integrated Terminal"),
+                                       width=self.integrated_terminal_width,
+                                       height=self.integrated_terminal_height)
                 except Exception as e:
                     print("IntegratedTerminal exception:", e)
                     hasVte = False
