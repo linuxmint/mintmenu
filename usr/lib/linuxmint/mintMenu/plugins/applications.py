@@ -419,7 +419,7 @@ class pluginclass(object):
             self.builder.get_object("executeButton").hide()
             searchLabel_text = _("Search:")
         searchLabel = self.builder.get_object("searchLabel")
-        searchLabel.set_markup("<b>%s</b>" % searchLabel_text)
+        searchLabel.set_text(searchLabel_text)
         searchLabel.show()
 
     def changeShowApplicationComments(self, settings, key, args):
@@ -800,16 +800,21 @@ class pluginclass(object):
                             shownList.append(i)
                             #if this is the first matching item
                             #focus it
-                            if(not showns):
+                            if not showns:
                                 i.grab_focus()
                             showns = True
-                if not showns:
-                    if len(text) >= 3:
-                        self.add_search_suggestions(text)
-                        if self.allow_execute:
-                            GLib.timeout_add(150, self.add_execute_suggestions, text)
-                        if self.useAPT:
-                            GLib.timeout_add(300, self.add_apt_filter_results, text)
+                textlen = len(text)
+                if self.allow_execute and textlen:
+                    if showns:
+                        dupes = [True for item in shownList if item.appExec.split().pop(0) == text]
+                    else:
+                        dupes = None
+                    if not dupes:
+                        GLib.timeout_add(150, self.add_execute_suggestions, text)
+                if not showns and textlen > 2:
+                    self.add_search_suggestions(text)
+                    if self.useAPT:
+                        GLib.timeout_add(300, self.add_apt_filter_results, text)
 
                 for i in self.categoriesBox.get_children():
                     i.released()
@@ -856,6 +861,7 @@ class pluginclass(object):
             event.keyval == Gdk.KEY_Return:
             self.on_execute_button_pressed(widget, event)
             return True
+
         return False
 
     def favPopup(self, widget, event):
