@@ -660,7 +660,7 @@ class pluginclass(object):
                     for word in keywords:
                         if word != "":
                             name = name.replace(word, "<b>%s</b>" % word)
-                    self.add_suggestion(Gtk.STOCK_ADD,
+                    self.add_suggestion("package-x-generic",
                         _("Install package '%s'") % name,
                         "%s\n\n%s\n\n%s" % (pkg.name, pkg.summary, pkg.description),
                         self.apturl_install, pkg.name)
