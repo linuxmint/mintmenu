@@ -299,7 +299,6 @@ class pluginclass(object):
 
         self.builder.get_object("searchButton").connect("button-press-event", self.searchPopup)
         self.builder.get_object("executeButton").connect("button-press-event", self.on_execute_button_pressed)
-        self.update_allow_execute()
 
         # self.icon_theme = Gtk.IconTheme.get_default()
         # self.icon_theme.connect("changed", self.on_icon_theme_changed)
@@ -411,16 +410,7 @@ class pluginclass(object):
     def update_allow_execute(self, settings=None, key=None, args=None):
         if settings and key:
             self.allow_execute = settings.get_boolean(key)
-        #self.builder.get_object("executeButton").set_visible(self.allow_execute)
-        if self.allow_execute:
-            self.builder.get_object("executeButton").show()
-            searchLabel_text = _("Search/Run:")
-        else:
-            self.builder.get_object("executeButton").hide()
-            searchLabel_text = _("Search:")
-        searchLabel = self.builder.get_object("searchLabel")
-        searchLabel.set_text(searchLabel_text)
-        searchLabel.show()
+        self.builder.get_object("executeButton").set_visible(self.allow_execute)
 
     def changeShowApplicationComments(self, settings, key, args):
         self.showapplicationcomments = settings.get_boolean(key)
