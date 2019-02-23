@@ -400,6 +400,8 @@ class MainWindow(object):
         if "applications" in self.plugins and hasattr(self.plugins["applications"], "focusSearchEntry"):
             if self.startWithFavorites:
                 self.plugins["applications"].changeTab(0)
+            else:
+                self.plugins["applications"].changeTab(1)
             self.plugins["applications"].focusSearchEntry()
 
     def hide(self):
