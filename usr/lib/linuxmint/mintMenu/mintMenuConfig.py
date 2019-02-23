@@ -64,9 +64,11 @@ class mintMenuConfig(object):
         self.showButtonIcon = self.builder.get_object("showButtonIcon")
         self.enableInternetSearch = self.builder.get_object("enableInternetSearch")
         self.buttonText = self.builder.get_object("buttonText")
-        self.hotkeyWidget = keybinding.KeybindingWidget(_("Keyboard shortcut:"))
-        grid = self.builder.get_object("main_grid")
-        grid.attach(self.hotkeyWidget, 0, 2, 2, 1)
+        self.hotkeyWidget = keybinding.KeybindingWidget()
+        self.builder.get_object("main_grid").attach_next_to(
+                self.hotkeyWidget,
+                self.builder.get_object("keybinding_label"),
+                Gtk.PositionType.RIGHT, 1, 1)
         self.buttonIcon = self.builder.get_object("buttonIcon")
         self.buttonIconChooser = self.builder.get_object("button_icon_chooser")
         self.image_filter = Gtk.FileFilter()
