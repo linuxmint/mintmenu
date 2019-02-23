@@ -73,9 +73,6 @@ class MainWindow(object):
         plugindir = os.path.join(os.path.expanduser("~"), ".linuxmint/mintMenu/plugins")
         sys.path.append(plugindir)
 
-        self.panelSettings = Gio.Settings.new("org.mate.panel")
-        self.panelSettings.connect("changed::tooltips-enabled", self.toggleTooltipsEnabled)
-
         self.settings.connect("changed::plugins-list", self.RegenPlugins)
         self.settings.connect("changed::start-with-favorites", self.toggleStartWithFavorites)
         self.settings.connect("changed::tooltips-enabled", self.toggleTooltipsEnabled)
@@ -86,12 +83,9 @@ class MainWindow(object):
         self.getSetGSettingEntries()
 
         self.tooltipsWidgets = []
-        if self.globalEnableTooltips and self.enableTooltips:
-            self.tooltipsEnable()
-        else:
-            self.tooltipsEnable(False)
 
         self.PopulatePlugins()
+        self.toggleTooltipsEnabled(self.settings, "tooltips-enabled")
         self.firstTime = True
 
     @classmethod
@@ -106,13 +100,9 @@ class MainWindow(object):
                 plugin.wake()
 
     def toggleTooltipsEnabled(self, settings, key, args = None):
-        if key == "tooltips-enabled":
-            self.globalEnableTooltips = settings.get_boolean(key)
-        else:
-            self.enableTooltips = settings.get_boolean(key)
-
-        if self.globalEnableTooltips and self.enableTooltips:
-            self.tooltipsEnable()
+        self.enableTooltips = settings.get_boolean(key)
+        if self.enableTooltips:
+            self.tooltipsEnable(True)
         else:
             self.tooltipsEnable(False)
 
@@ -141,8 +131,6 @@ class MainWindow(object):
         self.offset               = self.settings.get_int("offset")
         self.enableTooltips       = self.settings.get_boolean("tooltips-enabled")
         self.startWithFavorites   = self.settings.get_boolean("start-with-favorites")
-
-        self.globalEnableTooltips = self.panelSettings.get_boolean("tooltips-enabled")
 
     def PopulatePlugins(self):
         self.panesToColor = []
@@ -294,7 +282,6 @@ class MainWindow(object):
 
         self.paneholder.pack_start(ImageBox, False, False, 0)
         self.paneholder.pack_start(PluginPane, False, False, 0)
-        self.tooltipsEnable(False)
 
     # A little bit hacky but works.
     @staticmethod
