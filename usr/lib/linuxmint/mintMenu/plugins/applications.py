@@ -247,8 +247,13 @@ class pluginclass(object):
         self.favorites = []
 
         self.content_holder.set_size_request(self.width, self.height)
-        self.categoriesBox.set_size_request(self.width / 3, -1)
-        self.applicationsBox.set_size_request(self.width / 2, -1)
+        # Calculate applicationsBox width based on categoryBox width, but since
+        # we won't have that until the menu has been shown go with an estimate
+        self.applicationsBox.set_size_request(self.width - 155, -1)
+        # Add margin for scrollbars to categoriesBox
+        categoriesScrolledWindow = self.builder.get_object("categoriesScrolledWindow")
+        scrollbar_width = categoriesScrolledWindow.get_vscrollbar().get_preferred_width()
+        self.categoriesBox.set_margin_right(scrollbar_width.natural_width + 2)
 
         self.buildingButtonList = False
         self.stopBuildingButtonList = False
@@ -327,9 +332,7 @@ class pluginclass(object):
     def changePluginSize(self, settings, key, args):
         if key == "width":
             self.width = settings.get_int(key)
-            self.categoriesBox.set_size_request(self.width / 3, -1)
-            self.applicationsBox.set_size_request(self.width / 2, -1)
-
+            self.applicationsBox.set_size_request(self.width - self.categoriesBox.get_preferred_width().natural_width, -1)
         elif key == "height":
             self.heigth = settings.get_int(key)
         self.content_holder.set_size_request(self.width, self.height)
