@@ -672,10 +672,7 @@ class MenuWin(object):
     def showAboutDialog(self, action, userdata = None):
         about = Gtk.AboutDialog()
         about.set_name("mintMenu")
-        import subprocess
-        (stdout, stderr) = subprocess.Popen(["/usr/lib/python3/dist-packages/mintcommon/version.py", "mintmenu"],
-            stdout=subprocess.PIPE).communicate()
-        about.set_version(stdout.strip())
+        about.set_version("__DEB_VERSION__")
         try:
             gpl = open('/usr/share/common-licenses/GPL','r').read()
             about.set_license(gpl)
