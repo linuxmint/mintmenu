@@ -673,7 +673,7 @@ class MenuWin(object):
         about = Gtk.AboutDialog()
         about.set_name("mintMenu")
         import subprocess
-        (stdout, stderr) = subprocess.Popen(["/usr/lib/linuxmint/common/version.py", "mintmenu"],
+        (stdout, stderr) = subprocess.Popen(["/usr/lib/python3/dist-packages/mintcommon/version.py", "mintmenu"],
             stdout=subprocess.PIPE).communicate()
         about.set_version(stdout.strip())
         try:
