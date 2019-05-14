@@ -101,12 +101,13 @@ GObject.type_register(IconManager)
 
 class easyButton(Gtk.Button):
 
-    def __init__(self, iconName, iconSize, labels = None, buttonWidth = -1, buttonHeight = -1):
+    def __init__(self, iconName, iconSize, labels=None, buttonWidth=-1, buttonHeight=-1, ellipsis=True):
         GObject.GObject.__init__(self)
         self.connections = []
         self.iconName = iconName
         self.iconSize = iconSize
         self.showIcon = True
+        self.ellipsis = ellipsis
 
         self.set_relief(Gtk.ReliefStyle.NONE)
         self.set_size_request(buttonWidth, buttonHeight)
@@ -170,7 +171,8 @@ class easyButton(Gtk.Button):
                 labelStyle.insert(attr)
             label.set_attributes(labelStyle)
 
-        label.set_ellipsize(Pango.EllipsizeMode.END)
+        if self.ellipsis:
+            label.set_ellipsize(Pango.EllipsizeMode.END)
         label.set_alignment(0.0, 1.0)
         label.set_max_width_chars(0)
         label.show()
@@ -521,7 +523,7 @@ class FavApplicationLauncher(ApplicationLauncher):
 class CategoryButton(easyButton):
 
     def __init__(self, iconName, iconSize, labels , f):
-        easyButton.__init__(self, iconName, iconSize, labels)
+        easyButton.__init__(self, iconName, iconSize, labels, ellipsis=False)
         self.filter = f
 
 iconManager = IconManager()
