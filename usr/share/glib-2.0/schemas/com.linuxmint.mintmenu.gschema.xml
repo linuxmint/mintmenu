@@ -15,7 +15,7 @@
     </key>
 
     <key type="b" name="tooltips-enabled">
-      <default>true</default>
+      <default>false</default>
       <summary></summary>
       <description></description>
     </key>

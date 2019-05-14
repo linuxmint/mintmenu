@@ -1480,7 +1480,6 @@ class pluginclass(object):
                 for item in addedCategories:
                     try:
                         item["button"] = CategoryButton(item["icon"], categoryIconSize, [item["name"]], item["filter"])
-                        self.mintMenuWin.setTooltip(item["button"], item["tooltip"])
 
                         if self.categories_mouse_over:
                             startId = item["button"].connect("enter", self.StartFilter, item["filter"])

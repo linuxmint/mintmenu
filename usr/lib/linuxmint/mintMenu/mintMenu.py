@@ -73,9 +73,6 @@ class MainWindow(object):
         plugindir = os.path.join(os.path.expanduser("~"), ".linuxmint/mintMenu/plugins")
         sys.path.append(plugindir)
 
-        self.panelSettings = Gio.Settings.new("org.mate.panel")
-        self.panelSettings.connect("changed::tooltips-enabled", self.toggleTooltipsEnabled)
-
         self.settings.connect("changed::plugins-list", self.RegenPlugins)
         self.settings.connect("changed::start-with-favorites", self.toggleStartWithFavorites)
         self.settings.connect("changed::tooltips-enabled", self.toggleTooltipsEnabled)
@@ -86,12 +83,9 @@ class MainWindow(object):
         self.getSetGSettingEntries()
 
         self.tooltipsWidgets = []
-        if self.globalEnableTooltips and self.enableTooltips:
-            self.tooltipsEnable()
-        else:
-            self.tooltipsEnable(False)
 
         self.PopulatePlugins()
+        self.toggleTooltipsEnabled(self.settings, "tooltips-enabled")
         self.firstTime = True
 
     @classmethod
@@ -105,16 +99,10 @@ class MainWindow(object):
             if hasattr(plugin, "wake"):
                 plugin.wake()
 
-    def toggleTooltipsEnabled(self, settings, key, args = None):
-        if key == "tooltips-enabled":
-            self.globalEnableTooltips = settings.get_boolean(key)
-        else:
-            self.enableTooltips = settings.get_boolean(key)
-
-        if self.globalEnableTooltips and self.enableTooltips:
-            self.tooltipsEnable()
-        else:
-            self.tooltipsEnable(False)
+    def toggleTooltipsEnabled(self, settings, key, args=None):
+        enableTooltips = settings.get_boolean(key)
+        for widget in self.tooltipsWidgets:
+            widget.set_has_tooltip(enableTooltips)
 
     def toggleStartWithFavorites(self, settings, key):
         self.startWithFavorites = settings.get_boolean(key)
@@ -133,7 +121,6 @@ class MainWindow(object):
 
     def getSetGSettingEntries(self):
         self.dottedfile          = os.path.join(self.path, "dotted.png")
-
         self.pluginlist           = self.settings.get_strv("plugins-list")
         self.usecustomcolor       = self.settings.get_boolean("use-custom-color")
         self.customcolor          = self.settings.get_string("custom-color")
@@ -141,8 +128,6 @@ class MainWindow(object):
         self.offset               = self.settings.get_int("offset")
         self.enableTooltips       = self.settings.get_boolean("tooltips-enabled")
         self.startWithFavorites   = self.settings.get_boolean("start-with-favorites")
-
-        self.globalEnableTooltips = self.panelSettings.get_boolean("tooltips-enabled")
 
     def PopulatePlugins(self):
         self.panesToColor = []
@@ -294,7 +279,6 @@ class MainWindow(object):
 
         self.paneholder.pack_start(ImageBox, False, False, 0)
         self.paneholder.pack_start(PluginPane, False, False, 0)
-        self.tooltipsEnable(False)
 
     # A little bit hacky but works.
     @staticmethod
@@ -342,10 +326,6 @@ class MainWindow(object):
                 markup = '<span size="12000" weight="bold" color="%s">%s</span>' % (color, text)
             item.set_markup(markup)
 
-    def tooltipsEnable(self, enable = True):
-        for widget in self.tooltipsWidgets:
-            widget.set_has_tooltip(enable)
-
     def setTooltip(self, widget, tip):
         self.tooltipsWidgets.append(widget)
         widget.set_tooltip_text(tip)
@@ -373,6 +353,7 @@ class MainWindow(object):
 
         self.getSetGSettingEntries()
         self.PopulatePlugins()
+        self.toggleTooltipsEnabled(self.settings, "tooltips-enabled")
         self.loadTheme()
 
         #print NAME+u" reloaded"

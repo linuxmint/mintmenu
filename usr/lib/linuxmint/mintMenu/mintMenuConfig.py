@@ -47,6 +47,9 @@ class mintMenuConfig(object):
         self.showApplicationsPlugin = self.builder.get_object("showApplicationsPlugin")
         self.showSystemPlugin = self.builder.get_object("showSystemPlugin")
         self.showPlacesPlugin = self.builder.get_object("showPlacesPlugin")
+
+        self.showTooltips = self.builder.get_object("showToolTips")
+
         self.swapGeneric = self.builder.get_object("swapGeneric")
         self.hover = self.builder.get_object("hover")
         self.hoverDelay = self.builder.get_object("hoverDelay")
@@ -153,6 +156,7 @@ class mintMenuConfig(object):
         self.showSystemPlugin.connect("toggled", self.setPluginsLayout)
         self.showPlacesPlugin.connect("toggled", self.setPluginsLayout)
 
+        self.bindGSettingsValueToWidget(self.settings, "bool", "tooltips-enabled", self.showTooltips, "toggled", self.showTooltips.set_active, self.showTooltips.get_active)
 
         self.bindGSettingsValueToWidget(self.settingsPlaces, "bool", "show-computer", self.computertoggle, "toggled", self.computertoggle.set_active, self.computertoggle.get_active)
         self.bindGSettingsValueToWidget(self.settingsPlaces, "bool", "show-home-folder", self.homefoldertoggle, "toggled", self.homefoldertoggle.set_active, self.homefoldertoggle.get_active)
