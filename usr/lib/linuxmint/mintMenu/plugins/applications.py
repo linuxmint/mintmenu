@@ -172,6 +172,9 @@ class pluginclass(object):
         self.builder.add_from_file (os.path.join(os.path.dirname(__file__), "applications.glade"))
 
         # Read GLADE file
+        self.main_box = self.builder.get_object("main_box")
+        self.notebook = self.builder.get_object("notebook2")
+        self.search_bar = self.builder.get_object("search_bar")
         self.searchEntry = self.builder.get_object("searchEntry")
         self.searchButton = self.builder.get_object("searchButton")
         self.showAllAppsButton = self.builder.get_object("showAllAppsButton")
@@ -230,6 +233,7 @@ class pluginclass(object):
             self.settings.notifyAdd("swap-generic-name", self.changeSwapGenericName)
             self.settings.notifyAdd("show-category-icons", self.changeShowCategoryIcons)
             self.settings.notifyAdd("show-application-comments", self.changeShowApplicationComments)
+            self.settings.notifyAdd("search-on-top", self.positionSearchBar)
             self.settings.notifyAdd("use-apt", self.switchAPTUsage)
             self.settings.notifyAdd("fav-cols", self.changeFavCols)
             self.settings.notifyAdd("remember-filter", self.changeRememberFilter)
@@ -242,6 +246,8 @@ class pluginclass(object):
             self.settings.bindGSettingsEntryToVar("int", "default-tab", self, "defaultTab")
         except Exception as e:
             print(e)
+
+        self.positionSearchBar()
 
         self.currentFavCol = 0
         self.favorites = []
@@ -379,6 +385,16 @@ class pluginclass(object):
         for child in self.favoritesBox:
             if isinstance(child, FavApplicationLauncher):
                 child.setIconSize(self.faviconsize)
+
+    def positionSearchBar(self, settings=None, key=None, args=None):
+        self.main_box.remove(self.notebook)
+        self.main_box.remove(self.search_bar)
+        if self.settings.get("bool", "search-on-top"):
+            self.main_box.pack_start(self.search_bar, False, False, 0)
+            self.main_box.pack_start(self.notebook, True, True, 0)
+        else:
+            self.main_box.pack_start(self.notebook, True, True, 0)
+            self.main_box.pack_start(self.search_bar, False, False, 0)
 
     def switchAPTUsage(self, settings, key, args):
         self.useAPT = settings.get_boolean(key)

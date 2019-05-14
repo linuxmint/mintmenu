@@ -49,6 +49,7 @@ class mintMenuConfig(object):
         self.showPlacesPlugin = self.builder.get_object("showPlacesPlugin")
 
         self.showTooltips = self.builder.get_object("showToolTips")
+        self.showSearchOnTop = self.builder.get_object("showSearchOnTop")
 
         self.swapGeneric = self.builder.get_object("swapGeneric")
         self.hover = self.builder.get_object("hover")
@@ -137,6 +138,8 @@ class mintMenuConfig(object):
         self.bindGSettingsValueToWidget(self.settingsApplications, "int", "fav-cols", self.favCols, "value-changed", self.favCols.set_value, self.favCols.get_value)
         self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "remember-filter", self.rememberFilter, "toggled", self.rememberFilter.set_active, self.rememberFilter.get_active)
         self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "enable-internet-search", self.enableInternetSearch, "toggled", self.enableInternetSearch.set_active,  self.enableInternetSearch.get_active)
+        self.bindGSettingsValueToWidget(self.settingsApplications, "string", "search-command", self.searchCommand, "changed", self.searchCommand.set_text, self.searchCommand.get_text)
+        self.bindGSettingsValueToWidget(self.settingsApplications, "bool", "search-on-top", self.showSearchOnTop, "toggled", self.showSearchOnTop.set_active, self.showSearchOnTop.get_active)
 
         self.bindGSettingsValueToWidget(self.settingsPlaces, "int", "icon-size", self.placesIconSize, "value-changed", self.placesIconSize.set_value, self.placesIconSize.get_value)
         self.bindGSettingsValueToWidget(self.settingsSystem, "int", "icon-size", self.systemIconSize, "value-changed", self.systemIconSize.set_value, self.systemIconSize.get_value)
@@ -148,15 +151,13 @@ class mintMenuConfig(object):
         self.bindGSettingsValueToWidget(self.settings, "string", "applet-text", self.buttonText, "changed", self.buttonText.set_text, self.buttonText.get_text)
         self.bindGSettingsValueToWidget(self.settings, "string", "hot-key", self.hotkeyWidget, "accel-edited", self.hotkeyWidget.set_val, self.hotkeyWidget.get_val)
         self.bindGSettingsValueToWidget(self.settings, "string", "applet-icon", self.buttonIconChooser, "file-set", self.setButtonIcon, self.buttonIconChooser.get_filename)
-        self.bindGSettingsValueToWidget(self.settingsApplications, "string", "search-command", self.searchCommand, "changed", self.searchCommand.set_text, self.searchCommand.get_text)
+        self.bindGSettingsValueToWidget(self.settings, "bool", "tooltips-enabled", self.showTooltips, "toggled", self.showTooltips.set_active, self.showTooltips.get_active)
 
         self.getPluginsToggle()
         self.showRecentPlugin.connect("toggled", self.setPluginsLayout)
         self.showApplicationsPlugin.connect("toggled", self.setPluginsLayout)
         self.showSystemPlugin.connect("toggled", self.setPluginsLayout)
         self.showPlacesPlugin.connect("toggled", self.setPluginsLayout)
-
-        self.bindGSettingsValueToWidget(self.settings, "bool", "tooltips-enabled", self.showTooltips, "toggled", self.showTooltips.set_active, self.showTooltips.get_active)
 
         self.bindGSettingsValueToWidget(self.settingsPlaces, "bool", "show-computer", self.computertoggle, "toggled", self.computertoggle.set_active, self.computertoggle.get_active)
         self.bindGSettingsValueToWidget(self.settingsPlaces, "bool", "show-home-folder", self.homefoldertoggle, "toggled", self.homefoldertoggle.set_active, self.homefoldertoggle.get_active)

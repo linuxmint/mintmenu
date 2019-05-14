@@ -307,6 +307,12 @@
       <summary></summary>
       <description></description>
     </key>
+
+    <key type="b" name="search-on-top">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
   </schema>
 
   <schema id="com.linuxmint.mintmenu.plugins.system_management" path="/com/linuxmint/mintmenu/plugins/system_management/">
