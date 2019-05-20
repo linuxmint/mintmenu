@@ -2,8 +2,8 @@
 <schemalist>
   <schema id="com.linuxmint.mintmenu" path="/com/linuxmint/mintmenu/">
 
-    <key type="b" name="hide-applet-icon">
-      <default>false</default>
+    <key type="b" name="show-applet-icon">
+      <default>true</default>
       <summary></summary>
       <description></description>
     </key>

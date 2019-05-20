@@ -50,8 +50,11 @@
                             <property name="margin_top">10</property>
                             <property name="margin_bottom">10</property>
                             <property name="label" translatable="yes">Favorites</property>
-                            <property name="use_markup">True</property>
                             <property name="xalign">0</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                              <attribute name="scale" value="1.2"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -195,6 +198,10 @@
                             <property name="margin_bottom">10</property>
                             <property name="label" translatable="yes">Applications</property>
                             <property name="xalign">0</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                              <attribute name="scale" value="1.2"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="expand">True</property>

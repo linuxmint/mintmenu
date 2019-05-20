@@ -113,11 +113,11 @@ class MainWindow(object):
 
     def toggleCustomBackgroundColor(self, settings, key):
         self.customcolor = settings.get_string(key)
-        self.SetPaneColors(self.panesToColor)
+        self.setCustomColors()
 
     def toggleCustomHeadingColor(self, settings, key):
         self.customheadingcolor = settings.get_string(key)
-        self.SetHeadingStyle(self.headingsToColor)
+        self.setCustomColors()
 
     def getSetGSettingEntries(self):
         self.dottedfile          = os.path.join(self.path, "dotted.png")
@@ -196,13 +196,14 @@ class MainWindow(object):
 
                 VBox1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
                 if MyPlugin.heading != "":
-                    Label1 = Gtk.Label(label= MyPlugin.heading)
+                    label1 = Gtk.Label()
+                    label1.set_markup("<span size=\"12000\" weight=\"bold\">%s</span>" % MyPlugin.heading)
                     Align1 = Gtk.Alignment.new(0, 0, 0, 0)
                     Align1.set_padding(10, 5, 10, 0)
-                    Align1.add(Label1)
-                    self.headingsToColor.append(Label1)
+                    Align1.add(label1)
+                    self.headingsToColor.append(label1)
                     Align1.show()
-                    Label1.show()
+                    label1.show()
 
                     if not hasattr(MyPlugin, 'sticky') or MyPlugin.sticky:
                         heading = Gtk.EventBox()
@@ -297,34 +298,29 @@ class MainWindow(object):
         return {"fg": fgColor, "bg": bgColor}
 
     def loadTheme(self):
-        colors = self.getDefaultColors()
-        self.SetPaneColors(self.panesToColor, colors["bg"])
-        self.SetHeadingStyle(self.headingsToColor)
+        self.setCustomColors()
 
-    def SetPaneColors(self, items, color = None):
-        for item in items:
+    def setCustomColors(self):
+        # Panes
+        for item in self.panesToColor:
             context = item.get_style_context()
             if self.usecustomcolor:
-                bgColor = Gdk.RGBA()
-                bgColor.parse(self.customcolor)
-                item.override_background_color(context.get_state(), bgColor)
-            elif color is not None:
+                color = Gdk.RGBA()
+                color.parse(self.customcolor)
                 item.override_background_color(context.get_state(), color)
-
-    def SetHeadingStyle(self, items):
-        if self.usecustomcolor:
-            color = self.customheadingcolor
-        else:
-            color = None
-
-        for item in items:
-            item.set_use_markup(True)
-            text = item.get_text()
-            if color == None:
-                markup = '<span size="12000" weight="bold">%s</span>' % (text)
             else:
-                markup = '<span size="12000" weight="bold" color="%s">%s</span>' % (color, text)
-            item.set_markup(markup)
+                colors = self.getDefaultColors()
+                item.override_background_color(context.get_state(), colors["bg"])
+        # Headings
+        for item in self.headingsToColor:
+            context = item.get_style_context()
+            if self.usecustomcolor:
+                color = Gdk.RGBA()
+                color.parse(self.customheadingcolor)
+                item.override_color(context.get_state(), color)
+            else:
+                colors = self.getDefaultColors()
+                item.override_color(context.get_state(), colors["fg"])
 
     def setTooltip(self, widget, tip):
         self.tooltipsWidgets.append(widget)
@@ -424,7 +420,7 @@ class MenuWin(object):
         self.settings.connect("changed::theme-name", self.changeTheme)
         self.settings.connect("changed::hot-key", self.reloadSettings)
         self.settings.connect("changed::applet-icon", self.reloadSettings)
-        self.settings.connect("changed::hide-applet-icon", self.reloadSettings)
+        self.settings.connect("changed::show-applet-icon", self.reloadSettings)
         self.settings.connect("changed::applet-icon-size", self.reloadSettings)
 
         self.applet.set_flags(MatePanelApplet.AppletFlags.EXPAND_MINOR)
@@ -556,7 +552,7 @@ class MenuWin(object):
         self.applet.set_background_widget(self.applet)
 
     def loadSettings(self, *args, **kargs):
-        self.hideIcon   =  self.settings.get_boolean("hide-applet-icon")
+        self.showIcon   =  self.settings.get_boolean("show-applet-icon")
         self.buttonText =  self.settings.get_string("applet-text")
         self.theme_name =  self.settings.get_string("theme-name")
         self.hotkeyText =  self.settings.get_string("hot-key")
@@ -624,10 +620,10 @@ class MenuWin(object):
         self.keybinder.rebind(self.hotkeyText)
 
     def sizeButton(self):
-        if self.hideIcon:
-            self.button_icon.hide()
-        else:
+        if self.showIcon:
             self.button_icon.show()
+        else:
+            self.button_icon.hide()
 
         # This code calculates width and height for the button_box
         # and takes the orientation and scale factor in account
@@ -636,15 +632,15 @@ class MenuWin(object):
         sl_req = self.systemlabel.get_preferred_size()[1]
         sl_scale = self.systemlabel.get_scale_factor()
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
-            if self.hideIcon:
-                self.applet.set_size_request(sl_req.width / sl_scale + 2, bi_req.height)
-            else:
+            if self.showIcon:
                 self.applet.set_size_request(sl_req.width / sl_scale + bi_req.width / bi_scale + 5, bi_req.height)
-        else:
-            if self.hideIcon:
-                self.applet.set_size_request(bi_req.width, sl_req.height / sl_scale + 2)
             else:
+                self.applet.set_size_request(sl_req.width / sl_scale + 2, bi_req.height)
+        else:
+            if self.showIcon:
                 self.applet.set_size_request(bi_req.width, sl_req.height / sl_scale + bi_req.height / bi_scale + 5)
+            else:
+                self.applet.set_size_request(bi_req.width, sl_req.height / sl_scale + 2)
 
     def reloadSettings(self, *args):
         self.loadSettings()
@@ -668,8 +664,7 @@ class MenuWin(object):
         about.show()
 
     def showPreferences(self, action, userdata = None):
-        # Execute("mateconf-editor /apps/mintMenu")
-        Execute(os.path.join(PATH, "mintMenuConfig.py"))
+        Execute("/usr/lib/linuxmint/mintMenu/preferences.py")
 
     def showMenuEditor(self, action, userdata = None):
         Execute("mozo")

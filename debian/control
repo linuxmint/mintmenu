@@ -15,6 +15,7 @@ Depends:
  python-apt,
  python-configobj,
  python-setproctitle,
+ python-xapp,
  python-xlib,
  python-xdg,
  xdg-utils,
@@ -24,6 +25,7 @@ Depends:
  gir1.2-matepanelapplet-4.0,
  gir1.2-gtk-3.0,
  gir1.2-mate-desktop,
+ gir1.2-xapp-1.0,
  mozo
 Description: Advanced MATE menu
  One of the most advanced menus under Linux. MintMenu supports filtering,
