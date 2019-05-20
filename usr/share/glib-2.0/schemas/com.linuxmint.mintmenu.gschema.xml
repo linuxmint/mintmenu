@@ -83,17 +83,6 @@
 
 
   <schema id="com.linuxmint.mintmenu.plugins.places" path="/com/linuxmint/mintmenu/plugins/places/">
-    <key type="b" name="sticky">
-      <default>false</default>
-      <summary></summary>
-      <description></description>
-    </key>
-
-    <key type="b" name="minimized">
-      <default>false</default>
-      <summary></summary>
-      <description></description>
-    </key>
 
     <key type="b" name="allow-scrollbar">
       <default>false</default>
@@ -266,18 +255,6 @@
       <description></description>
     </key>
 
-    <key type="b" name="sticky">
-      <default>false</default>
-      <summary></summary>
-      <description></description>
-    </key>
-
-    <key type="b" name="minimized">
-      <default>false</default>
-      <summary></summary>
-      <description></description>
-    </key>
-
     <key type="s" name="search-command">
       <default>"mate-search-tool --named \"%s\" --start"</default>
       <summary></summary>
@@ -389,18 +366,6 @@
       <description></description>
     </key>
 
-    <key type="b" name="sticky">
-      <default>false</default>
-      <summary></summary>
-      <description></description>
-    </key>
-
-    <key type="b" name="minimized">
-      <default>false</default>
-      <summary></summary>
-      <description></description>
-    </key>
-
     <key type="s" name="icon">
       <default>"preferences-system"</default>
       <summary></summary>
@@ -442,18 +407,6 @@
 
     <key type="s" name="icon">
       <default>"mate-fs-directory"</default>
-      <summary></summary>
-      <description></description>
-    </key>
-
-    <key type="b" name="sticky">
-      <default>false</default>
-      <summary></summary>
-      <description></description>
-    </key>
-
-    <key type="b" name="minimized">
-      <default>false</default>
       <summary></summary>
       <description></description>
     </key>

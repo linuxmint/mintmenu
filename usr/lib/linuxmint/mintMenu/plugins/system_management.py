@@ -6,10 +6,9 @@ import locale
 
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio
 
 from plugins.easybuttons import easyButton
-from plugins.easygsettings import EasyGSettings
 from plugins.execute import Execute
 
 # i18n
@@ -48,33 +47,29 @@ class pluginclass(object):
         self.itemstocolor = [self.builder.get_object("viewport2")]
 
         # Gconf stuff
-        self.settings = EasyGSettings("com.linuxmint.mintmenu.plugins.system_management")
+        self.settings = Gio.Settings("com.linuxmint.mintmenu.plugins.system_management")
 
-        self.settings.notifyAdd("icon-size", self.RegenPlugin)
-        self.settings.notifyAdd("show-control-center", self.RegenPlugin)
-        self.settings.notifyAdd("show-lock-screen", self.RegenPlugin)
-        self.settings.notifyAdd("show-logout", self.RegenPlugin)
-        self.settings.notifyAdd("show-package-manager", self.RegenPlugin)
-        self.settings.notifyAdd("show-software-manager", self.RegenPlugin)
-        self.settings.notifyAdd("show-terminal", self.RegenPlugin)
-        self.settings.notifyAdd("show-quit", self.RegenPlugin)
-        self.settings.notifyAdd("allow-scrollbar", self.RegenPlugin)
-        self.settings.notifyAdd("height", self.changePluginSize)
-        self.settings.notifyAdd("width", self.changePluginSize)
-        self.settings.bindGSettingsEntryToVar("bool", "sticky", self, "sticky")
+        self.settings.connect("changed::icon-size", self.RegenPlugin)
+        self.settings.connect("changed::show-control-center", self.RegenPlugin)
+        self.settings.connect("changed::show-lock-screen", self.RegenPlugin)
+        self.settings.connect("changed::show-logout", self.RegenPlugin)
+        self.settings.connect("changed::show-package-manager", self.RegenPlugin)
+        self.settings.connect("changed::show-software-manager", self.RegenPlugin)
+        self.settings.connect("changed::show-terminal", self.RegenPlugin)
+        self.settings.connect("changed::show-quit", self.RegenPlugin)
+        self.settings.connect("changed::allow-scrollbar", self.RegenPlugin)
+        self.settings.connect("changed::height", self.changePluginSize)
+        self.settings.connect("changed::width", self.changePluginSize)
 
         self.GetGSettingsEntries()
 
         self.content_holder.set_size_request(self.width, self.height)
 
-    def destroy(self):
-        self.settings.notifyRemoveAll()
-
     def wake(self):
         pass
 
     def changePluginSize(self, settings, key, args):
-        self.allowScrollbar = self.settings.get("bool", "allow-scrollbar")
+        self.allowScrollbar = self.settings.get_boolean("allow-scrollbar")
         if key == "width":
             self.width = settings.get_int(key)
         elif key == "height":
@@ -95,25 +90,25 @@ class pluginclass(object):
 
     def GetGSettingsEntries(self):
 
-        self.width = self.settings.get("int", "width")
-        self.allowScrollbar = self.settings.get("bool", "allow-scrollbar")
+        self.width = self.settings.get_int("width")
+        self.allowScrollbar = self.settings.get_boolean("allow-scrollbar")
         self.scrolledWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        self.height = self.settings.get("int", "height")
+        self.height = self.settings.get_int("height")
         self.content_holder.set_size_request(self.width, self.height)
         if not self.allowScrollbar:
             self.height = -1
             self.scrolledWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER)
         self.content_holder.set_size_request(self.width, self.height)
-        self.iconsize = self.settings.get("int","icon-size")
+        self.iconsize = self.settings.get_int("icon-size")
 
         # Check toggles
-        self.showSoftwareManager = self.settings.get("bool", "show-software-manager")
-        self.showPackageManager = self.settings.get("bool", "show-package-manager")
-        self.showControlCenter = self.settings.get("bool", "show-control-center")
-        self.showTerminal = self.settings.get("bool", "show-terminal")
-        self.showLockScreen = self.settings.get("bool", "show-lock-screen")
-        self.showLogout = self.settings.get("bool", "show-logout")
-        self.showQuit = self.settings.get("bool", "show-quit")
+        self.showSoftwareManager = self.settings.get_boolean("show-software-manager")
+        self.showPackageManager = self.settings.get_boolean("show-package-manager")
+        self.showControlCenter = self.settings.get_boolean("show-control-center")
+        self.showTerminal = self.settings.get_boolean("show-terminal")
+        self.showLockScreen = self.settings.get_boolean("show-lock-screen")
+        self.showLogout = self.settings.get_boolean("show-logout")
+        self.showQuit = self.settings.get_boolean("show-quit")
 
         if self.de == "cinnamon":
             self.lock_cmd = "cinnamon-screensaver-command --lock"
@@ -137,12 +132,9 @@ class pluginclass(object):
             self.settings_cmd = "mate-control-center"
 
         # Hide vertical dotted separator
-        self.hideseparator = self.settings.get("bool", "hide-separator")
+        self.hideseparator = self.settings.get_boolean("hide-separator")
         # Plugin icon
-        self.icon = self.settings.get("string", "icon")
-        # Allow plugin to be minimized to the left plugin pane
-        self.sticky = self.settings.get("bool", "sticky")
-        self.minimized = self.settings.get("bool", "minimized")
+        self.icon = self.settings.get_string("icon")
 
     def ClearAll(self):
         for child in self.systemBtnHolder.get_children():

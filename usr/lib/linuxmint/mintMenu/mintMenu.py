@@ -207,18 +207,8 @@ class MainWindow(object):
                     self.headingsToColor.append(label1)
                     Align1.show()
                     label1.show()
-
-                    if not hasattr(MyPlugin, 'sticky') or MyPlugin.sticky:
-                        heading = Gtk.EventBox()
-                        Align1.set_padding(0, 0, 10, 0)
-                        heading.set_visible_window(False)
-                        heading.set_size_request(MyPlugin.width, 30)
-                    else:
-                        heading = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-                        #heading.set_relief(Gtk.ReliefStyle.NONE)
-                        heading.set_size_request(MyPlugin.width, -1)
-                        #heading.set_sensitive(False)
-                        #heading.connect("button_press_event", self.TogglePluginView, VBox1, MyPlugin.icon, MyPlugin.heading, MyPlugin)
+                    heading = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+                    heading.set_size_request(MyPlugin.width, -1)
 
                     heading.add(Align1)
                     heading.show()

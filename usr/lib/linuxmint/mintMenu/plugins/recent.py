@@ -1,16 +1,15 @@
 #!/usr/bin/python2
 
-import os
-import subprocess
 import gettext
 import locale
+import os
+import subprocess
 
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio
 
 import plugins.recentHelper as RecentHelper
-from plugins.easygsettings import EasyGSettings
 from plugins.execute import Execute
 
 # i18n
@@ -56,15 +55,11 @@ class pluginclass:
         #Plugin icon
         self.icon = 'mate-folder.png'
 
-        self.settings = EasyGSettings("com.linuxmint.mintmenu.plugins.recent")
+        self.settings = Gio.Settings("com.linuxmint.mintmenu.plugins.recent")
+        self.settings.connect('changed', self.RegenPlugin)
 
-        self.settings.notifyAdd('height', self.RegenPlugin)
-        self.settings.notifyAdd('width', self.RegenPlugin)
-        self.settings.notifyAdd('num-recent-docs', self.RegenPlugin)
-        self.settings.notifyAdd('recent-font-size', self.RegenPlugin)
-
-        self.appSettings = EasyGSettings("com.linuxmint.mintmenu.plugins.applications")
-        self.appSettings.notifyAdd("icon-size", self.RegenPlugin)
+        self.appSettings = Gio.Settings("com.linuxmint.mintmenu.plugins.applications")
+        self.appSettings.connect("changed::icon-size", self.RegenPlugin)
 
         self.FileList=[]
         self.RecManagerInstance = Gtk.RecentManager.get_default()
@@ -86,7 +81,6 @@ class pluginclass:
         self.builder.get_object("RecentTabs").destroy()
         self.builder.get_object("ClrBtn").destroy()
         self.content_holder.destroy()
-        self.settings.notifyRemoveAll()
         if self.recentManagerId:
             self.RecManagerInstance.disconnect(self.recentManagerId)
 
@@ -94,28 +88,18 @@ class pluginclass:
         self.GetGSettingsEntries()
 
     def GetGSettingsEntries(self):
-        self.recenth = self.settings.get('int', 'height')
-        self.recentw = self.settings.get('int', 'width')
-        self.numentries = self.settings.get('int', 'num-recent-docs')
+        self.recenth = self.settings.get_int("height")
+        self.recentw = self.settings.get_int("width")
+        self.numentries = self.settings.get_int("num-recent-docs")
         RecentHelper.numentries = self.numentries
-
-        self.recentfontsize = self.settings.get('int', 'recent-font-size')
+        self.recentfontsize = self.settings.get_int("recent-font-size")
 
         # Hide vertical dotted separator
-        self.hideseparator = self.settings.get("bool", "hide-separator")
+        self.hideseparator = self.settings.get_boolean("hide-separator")
         # Plugin icon
-        self.icon = self.settings.get("string", 'icon')
-        # Allow plugin to be minimized to the left plugin pane
-        self.sticky = self.settings.get("bool", "sticky")
-        self.minimized = self.settings.get("bool", "minimized")
-        RecentHelper.iconSize = self.appSettings.get("int", "icon-size")
+        self.icon = self.settings.get_string("icon")
+        RecentHelper.iconSize = self.appSettings.get_int("icon-size")
         self.RebuildPlugin()
-
-    def SetHidden(self, minimized):
-        if minimized:
-            self.settings.set("bool", "minimized", True)
-        else:
-            self.settings.set("bool", "minimized", False)
 
     def RebuildPlugin(self):
         self.content_holder.set_size_request(self.recentw, self.recenth)

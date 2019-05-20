@@ -18,7 +18,6 @@ import plugins.recentHelper as RecentHelper
 from plugins.easybuttons import (ApplicationLauncher, CategoryButton,
                                  FavApplicationLauncher,
                                  MenuApplicationLauncher)
-from plugins.easygsettings import EasyGSettings
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
@@ -227,27 +226,26 @@ class pluginclass(object):
         # self.searchButton.connect("button_release_event", self.SearchWithButton)
         try:
             # GSettings stuff
-            self.settings = EasyGSettings("com.linuxmint.mintmenu.plugins.applications")
+            self.settings = Gio.Settings("com.linuxmint.mintmenu.plugins.applications")
             self.GetGSettingsEntries()
-            self.settings.notifyAdd("icon-size", self.changeIconSize)
-            self.settings.notifyAdd("favicon-size", self.changeFavIconSize)
-            self.settings.notifyAdd("height", self.changePluginSize)
-            self.settings.notifyAdd("width", self.changePluginSize)
-            self.settings.notifyAdd("categories-mouse-over", self.changeCategoriesMouseOver)
-            self.settings.notifyAdd("swap-generic-name", self.changeSwapGenericName)
-            self.settings.notifyAdd("show-category-icons", self.changeShowCategoryIcons)
-            self.settings.notifyAdd("show-application-comments", self.changeShowApplicationComments)
-            self.settings.notifyAdd("search-on-top", self.positionSearchBar)
-            self.settings.notifyAdd("use-apt", self.switchAPTUsage)
-            self.settings.notifyAdd("fav-cols", self.changeFavCols)
-            self.settings.notifyAdd("remember-filter", self.changeRememberFilter)
-            self.settings.notifyAdd("enable-internet-search", self.changeEnableInternetSearch)
-
-            self.settings.bindGSettingsEntryToVar("int", "category-hover-delay", self, "categoryhoverdelay")
-            self.settings.bindGSettingsEntryToVar("bool", "do-not-filter", self, "donotfilterapps")
-            self.settings.bindGSettingsEntryToVar("bool", "enable-internet-search", self, "enableInternetSearch")
-            self.settings.bindGSettingsEntryToVar("string", "search-command", self, "searchtool")
-            self.settings.bindGSettingsEntryToVar("int", "default-tab", self, "defaultTab")
+            self.settings.connect("changed::icon-size", self.changeIconSize)
+            self.settings.connect("changed::favicon-size", self.changeFavIconSize)
+            self.settings.connect("changed::height", self.changePluginSize)
+            self.settings.connect("changed::width", self.changePluginSize)
+            self.settings.connect("changed::categories-mouse-over", self.changeCategoriesMouseOver)
+            self.settings.connect("changed::swap-generic-name", self.changeSwapGenericName)
+            self.settings.connect("changed::show-category-icons", self.changeShowCategoryIcons)
+            self.settings.connect("changed::show-application-comments", self.changeShowApplicationComments)
+            self.settings.connect("changed::search-on-top", self.positionSearchBar)
+            self.settings.connect("changed::use-apt", self.switchAPTUsage)
+            self.settings.connect("changed::fav-cols", self.changeFavCols)
+            self.settings.connect("changed::remember-filter", self.changeRememberFilter)
+            self.settings.connect("changed::enable-internet-search", self.changeEnableInternetSearch)
+            self.settings.connect("changed::category-hover-delay", self.GetGSettingsEntries)
+            self.settings.connect("changed::do-not-filter", self.GetGSettingsEntries)
+            self.settings.connect("changed::enable-internet-search", self.GetGSettingsEntries)
+            self.settings.connect("changed::search-command", self.GetGSettingsEntries)
+            self.settings.connect("changed::default-tab", self.GetGSettingsEntries)
         except Exception as e:
             print(e)
 
@@ -337,9 +335,7 @@ class pluginclass(object):
 
         self.mintMenuWin.window.disconnect(self.keyPress_handler)
 
-        self.settings.notifyRemoveAll()
-
-    def changePluginSize(self, settings, key, args):
+    def changePluginSize(self, settings, key):
         if key == "width":
             self.width = settings.get_int(key)
             self.applicationsBox.set_size_request(self.width - self.categoriesBox.get_preferred_width().natural_width, -1)
@@ -348,14 +344,14 @@ class pluginclass(object):
             self.heigth = settings.get_int(key)
         self.content_holder.set_size_request(self.width, self.height)
 
-    def changeSwapGenericName(self, settings, key, args):
+    def changeSwapGenericName(self, settings, key):
         self.swapgeneric = settings.get_boolean(key)
 
         for child in self.favoritesBox:
             if isinstance(child, FavApplicationLauncher):
                 child.setSwapGeneric(self.swapgeneric)
 
-    def changeShowCategoryIcons(self, settings, key, args):
+    def changeShowCategoryIcons(self, settings, key):
         self.showcategoryicons = settings.get_boolean(key)
 
         if self.showcategoryicons:
@@ -366,7 +362,7 @@ class pluginclass(object):
         for child in self.categoriesBox:
             child.setIconSize(categoryIconSize)
 
-    def changeIconSize(self, settings, key, args):
+    def changeIconSize(self, settings, key):
         self.iconSize = settings.get_int(key)
 
         if self.showcategoryicons:
@@ -383,39 +379,39 @@ class pluginclass(object):
             except:
                 pass
 
-    def changeFavIconSize(self, settings, key, args):
+    def changeFavIconSize(self, settings, key):
         self.faviconsize = settings.get_int(key)
 
         for child in self.favoritesBox:
             if isinstance(child, FavApplicationLauncher):
                 child.setIconSize(self.faviconsize)
 
-    def positionSearchBar(self, settings=None, key=None, args=None):
+    def positionSearchBar(self, settings=None, key=None):
         self.main_box.remove(self.notebook)
         self.main_box.remove(self.search_bar)
-        if self.settings.get("bool", "search-on-top"):
+        if self.settings.get_boolean("search-on-top"):
             self.main_box.pack_start(self.search_bar, False, False, 0)
             self.main_box.pack_start(self.notebook, True, True, 0)
         else:
             self.main_box.pack_start(self.notebook, True, True, 0)
             self.main_box.pack_start(self.search_bar, False, False, 0)
 
-    def switchAPTUsage(self, settings, key, args):
+    def switchAPTUsage(self, settings, key):
         self.useAPT = settings.get_boolean(key)
         self.refresh_apt_cache()
 
-    def changeRememberFilter(self, settings, key, args):
+    def changeRememberFilter(self, settings, key):
         self.rememberFilter = settings.get_boolean(key)
 
-    def changeEnableInternetSearch(self, settings, key, args):
+    def changeEnableInternetSearch(self, settings, key):
         self.enableInternetSearch = settings.get_boolean(key)
 
-    def changeShowApplicationComments(self, settings, key, args):
+    def changeShowApplicationComments(self, settings, key):
         self.showapplicationcomments = settings.get_boolean(key)
         for child in self.applicationsBox:
             child.setShowComment(self.showapplicationcomments)
 
-    def changeCategoriesMouseOver(self, settings, key, args):
+    def changeCategoriesMouseOver(self, settings, key):
         self.categories_mouse_over = settings.get_boolean(key)
         for child in self.categoriesBox:
             if self.categories_mouse_over and not child.mouseOverHandlerIds:
@@ -427,7 +423,7 @@ class pluginclass(object):
                 child.disconnect(child.mouseOverHandlerIds[1])
                 child.mouseOverHandlerIds = None
 
-    def changeFavCols(self, settings, key, args):
+    def changeFavCols(self, settings, key):
         self.favCols = settings.get_int(key)
         for fav in self.favorites:
             self.favoritesBox.remove(fav)
@@ -445,8 +441,6 @@ class pluginclass(object):
         oldswapgeneric = self.swapgeneric
         oldshowcategoryicons = self.showcategoryicons
         oldcategoryhoverdelay = self.categoryhoverdelay
-        oldsticky = self.sticky
-        oldminimized = self.minimized
         oldicon = self.icon
         oldhideseparator = self.hideseparator
         oldshowapplicationcomments = self.showapplicationcomments
@@ -460,8 +454,6 @@ class pluginclass(object):
             oldswapgeneric == self.swapgeneric and
             oldshowcategoryicons == self.showcategoryicons and
             oldcategoryhoverdelay == self.categoryhoverdelay and
-            oldsticky == self.sticky and
-            oldminimized == self.minimized and
             oldicon == self.icon and
             oldhideseparator == self.hideseparator and
             oldshowapplicationcomments == self.showapplicationcomments
@@ -473,47 +465,37 @@ class pluginclass(object):
         RecentHelper.buildRecentApps()
         self.RebuildPlugin()
 
-    def GetGSettingsEntries(self):
+    def GetGSettingsEntries(self, settings=None, key=None):
 
-        self.categories_mouse_over = self.settings.get("bool", "categories-mouse-over")
-        self.width = self.settings.get("int", "width")
-        self.height = self.settings.get("int", "height")
-        self.donotfilterapps = self.settings.get("bool", "do-not-filter")
-        self.iconSize = self.settings.get("int", "icon-size")
-        self.faviconsize = self.settings.get("int", "favicon-size")
-        self.favCols = self.settings.get("int", "fav-cols")
-        self.swapgeneric = self.settings.get("bool", "swap-generic-name")
-        self.showcategoryicons = self.settings.get("bool", "show-category-icons")
-        self.categoryhoverdelay = self.settings.get("int", "category-hover-delay")
-        self.showapplicationcomments = self.settings.get("bool", "show-application-comments")
-        self.useAPT = self.settings.get("bool", "use-apt")
-        self.rememberFilter = self.settings.get("bool", "remember-filter")
-        self.enableInternetSearch = self.settings.get("bool", "enable-internet-search")
+        self.categories_mouse_over = self.settings.get_boolean("categories-mouse-over")
+        self.width = self.settings.get_int("width")
+        self.height = self.settings.get_int("height")
+        self.donotfilterapps = self.settings.get_boolean("do-not-filter")
+        self.iconSize = self.settings.get_int("icon-size")
+        self.faviconsize = self.settings.get_int("favicon-size")
+        self.favCols = self.settings.get_int("fav-cols")
+        self.swapgeneric = self.settings.get_boolean("swap-generic-name")
+        self.showcategoryicons = self.settings.get_boolean("show-category-icons")
+        self.categoryhoverdelay = self.settings.get_int("category-hover-delay")
+        self.showapplicationcomments = self.settings.get_boolean("show-application-comments")
+        self.useAPT = self.settings.get_boolean("use-apt")
+        self.rememberFilter = self.settings.get_boolean("remember-filter")
+        self.enableInternetSearch = self.settings.get_boolean("enable-internet-search")
 
-        self.lastActiveTab =  self.settings.get("int", "last-active-tab")
-        self.defaultTab = self.settings.get("int", "default-tab")
-
-        # Allow plugin to be minimized to the left plugin pane
-        self.sticky = self.settings.get("bool", "sticky")
-        self.minimized = self.settings.get("bool", "minimized")
+        self.lastActiveTab =  self.settings.get_int("last-active-tab")
+        self.defaultTab = self.settings.get_int("default-tab")
 
         # Search tool
-        self.searchtool = self.settings.get("string", "search-command")
+        self.searchtool = self.settings.get_string("search-command")
         if self.searchtool == "beagle-search SEARCH_STRING":
             self.searchtool = "mate-search-tool --named \"%s\" --start"
-            self.settings.set("string", "search-command", "mate-search-tool --named \"%s\" --start")
+            self.settings.set_string("search-command", "mate-search-tool --named \"%s\" --start")
 
         # Plugin icon
-        self.icon = self.settings.get("string", "icon")
+        self.icon = self.settings.get_string("icon")
 
         # Hide vertical dotted separator
-        self.hideseparator = self.settings.get("bool", "hide-separator")
-
-    def SetHidden(self, minimized):
-        if minimized:
-            self.settings.set("bool", "minimized", True)
-        else:
-            self.settings.set("bool", "minimized", False)
+        self.hideseparator = self.settings.get_boolean("hide-separator")
 
     def RebuildPlugin(self):
         self.content_holder.set_size_request(self.width, self.height)
@@ -541,7 +523,7 @@ class pluginclass(object):
             self.Filter(self.activeFilter[2], self.activeFilter[1])
 
     def onHideMenu(self):
-        self.settings.set("int", "last-active-tab", self.lastActiveTab)
+        self.settings.set_int("last-active-tab", self.lastActiveTab)
 
     def changeTab(self, tabNum, clear = True):
         notebook = self.builder.get_object("notebook2")
