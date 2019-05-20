@@ -1,29 +1,12 @@
 #!/bin/bash
 
-intltool-extract --type=gettext/glade usr/lib/linuxmint/mintMenu/mintMenu.glade
-intltool-extract --type=gettext/glade usr/lib/linuxmint/mintMenu/mintMenuConfig.glade
-intltool-extract --type=gettext/glade usr/lib/linuxmint/mintMenu/plugins/applications.glade
-intltool-extract --type=gettext/glade usr/lib/linuxmint/mintMenu/plugins/places.glade
-intltool-extract --type=gettext/glade usr/lib/linuxmint/mintMenu/plugins/recent.glade
-intltool-extract --type=gettext/glade usr/lib/linuxmint/mintMenu/plugins/system_management.glade
+intltool-extract --type=gettext/glade usr/share/linuxmint/mintmenu/applications.ui
+intltool-extract --type=gettext/glade usr/share/linuxmint/mintmenu/main.ui
+intltool-extract --type=gettext/glade usr/share/linuxmint/mintmenu/places.ui
+intltool-extract --type=gettext/glade usr/share/linuxmint/mintmenu/preferences.ui
+intltool-extract --type=gettext/glade usr/share/linuxmint/mintmenu/recent.ui
+intltool-extract --type=gettext/glade usr/share/linuxmint/mintmenu/system.ui
 
-xgettext --language=Python --keyword=_ --keyword=N_ --output=mintmenu.pot \
-    usr/lib/linuxmint/mintMenu/mintMenu.py \
-    usr/lib/linuxmint/mintMenu/mintMenu.glade.h \
-    usr/lib/linuxmint/mintMenu/mintMenuConfig.py \
-    usr/lib/linuxmint/mintMenu/mintMenuConfig.glade.h \
-    usr/lib/linuxmint/mintMenu/keybinding.py \
-    usr/lib/linuxmint/mintMenu/plugins/applications.py \
-    usr/lib/linuxmint/mintMenu/plugins/applications.glade.h \
-    usr/lib/linuxmint/mintMenu/plugins/recent.py \
-    usr/lib/linuxmint/mintMenu/plugins/recent.glade.h \
-    usr/lib/linuxmint/mintMenu/plugins/recentHelper.py \
-    usr/lib/linuxmint/mintMenu/plugins/places.py \
-    usr/lib/linuxmint/mintMenu/plugins/places.glade.h \
-    usr/lib/linuxmint/mintMenu/plugins/system_management.py \
-    usr/lib/linuxmint/mintMenu/plugins/system_management.glade.h
+xgettext --language=Python --keyword=_ --keyword=N_ --output=mintmenu.pot usr/lib/linuxmint/mintMenu/*.py usr/share/linuxmint/mintmenu/*.ui.h
 
-rm -rf usr/lib/linuxmint/mintMenu/*.glade.h
-rm -rf usr/lib/linuxmint/mintMenu/plugins/*.glade.h
-
-
+rm -rf usr/share/linuxmint/mintmenu/*.ui.h

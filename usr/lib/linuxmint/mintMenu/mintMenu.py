@@ -1,5 +1,6 @@
 #!/usr/bin/python2
 
+import locale
 import gc
 import gettext
 import os
@@ -27,6 +28,8 @@ setproctitle.setproctitle('mintmenu')
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
+locale.bindtextdomain("mintmenu", "/usr/share/linuxmint/locale")
+locale.textdomain("mintmenu")
 
 NAME = _("Menu")
 PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -52,9 +55,9 @@ class MainWindow(object):
         self.icon = "/usr/lib/linuxmint/mintMenu/visualisation-logo.png"
 
         self.toggle = toggleButton
-        # Load UI file and extract widgets
         builder = Gtk.Builder()
-        builder.add_from_file(os.path.join(self.path, "mintMenu.glade"))
+        builder.set_translation_domain("mintmenu")
+        builder.add_from_file("/usr/share/linuxmint/mintmenu/main.ui")
         self.window     = builder.get_object("mainWindow")
         self.paneholder = builder.get_object("paneholder")
 

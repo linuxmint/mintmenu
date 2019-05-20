@@ -1,5 +1,6 @@
 #!/usr/bin/python2
 
+import locale
 import gettext
 import os
 import string
@@ -17,6 +18,9 @@ from plugins.execute import Execute
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
+locale.bindtextdomain("mintmenu", "/usr/share/linuxmint/locale")
+locale.textdomain("mintmenu")
+
 home = os.path.expanduser("~")
 
 class pluginclass(object):
@@ -29,7 +33,8 @@ class pluginclass(object):
 
         # Read UI file
         builder = Gtk.Builder()
-        builder.add_from_file(os.path.join(os.path.dirname(__file__), "places.glade"))
+        builder.set_translation_domain("mintmenu")
+        builder.add_from_file("/usr/share/linuxmint/mintmenu/places.ui")
 
         self.placesBtnHolder    = builder.get_object("places_button_holder")
         self.editableBtnHolder  = builder.get_object("editable_button_holder")

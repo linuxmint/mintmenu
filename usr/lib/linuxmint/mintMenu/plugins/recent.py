@@ -2,6 +2,8 @@
 
 import os
 import subprocess
+import gettext
+import locale
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -11,6 +13,10 @@ import plugins.recentHelper as RecentHelper
 from plugins.easygsettings import EasyGSettings
 from plugins.execute import Execute
 
+# i18n
+gettext.install("mintmenu", "/usr/share/linuxmint/locale")
+locale.bindtextdomain("mintmenu", "/usr/share/linuxmint/locale")
+locale.textdomain("mintmenu")
 
 class pluginclass:
     """ This is the main class for the plugin.
@@ -24,8 +30,8 @@ class pluginclass:
         self.de = de
 
         self.builder = Gtk.Builder()
-        #The Glade file for the plugin
-        self.builder.add_from_file(os.path.join(os.path.dirname(__file__), "recent.glade"))
+        self.builder.set_translation_domain("mintmenu")
+        self.builder.add_from_file("/usr/share/linuxmint/mintmenu/recent.ui")
 
         #Set 'window' property for the plugin (Must be the root widget)
         self.window = self.builder.get_object("window1")

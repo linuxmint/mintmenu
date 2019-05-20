@@ -2,6 +2,7 @@
 
 import gettext
 import os
+import locale
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -13,6 +14,8 @@ from plugins.execute import Execute
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
+locale.bindtextdomain("mintmenu", "/usr/share/linuxmint/locale")
+locale.textdomain("mintmenu")
 
 class pluginclass(object):
 
@@ -23,7 +26,8 @@ class pluginclass(object):
         self.de = de
 
         self.builder = Gtk.Builder()
-        self.builder.add_from_file(os.path.join(os.path.dirname(__file__), "system_management.glade"))
+        self.builder.set_translation_domain("mintmenu")
+        self.builder.add_from_file("/usr/share/linuxmint/mintmenu/system.ui")
 
         self.systemBtnHolder    = self.builder.get_object("system_button_holder")
         self.editableBtnHolder  = self.builder.get_object("editable_button_holder")

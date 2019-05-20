@@ -3,6 +3,7 @@
 import cgi
 import filecmp
 import gettext
+import locale
 import os
 import subprocess
 import threading
@@ -21,6 +22,9 @@ from plugins.easygsettings import EasyGSettings
 
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
+locale.bindtextdomain("mintmenu", "/usr/share/linuxmint/locale")
+locale.textdomain("mintmenu")
+
 home = os.path.expanduser("~")
 
 class PackageDescriptor():
@@ -168,8 +172,8 @@ class pluginclass(object):
             self.lang = lang.split("_")[0]
 
         self.builder = Gtk.Builder()
-        # The Glade file for the plugin
-        self.builder.add_from_file (os.path.join(os.path.dirname(__file__), "applications.glade"))
+        self.builder.set_translation_domain("mintmenu")
+        self.builder.add_from_file("/usr/share/linuxmint/mintmenu/applications.ui")
 
         # Read GLADE file
         self.main_box = self.builder.get_object("main_box")
