@@ -402,6 +402,7 @@ class MenuWin(object):
         self.applet = applet
         self.detect_desktop_environment()
         self.settings = Gio.Settings.new("com.linuxmint.mintmenu")
+        self.icon_theme = Gtk.IconTheme.get_default()
         self.loadSettings()
 
         self.createPanelButton()
@@ -486,7 +487,7 @@ class MenuWin(object):
         return True
 
     def enter_notify(self, applet, event):
-        self.do_image(self.buttonIcon, True)
+        self.set_applet_icon(True)
 
     def leave_notify(self, applet, event):
         # Hack for mate-panel-test-applets focus issue (this can be commented)
@@ -494,20 +495,17 @@ class MenuWin(object):
         #     if event.x >= 0 and event.y >= 0 and event.x < applet.get_window().get_width() and event.y < applet.get_window().get_height():
         #         self.mainwin.stopHiding()
 
-        self.do_image(self.buttonIcon, False)
+        self.set_applet_icon()
 
-    def do_image(self, image_file, saturate):
-        if image_file.endswith(".svg"):
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(image_file, -1, 22)
-        else:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(image_file)
+    def set_applet_icon(self, saturate=False):
         if saturate:
-            GdkPixbuf.Pixbuf.saturate_and_pixelate(pixbuf, pixbuf, 1.5, False)
-        self.button_icon.set_from_pixbuf(pixbuf)
+            self.button_icon.set_from_pixbuf(self.saturated_pixbuf)
+        else:
+            self.button_icon.set_from_pixbuf(self.pixbuf)
 
     def createPanelButton(self):
         self.button_icon = Gtk.Image()
-        self.do_image(self.buttonIcon, False)
+        self.set_applet_icon()
         self.systemlabel = Gtk.Label(label= "%s " % self.buttonText)
         if os.path.isfile("/etc/linuxmint/info"):
             with open("/etc/linuxmint/info") as info:
@@ -549,8 +547,20 @@ class MenuWin(object):
         self.buttonText =  self.settings.get_string("applet-text")
         self.theme_name =  self.settings.get_string("theme-name")
         self.hotkeyText =  self.settings.get_string("hot-key")
-        if not os.path.exists(self.settings.get_string("applet-icon")):
+
+        applet_icon = self.settings.get_string("applet-icon")
+        if not (os.path.exists(applet_icon) or self.icon_theme.has_icon(applet_icon)):
             self.settings.reset("applet-icon")
+        applet_icon = self.settings.get_string("applet-icon")
+        if "/" in applet_icon:
+            if applet_icon.endswith(".svg"):
+                self.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(applet_icon, -1, 22)
+            else:
+                self.pixbuf = GdkPixbuf.Pixbuf.new_from_file(applet_icon)
+        else:
+            self.pixbuf = self.icon_theme.load_icon(applet_icon, 22, 0)
+        self.saturated_pixbuf = self.pixbuf.copy()
+        GdkPixbuf.Pixbuf.saturate_and_pixelate(self.saturated_pixbuf, self.saturated_pixbuf, 1.5, False)
         self.buttonIcon =  self.settings.get_string("applet-icon")
         self.iconSize = self.settings.get_int("applet-icon-size")
 
@@ -605,7 +615,7 @@ class MenuWin(object):
     def updateButton(self):
         self.systemlabel.set_text(self.buttonText)
         self.button_icon.clear()
-        self.do_image(self.buttonIcon, False)
+        self.set_applet_icon()
         self.sizeButton()
 
     def hotkeyChanged (self, schema, key):
