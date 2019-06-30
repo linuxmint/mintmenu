@@ -1,3 +1,48 @@
+mintmenu (5.9.2) tina; urgency=medium
+
+  [ gm10 ]
+  * Places: Don't hardcode file browser (#204)
+  * Applications: Fix keypress event handler (#205)
+
+  [ Andrew ]
+  * Fix broke running with "xdg-su" in exec field (#200)
+
+  [ gm10 ]
+  * Assorted cleanup, fixes and performance improvements (#206)
+  * keybinding: Remove left-over debug messages (#213)
+  * Change makepot to parse .glade files (#210)
+  * Clean up i18n, remove unnecessary duplication
+
+  [ Clement Lefebvre ]
+  * Fix msgids and glade files
+
+  [ gm10 ]
+  * Applications.py: Clean up more whitespace and line lengths
+  * remove unused variables from favoritesBuildLauncher
+  * Preferences: Fix deprecated alignment parameters (#219)
+  * Applications: Remove Search label (#217)
+  * Applications: Replace deprecated xpad/ypad with margin-XYZ parameters (#218)
+  * Applications: Replace the deprecated icon for adding packages (#216)
+  * Preferences: Change "recent documents" to "recently used applications and documents" plugin (#215)
+  * Preferences: Normalize margins/alignment/layout between tabs (#220)
+
+  [ Clement Lefebvre ]
+  * About: Fix the path for mintcommon's version.py
+  * Inject the app version during the build
+  * Configuration screen: Fix alignmnents and margins
+  * Applications: Categories column always use natural width
+  * Fix tooltips and make them optional, remove category tooltips in apps
+  * Add option to show search bar on top
+  * l10n: Update POT
+  * Revamp preferences
+  * Fix l10n
+  * Recent: Move documents to the left
+  * Remove obsolete code
+  * Preferences: Fix support for low resolutions
+  * Applet icon: Add support for icon names
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sun, 30 Jun 2019 15:44:01 +0200
+
 mintmenu (5.9.1) tessa; urgency=medium
 
   * Change default menu icon
