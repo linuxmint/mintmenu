@@ -1,3 +1,9 @@
+mintmenu (5.9.3) tina; urgency=medium
+
+  * Applications: Port to GI MateMenu
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 05 Jul 2019 11:32:04 +0200
+
 mintmenu (5.9.2) tina; urgency=medium
 
   [ gm10 ]
