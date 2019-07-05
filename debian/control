@@ -21,7 +21,7 @@ Depends:
  xdg-utils,
  libglib2.0-bin,
  mate-menus,
- python-mate-menu,
+ gir1.2-matemenu-2.0,
  gir1.2-matepanelapplet-4.0,
  gir1.2-gtk-3.0,
  gir1.2-mate-desktop,
