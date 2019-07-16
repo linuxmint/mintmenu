@@ -667,7 +667,7 @@ class MenuWin(object):
         about.show()
 
     def showPreferences(self, action, userdata = None):
-        Execute("/usr/lib/linuxmint/mintMenu/preferences.py")
+        Execute("python2 /usr/lib/linuxmint/mintMenu/preferences.py")
 
     def showMenuEditor(self, action, userdata = None):
         Execute("mozo")
