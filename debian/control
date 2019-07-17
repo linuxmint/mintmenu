@@ -18,6 +18,7 @@ Depends:
  python-xapp,
  python-xlib,
  python-xdg,
+ python3-xlib,
  xdg-utils,
  libglib2.0-bin,
  mate-menus,
