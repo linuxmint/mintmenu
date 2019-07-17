@@ -1,3 +1,9 @@
+mintmenu (5.9.4) tina; urgency=medium
+
+  * Packaging: Add dependency on python3-xlib
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 17 Jul 2019 11:38:44 +0200
+
 mintmenu (5.9.3) tina; urgency=medium
 
   * Applications: Port to GI MateMenu
