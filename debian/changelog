@@ -1,3 +1,9 @@
+mintmenu (5.9.5) tina; urgency=medium
+
+  * Fix default favorites not being created
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 17 Jul 2019 15:49:20 +0200
+
 mintmenu (5.9.4) tina; urgency=medium
 
   * Packaging: Add dependency on python3-xlib
