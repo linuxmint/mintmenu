@@ -1261,8 +1261,11 @@ class pluginclass(object):
     def buildFavorites(self):
         try:
             path = os.path.join(home, ".linuxmint/mintMenu/applications.list")
+            if os.path.isdir(path):
+                # dir created by a bug in mint 19.2 beta
+                os.system("rm -rf %s" % path)
             if not os.path.exists(path):
-                os.system("mkdir -p " + path)
+                os.system("mkdir -p ~/.linuxmint/mintMenu")
                 os.system("cp /usr/lib/linuxmint/mintMenu/applications.list " + path)
 
             applicationsList = open(path).readlines()
