@@ -7,6 +7,6 @@ intltool-extract --type=gettext/glade usr/share/linuxmint/mintmenu/preferences.u
 intltool-extract --type=gettext/glade usr/share/linuxmint/mintmenu/recent.ui
 intltool-extract --type=gettext/glade usr/share/linuxmint/mintmenu/system.ui
 
-xgettext --language=Python --keyword=_ --keyword=N_ --output=mintmenu.pot usr/lib/linuxmint/mintMenu/*.py usr/share/linuxmint/mintmenu/*.ui.h
+xgettext --language=Python --keyword=_ --keyword=N_ --output=mintmenu.pot usr/lib/linuxmint/mintMenu/*.py usr/lib/linuxmint/mintMenu/plugins/*.py usr/share/linuxmint/mintmenu/*.ui.h
 
 rm -rf usr/share/linuxmint/mintmenu/*.ui.h
