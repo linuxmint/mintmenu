@@ -634,7 +634,7 @@ class pluginclass(object):
 
         self.add_suggestion("accessories-dictionary", _("Lookup %s in Dictionary") % text, None,
                             self.search_dictionary)
-        self.add_suggestion("edit-find", _("Search Computer for %s") % text, None, self.Search)
+        self.add_suggestion("edit-find-symbolic", _("Search Computer for %s") % text, None, self.Search)
 
         self.applicationsBox.get_children()[-1].grab_focus()
 
@@ -986,7 +986,7 @@ class pluginclass(object):
             add_menu_item('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.svg', _("Search Wikipedia"), self.search_wikipedia)
 
         add_menu_item('accessories-dictionary', _("Search Dictionary"), self.search_dictionary)
-        add_menu_item("edit-find", _("Search Computer"), self.Search)
+        add_menu_item("edit-find-symbolic", _("Search Computer"), self.Search)
         add_menu_item()
         add_menu_item('/usr/lib/linuxmint/mintMenu/search_engines/software.png', _("Find Software"), self.search_mint_software)
         add_menu_item('/usr/lib/linuxmint/mintMenu/search_engines/tutorials.png', _("Find Tutorials"), self.search_mint_tutorials)
@@ -1624,7 +1624,7 @@ class pluginclass(object):
     # Build a list of all categories in the menu ([{"name", "icon", tooltip"}]
     def buildCategoryList(self):
         newCategoryList = [{"name": _("All"),
-                            "icon": "edit-select-all",
+                            "icon": "start-here-symbolic",
                             "tooltip": _("Show all applications"),
                             "filter":"", "index": 0}]
         num = 1
