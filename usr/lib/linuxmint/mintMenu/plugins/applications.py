@@ -1223,19 +1223,12 @@ class pluginclass(object):
             # For Folders and Network Shares
             location = "".join(location.split("%20"))
 
-            # TODO: Do we still need this?
-            #For Special locations
-            if location == "x-nautilus-desktop:///computer":
-                location = "/usr/share/applications/nautilus-computer.desktop"
-            elif location == "x-nautilus-desktop:///home":
-                location =  "/usr/share/applications/nautilus-home.desktop"
-            elif location == "x-nautilus-desktop:///network":
-                location = "/usr/share/applications/network-scheme.desktop"
-            elif location.startswith("x-nautilus-desktop:///"):
-                location = "/usr/share/applications/nautilus-computer.desktop"
-
             if location.startswith("file://"):
                 location = location[7:]
+
+            if not os.path.exists(location):
+                print("%s does not exist, skipping." % location)
+                return None
 
             # Don't add a location twice
             for fav in self.favorites:
@@ -1277,33 +1270,37 @@ class pluginclass(object):
 
             position = 0
 
-            for app in applicationsList :
-                app = app.strip()
+            for app in applicationsList:
+                try:
+                    app = app.strip()
 
-                if app[0:9] == "location:":
-                    favButton = self.favoritesBuildLauncher(app[9:])
-                elif app == "space":
-                    favButton = self.favoritesBuildSpace()
-                elif app == "separator":
-                    favButton = self.favoritesBuildSeparator()
-                else:
-                    if app.endswith(".desktop"):
-                        favButton = self.favoritesBuildLauncher(app)
+                    if app[0:9] == "location:":
+                        favButton = self.favoritesBuildLauncher(app[9:])
+                    elif app == "space":
+                        favButton = self.favoritesBuildSpace()
+                    elif app == "separator":
+                        favButton = self.favoritesBuildSeparator()
                     else:
-                        favButton = None
+                        if app.endswith(".desktop"):
+                            favButton = self.favoritesBuildLauncher(app)
+                        else:
+                            favButton = None
 
-                if favButton:
-                    favButton.position = position
-                    self.favorites.append(favButton)
-                    self.favoritesPositionOnGrid(favButton)
-                    favButton.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY)
-                    favButton.drag_dest_set(Gtk.DestDefaults.MOTION |
-                                            Gtk.DestDefaults.HIGHLIGHT |
-                                            Gtk.DestDefaults.DROP,
-                                            self.toFav, Gdk.DragAction.COPY)
-                    favButton.connect("drag-data-get", self.on_drag_data_get)
-                    favButton.connect("drag-data-received", self.on_drag_data_received)
-                    position += 1
+                    if favButton:
+                        favButton.position = position
+                        self.favorites.append(favButton)
+                        self.favoritesPositionOnGrid(favButton)
+                        favButton.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY)
+                        favButton.drag_dest_set(Gtk.DestDefaults.MOTION |
+                                                Gtk.DestDefaults.HIGHLIGHT |
+                                                Gtk.DestDefaults.DROP,
+                                                self.toFav, Gdk.DragAction.COPY)
+                        favButton.connect("drag-data-get", self.on_drag_data_get)
+                        favButton.connect("drag-data-received", self.on_drag_data_received)
+                        position += 1
+                except Exception as e:
+                    print("Can't add favorite: %s" % app)
+                    print (e)
 
             self.favoritesSave()
         except Exception as e:
