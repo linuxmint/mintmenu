@@ -8,12 +8,6 @@
       <description></description>
     </key>
 
-    <key type="b" name="use-custom-color">
-      <default>false</default>
-      <summary></summary>
-      <description></description>
-    </key>
-
     <key type="b" name="tooltips-enabled">
       <default>false</default>
       <summary></summary>
@@ -68,17 +62,6 @@
       <description></description>
     </key>
 
-    <key type="s" name="custom-color">
-      <default>"#DEDEDE"</default>
-      <summary></summary>
-      <description></description>
-    </key>
-
-    <key type="s" name="custom-heading-color">
-      <default>"#3C3C3C"</default>
-      <summary></summary>
-      <description></description>
-    </key>
   </schema>
 
 

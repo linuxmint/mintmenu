@@ -93,10 +93,10 @@ class mintMenuPreferences():
 
         page = SettingsPage()
         self.builder.get_object("box_appearance").add(page)
-        section = page.add_section(_("Colors"), _("Custom colors and theme"))
-        section.add_row(GSettingsSwitch(_("Use custom colors"), "com.linuxmint.mintmenu", "use-custom-color"))
-        section.add_reveal_row(GSettingsColorChooser(_("Headings"), "com.linuxmint.mintmenu", "custom-heading-color"), "com.linuxmint.mintmenu", "use-custom-color")
-        section.add_reveal_row(GSettingsColorChooser(_("Background"), "com.linuxmint.mintmenu", "custom-color"), "com.linuxmint.mintmenu", "use-custom-color")
+        section = page.add_section(_("Appearance"), _("Custom theme"))
+        # section.add_row(GSettingsSwitch(_("Use custom colors"), "com.linuxmint.mintmenu", "use-custom-color"))
+        # section.add_reveal_row(GSettingsColorChooser(_("Headings"), "com.linuxmint.mintmenu", "custom-heading-color"), "com.linuxmint.mintmenu", "use-custom-color")
+        # section.add_reveal_row(GSettingsColorChooser(_("Background"), "com.linuxmint.mintmenu", "custom-color"), "com.linuxmint.mintmenu", "use-custom-color")
         options = []
         options.append(["default", _("Desktop theme"), "default"])
         themes = glob.glob("/usr/share/themes/*/*/gtkrc")

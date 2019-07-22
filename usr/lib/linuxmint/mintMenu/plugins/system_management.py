@@ -43,9 +43,6 @@ class pluginclass(object):
         # This should be the first item added to the window in glade
         self.content_holder = self.builder.get_object("System")
 
-        # Items to get custom colors
-        self.itemstocolor = [self.builder.get_object("viewport2")]
-
         # Gconf stuff
         self.settings = Gio.Settings("com.linuxmint.mintmenu.plugins.system_management")
 

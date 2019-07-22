@@ -63,9 +63,6 @@ class MainWindow(object):
 
         builder.connect_signals(self)
 
-        self.panesToColor = []
-        self.headingsToColor = []
-
         self.window.connect("key-press-event", self.onKeyPress)
         self.window.connect("focus-in-event", self.onFocusIn)
         self.loseFocusId = self.window.connect("focus-out-event", self.onFocusOut)
@@ -79,9 +76,6 @@ class MainWindow(object):
         self.settings.connect("changed::plugins-list", self.RegenPlugins)
         self.settings.connect("changed::start-with-favorites", self.toggleStartWithFavorites)
         self.settings.connect("changed::tooltips-enabled", self.toggleTooltipsEnabled)
-        self.settings.connect("changed::use-custom-color", self.toggleUseCustomColor)
-        self.settings.connect("changed::custom-heading-color", self.toggleCustomHeadingColor)
-        self.settings.connect("changed::custom-color", self.toggleCustomBackgroundColor)
 
         self.getSetGSettingEntries()
 
@@ -110,38 +104,20 @@ class MainWindow(object):
     def toggleStartWithFavorites(self, settings, key):
         self.startWithFavorites = settings.get_boolean(key)
 
-    def toggleUseCustomColor(self, settings, key):
-        self.usecustomcolor = settings.get_boolean(key)
-        self.loadTheme()
-
-    def toggleCustomBackgroundColor(self, settings, key):
-        self.customcolor = settings.get_string(key)
-        self.setCustomColors()
-
-    def toggleCustomHeadingColor(self, settings, key):
-        self.customheadingcolor = settings.get_string(key)
-        self.setCustomColors()
-
     def getSetGSettingEntries(self):
         self.dottedfile          = os.path.join(self.path, "dotted.png")
         self.pluginlist           = self.settings.get_strv("plugins-list")
-        self.usecustomcolor       = self.settings.get_boolean("use-custom-color")
-        self.customcolor          = self.settings.get_string("custom-color")
-        self.customheadingcolor   = self.settings.get_string("custom-heading-color")
         self.offset               = self.settings.get_int("offset")
         self.enableTooltips       = self.settings.get_boolean("tooltips-enabled")
         self.startWithFavorites   = self.settings.get_boolean("start-with-favorites")
 
     def PopulatePlugins(self):
-        self.panesToColor = []
-        self.headingsToColor = []
         PluginPane = Gtk.EventBox()
         PluginPane.show()
         PaneLadder = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         PluginPane.add(PaneLadder)
         ImageBox = Gtk.EventBox()
         ImageBox.show()
-        self.panesToColor.extend([PluginPane, ImageBox])
 
         seperatorImage = GdkPixbuf.Pixbuf.new_from_file(self.dottedfile)
 
@@ -194,7 +170,6 @@ class MainWindow(object):
                     MyPlugin.icon = 'mate-logo-icon.png'
                     print("Unable to load %s plugin" % plugin)
 
-                self.panesToColor.append(MyPlugin.content_holder)
                 MyPlugin.content_holder.show()
 
                 VBox1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -204,7 +179,6 @@ class MainWindow(object):
                     Align1 = Gtk.Alignment.new(0, 0, 0, 0)
                     Align1.set_padding(10, 5, 10, 0)
                     Align1.add(label1)
-                    self.headingsToColor.append(label1)
                     Align1.show()
                     label1.show()
                     heading = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -232,10 +206,6 @@ class MainWindow(object):
                         MyPlugin.do_plugin()
                     if hasattr(MyPlugin, 'height'):
                         MyPlugin.content_holder.set_size_request(-1, MyPlugin.height)
-                    if hasattr(MyPlugin, 'itemstocolor'):
-                        self.panesToColor.extend(MyPlugin.itemstocolor)
-                    if hasattr(MyPlugin, 'headingstocolor'):
-                        self.headingsToColor.extend(MyPlugin.headingstocolor)
                 except:
                     # create traceback
                     info = sys.exc_info()
@@ -254,7 +224,6 @@ class MainWindow(object):
                 PaneLadder = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
                 PluginPane.add(PaneLadder)
                 ImageBox = Gtk.EventBox()
-                self.panesToColor.extend([PluginPane, ImageBox])
                 ImageBox.show()
                 PluginPane.show_all()
 
@@ -273,47 +242,6 @@ class MainWindow(object):
 
         self.paneholder.pack_start(ImageBox, False, False, 0)
         self.paneholder.pack_start(PluginPane, False, False, 0)
-
-    # A little bit hacky but works.
-    @staticmethod
-    def getDefaultColors():
-        widget = Gtk.EventBox()
-        widget.show()
-
-        context = widget.get_style_context()
-        context.set_state(Gtk.StateFlags.NORMAL)
-        context.add_class(Gtk.STYLE_CLASS_DEFAULT)
-        context.add_class(Gtk.STYLE_CLASS_BACKGROUND)
-
-        fgColor = context.get_color(context.get_state())
-        bgColor = context.get_background_color(context.get_state())
-
-        return {"fg": fgColor, "bg": bgColor}
-
-    def loadTheme(self):
-        self.setCustomColors()
-
-    def setCustomColors(self):
-        # Panes
-        for item in self.panesToColor:
-            context = item.get_style_context()
-            if self.usecustomcolor:
-                color = Gdk.RGBA()
-                color.parse(self.customcolor)
-                item.override_background_color(context.get_state(), color)
-            else:
-                colors = self.getDefaultColors()
-                item.override_background_color(context.get_state(), colors["bg"])
-        # Headings
-        for item in self.headingsToColor:
-            context = item.get_style_context()
-            if self.usecustomcolor:
-                color = Gdk.RGBA()
-                color.parse(self.customheadingcolor)
-                item.override_color(context.get_state(), color)
-            else:
-                colors = self.getDefaultColors()
-                item.override_color(context.get_state(), colors["fg"])
 
     def setTooltip(self, widget, tip):
         self.tooltipsWidgets.append(widget)
@@ -343,7 +271,6 @@ class MainWindow(object):
         self.getSetGSettingEntries()
         self.PopulatePlugins()
         self.toggleTooltipsEnabled(self.settings, "tooltips-enabled")
-        self.loadTheme()
 
         #print NAME+u" reloaded"
 
@@ -430,7 +357,6 @@ class MenuWin(object):
 
         self.mainwin.window.set_name("mintmenu") # Name used in Gtk RC files
         self.applyTheme()
-        self.mainwin.loadTheme()
 
         if self.mainwin.icon:
             Gtk.Window.set_default_icon_name(self.mainwin.icon)
@@ -567,7 +493,6 @@ class MenuWin(object):
     def changeTheme(self, *args):
         self.reloadSettings()
         self.applyTheme()
-        self.mainwin.loadTheme()
 
     def applyTheme(self):
         style_settings = Gtk.Settings.get_default()
