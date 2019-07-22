@@ -1,3 +1,12 @@
+mintmenu (5.9.6) tina; urgency=medium
+
+  * Switch to symbolic icons
+  * Fix crash on non-existing favorites
+  * Remove support for custom colors
+  * l10n: Update POT
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 22 Jul 2019 13:45:51 +0200
+
 mintmenu (5.9.5) tina; urgency=medium
 
   * Fix default favorites not being created
