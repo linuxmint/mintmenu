@@ -595,7 +595,10 @@ class MenuWin(object):
         Execute("/usr/lib/linuxmint/mintMenu/preferences.py")
 
     def showMenuEditor(self, action, userdata = None):
-        Execute("mozo")
+        if os.path.exists("/usr/bin/menulibre"):
+            Execute("menulibre")
+        else:
+            Execute("mozo")
 
     def showMenu(self, widget=None, event=None):
         if event == None or event.button == 1:

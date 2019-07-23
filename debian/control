@@ -27,7 +27,7 @@ Depends:
  gir1.2-gtk-3.0,
  gir1.2-mate-desktop,
  gir1.2-xapp-1.0,
- mozo
+ menulibre | mozo
 Description: Advanced MATE menu
  One of the most advanced menus under Linux. MintMenu supports filtering,
  favorites, easy-uninstallation, autosession, and many other features.
