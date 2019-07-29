@@ -597,7 +597,7 @@ class MenuWin(object):
     def showMenuEditor(self, action, userdata = None):
         if os.path.exists("/usr/bin/menulibre"):
             Execute("menulibre")
-        else:
+        elif os.path.exists("/usr/bin/mozo"):
             Execute("mozo")
 
     def showMenu(self, widget=None, event=None):
@@ -692,13 +692,16 @@ class MenuWin(object):
 
     # this callback is to create a context menu
     def create_menu(self):
+        menu_file = "popup-without-edit.xml"
         action_group = Gtk.ActionGroup(name="context-menu")
         action = Gtk.Action(name="MintMenuPrefs", label=_("Preferences"), tooltip=None)
         action.connect("activate", self.showPreferences)
         action_group.add_action(action)
-        action = Gtk.Action(name="MintMenuEdit", label=_("Edit menu"), tooltip=None)
-        action.connect("activate", self.showMenuEditor)
-        action_group.add_action(action)
+        if os.path.exists("/usr/bin/menulibre") or os.path.exists("/usr/bin/mozo"):
+            action = Gtk.Action(name="MintMenuEdit", label=_("Edit menu"), tooltip=None)
+            action.connect("activate", self.showMenuEditor)
+            action_group.add_action(action)
+            menu_file = "popup.xml"
         action = Gtk.Action(name="MintMenuReload", label=_("Reload plugins"), tooltip=None)
         action.connect("activate", self.mainwin.RegenPlugins)
         action_group.add_action(action)
@@ -707,7 +710,7 @@ class MenuWin(object):
         action_group.add_action(action)
         action_group.set_translation_domain ("mintmenu")
 
-        xml = os.path.join(os.path.join(os.path.dirname(__file__)), "popup.xml")
+        xml = os.path.join(os.path.join(os.path.dirname(__file__)), menu_file)
         self.applet.setup_menu_from_file(xml, action_group)
 
     def detect_desktop_environment (self):
