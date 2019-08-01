@@ -25,7 +25,7 @@ Depends:
  gir1.2-matemenu-2.0,
  gir1.2-matepanelapplet-4.0,
  gir1.2-gtk-3.0,
- gir1.2-mate-desktop,
+ gir1.2-matedesktop-2.0,
  gir1.2-xapp-1.0
 Description: Advanced MATE menu
  One of the most advanced menus under Linux. MintMenu supports filtering,
