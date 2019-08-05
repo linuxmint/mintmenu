@@ -74,7 +74,7 @@ class pluginclass(object):
         if self.showtrash:
             self.refreshTrash()
 
-    def changePluginSize(self, settings, key, args = None):
+    def changePluginSize(self, settings, key):
         self.allowScrollbar = self.settings.get_boolean("allow-scrollbar")
         self.width = self.settings.get_int("width")
         if not self.allowScrollbar:
