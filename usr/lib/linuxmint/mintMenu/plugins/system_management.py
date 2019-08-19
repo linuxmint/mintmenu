@@ -65,7 +65,7 @@ class pluginclass(object):
     def wake(self):
         pass
 
-    def changePluginSize(self, settings, key, args):
+    def changePluginSize(self, settings, key):
         self.allowScrollbar = self.settings.get_boolean("allow-scrollbar")
         if key == "width":
             self.width = settings.get_int(key)
