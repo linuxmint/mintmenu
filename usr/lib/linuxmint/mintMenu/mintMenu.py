@@ -421,10 +421,11 @@ class MenuWin(object):
         self.set_applet_icon()
 
     def set_applet_icon(self, saturate=False):
-        if saturate:
-            self.button_icon.set_from_surface(self.saturated_surface)
-        else:
-            self.button_icon.set_from_surface(self.surface)
+        if not self.symbolic:
+            if saturate:
+                self.button_icon.set_from_surface(self.saturated_surface)
+            else:
+                self.button_icon.set_from_surface(self.surface)
 
     def createPanelButton(self):
         self.set_applet_icon()
@@ -475,17 +476,24 @@ class MenuWin(object):
             self.settings.reset("applet-icon")
         applet_icon = self.settings.get_string("applet-icon")
         self.scale = self.button_icon.get_scale_factor()
+        self.symbolic = False
+        self.pixbuf = None
         if "/" in applet_icon:
             if applet_icon.endswith(".svg"):
                 self.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(applet_icon, -1, 22 * self.scale)
             else:
                 self.pixbuf = GdkPixbuf.Pixbuf.new_from_file(applet_icon)
         else:
-            self.pixbuf = self.icon_theme.load_icon(applet_icon, 22 * self.scale, 0)
-        self.surface = Gdk.cairo_surface_create_from_pixbuf(self.pixbuf, self.scale)
-        self.saturated_pixbuf = self.pixbuf.copy()
-        GdkPixbuf.Pixbuf.saturate_and_pixelate(self.saturated_pixbuf, self.saturated_pixbuf, 1.5, False)
-        self.saturated_surface = Gdk.cairo_surface_create_from_pixbuf(self.saturated_pixbuf, self.scale)
+            if applet_icon.endswith("-symbolic"):
+                self.button_icon.set_from_icon_name(applet_icon, 22)
+                self.symbolic = True
+            else:
+                self.pixbuf = self.icon_theme.load_icon(applet_icon, 22 * self.scale, 0)
+        if self.pixbuf is not None:
+            self.surface = Gdk.cairo_surface_create_from_pixbuf(self.pixbuf, self.scale)
+            self.saturated_pixbuf = self.pixbuf.copy()
+            GdkPixbuf.Pixbuf.saturate_and_pixelate(self.saturated_pixbuf, self.saturated_pixbuf, 1.5, False)
+            self.saturated_surface = Gdk.cairo_surface_create_from_pixbuf(self.saturated_pixbuf, self.scale)
         self.buttonIcon =  self.settings.get_string("applet-icon")
         self.iconSize = self.settings.get_int("applet-icon-size")
 
