@@ -52,7 +52,6 @@ class MainWindow(object):
         sys.path.append(os.path.join(self.path, "plugins"))
 
         self.de = de
-        self.icon = "/usr/lib/linuxmint/mintMenu/visualisation-logo.png"
 
         self.toggle = toggleButton
         builder = Gtk.Builder()
@@ -330,6 +329,7 @@ class MenuWin(object):
         self.detect_desktop_environment()
         self.settings = Gio.Settings.new("com.linuxmint.mintmenu")
         self.icon_theme = Gtk.IconTheme.get_default()
+        self.button_icon = Gtk.Image()
         self.loadSettings()
 
         self.createPanelButton()
@@ -357,9 +357,6 @@ class MenuWin(object):
 
         self.mainwin.window.set_name("mintmenu") # Name used in Gtk RC files
         self.applyTheme()
-
-        if self.mainwin.icon:
-            Gtk.Window.set_default_icon_name(self.mainwin.icon)
 
         try:
             self.keybinder = keybinding.GlobalKeyBinding()
@@ -425,12 +422,11 @@ class MenuWin(object):
 
     def set_applet_icon(self, saturate=False):
         if saturate:
-            self.button_icon.set_from_pixbuf(self.saturated_pixbuf)
+            self.button_icon.set_from_surface(self.saturated_surface)
         else:
-            self.button_icon.set_from_pixbuf(self.pixbuf)
+            self.button_icon.set_from_surface(self.surface)
 
     def createPanelButton(self):
-        self.button_icon = Gtk.Image()
         self.set_applet_icon()
         self.systemlabel = Gtk.Label(label= "%s " % self.buttonText)
         if os.path.isfile("/etc/linuxmint/info"):
@@ -478,15 +474,18 @@ class MenuWin(object):
         if not (os.path.exists(applet_icon) or self.icon_theme.has_icon(applet_icon)):
             self.settings.reset("applet-icon")
         applet_icon = self.settings.get_string("applet-icon")
+        self.scale = self.button_icon.get_scale_factor()
         if "/" in applet_icon:
             if applet_icon.endswith(".svg"):
-                self.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(applet_icon, -1, 22)
+                self.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(applet_icon, -1, 22 * self.scale)
             else:
                 self.pixbuf = GdkPixbuf.Pixbuf.new_from_file(applet_icon)
         else:
-            self.pixbuf = self.icon_theme.load_icon(applet_icon, 22, 0)
+            self.pixbuf = self.icon_theme.load_icon(applet_icon, 22 * self.scale, 0)
+        self.surface = Gdk.cairo_surface_create_from_pixbuf(self.pixbuf, self.scale)
         self.saturated_pixbuf = self.pixbuf.copy()
         GdkPixbuf.Pixbuf.saturate_and_pixelate(self.saturated_pixbuf, self.saturated_pixbuf, 1.5, False)
+        self.saturated_surface = Gdk.cairo_surface_create_from_pixbuf(self.saturated_pixbuf, self.scale)
         self.buttonIcon =  self.settings.get_string("applet-icon")
         self.iconSize = self.settings.get_int("applet-icon-size")
 
