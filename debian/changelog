@@ -1,3 +1,16 @@
+mintmenu (5.9.9) tina; urgency=medium
+
+  [ monsta ]
+  * depend on gir1.2-matedesktop-2.0 instead of gir1.2-mate-desktop (#231)
+  * plugins: fix number of callback arguments (#236)
+  * depend on python3-xapp instead of python-xapp (#238)
+
+  [ Clement Lefebvre ]
+  * RecentApp: Fix crash when location doesn't exist
+  * Applications: Fix empty apps when a category has no icon
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 26 Sep 2019 10:09:57 +0100
+
 mintmenu (5.9.8) tina; urgency=medium
 
   * Don't depend on a menu editor
