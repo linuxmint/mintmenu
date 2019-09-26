@@ -1623,7 +1623,10 @@ class pluginclass(object):
             for child in get_contents(menu.directory):
                 if isinstance(child, MateMenu.TreeDirectory):
                     name = child.get_name()
-                    icon = child.get_icon().to_string()
+                    if child.get_icon() is None:
+                        icon = "applications-other"
+                    else:
+                        icon = child.get_icon().to_string()
                     newCategoryList.append({"name": name,
                                             "icon": icon,
                                             "tooltip": name,
