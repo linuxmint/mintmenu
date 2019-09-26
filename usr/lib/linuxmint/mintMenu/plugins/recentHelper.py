@@ -66,13 +66,14 @@ def recentAppBuildLauncher(location):
 
         if location.startswith("file://"):
             location = location[7:]
-        appButton = ApplicationLauncher(location, iconSize)
-
-        if appButton.appExec:
-            appButton.show()
-            appButton.connect("clicked", applicationButtonClicked)
-            appButton.type = "location"
-            return appButton
+        if os.path.exists(location):
+            appButton = ApplicationLauncher(location, iconSize)
+            if appButton.appExec:
+                appButton.show()
+                appButton.connect("clicked", applicationButtonClicked)
+                appButton.type = "location"
+                return appButton
+        print("RecentApp: %s not found." % location)
     except Exception as e:
         print("File in recentapp not found: '%s': %s" % (location, e))
 
