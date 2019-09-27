@@ -483,8 +483,9 @@ class MenuWin(object):
             else:
                 self.pixbuf = GdkPixbuf.Pixbuf.new_from_file(applet_icon)
         else:
-            if applet_icon.endswith("-symbolic"):
-                self.button_icon.set_from_icon_name(applet_icon, 22)
+            if applet_icon.endswith("symbolic"):
+                self.button_icon.set_from_icon_name(applet_icon, Gtk.IconSize.DIALOG)
+                self.button_icon.set_pixel_size(22)
                 self.symbolic = True
             else:
                 self.pixbuf = self.icon_theme.load_icon(applet_icon, 22 * self.scale, 0)
