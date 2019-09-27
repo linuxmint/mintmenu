@@ -474,7 +474,6 @@ class MenuWin(object):
         applet_icon = self.settings.get_string("applet-icon")
         if not (os.path.exists(applet_icon) or self.icon_theme.has_icon(applet_icon)):
             self.settings.reset("applet-icon")
-        applet_icon = self.settings.get_string("applet-icon")
         self.scale = self.button_icon.get_scale_factor()
         self.symbolic = False
         self.pixbuf = None
@@ -546,7 +545,6 @@ class MenuWin(object):
 
     def updateButton(self):
         self.systemlabel.set_text(self.buttonText)
-        self.button_icon.clear()
         self.set_applet_icon()
         self.sizeButton()
 
