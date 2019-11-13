@@ -14,6 +14,7 @@ Depends:
  python (>= 2.4), python (<< 3),
  python-apt,
  python-configobj,
+ python-gi-cairo,
  python-setproctitle,
  python-xlib,
  python-xdg,
