@@ -1,3 +1,13 @@
+mintmenu (6.0.0) tricia; urgency=medium
+
+  * Fix blurry icon in HiDPI
+  * Applet: Fix handling of symbolic icons
+  * Applet: Fix changing the icon to a symbolic icon
+  * Applet: Fix compatibility with symbolic pngs
+  * Add missing dep on python-gi-cairo
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 13 Nov 2019 10:37:02 +0100
+
 mintmenu (5.9.9) tina; urgency=medium
 
   [ monsta ]
