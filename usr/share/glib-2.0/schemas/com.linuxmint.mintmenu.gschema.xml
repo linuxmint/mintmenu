@@ -51,7 +51,7 @@
     </key>
 
     <key type="s" name="applet-icon">
-      <default>"/usr/share/icons/hicolor/scalable/apps/linuxmint-logo-5.svg"</default>
+      <default>"linuxmint-logo-filled-ring"</default>
       <summary></summary>
       <description></description>
     </key>
