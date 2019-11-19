@@ -1,3 +1,11 @@
+mintmenu (6.0.1) tricia; urgency=medium
+
+  * Change default menu icon
+  * Add menu icon selection
+  * l10n: Update POT
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 19 Nov 2019 14:00:41 +0000
+
 mintmenu (6.0.0) tricia; urgency=medium
 
   * Fix blurry icon in HiDPI
