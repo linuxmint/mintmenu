@@ -56,6 +56,24 @@
       <description></description>
     </key>
 
+    <key type="s" name="default-applet-icon">
+      <default>"linuxmint-logo-filled-ring"</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
+    <key type="as" name="applet-icons">
+      <default>["linuxmint-logo", "linuxmint-logo-badge", "linuxmint-logo-badge-symbolic", "linuxmint-logo-filled-badge",
+    "linuxmint-logo-filled-leaf-badge", "linuxmint-logo-filled-leaf", "linuxmint-logo-filled-ring",
+    "linuxmint-logo-leaf-badge", "linuxmint-logo-leaf-badge-symbolic", "linuxmint-logo-leaf",
+    "linuxmint-logo-leaf-symbolic", "linuxmint-logo-neon", "linuxmint-logo-ring",
+    "linuxmint-logo-ring-symbolic", "linuxmint-logo-simple", "linuxmint-logo-simple-symbolic",
+    "mate-symbolic", "emblem-favorite-symbolic", "user-bookmarks-symbolic",
+    "start-here-symbolic"]</default>
+      <summary></summary>
+      <description></description>
+    </key>
+
     <key type="as" name="plugins-list">
       <default>['places', 'system_management', 'newpane', 'applications']</default>
       <summary></summary>

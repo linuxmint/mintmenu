@@ -67,7 +67,12 @@ class mintMenuPreferences():
         section = page.add_section(_("Menu button"), _("Applet button in the panel"))
         section.add_row(GSettingsSwitch(_("Show button icon"), "com.linuxmint.mintmenu", "show-applet-icon"))
         section.add_reveal_row(GSettingsEntry(_("Button text"), "com.linuxmint.mintmenu", "applet-text"), "com.linuxmint.mintmenu", "show-applet-icon")
-        section.add_reveal_row(GSettingsIconChooser(_("Button icon"), "com.linuxmint.mintmenu", "applet-icon"), "com.linuxmint.mintmenu", "show-applet-icon")
+        logos = {}
+        logos['name']= _("Menu icons")
+        logos['icons']= self.settings.get_strv("applet-icons")
+        icon_chooser = GSettingsIconChooser(_("Button icon"), "com.linuxmint.mintmenu", "applet-icon", default_icon=self.settings.get_string("default-applet-icon"), custom=[logos])
+        icon_chooser.content_widget.set_default_category(_("Menu icons"))
+        section.add_reveal_row(icon_chooser, "com.linuxmint.mintmenu", "show-applet-icon")
 
         binding_widget = keybinding.KeybindingWidget()
         binding_widget.set_val(self.settings.get_string("hot-key"))
