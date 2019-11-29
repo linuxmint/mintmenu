@@ -70,7 +70,7 @@ class mintMenuPreferences():
         logos = {}
         logos['name']= _("Menu icons")
         logos['icons']= self.settings.get_strv("applet-icons")
-        icon_chooser = GSettingsIconChooser(_("Button icon"), "com.linuxmint.mintmenu", "applet-icon", default_icon=self.settings.get_string("default-applet-icon"), custom=[logos])
+        icon_chooser = GSettingsIconChooser(_("Button icon"), "com.linuxmint.mintmenu", "applet-icon", default_icon=self.settings.get_string("default-applet-icon"), icon_categories=[logos])
         icon_chooser.content_widget.set_default_category(_("Menu icons"))
         section.add_reveal_row(icon_chooser, "com.linuxmint.mintmenu", "show-applet-icon")
 
