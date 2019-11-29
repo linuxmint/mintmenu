@@ -1,3 +1,9 @@
+mintmenu (6.0.2) tricia; urgency=medium
+
+  * Preferences: Fix IconChooser argument
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 29 Nov 2019 12:01:48 +0000
+
 mintmenu (6.0.1) tricia; urgency=medium
 
   * Change default menu icon
