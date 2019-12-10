@@ -601,10 +601,10 @@ class MenuWin(object):
         Execute("/usr/lib/linuxmint/mintMenu/preferences.py")
 
     def showMenuEditor(self, action, userdata = None):
-        if os.path.exists("/usr/bin/menulibre"):
-            Execute("menulibre")
-        elif os.path.exists("/usr/bin/mozo"):
+        if os.path.exists("/usr/bin/mozo"):
             Execute("mozo")
+        elif os.path.exists("/usr/bin/menulibre"):
+            Execute("menulibre")
 
     def showMenu(self, widget=None, event=None):
         if event == None or event.button == 1:
