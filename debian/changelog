@@ -1,3 +1,9 @@
+mintmenu (6.0.3) tricia; urgency=medium
+
+  * Prefer mozo over menulibre
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 10 Dec 2019 16:08:06 +0000
+
 mintmenu (6.0.2) tricia; urgency=medium
 
   * Preferences: Fix IconChooser argument
