@@ -581,13 +581,9 @@ class MenuWin(object):
 
     def showAboutDialog(self, action, userdata = None):
         about = Gtk.AboutDialog()
-        about.set_name("mintMenu")
+        about.set_program_name("mintMenu")
         about.set_version("__DEB_VERSION__")
-        try:
-            gpl = open('/usr/share/common-licenses/GPL','r').read()
-            about.set_license(gpl)
-        except Exception as e:
-            print(e)
+        about.set_license_type(Gtk.License.GPL_3_0)
         about.set_comments(_("Advanced MATE Menu"))
         # about.set_authors(["Clement Lefebvre <clem@linuxmint.com>", "Lars-Peter Clausen <lars@laprican.de>"])
         about.set_translator_credits(("translator-credits"))
