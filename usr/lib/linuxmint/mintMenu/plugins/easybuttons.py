@@ -388,13 +388,6 @@ class ApplicationLauncher(easyButton):
         if os.path.exists(self.startupFilePath):
             os.remove(self.startupFilePath)
 
-    def addToFavourites(self):
-        favouritesDir = os.path.join(os.path.expanduser("~"), ".linuxmint/mintMenu/applications")
-        if not os.path.exists(favouritesDir):
-            os.makedirs(favouritesDir)
-
-        shutil.copyfile(self.desktopFile, self.favouritesFilePath)
-
     def removeFromFavourites(self):
         if os.path.exists(self.favouritesFilePath):
             os.remove(self.favouritesFilePath)

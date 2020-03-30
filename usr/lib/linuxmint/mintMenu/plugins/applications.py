@@ -245,6 +245,9 @@ class pluginclass(object):
         try:
             # GSettings stuff
             self.settings = Gio.Settings("com.linuxmint.mintmenu.plugins.applications")
+
+            self.migrate_favorites()
+
             self.GetGSettingsEntries()
             self.settings.connect("changed::icon-size", self.changeIconSize)
             self.settings.connect("changed::favicon-size", self.changeFavIconSize)
@@ -264,6 +267,7 @@ class pluginclass(object):
             self.settings.connect("changed::enable-internet-search", self.GetGSettingsEntries)
             self.settings.connect("changed::search-command", self.GetGSettingsEntries)
             self.settings.connect("changed::default-tab", self.GetGSettingsEntries)
+            self.settings.connect("changed::favorite-apps-list", self.favoriteAppsChanged)
         except Exception as e:
             print(e)
 
@@ -518,16 +522,6 @@ class pluginclass(object):
 
     def RebuildPlugin(self):
         self.content_holder.set_size_request(self.width, self.height)
-
-    def checkMintMenuFolder(self):
-        if os.path.exists(os.path.join(os.path.expanduser("~"), ".linuxmint", "mintMenu", "applications")):
-            return True
-        try:
-            os.makedirs(os.path.join(os.path.expanduser("~"), ".linuxmint", "mintMenu", "applications"))
-            return True
-        except:
-            pass
-        return False
 
     def onShowMenu(self):
         if self.favorites:
@@ -1245,26 +1239,44 @@ class pluginclass(object):
 
         return None
 
+    def migrate_favorites(self):
+        if self.settings.get_strv("favorite-apps-list") != []:
+            return
+
+        default_path = os.path.join("/usr/linuxmint/mintMenu/applications.list")
+        path = os.path.join(home, ".linuxmint/mintMenu/applications.list")
+
+        if os.path.isdir(path):
+            # dir created by a bug in mint 19.2 beta
+            os.system("rm -rf %s" % path)
+            return
+
+        if not os.path.exists(path):
+            path = default_path
+
+        with open(path) as f:
+            self.settings.set_strv("favorite-apps-list", f.readlines())
+
+        try:
+            os.replace(path, path + ".deprecated_uses_dconf_now")
+        except:
+            # This will fail if it was the default path, ignore it.
+            pass
+
+    def favoriteAppsChanged(self, setting, key):
+        self.buildFavorites()
+
     def buildFavorites(self):
         try:
-            path = os.path.join(home, ".linuxmint/mintMenu/applications.list")
-            if os.path.isdir(path):
-                # dir created by a bug in mint 19.2 beta
-                os.system("rm -rf %s" % path)
-            if not os.path.exists(path):
-                os.system("mkdir -p ~/.linuxmint/mintMenu")
-                os.system("cp /usr/lib/linuxmint/mintMenu/applications.list " + path)
-
-            applicationsList = open(path).readlines()
-
-            self.favorites =  []
+            faves = self.settings.get_strv("favorite-apps-list")
 
             for child in self.favoritesBox:
                 child.destroy()
 
             position = 0
+            self.favorites = []
 
-            for app in applicationsList:
+            for app in faves:
                 try:
                     app = app.strip()
 
@@ -1296,7 +1308,6 @@ class pluginclass(object):
                     print("Can't add favorite: %s" % app)
                     print (e)
 
-            self.favoritesSave()
         except Exception as e:
             print(e)
 
@@ -1382,20 +1393,15 @@ class pluginclass(object):
                 self.favoritesRemove(fav.position)
 
     def favoritesSave(self):
-        try:
-            self.checkMintMenuFolder()
-            with open(os.path.join(home, ".linuxmint/mintMenu/applications.list") , "w") as appListFile:
-                for favorite in self.favorites:
-                    if favorite.type == "location":
-                        appListFile.write("location:" + favorite.desktopFile + "\n")
-                    else:
-                        appListFile.write(favorite.type + "\n")
-        except Exception as e:
-            msgDlg = Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                _("Couldn't save favorites. Check if you have write access to ~/.linuxmint/mintMenu") +
-                "\n(" + e.__str__() + ")")
-            msgDlg.run()
-            msgDlg.destroy()
+        new_faves = []
+
+        for favorite in self.favorites:
+            if favorite.type == "location":
+                new_faves.append("location:" + favorite.desktopFile)
+            else:
+                new_faves.append(favorite.type)
+
+        self.settings.set_strv("favorite-apps-list", new_faves)
 
     def isLocationInFavorites(self, location):
         for fav in self.favorites:

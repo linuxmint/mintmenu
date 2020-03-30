@@ -12,6 +12,8 @@ from gi.repository import Gtk, Gio
 import plugins.recentHelper as RecentHelper
 from plugins.execute import Execute
 
+home = os.path.expanduser("~")
+
 # i18n
 gettext.install("mintmenu", "/usr/share/linuxmint/locale")
 locale.bindtextdomain("mintmenu", "/usr/share/linuxmint/locale")
@@ -56,6 +58,9 @@ class pluginclass:
         self.icon = 'mate-folder.png'
 
         self.settings = Gio.Settings("com.linuxmint.mintmenu.plugins.recent")
+        RecentHelper.settings = self.settings
+
+        self.migrate_recent_apps()
         self.settings.connect('changed', self.RegenPlugin)
 
         self.appSettings = Gio.Settings("com.linuxmint.mintmenu.plugins.applications")
@@ -86,6 +91,20 @@ class pluginclass:
 
     def RegenPlugin(self, *args, **kargs):
         self.GetGSettingsEntries()
+
+    def migrate_recent_apps(self):
+        if self.settings.get_strv("recent-apps-list") != []:
+            return
+
+        path = os.path.join(home, ".linuxmint/mintMenu/recentApplications.list")
+        if os.path.exists(path):
+            with open(path) as f:
+                self.settings.set_strv("recent-apps-list", f.readlines())
+
+            try:
+                os.unlink(path)
+            except:
+                pass
 
     def GetGSettingsEntries(self):
         self.recenth = self.settings.get_int("height")

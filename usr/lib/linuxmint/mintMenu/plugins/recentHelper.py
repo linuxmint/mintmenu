@@ -10,6 +10,8 @@ from plugins.easybuttons import ApplicationLauncher
 
 home = os.path.expanduser("~")
 recentApps = []
+settings = None # set by recent plugin
+
 mintMenuWin = None
 recentAppBox = None
 numentries = 10
@@ -25,21 +27,15 @@ def recentAppsAdd(recentAppsButton):
             counter = counter + 1
 
 def recentAppsSave():
-    try:
-        path = os.path.join(home, ".linuxmint/mintMenu/recentApplications.list")
-        with open(path, "w") as recentAppListFile:
-            for recentApp in recentApps:
-                if not hasattr(recentApp, "type") or recentApp.type == "location":
-                    recentAppListFile.write("location:" + recentApp.desktopFile + "\n")
-                else:
-                    recentAppListFile.write(recentApp.type + "\n")
+    new_recent_apps = []
 
-    except Exception as e:
-        print(e)
-        msgDlg = Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-            _("Couldn't save recent apps. Check if you have write access to ~/.linuxmint/mintMenu")+"\n(" + e.__str__() + ")")
-        msgDlg.run()
-        msgDlg.destroy()
+    for recentApp in recentApps:
+        if not hasattr(recentApp, "type") or recentApp.type == "location":
+            new_recent_apps.append("location:" + recentApp.desktopFile)
+        else:
+            new_recent_apps.append(recentApp.type)
+
+    settings.set_strv("recent-apps-list", new_recent_apps)
 
 def recentAppBuildLauncher(location):
     try:
@@ -82,13 +78,9 @@ def recentAppBuildLauncher(location):
 def buildRecentApps():
     del recentApps[:]
     try:
-        path = os.path.join(home, ".linuxmint/mintMenu/recentApplications.list")
-        if not os.path.exists(path):
-            recentApplicationsList = []
-        else:
-            recentApplicationsList = open(path).readlines()
+        recent_apps = settings.get_strv("recent-apps-list")
 
-        for app in recentApplicationsList :
+        for app in recent_apps:
             app = app.strip()
 
             if app[0:9] == "location:":

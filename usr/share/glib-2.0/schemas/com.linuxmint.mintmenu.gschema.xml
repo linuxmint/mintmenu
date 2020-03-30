@@ -291,6 +291,12 @@
       <summary></summary>
       <description></description>
     </key>
+
+    <key type="as" name="favorite-apps-list">
+      <default>[]</default>
+      <summary>List of absolute desktop file paths</summary>
+    </key>
+
   </schema>
 
   <schema id="com.linuxmint.mintmenu.plugins.system_management" path="/com/linuxmint/mintmenu/plugins/system_management/">
@@ -410,6 +416,11 @@
       <default>"mate-fs-directory"</default>
       <summary></summary>
       <description></description>
+    </key>
+
+    <key type="as" name="recent-apps-list">
+      <default>[]</default>
+      <summary>List of absolute desktop file paths</summary>
     </key>
 
   </schema>
