@@ -149,7 +149,11 @@ class pluginclass:
         return True
 
     def clrmenu(self, *args, **kargs):
-        self.RecManagerInstance.purge_items()
+        if self.builder.get_object("RecentTabs").get_current_page() == 0: # files
+            self.RecManagerInstance.purge_items()
+        else: # apps
+            self.settings.reset("recent-apps-list")
+
         self.DoRecent()
 
     def AddRecentBtn(self, Name, RecentImage):
