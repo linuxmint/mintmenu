@@ -349,7 +349,12 @@ class ApplicationLauncher(easyButton):
                     cmd = "mate-terminal -e \"" + self.appExec + "\""
                 Execute(cmd, self.appPath)
             else:
-                Execute(None, desktopFile=self.desktopFile)
+                if self.appExec.startswith("pkexec "):
+                    print ("Using pkexec workaround...")
+                    cmd = "sh -c \"" + self.appExec + "\""
+                    Execute(cmd, self.appPath)
+                else:
+                    Execute(None, desktopFile=self.desktopFile)
 
     def uninstall(self, *args):
         Execute("mint-remove-application " + self.desktopFile)
