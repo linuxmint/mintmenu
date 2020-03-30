@@ -1,13 +1,13 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import sys, os
 
 if len(sys.argv) > 1:
     if (sys.argv[1] in ["help", "h", "-?", "--help", "-h", "?"]):
-        print "mintMenu - the advanced MATE menu\n"
-        print "options:"
-        print "  [--]help,  [-]h                    Display this help."
-        print "  [--]clean, [--]clear, [--]reset    Restore settings to default.\n"
+        print("mintMenu - the advanced MATE menu\n")
+        print("options:")
+        print("  [--]help,  [-]h                    Display this help.")
+        print("  [--]clean, [--]clear, [--]reset    Restore settings to default.\n")
     elif (sys.argv[1] in ["clean", "clear", "reset", "--clean", "--clear", "--reset"]):
         os.system("gsettings reset-recursively com.linuxmint.mintmenu")
         os.system("gsettings reset-recursively com.linuxmint.mintmenu.plugins.places")
@@ -15,6 +15,6 @@ if len(sys.argv) > 1:
         os.system("gsettings reset-recursively com.linuxmint.mintmenu.plugins.recent")
         os.system("gsettings reset-recursively com.linuxmint.mintmenu.plugins.system_management")
         os.system("rm -rf ~/.linuxmint/mintMenu")
-        print "All mintMenu settings are now restored to default"
+        print("All mintMenu settings are now restored to default")
 else:
     os.system("/usr/lib/linuxmint/mintMenu/mintMenu.py")

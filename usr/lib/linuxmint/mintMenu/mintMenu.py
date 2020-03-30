@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import locale
 import gc
@@ -131,7 +131,7 @@ class MainWindow(object):
                 try:
                     X = __import__(plugin)
                     # If no parameter passed to plugin it is autonomous
-                    if X.pluginclass.__init__.func_code.co_argcount == 1:
+                    if X.pluginclass.__init__.__code__.co_argcount == 1:
                         MyPlugin = X.pluginclass()
                     else:
                         # pass mintMenu and togglebutton instance so that the plugin can use it
@@ -433,7 +433,6 @@ class MenuWin(object):
         if os.path.isfile("/etc/linuxmint/info"):
             with open("/etc/linuxmint/info") as info:
                 for line in info:
-                    line = line.decode("utf-8")
                     if line.startswith("DESCRIPTION="):
                         tooltip = line.split("=",1)[1].strip('"\n')
                         self.systemlabel.set_tooltip_text(tooltip)

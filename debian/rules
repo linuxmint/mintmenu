@@ -3,7 +3,7 @@
 DEB_VERSION := $(shell dpkg-parsechangelog | egrep '^Version:' | cut -f 2 -d ' ')
 
 %:
-	dh ${@} --with-python2
+	dh ${@} --with-python3
 
 # Inject version number in the code
 override_dh_installdeb:

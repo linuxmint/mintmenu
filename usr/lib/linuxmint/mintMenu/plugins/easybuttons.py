@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import os.path
 import shutil
@@ -128,7 +128,7 @@ class easyButton(Gtk.Button):
 
         if labels:
             for label in labels:
-                if isinstance(label, basestring):
+                if isinstance(label, str):
                     self.addLabel(label)
                 elif isinstance(label, list):
                     self.addLabel(label[0], label[1])
@@ -317,13 +317,16 @@ class ApplicationLauncher(easyButton):
         return True
 
     def strip_accents(self, string):
-        value = string
-        if isinstance(string, unicode):
-            try:
-                value = string.encode('UTF8', 'ignore')
-            except:
-                pass
-        return value
+        # FIXME: Is this right??
+        return string
+        # value = string
+        # print(value, "...")
+        # if isinstance(string, str):
+        #     try:
+        #         value = string.encode('UTF8', 'ignore')
+        #     except:
+        #         pass
+        # return value
 
     def getTooltip(self):
         tooltip = self.appName

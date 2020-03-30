@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import cgi
 import filecmp
@@ -7,7 +7,7 @@ import locale
 import os
 import subprocess
 import threading
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -997,17 +997,17 @@ class pluginclass(object):
         self.focusSearchEntry(clear = False)
 
     def search_ddg(self, widget):
-        text = urllib.quote_plus(self.searchEntry.get_text().strip())
+        text = urllib.parse.quote_plus(self.searchEntry.get_text().strip())
         subprocess.Popen(["xdg-open", "https://duckduckgo.com/?q=%s" % text])
         self.mintMenuWin.hide()
 
     def search_google(self, widget):
-        text = urllib.quote_plus(self.searchEntry.get_text().strip())
+        text = urllib.parse.quote_plus(self.searchEntry.get_text().strip())
         subprocess.Popen(["xdg-open", "https://www.google.com/search?q=%s" % text])
         self.mintMenuWin.hide()
 
     def search_wikipedia(self, widget):
-        text = urllib.quote_plus(self.searchEntry.get_text().strip())
+        text = urllib.parse.quote_plus(self.searchEntry.get_text().strip())
         subprocess.Popen(["xdg-open", "https://en.wikipedia.org/wiki/Special:Search?search=%s" % text])
         self.mintMenuWin.hide()
 
@@ -1017,27 +1017,27 @@ class pluginclass(object):
         self.mintMenuWin.hide()
 
     def search_mint_tutorials(self, widget):
-        text = urllib.quote(self.searchEntry.get_text().strip())
+        text = urllib.parse.quote(self.searchEntry.get_text().strip())
         subprocess.Popen(["xdg-open", "https://community.linuxmint.com/index.php/tutorial/search/0/%s" % text])
         self.mintMenuWin.hide()
 
     def search_mint_ideas(self, widget):
-        text = urllib.quote(self.searchEntry.get_text().strip())
+        text = urllib.parse.quote(self.searchEntry.get_text().strip())
         subprocess.Popen(["xdg-open", "https://community.linuxmint.com/index.php/idea/search/0/%s" % text])
         self.mintMenuWin.hide()
 
     def search_mint_users(self, widget):
-        text = urllib.quote(self.searchEntry.get_text().strip())
+        text = urllib.parse.quote(self.searchEntry.get_text().strip())
         subprocess.Popen(["xdg-open", "https://community.linuxmint.com/index.php/user/search/0/%s" % text])
         self.mintMenuWin.hide()
 
     def search_mint_hardware(self, widget):
-        text = urllib.quote(self.searchEntry.get_text().strip())
+        text = urllib.parse.quote(self.searchEntry.get_text().strip())
         subprocess.Popen(["xdg-open", "https://community.linuxmint.com/index.php/hardware/search/0/%s" % text])
         self.mintMenuWin.hide()
 
     def search_mint_software(self, widget):
-        text = urllib.quote(self.searchEntry.get_text())
+        text = urllib.parse.quote(self.searchEntry.get_text())
         subprocess.Popen(["xdg-open", "https://community.linuxmint.com/index.php/software/search/0/%s" % text])
         self.mintMenuWin.hide()
 

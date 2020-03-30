@@ -1,11 +1,11 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import locale
 import gettext
 import os
 import string
 from glob import glob
-from urllib import unquote
+from urllib.parse import unquote
 
 import gi
 gi.require_version("Gtk", "3.0")
