@@ -1,3 +1,9 @@
+mintmenu (6.0.3.1) tricia; urgency=medium
+
+  * Fix launching pkexec applications (#248)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 31 Mar 2020 12:33:51 +0100
+
 mintmenu (6.0.3) tricia; urgency=medium
 
   * Prefer mozo over menulibre
