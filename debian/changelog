@@ -1,3 +1,17 @@
+mintmenu (5.9.1.2) debbie; urgency=medium
+
+  [ gm10 ]
+  * Places: Don't hardcode file browser (#204)
+  * Applications: Fix keypress event handler (#205)
+
+  [ Andrew ]
+  * Fix broke running with "xdg-su" in exec field (#200)
+
+  [ Clement Lefebvre ]
+  * Fix launching pkexec applications (#248)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 31 Mar 2020 12:37:33 +0100
+
 mintmenu (5.9.1.1) debbie; urgency=medium
 
   * Inject the app version during the build
