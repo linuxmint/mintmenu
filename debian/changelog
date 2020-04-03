@@ -1,3 +1,19 @@
+mintmenu (6.0.4) ulyana; urgency=medium
+
+  [ Michael Webster ]
+  * all: Use python3
+  * Use gsettings for recent and favorite apps
+  * recent.py: Allow the clear button to apply to whichever tab is currently active.
+  * about dialog: Fix program name and use a license type.
+
+  [ Clement Lefebvre ]
+  * Fix launching pkexec applications (#248)
+
+  [ Michael Webster ]
+  * debian: Fix dependencies to require python3 variants.
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 03 Apr 2020 12:08:41 +0100
+
 mintmenu (6.0.3) tricia; urgency=medium
 
   * Prefer mozo over menulibre
