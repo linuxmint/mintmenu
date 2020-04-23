@@ -1243,7 +1243,7 @@ class pluginclass(object):
         if self.settings.get_strv("favorite-apps-list") != []:
             return
 
-        default_path = os.path.join("/usr/linuxmint/mintMenu/applications.list")
+        default_path = os.path.join("/usr/lib/linuxmint/mintMenu/applications.list")
         path = os.path.join(home, ".linuxmint/mintMenu/applications.list")
 
         if os.path.isdir(path):
