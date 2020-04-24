@@ -51,13 +51,13 @@
     </key>
 
     <key type="s" name="applet-icon">
-      <default>"linuxmint-logo-filled-ring"</default>
+      <default>"linuxmint-logo-ring-symbolic"</default>
       <summary></summary>
       <description></description>
     </key>
 
     <key type="s" name="default-applet-icon">
-      <default>"linuxmint-logo-filled-ring"</default>
+      <default>"linuxmint-logo-ring-symbolic"</default>
       <summary></summary>
       <description></description>
     </key>
