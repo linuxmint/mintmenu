@@ -33,7 +33,7 @@
     </key>
 
     <key type="s" name="applet-text">
-      <default>"Menu"</default>
+      <default>""</default>
       <summary></summary>
       <description></description>
     </key>
