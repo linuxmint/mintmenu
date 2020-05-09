@@ -344,7 +344,7 @@ class ApplicationLauncher(easyButton):
             else:
                 selection.set_uris(["file://" + self.desktopFile])
 
-    def execute(self, *args):
+    def execute(self, *args, **kwargs):
         if self.appExec:
             if self.useTerminal:
                 cmd = "x-terminal-emulator -e \"" + self.appExec + "\""
@@ -352,7 +352,14 @@ class ApplicationLauncher(easyButton):
                     cmd = "mate-terminal -e \"" + self.appExec + "\""
                 Execute(cmd, self.appPath)
             else:
-                Execute(None, desktopFile=self.desktopFile)
+                offload = False
+
+                try:
+                    offload = kwargs["offload"]
+                except KeyError:
+                    pass
+
+                Execute(None, desktopFile=self.desktopFile, offload=offload)
 
     def uninstall(self, *args):
         Execute("mint-remove-application " + self.desktopFile)
@@ -464,12 +471,12 @@ class MenuApplicationLauncher(ApplicationLauncher):
         else:
             self.addLabel(appName)
 
-    def execute(self, *args):
+    def execute(self, *args, **kwargs):
         self.highlight = False
         for child in self.labelBox:
             child.destroy()
         self.setupLabels()
-        return super(MenuApplicationLauncher, self).execute(*args)
+        return super(MenuApplicationLauncher, self).execute(*args, **kwargs)
 
     def setShowComment(self, showComment):
         self.showComment = showComment

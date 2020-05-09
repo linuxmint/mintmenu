@@ -12,7 +12,7 @@ import urllib.request, urllib.parse, urllib.error
 import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version("MateMenu", "2.0")
-from gi.repository import Gtk, Gdk, GdkPixbuf, Gio, GLib, MateMenu
+from gi.repository import Gtk, Gdk, GdkPixbuf, Gio, GLib, MateMenu, XApp
 
 import plugins.recentHelper as RecentHelper
 from plugins.easybuttons import (ApplicationLauncher, CategoryButton,
@@ -187,6 +187,13 @@ class pluginclass(object):
         self.toggleButton = toggleButton
         self.menuFiles = []
         self.de = de
+
+        self.canOffload = False
+
+        try:
+            self.canOffload = XApp.util_gpu_offload_supported()
+        except AttributeError:
+            print("Could not check for gpu offload support - maybe xapps isn't up to date.");
 
         # Detect the locale (this is used for the Wikipedia search)
         self.lang = "en"
@@ -835,6 +842,7 @@ class pluginclass(object):
             startupMenuItem = Gtk.CheckMenuItem(_("Launch when I log in"))
             separator3 = Gtk.SeparatorMenuItem()
             launchMenuItem = Gtk.MenuItem(_("Launch"))
+            launchOffloadedMenuItem = Gtk.MenuItem(_("Run with NVIDIA GPU"))
             removeFromFavMenuItem = Gtk.MenuItem(_("Remove from favorites"))
             separator4 = Gtk.SeparatorMenuItem()
             propsMenuItem = Gtk.MenuItem(_("Edit properties"))
@@ -850,6 +858,7 @@ class pluginclass(object):
                 startupMenuItem.set_active(False)
                 startupMenuItem.connect("toggled", self.onAddToStartup, widget)
             launchMenuItem.connect("activate", self.onLaunchApp, widget)
+            launchOffloadedMenuItem.connect("activate", self.onLaunchOffloadedApp, widget)
             removeFromFavMenuItem.connect("activate", self.onFavoritesRemove, widget)
             propsMenuItem.connect("activate", self.onPropsApp, widget)
 
@@ -863,6 +872,8 @@ class pluginclass(object):
             mTree.append(startupMenuItem)
             mTree.append(separator3)
             mTree.append(launchMenuItem)
+            if self.canOffload:
+                mTree.append(launchOffloadedMenuItem)
             mTree.append(removeFromFavMenuItem)
             mTree.append(separator4)
             mTree.append(propsMenuItem)
@@ -904,6 +915,7 @@ class pluginclass(object):
         startupMenuItem = Gtk.CheckMenuItem(_("Launch when I log in"))
         separator2 = Gtk.SeparatorMenuItem()
         launchMenuItem = Gtk.MenuItem(_("Launch"))
+        launchOffloadedMenuItem = Gtk.MenuItem(_("Run with NVIDIA GPU"))
         uninstallMenuItem = Gtk.MenuItem(_("Uninstall"))
         deleteMenuItem = Gtk.MenuItem(_("Delete from menu"))
         separator3 = Gtk.SeparatorMenuItem()
@@ -918,6 +930,8 @@ class pluginclass(object):
         mTree.append(startupMenuItem)
         mTree.append(separator2)
         mTree.append(launchMenuItem)
+        if self.canOffload:
+            mTree.append(launchOffloadedMenuItem)
         mTree.append(uninstallMenuItem)
         if home in widget.desktopFile:
             mTree.append(deleteMenuItem)
@@ -929,6 +943,7 @@ class pluginclass(object):
         desktopMenuItem.connect("activate", self.add_to_desktop, widget)
         panelMenuItem.connect("activate", self.add_to_panel, widget)
         launchMenuItem.connect("activate", self.onLaunchApp, widget)
+        launchOffloadedMenuItem.connect("activate", self.onLaunchOffloadedApp, widget)
         propsMenuItem.connect("activate", self.onPropsApp, widget)
         uninstallMenuItem.connect("activate", self.onUninstallApp, widget)
 
@@ -1068,6 +1083,10 @@ class pluginclass(object):
 
     def onLaunchApp(self, menu, widget):
         widget.execute()
+        self.mintMenuWin.hide()
+
+    def onLaunchOffloadedApp(self, menu, widget):
+        widget.execute(offload=True)
         self.mintMenuWin.hide()
 
     def onPropsApp(self, menu, widget):
