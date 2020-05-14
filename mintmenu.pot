@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-19 14:00+0000\n"
+"POT-Creation-Date: 2020-05-14 08:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,23 +49,23 @@ msgstr ""
 msgid "Couldn't initialize plugin"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:592
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:587
 msgid "Advanced MATE Menu"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:703
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:698
 msgid "Preferences"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:707
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:702
 msgid "Edit menu"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:711
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:706
 msgid "Reload plugins"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/mintMenu.py:714
+#: usr/lib/linuxmint/mintMenu/mintMenu.py:709
 msgid "About"
 msgstr ""
 
@@ -374,134 +374,133 @@ msgstr ""
 msgid "Path"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:624
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:625
 #, python-format
 msgid "Search DuckDuckGo for %s"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:626
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:627
 #, python-format
 msgid "Search Wikipedia for %s"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:629
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:630
 #, python-format
 msgid "Lookup %s in Dictionary"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:631
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:632
 #, python-format
 msgid "Search Computer for %s"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:689
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:731
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:690
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:732
 #, python-format
 msgid "Install package '%s'"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:835
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:906
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:836
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:911
 msgid "Add to desktop"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:836
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:907
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:837
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:912
 msgid "Add to panel"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:838
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:884
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:839
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:889
 msgid "Insert space"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:839
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:885
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:840
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:890
 msgid "Insert separator"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:841
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:910
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:842
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:915
 msgid "Launch when I log in"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:843
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:912
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:844
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:917
 msgid "Launch"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:844
-msgid "Remove from favorites"
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:845
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:918
+msgid "Run with NVIDIA GPU"
 msgstr ""
 
 #: usr/lib/linuxmint/mintMenu/plugins/applications.py:846
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:916
+msgid "Remove from favorites"
+msgstr ""
+
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:848
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:922
 msgid "Edit properties"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:883
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:888
 msgid "Remove"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:909
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:914
 msgid "Show in my favorites"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:913
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:919
 msgid "Uninstall"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:914
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:920
 msgid "Delete from menu"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:979
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:988
 msgid "Search DuckDuckGo"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:980
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:989
 msgid "Search Wikipedia"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:982
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:991
 msgid "Search Dictionary"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:983
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:992
 msgid "Search Computer"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:985
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:994
 msgid "Find Software"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:986
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:995
 msgid "Find Tutorials"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:987
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:996
 msgid "Find Hardware"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:988
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:997
 msgid "Find Ideas"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:989
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:998
 msgid "Find Users"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1395
-msgid ""
-"Couldn't save favorites. Check if you have write access to ~/.linuxmint/"
-"mintMenu"
-msgstr ""
-
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1617
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1642
 msgid "All"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1619
+#: usr/lib/linuxmint/mintMenu/plugins/applications.py:1644
 msgid "Show all applications"
 msgstr ""
 
@@ -530,17 +529,11 @@ msgstr ""
 msgid "Empty trash"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/recentHelper.py:40
-msgid ""
-"Couldn't save recent apps. Check if you have write access to ~/.linuxmint/"
-"mintMenu"
-msgstr ""
-
-#: usr/lib/linuxmint/mintMenu/plugins/recent.py:39
+#: usr/lib/linuxmint/mintMenu/plugins/recent.py:41
 msgid "Recently used"
 msgstr ""
 
-#: usr/lib/linuxmint/mintMenu/plugins/recent.py:169
+#: usr/lib/linuxmint/mintMenu/plugins/recent.py:192
 msgid "The file or location could not be opened."
 msgstr ""
 
