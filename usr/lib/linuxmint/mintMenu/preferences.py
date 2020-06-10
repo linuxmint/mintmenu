@@ -49,8 +49,8 @@ class mintMenuPreferences():
 
     def __init__(self):
 
-        self.settings = Gio.Settings("com.linuxmint.mintmenu")
-        self.places_settings = Gio.Settings("com.linuxmint.mintmenu.plugins.places")
+        self.settings = Gio.Settings(schema_id="com.linuxmint.mintmenu")
+        self.places_settings = Gio.Settings(schema_id="com.linuxmint.mintmenu.plugins.places")
 
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain("mintmenu")

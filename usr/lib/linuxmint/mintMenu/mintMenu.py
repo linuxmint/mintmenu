@@ -21,8 +21,6 @@ import pointerMonitor
 import setproctitle
 from plugins.execute import Execute
 
-GObject.threads_init()
-
 # Rename the process
 setproctitle.setproctitle('mintmenu')
 
