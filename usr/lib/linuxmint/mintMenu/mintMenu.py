@@ -329,10 +329,11 @@ class MenuWin(object):
         self.detect_desktop_environment()
         self.settings = Gio.Settings.new("com.linuxmint.mintmenu")
         self.icon_theme = Gtk.IconTheme.get_default()
-        self.button_icon = Gtk.Image()
+        self.button_icon = Gtk.Image(no_show_all=True)
         self.loadSettings()
 
-        self.createPanelButton()
+        self.button_box = None
+        self.updatePanelButton()
 
         self.mate_settings = Gio.Settings.new("org.mate.interface")
         self.mate_settings.connect("changed::gtk-theme", self.changeTheme)
@@ -346,7 +347,7 @@ class MenuWin(object):
 
         self.applet.set_flags(MatePanelApplet.AppletFlags.EXPAND_MINOR)
         self.applet.connect("button-press-event", self.showMenu)
-        self.applet.connect("change-orient", self.changeOrientation)
+        self.applet.connect("change-orient", self.updatePanelButton)
         self.applet.connect("enter-notify-event", self.enter_notify)
         self.applet.connect("leave-notify-event", self.leave_notify)
 
@@ -427,9 +428,13 @@ class MenuWin(object):
             else:
                 self.button_icon.set_from_surface(self.surface)
 
-    def createPanelButton(self):
+    def updatePanelButton(self):
+        if self.button_box != None:
+            self.button_box.destroy()
+
         self.set_applet_icon()
-        self.systemlabel = Gtk.Label(label= "%s " % self.buttonText)
+        self.systemlabel = Gtk.Label(label= "%s" % self.buttonText, no_show_all=True)
+
         if os.path.isfile("/etc/linuxmint/info"):
             with open("/etc/linuxmint/info") as info:
                 for line in info:
@@ -438,24 +443,54 @@ class MenuWin(object):
                         self.systemlabel.set_tooltip_text(tooltip)
                         self.button_icon.set_tooltip_text(tooltip)
                         break
+
+        self.button_icon.props.margin = 0
+        self.systemlabel.props.margin = 0
+        self.systemlabel.props.visible = show_text = self.buttonText != ""
+        self.button_icon.props.visible = self.showIcon
+
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
-            self.button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+            self.button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
             self.button_box.pack_start(self.button_icon, False, False, 0)
             self.button_box.pack_start(self.systemlabel, False, False, 0)
-            self.button_icon.set_padding(5, 0)
+            if self.showIcon and not show_text:
+                self.button_icon.props.margin_start = 5
+                self.button_icon.props.margin_end = 5
+            elif show_text and not self.showIcon:
+                self.systemlabel.props.margin_start = 5
+                self.systemlabel.props.margin_end = 5
+            else:
+                self.button_icon.props.margin_start = 5
+                self.systemlabel.props.margin_end = 5
         # if we have a vertical panel
         elif self.applet.get_orient() == MatePanelApplet.AppletOrient.LEFT:
-            self.button_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            self.button_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
             self.systemlabel.set_angle(270)
             self.button_box.pack_start(self.button_icon , False, False, 0)
             self.button_box.pack_start(self.systemlabel , False, False, 0)
-            self.button_icon.set_padding(0, 5)
+            if self.showIcon and not show_text:
+                self.button_icon.props.margin_top = 5
+                self.button_icon.props.margin_bottom = 5
+            elif show_text and not self.showIcon:
+                self.systemlabel.props.margin_top = 5
+                self.systemlabel.props.margin_bottom = 5
+            else:
+                self.button_icon.props.margin_top = 5
+                self.systemlabel.props.margin_bottom = 5
         elif self.applet.get_orient() == MatePanelApplet.AppletOrient.RIGHT:
-            self.button_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            self.button_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
             self.systemlabel.set_angle(90)
             self.button_box.pack_start(self.systemlabel , False, False, 0)
             self.button_box.pack_start(self.button_icon , False, False, 0)
-            self.button_icon.set_padding(0, 5)
+            if self.showIcon and not show_text:
+                self.button_icon.props.margin_top = 5
+                self.button_icon.props.margin_bottom = 5
+            elif show_text and not self.showIcon:
+                self.systemlabel.props.margin_top = 5
+                self.systemlabel.props.margin_bottom = 5
+            else:
+                self.button_icon.props.margin_bottom = 5
+                self.systemlabel.props.margin_top = 5
 
         self.button_box.set_homogeneous(False)
         self.button_box.show_all()
@@ -511,53 +546,11 @@ class MenuWin(object):
             except:
                 style_settings.set_property("gtk-theme-name", desktop_theme)
 
-    def changeOrientation(self, *args, **kargs):
-        if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
-            tmpbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-            self.systemlabel.set_angle(0)
-            self.button_box.reorder_child(self.button_icon, 0)
-            self.button_icon.set_padding(5, 0)
-        elif self.applet.get_orient() == MatePanelApplet.AppletOrient.LEFT:
-            tmpbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            self.systemlabel.set_angle(270)
-            self.button_box.reorder_child(self.button_icon, 0)
-            self.button_icon.set_padding(0, 5)
-        elif self.applet.get_orient() == MatePanelApplet.AppletOrient.RIGHT:
-            tmpbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            self.systemlabel.set_angle(90)
-            self.button_box.reorder_child(self.button_icon, 1)
-            self.button_icon.set_padding(0, 5)
-
-        tmpbox.set_homogeneous(False)
-
-        # reparent all the hboxes to the new tmpbox
-        for i in self.button_box:
-            i.reparent(tmpbox)
-
-        self.button_box.destroy()
-
-        self.button_box = tmpbox
-        self.button_box.show()
-
-        # this call makes sure width stays intact
-        self.updateButton()
-        self.applet.add(self.button_box)
-
-    def updateButton(self):
-        self.systemlabel.set_text(self.buttonText)
-        self.set_applet_icon()
-        self.sizeButton()
-
     def hotkeyChanged (self, schema, key):
         self.hotkeyText =  self.settings.get_string("hot-key")
         self.keybinder.rebind(self.hotkeyText)
 
     def sizeButton(self):
-        if self.showIcon:
-            self.button_icon.show()
-        else:
-            self.button_icon.hide()
-
         # This code calculates width and height for the button_box
         # and takes the orientation and scale factor in account
         bi_req = self.button_icon.get_preferred_size()[1]
@@ -566,18 +559,18 @@ class MenuWin(object):
         sl_scale = self.systemlabel.get_scale_factor()
         if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
             if self.showIcon:
-                self.applet.set_size_request(sl_req.width / sl_scale + bi_req.width / bi_scale + 5, bi_req.height)
+                self.applet.set_size_request(sl_req.width / sl_scale + bi_req.width / bi_scale, bi_req.height)
             else:
-                self.applet.set_size_request(sl_req.width / sl_scale + 2, bi_req.height)
+                self.applet.set_size_request(sl_req.width / sl_scale, bi_req.height)
         else:
             if self.showIcon:
-                self.applet.set_size_request(bi_req.width, sl_req.height / sl_scale + bi_req.height / bi_scale + 5)
+                self.applet.set_size_request(bi_req.width, sl_req.height / sl_scale + bi_req.height / bi_scale)
             else:
-                self.applet.set_size_request(bi_req.width, sl_req.height / sl_scale + 2)
+                self.applet.set_size_request(bi_req.width, sl_req.height / sl_scale)
 
     def reloadSettings(self, *args):
         self.loadSettings()
-        self.updateButton()
+        self.updatePanelButton()
 
     def showAboutDialog(self, action, userdata = None):
         about = Gtk.AboutDialog()
