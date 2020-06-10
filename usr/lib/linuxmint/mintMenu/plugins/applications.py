@@ -12,7 +12,8 @@ import urllib.request, urllib.parse, urllib.error
 import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version("MateMenu", "2.0")
-from gi.repository import Gtk, Gdk, GdkPixbuf, Gio, GLib, MateMenu
+gi.require_version("XApp", "1.0")
+from gi.repository import Gtk, Gdk, GdkPixbuf, Gio, GLib, MateMenu, XApp
 
 import plugins.recentHelper as RecentHelper
 from plugins.easybuttons import (ApplicationLauncher, CategoryButton,
