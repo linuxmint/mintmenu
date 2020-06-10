@@ -1,3 +1,9 @@
+mintmenu (6.0.9) ulyana; urgency=medium
+
+  * Add missing dependency
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 10 Jun 2020 11:53:29 +0100
+
 mintmenu (6.0.8) ulyana; urgency=medium
 
   * Search: Fix searching for accentuated strings
