@@ -2,6 +2,7 @@
 
 import os.path
 import shutil
+import unidecode
 
 import xdg.DesktopEntry
 import xdg.Menu
@@ -258,10 +259,10 @@ class ApplicationLauncher(easyButton):
 
     def loadDesktopEntry(self, desktopItem):
         try:
-            self.appName = self.strip_accents(desktopItem.getName())
-            self.appGenericName = self.strip_accents(desktopItem.getGenericName())
-            self.appComment = self.strip_accents(desktopItem.getComment())
-            self.appExec = self.strip_accents(desktopItem.getExec().replace('\\\\', '\\'))
+            self.appName = desktopItem.getName()
+            self.appGenericName = desktopItem.getGenericName()
+            self.appComment = desktopItem.getComment()
+            self.appExec = desktopItem.getExec().replace('\\\\', '\\')
             self.appIconName = desktopItem.getIcon()
             self.appCategories = desktopItem.getCategories()
             self.appMateDocPath = desktopItem.get("X-MATE-DocPath") or ""
@@ -303,30 +304,25 @@ class ApplicationLauncher(easyButton):
         self.addLabel(self.appName)
 
     def filterText(self, text):
-        keywords = text.lower().split()
-        appName = self.appName.lower()
-        appGenericName = self.appGenericName.lower()
-        appComment = self.appComment.lower()
-        appExec = self.appExec.lower()
+        keywords = self.strip_case_and_accents(text).split()
+        appName = self.strip_case_and_accents(self.appName)
+        appGenericName = self.strip_case_and_accents(self.appGenericName)
+        appComment = self.strip_case_and_accents(self.appComment)
+        appExec = self.strip_case_and_accents(self.appExec)
         for keyword in keywords:
-            keyw = self.strip_accents(keyword)
-            if keyw != "" and appName.find(keyw) == -1 and appGenericName.find(keyw) == -1 and appComment.find(keyw) == -1 and appExec.find(keyw) == -1:
+            if keyword != "" and appName.find(keyword) == -1 and appGenericName.find(keyword) == -1 and appComment.find(keyword) == -1 and appExec.find(keyword) == -1:
                 self.hide()
                 return False
         self.show()
         return True
 
-    def strip_accents(self, string):
-        # FIXME: Is this right??
-        return string
-        # value = string
-        # print(value, "...")
-        # if isinstance(string, str):
-        #     try:
-        #         value = string.encode('UTF8', 'ignore')
-        #     except:
-        #         pass
-        # return value
+    def strip_case_and_accents(self, string):
+        if isinstance(string, str):
+            try:
+                value = unidecode.unidecode(string.lower())
+            except:
+                pass
+        return value
 
     def getTooltip(self):
         tooltip = self.appName
