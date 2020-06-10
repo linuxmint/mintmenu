@@ -1,3 +1,11 @@
+mintmenu (6.1.0) ulyana; urgency=medium
+
+  [ Michael Webster ]
+  * mintMenu.py: Refactor panel button construction to fix padding in different configurations.
+  * gtk: Fix a couple of deprecations
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 10 Jun 2020 16:43:29 +0100
+
 mintmenu (6.0.9) ulyana; urgency=medium
 
   * Add missing dependency
