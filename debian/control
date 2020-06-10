@@ -15,6 +15,7 @@ Depends:
  python3-configobj,
  python3-gi-cairo,
  python3-setproctitle,
+ python3-unidecode,
  python3-xlib,
  python3-xdg,
  python3-xapp,
