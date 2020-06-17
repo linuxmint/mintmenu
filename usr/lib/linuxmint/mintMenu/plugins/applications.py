@@ -174,11 +174,11 @@ class pluginclass(object):
     toButton = (Gtk.TargetEntry.new("text/uri-list", 0, TARGET_TYPE_TEXT),
                 Gtk.TargetEntry.new("text/uri-list", 0, TARGET_TYPE_TEXT))
     TARGET_TYPE_FAV = 81
-    toFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81),
+    toFav = (Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 81),
              Gtk.TargetEntry.new("text/plain", 0, 100),
              Gtk.TargetEntry.new("text/uri-list", 0, 101))
-    fromFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81),
-               Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81))
+    fromFav = (Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 81),
+               Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 81))
 
     #@print_timing
     def __init__(self, mintMenuWin, toggleButton, de):
@@ -1432,12 +1432,11 @@ class pluginclass(object):
     def on_drag_data_get(self, widget, context, selection, info, time):
         if info == self.TARGET_TYPE_FAV:
             self.drag_origin = widget.position
-            # FIXME: This fails in python3:
-            selection.set(selection.get_target(), 8, str(widget.position))
+            selection.set_text(str(widget.position), -1)
 
     def on_drag_data_received(self, widget, context, x, y, selection, info, time):
         if info == self.TARGET_TYPE_FAV:
-            self.favoritesReorder(int(selection.get_data()), widget.position)
+            self.favoritesReorder(int(selection.get_data().decode()), widget.position)
 
     # def on_icon_theme_changed(self, theme):
     #     print("on_icon_theme_changed")
