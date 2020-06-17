@@ -115,6 +115,10 @@ def doRecentApps():
 
 def applicationButtonClicked(widget):
     mintMenuWin.hide()
+
+    if settings == None:
+        return
+
     recentAppsAdd(widget)
     recentAppsSave()
     doRecentApps()
