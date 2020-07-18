@@ -1,3 +1,15 @@
+mintmenu (6.0.5.1) ulyana; urgency=medium
+
+  [ Clement Lefebvre ]
+  * Search: Fix searching for accentuated strings
+  * Add missing dependency
+
+  [ Michael Webster ]
+  * applications.py: Fix dnd for re-ordering/adding favorites.
+  * recentHelper.py: Don't try to modify the recent list unless recents are enabled.
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sat, 18 Jul 2020 12:25:24 +0100
+
 mintmenu (6.0.5) ulyana; urgency=medium
 
   * Fix typo in file path
