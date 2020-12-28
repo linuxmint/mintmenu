@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import cgi
+import html
 import filecmp
 import gettext
 import locale
@@ -620,7 +620,7 @@ class pluginclass(object):
         self.suggestions.append(item)
 
     def add_search_suggestions(self, text):
-        text = "<b>%s</b>" % cgi.escape(text)
+        text = "<b>%s</b>" % html.escape(text)
         if self.enableInternetSearch:
             self.add_suggestion("/usr/lib/linuxmint/mintMenu/search_engines/ddg.svg",
                                 _("Search DuckDuckGo for %s") % text, None, self.search_ddg)
