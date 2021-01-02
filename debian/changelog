@@ -1,3 +1,13 @@
+mintmenu (6.1.2) ulyssa; urgency=medium
+
+  [ Vincent Vermeulen ]
+  * fix APT search
+
+  [ Clement Lefebvre ]
+  * Favorites: Add a scrolledwindow (#263)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sat, 02 Jan 2021 22:21:33 +0000
+
 mintmenu (6.1.1) ulyana; urgency=medium
 
   [ Michael Webster ]
