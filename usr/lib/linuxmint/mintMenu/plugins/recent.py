@@ -197,7 +197,7 @@ class pluginclass:
     def GetRecent(self, *args, **kargs):
         FileString=[]
         IconString=[]
-        RecentInfo=self.RecManagerInstance.get_items()
+        RecentInfo=sorted(self.RecManagerInstance.get_items(), key=lambda item: item.get_modified(), reverse=True)
         count=0
         MaxEntries=self.numentries
         if self.numentries == -1:
