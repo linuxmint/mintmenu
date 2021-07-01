@@ -7,7 +7,7 @@ import subprocess
 
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, Pango
 
 import plugins.recentHelper as RecentHelper
 from plugins.execute import Execute
@@ -174,7 +174,7 @@ class pluginclass:
         Box1.add(ButtonIcon)
 
         Label1 = Gtk.Label(DispName)
-        Label1.set_ellipsize(3)
+        Label1.set_ellipsize(Pango.EllipsizeMode.END)
         Box1.add(Label1)
 
         AButton.add(Box1)
