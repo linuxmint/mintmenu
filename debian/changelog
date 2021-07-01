@@ -1,3 +1,9 @@
+mintmenu (6.1.4) uma; urgency=medium
+
+  * Recent: Fix buttons layout
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 01 Jul 2021 13:39:07 +0100
+
 mintmenu (6.1.3) uma; urgency=medium
 
   [ Vincent Vermeulen ]
