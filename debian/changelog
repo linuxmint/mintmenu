@@ -1,3 +1,10 @@
+mintmenu (6.1.5) vera; urgency=medium
+
+  [ monsta ]
+  * remove mint-common dependency (#274)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 21 Nov 2022 11:57:37 +0000
+
 mintmenu (6.1.4) uma; urgency=medium
 
   * Recent: Fix buttons layout
