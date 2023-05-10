@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import os
-from gi.repository import Gio, GLib, Gdk
+from gi.repository import Gio, GLib, Gdk, XApp
 
 
 def RemoveArgs(Execline):
@@ -32,8 +32,19 @@ def Execute(cmd , commandCwd=None, desktopFile=None, offload=False):
         if offload:
             print("Offloading '%s' to discrete gpu." % launcher.get_name());
 
-            context.setenv("__NV_PRIME_RENDER_OFFLOAD", "1")
-            context.setenv("__GLX_VENDOR_LIBRARY_NAME", "nvidia");
+            try:
+                helper = XApp.GpuOffloadHelper.get_sync()
+                infos = helper.get_offload_infos()
+
+                if infos:
+                    i = 0
+                    env_strv = infos[0].env_strv
+                    while i < len(env_strv):
+                        context.setenv(env_strv[i], env_strv[i + 1])
+                        i += 2
+            except AttributeError:
+                context.setenv("__NV_PRIME_RENDER_OFFLOAD", "1")
+                context.setenv("__GLX_VENDOR_LIBRARY_NAME", "nvidia");
 
         try:
             retval = launcher.launch_uris_as_manager(uris=[],

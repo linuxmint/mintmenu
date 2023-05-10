@@ -10,6 +10,7 @@ import traceback
 import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version('MatePanelApplet', '4.0')
+gi.require_version('XApp', '1.0')
 from gi.repository import Gtk, GdkPixbuf, Gdk, GObject
 from gi.repository import MatePanelApplet
 from gi.repository import Gio

@@ -268,6 +268,7 @@ class ApplicationLauncher(easyButton):
             self.appMateDocPath = desktopItem.get("X-MATE-DocPath") or ""
             self.useTerminal = desktopItem.getTerminal()
             self.appPath = desktopItem.getPath()
+            self.prefersOffload = desktopItem.get("PrefersNonDefaultGPU", "Desktop Entry", type="boolean")
 
             if not self.appMateDocPath:
                 self.appKdeDocPath      = desktopItem.getDocPath() or ""
@@ -354,6 +355,9 @@ class ApplicationLauncher(easyButton):
                     offload = kwargs["offload"]
                 except KeyError:
                     pass
+
+                if self.prefersOffload:
+                    offload = True
 
                 Execute(None, desktopFile=self.desktopFile, offload=offload)
 

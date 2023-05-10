@@ -192,9 +192,13 @@ class pluginclass(object):
         self.canOffload = False
 
         try:
-            self.canOffload = XApp.util_gpu_offload_supported()
+            helper = XApp.GpuOffloadHelper.get_sync()
+            self.canOffload = helper.is_offload_supported()
         except AttributeError:
-            print("Could not check for gpu offload support - maybe xapps isn't up to date.");
+            try:
+                self.canOffload = XApp.util_gpu_offload_supported()
+            except AttributeError:
+                print("Could not check for gpu offload support - maybe xapps isn't up to date.");
 
         # Detect the locale (this is used for the Wikipedia search)
         self.lang = "en"
