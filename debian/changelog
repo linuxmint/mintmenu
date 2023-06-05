@@ -1,3 +1,10 @@
+mintmenu (6.1.6) victoria; urgency=medium
+
+  [ Michael Webster ]
+  * Use XAppGpuOffloadHelper for gpu offloading, respect PrefersNonDefaultGPU desktop entry key.
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 05 Jun 2023 13:40:15 +0100
+
 mintmenu (6.1.5) vera; urgency=medium
 
   [ monsta ]
