@@ -798,7 +798,6 @@ class pluginclass(object):
                     showns = True
         return showns
 
-
     def exact_application_search(self, search_text):
         shownList = []
         showns = False # Are any app shown?
@@ -895,6 +894,7 @@ class pluginclass(object):
                 i.released()
                 i.set_relief(Gtk.ReliefStyle.NONE)
             widget.set_relief(Gtk.ReliefStyle.HALF)
+
         self.applicationsScrolledWindow.get_vadjustment().set_value(0)
 
     def FilterAndClear(self, widget, category = None):
@@ -1780,3 +1780,4 @@ class pluginclass(object):
                 #               newApplicationsList.append({"entry": item, "category": ""})
 
         return newApplicationsList
+    
