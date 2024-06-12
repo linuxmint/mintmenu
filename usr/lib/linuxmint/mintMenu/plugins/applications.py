@@ -1780,4 +1780,3 @@ class pluginclass(object):
                 #               newApplicationsList.append({"entry": item, "category": ""})
 
         return newApplicationsList
-    
