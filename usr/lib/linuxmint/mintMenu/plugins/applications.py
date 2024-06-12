@@ -8,6 +8,8 @@ import os
 import subprocess
 import threading
 import urllib.request, urllib.parse, urllib.error
+from fuzzywuzzy import process
+import unidecode
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -274,9 +276,11 @@ class pluginclass(object):
             self.settings.connect("changed::fav-cols", self.changeFavCols)
             self.settings.connect("changed::remember-filter", self.changeRememberFilter)
             self.settings.connect("changed::enable-internet-search", self.changeEnableInternetSearch)
+            self.settings.connect("changed::enable-fuzzy-search", self.changeEnableFuzzySearch)
             self.settings.connect("changed::category-hover-delay", self.GetGSettingsEntries)
             self.settings.connect("changed::do-not-filter", self.GetGSettingsEntries)
             self.settings.connect("changed::enable-internet-search", self.GetGSettingsEntries)
+            self.settings.connect("changed::enable-fuzzy-search", self.GetGSettingsEntries)
             self.settings.connect("changed::search-command", self.GetGSettingsEntries)
             self.settings.connect("changed::default-tab", self.GetGSettingsEntries)
             self.settings.connect("changed::favorite-apps-list", self.favoriteAppsChanged)
@@ -302,6 +306,7 @@ class pluginclass(object):
 
         self.categoryList = []
         self.applicationList = []
+        self.sortedApplicationList = []
 
         #dirty ugly hack, to get favorites drag origin position
         self.drag_origin = None
@@ -441,6 +446,9 @@ class pluginclass(object):
     def changeEnableInternetSearch(self, settings, key):
         self.enableInternetSearch = settings.get_boolean(key)
 
+    def changeEnableFuzzySearch(self, settings, key):
+        self.enableFuzzySearch = settings.get_boolean(key)
+
     def changeShowApplicationComments(self, settings, key):
         self.showapplicationcomments = settings.get_boolean(key)
         for child in self.applicationsBox:
@@ -516,6 +524,7 @@ class pluginclass(object):
         self.useAPT = self.settings.get_boolean("use-apt")
         self.rememberFilter = self.settings.get_boolean("remember-filter")
         self.enableInternetSearch = self.settings.get_boolean("enable-internet-search")
+        self.enableFuzzySearch = self.settings.get_boolean("enable-fuzzy-search")
 
         self.lastActiveTab =  self.settings.get_int("last-active-tab")
         self.defaultTab = self.settings.get_int("default-tab")
@@ -745,6 +754,86 @@ class pluginclass(object):
         except Exception as e:
             print(e)
 
+    def strip_case_and_accents(self, string):
+        if isinstance(string, str):
+            try:
+                value = unidecode.unidecode(string.lower())
+            except:
+                pass
+        return value
+
+    def fuzzy_application_search(self, search_text):
+        shownList = []
+        showns = False # Are any app shown?
+        keywords = self.strip_case_and_accents(search_text).split()
+        labels = [app["button"].appName for app in self.applicationList]
+        results = process.extract(search_text, labels, limit=len(labels))
+
+        first_button = True
+
+        for match in results:
+            if match[1] > 60:  # Adjust the threshold as needed
+                for app in self.applicationList:
+                    if app["button"].appName == match[0]:
+                        self.applicationsBox.pack_start(app["button"], False, False, 0)
+                        if first_button is True:
+                            app["button"].grab_focus()
+                        first_button = False
+                        shownList.append(app["button"])
+                        showns = True
+    
+        # Non-fuzzy results for appGenericName, appComment and appExec
+        # Again I should really make it a function or something
+        for app in self.applicationList:
+            for item in shownList:
+                if app["button"].desktopFile == item.desktopFile:
+                    continue
+            for keyword in keywords:
+                if keyword != "" and (self.strip_case_and_accents(app["button"].appGenericName).find(keyword) != -1 or self.strip_case_and_accents(app["button"].appComment).find(keyword) != -1 or self.strip_case_and_accents(app["button"].appExec).find(keyword) != -1):
+                    self.applicationsBox.pack_start(app["button"], False, False, 0)
+                    if first_button is True:
+                        app["button"].grab_focus()
+                    first_button = False
+                    shownList.append(app["button"])
+                    showns = True
+        return showns
+
+
+    def exact_application_search(self, search_text):
+        shownList = []
+        showns = False # Are any app shown?
+        first_button = True
+        keywords = self.strip_case_and_accents(search_text).split()
+        # I should probably make a function but whatever
+        # Add applications that match the appName
+        for app in self.applicationList:
+            for item in shownList:
+                if app["button"].desktopFile == item.desktopFile:
+                    continue
+            for keyword in keywords:
+                if keyword != "" and (self.strip_case_and_accents(app["button"].appName).find(keyword) != -1):
+                    self.applicationsBox.pack_start(app["button"], False, False, 0)
+                    if first_button is True:
+                        app["button"].grab_focus()
+                    first_button = False
+                    shownList.append(app["button"])
+                    showns = True
+
+        # Add applications that match appGenericName, appComment or appExec
+        for app in self.applicationList:
+            for item in shownList:
+                if app["button"].desktopFile == item.desktopFile:
+                    continue
+            for keyword in keywords:
+                if keyword != "" and (self.strip_case_and_accents(app["button"].appGenericName).find(keyword) != -1 or self.strip_case_and_accents(app["button"].appComment).find(keyword) != -1 or self.strip_case_and_accents(app["button"].appExec).find(keyword) != -1):
+                    self.applicationsBox.pack_start(app["button"], False, False, 0)
+                    if first_button is True:
+                        app["button"].grab_focus()
+                    first_button = False
+                    shownList.append(app["button"])
+                    showns = True
+        return showns
+
     def Filter(self, widget, category = None):
         self.filterTimer = None
 
@@ -761,23 +850,20 @@ class pluginclass(object):
                     self.changeTab(1, clear = False)
                 text = widget.get_text()
                 showns = False # Are any app shown?
-                shownList = []
-                for i in self.applicationsBox.get_children():
-                    shown = i.filterText(text)
-                    if shown:
-                        dupe = False
-                        for item in shownList:
-                            if i.desktopFile == item.desktopFile:
-                                dupe = True
-                        if dupe:
-                            i.hide()
-                        else:
-                            shownList.append(i)
-                            #if this is the first matching item
-                            #focus it
-                            if(not showns):
-                                i.grab_focus()
-                            showns = True
+    
+                for item in self.applicationList:
+                    self.applicationsBox.remove(item["button"])
+
+                if text == "": # Reset application list
+                    for item in self.applicationList:
+                        self.applicationsBox.remove(item["button"])
+                    for item in self.sortedApplicationList:
+                        self.applicationsBox.pack_start(item[1], False, False, 0)
+                if self.enableFuzzySearch:
+                    showns = self.fuzzy_application_search(text)
+                else:
+                    showns = self.exact_application_search(text)
+
                 if not showns:
                     if len(text) >= 3:
                         self.add_search_suggestions(text)
@@ -809,7 +895,6 @@ class pluginclass(object):
                 i.released()
                 i.set_relief(Gtk.ReliefStyle.NONE)
             widget.set_relief(Gtk.ReliefStyle.HALF)
-
         self.applicationsScrolledWindow.get_vadjustment().set_value(0)
 
     def FilterAndClear(self, widget, category = None):
@@ -1592,10 +1677,10 @@ class pluginclass(object):
                 self.applicationList[key]["button"].destroy()
                 del self.applicationList[key]
             if addedApplications:
-                sortedApplicationList = []
+                self.sortedApplicationList = []
                 for item in self.applicationList:
                     self.applicationsBox.remove(item["button"])
-                    sortedApplicationList.append((item["button"].appName, item["button"]))
+                    self.sortedApplicationList.append((item["button"].appName, item["button"]))
                 for item in addedApplications:
                     item["button"] = MenuApplicationLauncher(item["entry"].get_desktop_file_path(),
                             self.iconSize, item["category"], self.showapplicationcomments,
@@ -1603,21 +1688,21 @@ class pluginclass(object):
                     if item["button"].appExec:
                         self.mintMenuWin.setTooltip(item["button"], item["button"].getTooltip())
                         item["button"].connect("button-press-event", self.menuPopup)
-                        item["button"].connect("focus-in-event", self.scrollItemIntoView)
+                        # item["button"].connect("focus-in-event", self.scrollItemIntoView)
                         item["button"].connect("clicked", RecentHelper.applicationButtonClicked)
                         if self.activeFilter[0] == 0:
                             item["button"].filterText(self.activeFilter[1])
                         else:
                             item["button"].filterCategory(self.activeFilter[1])
                         item["button"].desktop_file_path = item["entry"].get_desktop_file_path()
-                        sortedApplicationList.append((item["button"].appName.upper(), item["button"]))
+                        self.sortedApplicationList.append((item["button"].appName.upper(), item["button"]))
                         self.applicationList.append(item)
                     else:
                         item["button"].destroy()
 
-                sortedApplicationList.sort()
+                self.sortedApplicationList.sort()
                 launcherNames = [] # Keep track of launcher names so we don't add them twice in the list..
-                for item in sortedApplicationList:
+                for item in self.sortedApplicationList:
                     launcherName = item[0]
                     button = item[1]
                     self.applicationsBox.add(button)

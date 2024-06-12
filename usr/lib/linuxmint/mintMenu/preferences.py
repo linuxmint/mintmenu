@@ -134,6 +134,7 @@ class mintMenuPreferences():
         section.add_row(GSettingsSwitch(_("Search for packages to install"), "com.linuxmint.mintmenu.plugins.applications", "use-apt"))
         section.add_row(GSettingsSwitch(_("Remember the last category or search"), "com.linuxmint.mintmenu.plugins.applications", "remember-filter"))
         section.add_row(GSettingsSwitch(_("Enable Internet search"), "com.linuxmint.mintmenu.plugins.applications", "enable-internet-search"))
+        section.add_row(GSettingsSwitch(_("Enable Fuzzy search"), "com.linuxmint.mintmenu.plugins.applications", "enable-fuzzy-search"))
         section.add_row(GSettingsEntry(_("Search command"), "com.linuxmint.mintmenu.plugins.applications", "search-command"))
 
         page = SettingsPage()
