@@ -588,6 +588,7 @@ class pluginclass(object):
         return False
 
     def focusSearchEntry(self, clear = True):
+        self.applicationsBox.get_children()[0].grab_focus()
         # grab_focus() does select all text,
         # restoring the original selection is somehow broken, so just select the end
         # of the existing text, that's the most likely candidate anyhow
@@ -1688,7 +1689,7 @@ class pluginclass(object):
                     if item["button"].appExec:
                         self.mintMenuWin.setTooltip(item["button"], item["button"].getTooltip())
                         item["button"].connect("button-press-event", self.menuPopup)
-                        # item["button"].connect("focus-in-event", self.scrollItemIntoView)
+                        item["button"].connect("focus-in-event", self.scrollItemIntoView)
                         item["button"].connect("clicked", RecentHelper.applicationButtonClicked)
                         if self.activeFilter[0] == 0:
                             item["button"].filterText(self.activeFilter[1])
