@@ -1,3 +1,10 @@
+mintmenu (6.1.8) wilma; urgency=medium
+
+  * favorites: Adapt to new desktop filename
+  * system: Hide terminal and package manager by default
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 25 Jun 2024 19:27:56 +0100
+
 mintmenu (6.1.7) victoria; urgency=medium
 
   [ Michael Webster ]
