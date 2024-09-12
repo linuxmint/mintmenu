@@ -346,12 +346,8 @@ class pluginclass(object):
                     self.panel = object_schema.get_string("toplevel-id")
                     self.panel_position = object_schema.get_int("position") + 1
 
-    def apturl_install(self, widget, pkg_name):
+    def url_install(self, widget, pkg_name):
         subprocess.Popen(["xdg-open", "apt://%s" % pkg_name])
-        # if os.path.exists("/usr/bin/apturl"):
-        #     os.system("/usr/bin/apturl apt://%s &" % pkg_name)
-        # else:
-        #     os.system("xdg-open apt://" + pkg_name + " &")
         self.mintMenuWin.hide()
 
     @staticmethod
@@ -694,7 +690,7 @@ class pluginclass(object):
                     self.add_suggestion("package-x-generic",
                         _("Install package '%s'") % name,
                         "%s\n\n%s\n\n%s" % (pkg.name, pkg.summary, pkg.description),
-                        self.apturl_install, pkg.name)
+                        self.url_install, pkg.name)
                     #if cache != self.current_results:
                     #    self.current_results.append(pkg)
 
@@ -736,7 +732,7 @@ class pluginclass(object):
                 self.add_suggestion(Gtk.STOCK_ADD,
                     _("Install package '%s'") % name,
                     "%s\n\n%s\n\n%s" % (pkg.name, pkg.summary, pkg.description),
-                    self.apturl_install, pkg.name)
+                    self.url_install, pkg.name)
 
             #if len(found_packages) == 0:
             #    self.applicationsBox.remove(self.last_separator)
