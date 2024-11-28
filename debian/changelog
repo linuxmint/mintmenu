@@ -1,3 +1,9 @@
+mintmenu (6.1.9) xia; urgency=medium
+
+  * Remove references to apturl
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 28 Nov 2024 13:57:01 +0000
+
 mintmenu (6.1.8) wilma; urgency=medium
 
   * favorites: Adapt to new desktop filename
