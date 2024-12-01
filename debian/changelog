@@ -1,3 +1,9 @@
+mintmenu (6.2.0) xia; urgency=medium
+
+  * favorites: Adapt to new Xed desktop path
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sun, 01 Dec 2024 15:41:31 +0000
+
 mintmenu (6.1.9) xia; urgency=medium
 
   * Remove references to apturl
