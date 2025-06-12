@@ -329,7 +329,7 @@ class ApplicationLauncher(easyButton):
             if appGenericName.find(keyword) != -1:
                 self.relevance += 1
 
-            if keyword != "" and appName.find(keyword) == -1 and appGenericName.find(keyword) == -1 and appComment.find(keyword) == -1 and appExec.find(keyword) == -1:
+            if self.relevance == 0:
                 self.hide()
                 return False
         self.show()
