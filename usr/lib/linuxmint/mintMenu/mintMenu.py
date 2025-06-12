@@ -168,10 +168,10 @@ class MainWindow(object):
                     MyPlugin.icon = 'mate-logo-icon.png'
                     print("Unable to load %s plugin" % plugin)
 
-                MyPlugin.content_holder.get_style_context().add_class("mint-" + plugin.replace("_", "-"))
                 MyPlugin.content_holder.show()
 
                 VBox1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+                VBox1.get_style_context().add_class("mint-" + plugin.replace("_", "-"))
                 if MyPlugin.heading != "":
                     label1 = Gtk.Label()
                     label1.set_markup("<span size=\"12000\" weight=\"bold\">%s</span>" % MyPlugin.heading)
