@@ -168,7 +168,7 @@ class MainWindow(object):
                     MyPlugin.icon = 'mate-logo-icon.png'
                     print("Unable to load %s plugin" % plugin)
 
-                MyPlugin.content_holder.add_class(f"mint-{plugin}")
+                MyPlugin.content_holder.get_style_context().add_class(f"mint-{plugin}")
                 MyPlugin.content_holder.show()
 
                 VBox1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -182,7 +182,7 @@ class MainWindow(object):
                     label1.show()
                     heading = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
                     heading.set_size_request(MyPlugin.width, -1)
-                    heading.add_class("mint-title")
+                    heading.get_style_context().add_class("mint-title")
                     heading.add(Align1)
                     heading.show()
                     VBox1.pack_start(heading, False, False, 0)
