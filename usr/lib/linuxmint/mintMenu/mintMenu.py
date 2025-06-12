@@ -168,7 +168,7 @@ class MainWindow(object):
                     MyPlugin.icon = 'mate-logo-icon.png'
                     print("Unable to load %s plugin" % plugin)
 
-                MyPlugin.content_holder.get_style_context().add_class(f"mint-{plugin}")
+                MyPlugin.content_holder.get_style_context().add_class("mint-" + plugin.replace("_", "-"))
                 MyPlugin.content_holder.show()
 
                 VBox1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
