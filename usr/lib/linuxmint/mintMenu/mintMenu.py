@@ -171,6 +171,7 @@ class MainWindow(object):
                 MyPlugin.content_holder.show()
 
                 VBox1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+                VBox1.get_style_context().add_class("mint-" + plugin.replace("_", "-"))
                 if MyPlugin.heading != "":
                     label1 = Gtk.Label()
                     label1.set_markup("<span size=\"12000\" weight=\"bold\">%s</span>" % MyPlugin.heading)
@@ -181,10 +182,11 @@ class MainWindow(object):
                     label1.show()
                     heading = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
                     heading.set_size_request(MyPlugin.width, -1)
-
+                    heading.get_style_context().add_class("mint-title")
                     heading.add(Align1)
                     heading.show()
                     VBox1.pack_start(heading, False, False, 0)
+
                 VBox1.show()
                 #Add plugin to Plugin Box under heading button
                 MyPlugin.content_holder.get_parent().remove(MyPlugin.content_holder)
