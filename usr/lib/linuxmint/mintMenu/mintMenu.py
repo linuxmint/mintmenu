@@ -6,6 +6,7 @@ import gettext
 import os
 import sys
 import traceback
+import cairo
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -103,11 +104,29 @@ class MainWindow(object):
         self.startWithFavorites = settings.get_boolean(key)
 
     def getSetGSettingEntries(self):
-        self.dottedfile          = os.path.join(self.path, "dotted.png")
+        self.dottedfile           = os.path.join(self.path, "dotted.png")
         self.pluginlist           = self.settings.get_strv("plugins-list")
         self.offset               = self.settings.get_int("offset")
         self.enableTooltips       = self.settings.get_boolean("tooltips-enabled")
         self.startWithFavorites   = self.settings.get_boolean("start-with-favorites")
+
+    def getRepeatedSeparator(self, pixbuf):
+        area = Gtk.DrawingArea()
+        area.set_hexpand(True)
+        area.set_vexpand(True)
+        def on_draw(widget, cr):
+            alloc = widget.get_allocation()
+            width = max(1, alloc.width)
+            height = max(1, alloc.height)
+            surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, 1) # dotted.png
+            pattern = cairo.SurfacePattern(surface)
+            pattern.set_extend(cairo.EXTEND_REPEAT)
+            cr.set_source(pattern)
+            cr.rectangle(0, 0, width, height)
+            cr.fill()
+            return False
+        area.connect("draw", on_draw)
+        return area
 
     def PopulatePlugins(self):
         PluginPane = Gtk.EventBox()
@@ -116,8 +135,6 @@ class MainWindow(object):
         PluginPane.add(PaneLadder)
         ImageBox = Gtk.EventBox()
         ImageBox.show()
-
-        seperatorImage = GdkPixbuf.Pixbuf.new_from_file(self.dottedfile)
 
         self.plugins = {}
 
@@ -138,13 +155,6 @@ class MainWindow(object):
 
                     if not MyPlugin.icon:
                         MyPlugin.icon = "mate-logo-icon.png"
-
-                    #if hasattr(MyPlugin, "hideseparator") and not MyPlugin.hideseparator:
-                    #    Image1 = Gtk.Image()
-                    #    Image1.set_from_pixbuf(seperatorImage)
-                    #    if not ImageBox.get_child():
-                    #        ImageBox.add(Image1)
-                    #        Image1.show()
 
                     #print u"Loading plugin '" + plugin + "' : sucessful"
                 except Exception:
@@ -228,14 +238,10 @@ class MainWindow(object):
                 PluginPane.show_all()
 
                 if self.plugins and hasattr(MyPlugin, 'hideseparator') and not MyPlugin.hideseparator:
-                    Image1 = Gtk.Image()
-                    Image1.set_from_pixbuf(seperatorImage)
-                    Image1.show()
-                    #ImageBox.add(Image1)
-
-                    Align1 = Gtk.Alignment.new(0, 0, 0, 0)
+                    seperatorImage = GdkPixbuf.Pixbuf.new_from_file(self.dottedfile)
+                    Align1 = Gtk.Alignment.new(0, 0, 1, 1)
                     Align1.set_padding(0, 0, 6, 6)
-                    Align1.add(Image1)
+                    Align1.add(self.getRepeatedSeparator(seperatorImage))
                     ImageBox.add(Align1)
                     ImageBox.show_all()
 
