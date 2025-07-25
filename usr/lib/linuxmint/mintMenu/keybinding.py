@@ -99,7 +99,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         return True
 
     def ungrab(self):
-        if self.keycode:
+        if hasattr(self, "keycode") and self.keycode:
             self.window.ungrab_key(self.keycode, X.AnyModifier, self.window)
 
     def rebind(self, key):
