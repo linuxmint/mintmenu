@@ -234,6 +234,7 @@ class ApplicationLauncher(easyButton):
 
         self.desktopFile = desktopFile
         self.startupMonitorId = 0
+        self.relevance = 0
 
         self.loadDesktopEntry(desktopItem)
 
@@ -306,12 +307,29 @@ class ApplicationLauncher(easyButton):
 
     def filterText(self, text):
         keywords = self.strip_case_and_accents(text).split()
+        self.relevance = 0
+
         appName = self.strip_case_and_accents(self.appName)
         appGenericName = self.strip_case_and_accents(self.appGenericName)
         appComment = self.strip_case_and_accents(self.appComment)
         appExec = self.strip_case_and_accents(self.appExec)
+
         for keyword in keywords:
-            if keyword != "" and appName.find(keyword) == -1 and appGenericName.find(keyword) == -1 and appComment.find(keyword) == -1 and appExec.find(keyword) == -1:
+            if appName == keyword:
+                self.relevance += 32
+            elif appName.find(keyword) == 0:
+                self.relevance += 16
+            elif appName.find(keyword) != -1:
+                self.relevance += 8
+
+            if appExec.find(keyword) != -1:
+                self.relevance += 4
+            if appComment.find(keyword) != -1:
+                self.relevance += 2
+            if appGenericName.find(keyword) != -1:
+                self.relevance += 1
+
+            if self.relevance == 0:
                 self.hide()
                 return False
         self.show()
