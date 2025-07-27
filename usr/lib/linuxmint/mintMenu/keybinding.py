@@ -51,7 +51,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         GObject.GObject.__init__ (self)
         threading.Thread.__init__ (self)
         self.setDaemon (True)
-
+        self.keycode = None
         self.keymap = Gdk.Keymap().get_default()
         self.display = Display()
         self.screen = self.display.screen()
