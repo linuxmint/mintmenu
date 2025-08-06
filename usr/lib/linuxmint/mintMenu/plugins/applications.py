@@ -795,18 +795,25 @@ class pluginclass(object):
                 allButton.set_relief(Gtk.ReliefStyle.HALF)
                 self.activeFilter = (0, text, widget)
         else:
-            #print "CATFILTER"
+            apps = self.applicationsBox.get_children()
+
+            if self.activeFilter[0] == 0: # Previous view was a search, reset our list order.
+                apps = sorted(apps, key=lambda app: app.appName)
+                for i in apps:
+                    self.applicationsBox.remove(i)
+                    self.applicationsBox.add(i)
+
             self.activeFilter = (1, category, widget)
-            if category == "":
-                listedDesktopFiles = []
-                for i in self.applicationsBox.get_children():
+
+            listedDesktopFiles = []
+            for i in apps:
+                if category == "":
                     if not i.desktop_file_path in listedDesktopFiles:
                         listedDesktopFiles.append(i.desktop_file_path)
                         i.show_all()
                     else:
                         i.hide()
-            else:
-                for i in self.applicationsBox.get_children():
+                else:
                     i.filterCategory(category)
 
             for i in self.categoriesBox.get_children():
