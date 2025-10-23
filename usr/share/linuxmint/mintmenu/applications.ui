@@ -95,7 +95,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">5</property>
                                     <property name="margin_right">5</property>
-                                    <property name="icon_name">xapp-go-next-symbolic</property>
+                                    <property name="icon_name">xsi-go-next-symbolic</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -251,7 +251,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">5</property>
                                     <property name="margin_right">5</property>
-                                    <property name="icon_name">xapp-go-next-symbolic</property>
+                                    <property name="icon_name">xsi-go-next-symbolic</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -425,7 +425,7 @@
                         <property name="can_focus">True</property>
                         <property name="can_default">True</property>
                         <property name="has_default">True</property>
-                        <property name="icon_name">xapp-edit-find-symbolic</property>
+                        <property name="icon_name">xsi-edit-find-symbolic</property>
                         <property name="icon_size">1</property>
                       </object>
                     </child>

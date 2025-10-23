@@ -630,7 +630,7 @@ class pluginclass(object):
 
         self.add_suggestion("accessories-dictionary", _("Lookup %s in Dictionary") % text, None,
                             self.search_dictionary)
-        self.add_suggestion("xapp-edit-find-symbolic", _("Search Computer for %s") % text, None, self.Search)
+        self.add_suggestion("xsi-edit-find-symbolic", _("Search Computer for %s") % text, None, self.Search)
 
         self.applicationsBox.get_children()[-1].grab_focus()
 
@@ -1005,7 +1005,7 @@ class pluginclass(object):
             add_menu_item('/usr/lib/linuxmint/mintMenu/search_engines/wikipedia.svg', _("Search Wikipedia"), self.search_wikipedia)
 
         add_menu_item('accessories-dictionary', _("Search Dictionary"), self.search_dictionary)
-        add_menu_item("xapp-edit-find-symbolic", _("Search Computer"), self.Search)
+        add_menu_item("xsi-edit-find-symbolic", _("Search Computer"), self.Search)
         add_menu_item()
         add_menu_item('/usr/lib/linuxmint/mintMenu/search_engines/software.png', _("Find Software"), self.search_mint_software)
         add_menu_item('/usr/lib/linuxmint/mintMenu/search_engines/tutorials.png', _("Find Tutorials"), self.search_mint_tutorials)
