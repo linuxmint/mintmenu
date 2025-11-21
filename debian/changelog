@@ -1,3 +1,11 @@
+mintmenu (6.2.3) zena; urgency=medium
+
+  * Switch to XApp symbolic icons
+  * Switch to XSI
+  * Add .gitignore
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 21 Nov 2025 13:32:19 +0000
+
 mintmenu (6.2.2) zara; urgency=medium
 
   [ Michael Webster ]
