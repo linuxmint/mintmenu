@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os.path
+import re
 import shutil
 import unidecode
 
@@ -402,12 +403,12 @@ class ApplicationLauncher(easyButton):
         shutil.copyfile(self.desktopFile, self.startupFilePath)
 
         # Remove %u, etc. from Exec entry, because MATE will not replace them when it starts the app
-        item = MateDesktop.DesktopItem.new_from_uri(self.startupFilePath, MateDesktop.DesktopItemLoadFlags.ONLY_IF_EXISTS)
+        item = MateDesktop.DesktopItem.new_from_file(self.startupFilePath, MateDesktop.DesktopItemLoadFlags.ONLY_IF_EXISTS)
         if item:
             r = re.compile("%[A-Za-z]")
             tmp = r.sub("", item.get_string(MateDesktop.DESKTOP_ITEM_EXEC)).strip()
             item.set_string(MateDesktop.DESKTOP_ITEM_EXEC, tmp)
-            item.save(self.startupFilePath, 0)
+            item.save(GLib.filename_to_uri(self.startupFilePath, None), True)
 
     def removeFromStartup(self):
         if os.path.exists(self.startupFilePath):
