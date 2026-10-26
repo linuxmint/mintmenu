@@ -1,3 +1,10 @@
+mintmenu (6.2.4) adrien; urgency=medium
+
+  [ Pedro Barbosa ]
+  * easybuttons.py: Fix "Launch when I log in" not cleaning the Exec line (#291)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 26 Oct 2026 12:46:45 +0000
+
 mintmenu (6.2.3) zena; urgency=medium
 
   * Switch to XApp symbolic icons
