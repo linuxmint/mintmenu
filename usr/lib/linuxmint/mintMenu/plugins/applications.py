@@ -327,12 +327,18 @@ class pluginclass(object):
         # self.icon_theme = Gtk.IconTheme.get_default()
         # self.icon_theme.connect("changed", self.on_icon_theme_changed)
 
+    def _spawn_async(self, argv):
+        try:
+            GLib.spawn_async(argv, flags=GLib.SpawnFlags.SEARCH_PATH)
+        except GLib.Error as e:
+            print("Error launching %s: %s" % (argv[0], e.message))
+
     def refresh_apt_cache(self):
         if self.useAPT:
             path = "%s/.linuxmint/mintMenu" % home
             if not os.path.exists(path):
                 os.makedirs(path)
-            subprocess.Popen(["/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py", "%s/apt.cache" % path])
+            self._spawn_async(["/usr/lib/linuxmint/mintMenu/plugins/get_apt_cache.py", "%s/apt.cache" % path])
 
     def get_panel(self):
         panelsettings = Gio.Settings.new("org.mate.panel")
@@ -347,7 +353,7 @@ class pluginclass(object):
                     self.panel_position = object_schema.get_int("position") + 1
 
     def url_install(self, widget, pkg_name):
-        subprocess.Popen(["xdg-open", "apt://%s" % pkg_name])
+        self._spawn_async(["xdg-open", "apt://%s" % pkg_name])
         self.mintMenuWin.hide()
 
     @staticmethod
@@ -1023,51 +1029,51 @@ class pluginclass(object):
 
     def search_ddg(self, widget):
         text = urllib.parse.quote_plus(self.searchEntry.get_text().strip())
-        subprocess.Popen(["xdg-open", "https://duckduckgo.com/?q=%s" % text])
+        self._spawn_async(["xdg-open", "https://duckduckgo.com/?q=%s" % text])
         self.mintMenuWin.hide()
 
     def search_google(self, widget):
         text = urllib.parse.quote_plus(self.searchEntry.get_text().strip())
-        subprocess.Popen(["xdg-open", "https://www.google.com/search?q=%s" % text])
+        self._spawn_async(["xdg-open", "https://www.google.com/search?q=%s" % text])
         self.mintMenuWin.hide()
 
     def search_wikipedia(self, widget):
         text = urllib.parse.quote_plus(self.searchEntry.get_text().strip())
-        subprocess.Popen(["xdg-open", "https://en.wikipedia.org/wiki/Special:Search?search=%s" % text])
+        self._spawn_async(["xdg-open", "https://en.wikipedia.org/wiki/Special:Search?search=%s" % text])
         self.mintMenuWin.hide()
 
     def search_dictionary(self, widget):
         text = self.searchEntry.get_text().strip()
-        subprocess.Popen(["mate-dictionary", "%s" % text])
+        self._spawn_async(["mate-dictionary", "%s" % text])
         self.mintMenuWin.hide()
 
     def search_mint_tutorials(self, widget):
         text = urllib.parse.quote(self.searchEntry.get_text().strip())
-        subprocess.Popen(["xdg-open", "https://community.linuxmint.com/index.php/tutorial/search/0/%s" % text])
+        self._spawn_async(["xdg-open", "https://community.linuxmint.com/index.php/tutorial/search/0/%s" % text])
         self.mintMenuWin.hide()
 
     def search_mint_ideas(self, widget):
         text = urllib.parse.quote(self.searchEntry.get_text().strip())
-        subprocess.Popen(["xdg-open", "https://community.linuxmint.com/index.php/idea/search/0/%s" % text])
+        self._spawn_async(["xdg-open", "https://community.linuxmint.com/index.php/idea/search/0/%s" % text])
         self.mintMenuWin.hide()
 
     def search_mint_users(self, widget):
         text = urllib.parse.quote(self.searchEntry.get_text().strip())
-        subprocess.Popen(["xdg-open", "https://community.linuxmint.com/index.php/user/search/0/%s" % text])
+        self._spawn_async(["xdg-open", "https://community.linuxmint.com/index.php/user/search/0/%s" % text])
         self.mintMenuWin.hide()
 
     def search_mint_hardware(self, widget):
         text = urllib.parse.quote(self.searchEntry.get_text().strip())
-        subprocess.Popen(["xdg-open", "https://community.linuxmint.com/index.php/hardware/search/0/%s" % text])
+        self._spawn_async(["xdg-open", "https://community.linuxmint.com/index.php/hardware/search/0/%s" % text])
         self.mintMenuWin.hide()
 
     def search_mint_software(self, widget):
         text = urllib.parse.quote(self.searchEntry.get_text())
-        subprocess.Popen(["xdg-open", "https://community.linuxmint.com/index.php/software/search/0/%s" % text])
+        self._spawn_async(["xdg-open", "https://community.linuxmint.com/index.php/software/search/0/%s" % text])
         self.mintMenuWin.hide()
 
     def add_to_desktop(self, widget, desktopEntry):
-        subprocess.Popen(["xdg-desktop-icon", "install", "--novendor", desktopEntry.desktopFile])
+        self._spawn_async(["xdg-desktop-icon", "install", "--novendor", desktopEntry.desktopFile])
 
     def add_to_panel(self, widget, desktopEntry):
         self.get_panel()
