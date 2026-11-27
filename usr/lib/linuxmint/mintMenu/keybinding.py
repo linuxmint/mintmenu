@@ -32,6 +32,7 @@ from gi.repository import Gtk, Gdk, GLib, GObject
 
 from Xlib import X, error
 from Xlib.display import Display
+from Xlib.protocol import rq
 
 SPECIAL_MODS = (["Super_L",    "<Super>"],
                 ["Super_R",    "<Super>"],
@@ -41,6 +42,33 @@ SPECIAL_MODS = (["Super_L",    "<Super>"],
                 ["Control_R",  "<Primary>"],
                 ["Shift_L",    "<Shift>"],
                 ["Shift_R",    "<Shift>"])
+
+class XkbUseExtension(rq.ReplyRequest):
+    _request = rq.Struct(rq.Card8('opcode'),
+                         rq.Opcode(0),
+                         rq.RequestLength(),
+                         rq.Card16('wanted_major'),
+                         rq.Card16('wanted_minor'))
+    _reply = rq.Struct(rq.ReplyCode(),
+                       rq.Bool('supported'),
+                       rq.Card16('sequence_number'),
+                       rq.ReplyLength(),
+                       rq.Card16('server_major'),
+                       rq.Card16('server_minor'),
+                       rq.Pad(20))
+
+def use_xkb(display):
+    # Without this the server reports the second keyboard layout to us as Mod5,
+    # the events we forward carry it, and <Super> shortcuts of the window
+    # manager or the settings daemon stop matching in that layout.
+    ext = display.query_extension('XKEYBOARD')
+    if not ext.present:
+        return
+    try:
+        XkbUseExtension(display=display.display, opcode=ext.major_opcode,
+                        wanted_major=1, wanted_minor=0)
+    except Exception:
+        pass
 
 class GlobalKeyBinding(GObject.GObject, threading.Thread):
     __gsignals__ = {
@@ -54,6 +82,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         self.keycode = None
         self.keymap = Gdk.Keymap().get_default()
         self.display = Display()
+        use_xkb(self.display)
         self.screen = self.display.screen()
         self.window = self.screen.root
         self.ignored_masks = self.get_mask_combinations(X.LockMask | X.Mod2Mask | X.Mod5Mask)
